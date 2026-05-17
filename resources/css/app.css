@@ -11,6 +11,8 @@
 
     /* Colors */
     --color-primary: #FF6602;
+    --color-primary-dark: #C0392B;
     --color-secondary: #006E37;
-    --color-tertiary: #006E37;
+    --color-bg: #0F172A;
+    --color-text-muted: #94A3B8;
 }
