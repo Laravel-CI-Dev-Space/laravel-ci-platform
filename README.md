@@ -1,4 +1,3 @@
-# laravel-ci-platform
 # 🐘 Plateforme Laravel Côte d'Ivoire
 
 Hub communautaire officiel — Forum · Blog · Événements · Job Board · Admin
@@ -12,7 +11,11 @@ Hub communautaire officiel — Forum · Blog · Événements · Job Board · Adm
 - [Stack technique](#-stack-technique)
 - [Équipe et branches](#-équipe-et-branches)
 - [Architecture du projet](#-architecture-du-projet)
-- [Règles Git et workflow](#-règles-git-et-workflow)
+- [Workflow Git — Lead (Wilson)](#-workflow-git--lead-wilson)
+- [Workflow Git — Autres développeurs](#-workflow-git--autres-développeurs)
+- [Ouvrir une Pull Request](#-ouvrir-une-pull-request)
+- [Review et merge — rôle du Lead](#-review-et-merge--rôle-du-lead)
+- [Droits et protections des branches](#-droits-et-protections-des-branches)
 - [Nomenclature et conventions de code](#-nomenclature-et-conventions-de-code)
 - [Pattern : Service · Controller · Form Request](#-pattern--service--controller--form-request)
 - [Installation locale](#-installation-locale)
@@ -223,43 +226,203 @@ laravel-ci/
 
 ---
 
-## 🔀 Règles Git et workflow
+## 🔀 Workflow Git — Lead (Wilson)
 
-### Workflow quotidien
+Le Lead initialise le repo et gère les branches principales.
+
+### Mise en place initiale (une seule fois)
 
 ```bash
-# 1. Toujours partir d'un develop à jour
+# Créer la branche develop depuis main
+git checkout -b develop
+git push origin develop
+
+# Créer sa propre branche de travail
+git checkout -b feature/wilson
+git push origin feature/wilson
+```
+
+### Workflow quotidien du Lead
+
+```bash
+# 1. Se mettre à jour sur develop
 git checkout develop
 git pull origin develop
 
 # 2. Aller sur sa branche
-git checkout feature/wilson   # ou ton prénom
+git checkout feature/wilson
 
-# 3. Rebase régulièrement pour rester à jour
+# 3. Rebase pour rester à jour avec le travail des autres
 git rebase develop
 
-# 4. Travailler, committer, pusher
+# 4. Coder, committer, pusher
 git add .
 git commit -m "feat(auth): add github oauth callback handler"
 git push origin feature/wilson
 
-# 5. Ouvrir une Pull Request vers develop (jamais vers main)
+# 5. Ouvrir une PR feature/wilson → develop sur GitHub
+#    Puis merger sa propre PR après vérification
 ```
 
-### Règles strictes
+### Récupérer un merge après validation
 
-- ❌ **Jamais** de commit direct sur `main` ou `develop`
-- ❌ **Jamais** de merge sans Pull Request validée
-- ✅ **Toujours** rebase sur `develop` avant d'ouvrir une PR
-- ✅ **Toujours** attendre la review du Lead avant merge
-- ✅ **Toujours** écrire des tests pour tout nouveau code
+```bash
+# Après avoir mergé une PR sur develop
+git checkout develop
+git pull origin develop
 
-### Pull Requests
+# Retourner sur sa branche et se rebaser
+git checkout feature/wilson
+git rebase develop
+```
 
-- Titre clair : `[MODULE] Description courte`
-- Description : ce qui a été fait, comment tester, screenshots si UI
-- Au moins **1 review** du Lead (Wilson) avant merge sur `develop`
-- Les tests doivent passer (GitHub Actions)
+---
+
+## 👨‍💻 Workflow Git — Autres développeurs
+
+Les autres devs sont invités comme **collaborateurs** sur le repo GitHub par le Lead.
+
+> **Wilson** → Settings → Collaborators → Add people → entrer le username GitHub de chaque dev
+
+### Mise en place initiale (une seule fois par dev)
+
+```bash
+# 1. Cloner le repo
+git clone https://github.com/Laravel-CI-Dev-Space/laravel-ci.git
+cd laravel-ci
+
+# 2. Créer sa branche depuis develop
+git checkout develop
+git checkout -b feature/abdoul    # chacun met son prénom
+git push origin feature/abdoul
+
+# 3. Installer le projet
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate --seed
+npm install && npm run build
+```
+
+### Workflow quotidien de chaque dev
+
+```bash
+# Chaque matin avant de coder — récupérer le travail des autres
+git checkout develop
+git pull origin develop
+git checkout feature/abdoul
+git rebase develop
+
+# Coder...
+
+# Formater le code avant de committer
+./vendor/bin/pint
+
+# Committer et pusher
+git add .
+git commit -m "feat(forum): add question list with pagination"
+git push origin feature/abdoul
+
+# Ouvrir une PR sur GitHub et attendre la review du Lead
+```
+
+### Règles strictes — tout le monde
+
+| Règle | Détail |
+|---|---|
+| ❌ Jamais de commit direct sur `main` | Branche de production uniquement |
+| ❌ Jamais de commit direct sur `develop` | Passe obligatoirement par une PR |
+| ❌ Jamais de merge sans PR validée | Le Lead doit approuver |
+| ✅ Rebase sur `develop` avant chaque PR | Évite les conflits au merge |
+| ✅ Tests obligatoires sur tout nouveau code | Pas de PR acceptée sans tests |
+| ✅ Pint lancé avant chaque commit | Code PSR-12 obligatoire |
+
+---
+
+## 📬 Ouvrir une Pull Request
+
+Après un `git push origin feature/ton-nom`, GitHub affiche une bannière :
+
+```
+feature/abdoul had recent pushes — Compare & pull request
+```
+
+Clique sur **"Compare & pull request"** ou va dans l'onglet **Pull requests → New pull request**.
+
+### Configurer la PR
+
+```
+base:    develop          ← TOUJOURS develop, jamais main
+compare: feature/abdoul   ← ta branche
+```
+
+> ⚠️ GitHub propose `base: main` par défaut — **change-le en `develop` à chaque fois.**
+
+### Remplir le formulaire
+
+```
+Titre : feat(forum): add question list with pagination
+
+Description :
+
+## Ce qui a été fait
+- Composant Livewire QuestionList avec pagination
+- Filtres : récent / populaire / sans réponse
+- Service ForumService::getQuestions()
+
+## Comment tester
+1. Aller sur /forum
+2. Tester les filtres
+3. php artisan test --filter=QuestionTest
+
+## Screenshots
+(joindre une capture si changement UI)
+```
+
+Clique **"Create pull request"** et attends la review du Lead. **Ne merge pas toi-même.**
+
+---
+
+## 🔍 Review et merge — rôle du Lead
+
+Wilson reçoit une notification GitHub à chaque nouvelle PR. Processus :
+
+**1. Lire le code** dans l'onglet **"Files changed"**
+
+**2. Laisser des commentaires** si des corrections sont nécessaires → le dev corrige et re-push sur sa branche, la PR se met à jour automatiquement
+
+**3. Approuver** avec **"Approve"** si tout est bon
+
+**4. Merger** avec **"Merge pull request" → "Confirm merge"**
+
+**5. Ne pas supprimer la branche** du dev — c'est sa branche permanente de travail
+
+---
+
+## 🔒 Droits et protections des branches
+
+### Tableau des droits
+
+| Action | Dev | Lead (Wilson) |
+|---|---|---|
+| Push sur `feature/son-nom` | ✅ | ✅ |
+| Push direct sur `develop` | ❌ | ✅ |
+| Push direct sur `main` | ❌ | ✅ |
+| Ouvrir une PR | ✅ | ✅ |
+| Approuver une PR | ❌ | ✅ |
+| Merger une PR | ❌ | ✅ |
+| Déployer en production | ❌ | ✅ |
+
+### Configurer la protection des branches sur GitHub
+
+Aller dans **Settings → Branches → Add branch protection rule** et appliquer ces règles sur `main` ET `develop` :
+
+```
+✅ Require a pull request before merging
+✅ Require approvals (1 minimum)
+✅ Require status checks to pass (GitHub Actions)
+✅ Do not allow bypassing the above settings
+```
 
 ---
 
