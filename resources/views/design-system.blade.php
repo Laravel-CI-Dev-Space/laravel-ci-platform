@@ -111,7 +111,6 @@
 
                 <hr class="border-gray-200">
 
-                {{-- ===== Événements ===== --}}
                 <section id="events" data-section>
                     <div class="mb-6">
                         <h2 class="text-2xl font-bold text-gray-900">Card Événement</h2>
@@ -226,8 +225,10 @@
                         <h2 class="text-2xl font-bold text-gray-900">Badges</h2>
                         <p class="text-sm text-gray-500 mt-1">
                             <code class="text-xs bg-gray-100 px-1 rounded">x-badge</code> — label seul, style neutre.
-                            <code class="text-xs bg-gray-100 px-1 rounded">x-badge-rounded</code> — arrondi complet avec prop
-                            <code class="text-xs bg-gray-100 px-1 rounded">color</code> (red, green, blue, yellow, purple, orange, gray).
+                            <code class="text-xs bg-gray-100 px-1 rounded">x-badge-rounded</code> — arrondi complet avec
+                            prop
+                            <code class="text-xs bg-gray-100 px-1 rounded">color</code> (red, green, blue, yellow, purple,
+                            orange, gray).
                         </p>
                     </div>
 
@@ -247,7 +248,9 @@
                         <div class="rounded-xl overflow-hidden border border-gray-200 bg-white">
                             <div class="flex items-center justify-between px-4 py-2 bg-gray-50 border-b border-gray-200">
                                 <span class="text-xs font-mono text-gray-400">x-badge-rounded</span>
-                                @include('design-system._copy-btn', ['snippet' => $snippets['badge_rounded']])
+                                @include('design-system._copy-btn', [
+                                    'snippet' => $snippets['badge_rounded'],
+                                ])
                             </div>
                             <div class="p-4 flex flex-wrap gap-2">
                                 <x-badge-rounded label="Laravel 11" color="red" />
@@ -282,8 +285,7 @@
                                 @include('design-system._copy-btn', ['snippet' => $snippets['avatar']])
                             </div>
                             <div class="p-4">
-                                <x-avatar
-                                    name="Tom Cook"
+                                <x-avatar name="Tom Cook"
                                     src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                                     subtitle="Voir le profil" />
                             </div>

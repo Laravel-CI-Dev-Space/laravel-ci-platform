@@ -11,7 +11,6 @@ class DesignSystemController extends Controller
             'date'        => '15 Oct.',
             'location'    => 'Orange Fab, Abidjan',
             'time'        => '09:00 - 17:00',
-            'type'        => 'meetup',
             'description' => 'Focus sur Laravel 11 et les nouvelles fonctionnalités de Reverb.',
             'image'       => null,
             'seats_taken' => 38,
