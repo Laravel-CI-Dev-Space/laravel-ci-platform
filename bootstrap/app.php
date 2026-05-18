@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\CheckMemberActive;
+use App\Http\Middleware\EnsureProfileComplete;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -18,6 +19,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             // Middleware custom
             'active'        => CheckMemberActive::class,
+            'profile.complete'   => EnsureProfileComplete::class,
+
 
             // Middlewares Spatie Permission
             'role'          => RoleMiddleware::class,
