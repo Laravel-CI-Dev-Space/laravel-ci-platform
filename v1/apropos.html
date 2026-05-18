@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#261812",
+                        "on-primary-fixed-variant": "#7c2e00",
+                        "on-tertiary-fixed-variant": "#00497b",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed-dim": "#9ccaff",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#a33e00",
+                        "tertiary-fixed": "#d0e4ff",
+                        "surface-container": "#ffe9e1",
+                        "on-primary-container": "#561d00",
+                        "surface-container-low": "#fff1ec",
+                        "on-surface": "#261812",
+                        "on-primary-fixed": "#360f00",
+                        "secondary-fixed": "#7efba4",
+                        "inverse-primary": "#ffb596",
+                        "primary-fixed-dim": "#ffb596",
+                        "surface-bright": "#fff8f6",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed": "#00210c",
+                        "on-tertiary-fixed": "#001d35",
+                        "on-surface-variant": "#5a4136",
+                        "surface-container-highest": "#f8ddd2",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary": "#006d37",
+                        "tertiary-container": "#009cfc",
+                        "on-secondary-container": "#007239",
+                        "on-tertiary-container": "#003155",
+                        "tertiary": "#0062a1",
+                        "primary-fixed": "#ffdbcd",
+                        "on-primary": "#ffffff",
+                        "surface-container-high": "#fee2d8",
+                        "inverse-on-surface": "#ffede7",
+                        "error-container": "#ffdad6",
+                        "surface-tint": "#a33e00",
+                        "surface-dim": "#f0d4ca",
+                        "surface-variant": "#f8ddd2",
+                        "secondary-container": "#7bf8a1",
+                        "on-secondary-fixed-variant": "#005228",
+                        "on-error": "#ffffff",
+                        "secondary-fixed-dim": "#61de8a",
+                        "primary-container": "#ff6600",
+                        "surface": "#fff8f6",
+                        "error": "#ba1a1a",
+                        "outline-variant": "#e3bfb1",
+                        "outline": "#8e7164",
+                        "background": "#fff8f6",
+                        "inverse-surface": "#3d2d26"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "gutter": "24px",
+                        "lg": "24px",
+                        "xs": "4px",
+                        "md": "16px",
+                        "xl": "48px",
+                        "container-max": "1200px",
+                        "sm": "8px",
+                        "accent-bar": "6px"
+                    },
+                    "fontFamily": {
+                        "code": ["JetBrains Mono"],
+                        "h2": ["JetBrains Mono"],
+                        "label": ["JetBrains Mono"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "h3": ["JetBrains Mono"],
+                        "h1": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "code": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "h2": ["32px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "label": ["12px", { "lineHeight": "1.0", "fontWeight": "500" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "h3": ["24px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "h1": ["40px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        /* Mobile menu */
+        #mobile-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease, opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        #mobile-menu.open {
+            max-height: 500px;
+            opacity: 1;
+        }
+
+        /* Responsive headings */
+        @media (max-width: 640px) {
+            .text-h1 {
+                font-size: 26px !important;
+                line-height: 1.25 !important;
+            }
+
+            .text-h2 {
+                font-size: 22px !important;
+            }
+
+            .text-h3 {
+                font-size: 18px !important;
+            }
+        }
+
+        @media (min-width: 641px) and (max-width: 1023px) {
+            .text-h1 {
+                font-size: 32px !important;
+            }
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+
+        .code-pattern {
+            background-image: radial-gradient(#FF6600 0.5px, transparent 0.5px);
+            background-size: 24px 24px;
+            opacity: 0.05;
+        }
+    </style>
+</head>
+
+<body class="bg-surface-bright font-body-md text-on-surface">
+    <!-- TopAppBar -->
+    <!-- HEADER UNIFIE RESPONSIVE -->
+    <header
+        class="bg-white sticky top-0 z-[100] border-t-[6px] border-[#FF6600] border-b border-[#E1E4E8] shadow-[0_4px_10px_rgba(0,0,0,0.04)]">
+        <div class="max-w-[1200px] mx-auto px-4 sm:px-4 sm:px-6">
+            <div class="h-16 sm:h-20 flex items-center justify-between gap-4">
+                <a href="index.html"
+                    class="text-lg sm:text-xl font-black text-[#FF6600] flex items-center gap-2 font-['JetBrains_Mono'] tracking-tight shrink-0">
+                    <span class="material-symbols-outlined text-2xl sm:text-3xl">developer_mode</span>
+                    Laravel CI
+                </a>
+                <nav class="hidden lg:flex gap-6 xl:gap-8 items-center flex-1 justify-center">
+                    <a href="forum.html"
+                        class="text-slate-600 hover:text-[#FF6600] transition-all duration-200 py-1 border-b-2 border-transparent hover:border-[#FF6600] font-['JetBrains_Mono'] text-sm tracking-tight">Forum</a>
+                    <a href="blog.html"
+                        class="text-slate-600 hover:text-[#FF6600] transition-all duration-200 py-1 border-b-2 border-transparent hover:border-[#FF6600] font-['JetBrains_Mono'] text-sm tracking-tight">Blog</a>
+                    <a href="evenements.html"
+                        class="text-slate-600 hover:text-[#FF6600] transition-all duration-200 py-1 border-b-2 border-transparent hover:border-[#FF6600] font-['JetBrains_Mono'] text-sm tracking-tight">Événements</a>
+                    <a href="job.html"
+                        class="text-slate-600 hover:text-[#FF6600] transition-all duration-200 py-1 border-b-2 border-transparent hover:border-[#FF6600] font-['JetBrains_Mono'] text-sm tracking-tight">Job
+                        Board</a>
+                    <a href="apropos.html"
+                        class="text-[#FF6600] border-b-2 border-[#FF6600] py-1 font-bold font-['JetBrains_Mono'] text-sm tracking-tight">À
+                        propos</a>
+                </nav>
+                <div class="hidden lg:flex items-center gap-3">
+                    <a href="connexion.html"
+                        class="text-slate-600 hover:text-[#FF6600] font-['JetBrains_Mono'] text-sm px-4 py-2 rounded-lg hover:bg-slate-50 active:scale-95 transition-all">Connexion</a>
+                    <a href="inscription.html"
+                        class="bg-[#FF6600] text-white px-5 py-2.5 rounded-lg font-bold font-['JetBrains_Mono'] text-sm active:scale-95 transition-transform shadow-sm hover:shadow-md">Rejoindre</a>
+                </div>
+                <button id="hamburger-btn" aria-label="Menu" aria-expanded="false"
+                    class="lg:hidden flex flex-col justify-center items-center w-10 h-10 rounded-lg hover:bg-slate-100 transition-colors gap-[5px] shrink-0">
+                    <span id="ham-line-1"
+                        class="block w-5 h-0.5 bg-slate-700 transition-all duration-300 origin-center"></span>
+                    <span id="ham-line-2" class="block w-5 h-0.5 bg-slate-700 transition-all duration-300"></span>
+                    <span id="ham-line-3"
+                        class="block w-5 h-0.5 bg-slate-700 transition-all duration-300 origin-center"></span>
+                </button>
+            </div>
+            <div id="mobile-menu" class="lg:hidden border-t border-[#E1E4E8]">
+                <nav class="py-4 flex flex-col gap-1">
+                    <a href="forum.html"
+                        class="px-3 py-3 rounded-lg text-slate-700 hover:text-[#FF6600] hover:bg-orange-50 transition-all flex items-center gap-3 font-['JetBrains_Mono'] text-sm"><span
+                            class="material-symbols-outlined text-[18px]">forum</span>Forum</a>
+                    <a href="blog.html"
+                        class="px-3 py-3 rounded-lg text-slate-700 hover:text-[#FF6600] hover:bg-orange-50 transition-all flex items-center gap-3 font-['JetBrains_Mono'] text-sm"><span
+                            class="material-symbols-outlined text-[18px]">article</span>Blog</a>
+                    <a href="evenements.html"
+                        class="px-3 py-3 rounded-lg text-slate-700 hover:text-[#FF6600] hover:bg-orange-50 transition-all flex items-center gap-3 font-['JetBrains_Mono'] text-sm"><span
+                            class="material-symbols-outlined text-[18px]">event</span>Événements</a>
+                    <a href="job.html"
+                        class="px-3 py-3 rounded-lg text-slate-700 hover:text-[#FF6600] hover:bg-orange-50 transition-all flex items-center gap-3 font-['JetBrains_Mono'] text-sm"><span
+                            class="material-symbols-outlined text-[18px]">work</span>Job Board</a>
+                    <a href="apropos.html"
+                        class="px-3 py-3 rounded-lg text-[#FF6600] bg-orange-50 font-bold flex items-center gap-3 font-['JetBrains_Mono'] text-sm"><span
+                            class="material-symbols-outlined text-[18px]">info</span>À propos</a>
+                </nav>
+                <div class="pb-4 pt-2 border-t border-[#E1E4E8] flex flex-col gap-2">
+                    <a href="connexion.html"
+                        class="w-full text-center py-3 font-['JetBrains_Mono'] text-sm font-bold text-[#FF6600] border border-[#FF6600] hover:bg-orange-50 rounded-lg transition-colors">Connexion</a>
+                    <a href="inscription.html"
+                        class="w-full py-3 bg-[#FF6600] text-white text-center rounded-lg font-bold font-['JetBrains_Mono'] text-sm hover:opacity-90 transition-opacity">Rejoindre
+                        la communauté</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <script>
+            (function () {
+                var btn = document.getElementById('hamburger-btn');
+                var menu = document.getElementById('mobile-menu');
+                var l1 = document.getElementById('ham-line-1');
+                var l2 = document.getElementById('ham-line-2');
+                var l3 = document.getElementById('ham-line-3');
+                var open = false;
+                function toggle(force) {
+                    open = (force !== undefined) ? force : !open;
+                    btn.setAttribute('aria-expanded', open);
+                    menu.classList.toggle('open', open);
+                    l1.style.transform = open ? 'translateY(7px) rotate(45deg)' : '';
+                    l2.style.opacity = open ? '0' : '1';
+                    l3.style.transform = open ? 'translateY(-7px) rotate(-45deg)' : '';
+                }
+                btn.addEventListener('click', function (e) { e.stopPropagation(); toggle(); });
+                document.addEventListener('click', function (e) {
+                    if (open && !menu.contains(e.target) && !btn.contains(e.target)) toggle(false);
+                });
+            })();
+    </script>
+    <!-- <div class="flex items-center gap-4">
+        <a href="connexion.html"
+            class="text-slate-600 hover:text-[#FF6600] font-['JetBrains_Mono'] text-sm px-4 py-2 rounded-lg hover:bg-slate-50 transition-all">Connexion</a>
+        <a href="inscription.html"
+            class="bg-[#FF6600] text-white px-5 py-2.5 rounded-lg font-bold font-['JetBrains_Mono'] text-sm transition-transform shadow-sm hover:shadow-md">Rejoindre</a>
+    </div> -->
+    </div>
+    </header>
+    <main class="max-w-[1200px] mx-auto px-4 sm:px-6 py-12">
+        <!-- Hero Section & Breadcrumb -->
+        <section class="mb-xl relative overflow-hidden bg-white border border-[#E1E4E8] rounded-xl p-12 shadow-sm">
+            <div class="absolute inset-0 code-pattern pointer-events-none"></div>
+            <div class="relative z-10">
+                <nav class="flex items-center gap-2 text-label font-label text-outline mb-6">
+                    <a class="hover:text-primary" href="index.html">Accueil</a>
+                    <span class="material-symbols-outlined text-[12px]" data-icon="chevron_right">chevron_right</span>
+                    <span class="text-primary">À propos</span>
+                </nav>
+                <h1 class="font-h1 text-h1 text-on-surface mb-4">Laravel Côte d'Ivoire</h1>
+                <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+                    Le coeur battant de l'écosystème Laravel en Afrique de l'Ouest. Nous rassemblons développeurs,
+                    architectes et passionnés pour bâtir l'avenir du web ivoirien.
+                </p>
+            </div>
+        </section>
+        <!-- Notre Histoire (Timeline) -->
+        <section class="mb-xl">
+            <div class="flex items-center gap-4 mb-lg">
+                <div class="h-1 w-12 bg-primary rounded-full"></div>
+                <h2 class="font-h2 text-h2">Notre histoire</h2>
+            </div>
+            <div class="relative pl-8 md:pl-0">
+                <!-- Vertical Line -->
+                <div class="absolute left-4 md:left-1/2 top-0 bottom-0 w-px bg-[#E1E4E8] -translate-x-1/2"></div>
+                <!-- Timeline Item 1 -->
+                <div class="relative mb-12 md:flex md:justify-between items-center group">
+                    <div class="md:w-[45%] mb-4 md:mb-0">
+                        <div
+                            class="bg-white p-6 rounded-lg border border-[#E1E4E8] shadow-sm hover:shadow-md transition-shadow">
+                            <span class="font-code text-primary font-bold text-sm">Janvier 2026</span>
+                            <h3 class="font-h3 text-h3 mt-2 mb-2">La Genèse</h3>
+                            <p class="text-on-surface-variant">Première rencontre informelle entre cinq passionnés à
+                                Abidjan. L'idée d'une communauté structurée pour promouvoir PHP et Laravel localement
+                                prend vie.</p>
+                        </div>
+                    </div>
+                    <div
+                        class="absolute left-0 md:left-1/2 w-8 h-8 bg-white border-4 border-primary rounded-full -translate-x-1/2 z-10 hidden md:block">
+                    </div>
+                    <div class="md:w-[45%]"></div>
+                </div>
+                <!-- Timeline Item 2 -->
+                <div class="relative mb-12 md:flex md:justify-between items-center group">
+                    <div class="md:w-[45%] order-2">
+                        <div
+                            class="bg-white p-6 rounded-lg border border-[#E1E4E8] shadow-sm hover:shadow-md transition-shadow">
+                            <span class="font-code text-primary font-bold text-sm">Mars 2026</span>
+                            <h3 class="font-h3 text-h3 mt-2 mb-2">Premier Meetup</h3>
+                            <p class="text-on-surface-variant">Le "Laravel Abidjan Meetup #1" réunit plus de 150
+                                développeurs. Lancement officiel de la plateforme de documentation en français.</p>
+                        </div>
+                    </div>
+                    <div
+                        class="absolute left-0 md:left-1/2 w-8 h-8 bg-white border-4 border-primary rounded-full -translate-x-1/2 z-10 hidden md:block">
+                    </div>
+                    <div class="md:w-[45%] order-1"></div>
+                </div>
+                <!-- Timeline Item 3 -->
+                <div class="relative md:flex md:justify-between items-center group">
+                    <div class="md:w-[45%]">
+                        <div
+                            class="bg-white p-6 rounded-lg border border-[#E1E4E8] shadow-sm hover:shadow-md transition-shadow">
+                            <span class="font-code text-primary font-bold text-sm">Mai 2026</span>
+                            <h3 class="font-h3 text-h3 mt-2 mb-2">L'Expansion</h3>
+                            <p class="text-on-surface-variant">Structuration en association nationale. Signature des
+                                premiers partenariats avec les universités locales pour intégrer Laravel aux cursus.</p>
+                        </div>
+                    </div>
+                    <div
+                        class="absolute left-0 md:left-1/2 w-8 h-8 bg-white border-4 border-primary rounded-full -translate-x-1/2 z-10 hidden md:block">
+                    </div>
+                    <div class="md:w-[45%]"></div>
+                </div>
+            </div>
+        </section>
+        <!-- Mission & Valeurs -->
+        <section class="mb-xl">
+            <h2 class="font-h2 text-h2 mb-lg text-center">Mission &amp; Valeurs</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+                <div
+                    class="bg-white p-8 rounded-xl border border-[#E1E4E8] relative overflow-hidden group hover:border-primary transition-colors">
+                    <div class="h-[6px] w-full bg-primary absolute top-0 left-0"></div>
+                    <div class="w-12 h-12 bg-orange-50 rounded-lg flex items-center justify-center text-primary mb-6">
+                        <span class="material-symbols-outlined" data-icon="school">school</span>
+                    </div>
+                    <h3 class="font-h3 text-h3 mb-4">Éducation</h3>
+                    <p class="text-on-surface-variant">Rendre accessible la maîtrise de Laravel à travers des
+                        formations, des tutoriels et des ateliers pratiques de haut niveau.</p>
+                </div>
+                <div
+                    class="bg-white p-8 rounded-xl border border-[#E1E4E8] relative overflow-hidden group hover:border-primary transition-colors">
+                    <div class="h-[6px] w-full bg-secondary absolute top-0 left-0"></div>
+                    <div class="w-12 h-12 bg-green-50 rounded-lg flex items-center justify-center text-secondary mb-6">
+                        <span class="material-symbols-outlined" data-icon="groups">groups</span>
+                    </div>
+                    <h3 class="font-h3 text-h3 mb-4">Communauté</h3>
+                    <p class="text-on-surface-variant">Créer un espace d'entraide sain où chaque développeur, quel que
+                        soit son niveau, peut trouver réponse et inspiration.</p>
+                </div>
+                <div
+                    class="bg-white p-8 rounded-xl border border-[#E1E4E8] relative overflow-hidden group hover:border-primary transition-colors">
+                    <div class="h-[6px] w-full bg-tertiary absolute top-0 left-0"></div>
+                    <div class="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center text-tertiary mb-6">
+                        <span class="material-symbols-outlined" data-icon="rocket_launch">rocket_launch</span>
+                    </div>
+                    <h3 class="font-h3 text-h3 mb-4">Innovation</h3>
+                    <p class="text-on-surface-variant">Pousser les standards du web ivoirien vers l'excellence
+                        technologique et l'architecture logicielle moderne.</p>
+                </div>
+            </div>
+        </section>
+        <!-- Équipe Fondatrice -->
+        <section class="mb-xl">
+            <h2 class="font-h2 text-h2 mb-lg">Équipe fondatrice</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-lg">
+                <!-- Membre 1 -->
+                <div class="bg-white p-6 rounded-xl border border-[#E1E4E8] text-center hover:shadow-lg transition-all">
+                    <div
+                        class="w-20 h-20 bg-primary-container text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4 font-code">
+                        KD
+                    </div>
+                    <h4 class="font-h3 text-xl mb-1">Kouassi D.</h4>
+                    <p class="text-label font-label text-primary mb-4">Directeur Technique</p>
+                    <div class="flex justify-center gap-3">
+                        <span class="material-symbols-outlined text-outline cursor-pointer hover:text-primary"
+                            data-icon="share">share</span>
+                        <span class="material-symbols-outlined text-outline cursor-pointer hover:text-primary"
+                            data-icon="alternate_email">alternate_email</span>
+                    </div>
+                </div>
+                <!-- Membre 2 -->
+                <div class="bg-white p-6 rounded-xl border border-[#E1E4E8] text-center hover:shadow-lg transition-all">
+                    <div
+                        class="w-20 h-20 bg-secondary-container text-on-secondary-container rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4 font-code">
+                        AK
+                    </div>
+                    <h4 class="font-h3 text-xl mb-1">Awa K.</h4>
+                    <p class="text-label font-label text-secondary mb-4">Product Manager</p>
+                    <div class="flex justify-center gap-3">
+                        <span class="material-symbols-outlined text-outline cursor-pointer hover:text-primary"
+                            data-icon="share">share</span>
+                        <span class="material-symbols-outlined text-outline cursor-pointer hover:text-primary"
+                            data-icon="alternate_email">alternate_email</span>
+                    </div>
+                </div>
+                <!-- Membre 3 -->
+                <div class="bg-white p-6 rounded-xl border border-[#E1E4E8] text-center hover:shadow-lg transition-all">
+                    <div
+                        class="w-20 h-20 bg-tertiary-container text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4 font-code">
+                        MB
+                    </div>
+                    <h4 class="font-h3 text-xl mb-1">Moussa B.</h4>
+                    <p class="text-label font-label text-tertiary mb-4">Community Lead</p>
+                    <div class="flex justify-center gap-3">
+                        <span class="material-symbols-outlined text-outline cursor-pointer hover:text-primary"
+                            data-icon="share">share</span>
+                        <span class="material-symbols-outlined text-outline cursor-pointer hover:text-primary"
+                            data-icon="alternate_email">alternate_email</span>
+                    </div>
+                </div>
+                <!-- Membre 4 -->
+                <div class="bg-white p-6 rounded-xl border border-[#E1E4E8] text-center hover:shadow-lg transition-all">
+                    <div
+                        class="w-20 h-20 bg-surface-container-highest text-on-surface-variant rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4 font-code">
+                        SY
+                    </div>
+                    <h4 class="font-h3 text-xl mb-1">Sali Y.</h4>
+                    <p class="text-label font-label text-outline mb-4">UX Designer</p>
+                    <div class="flex justify-center gap-3">
+                        <span class="material-symbols-outlined text-outline cursor-pointer hover:text-primary"
+                            data-icon="share">share</span>
+                        <span class="material-symbols-outlined text-outline cursor-pointer hover:text-primary"
+                            data-icon="alternate_email">alternate_email</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Partenaires & Contact -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-xl">
+            <!-- Partenaires -->
+            <div class="bg-white p-8 rounded-xl border border-[#E1E4E8] shadow-sm">
+                <h2 class="font-h2 text-h2 mb-6">Nos Partenaires</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div
+                        class="h-20 bg-surface-container-low rounded-lg flex items-center justify-center border border-[#E1E4E8] opacity-70 grayscale hover:grayscale-0 hover:opacity-100 transition-all p-4">
+                        <img alt="Logo Partenaire 1" class="max-h-full max-w-full"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9nFGZzmNLUymBpPn81K7BdduF9ZSSVlcOVqMbSds4Iz6hWneSiLhE3-x3VNrioOA63hsVLmAxc9iH26EIiAICS5T-coDGbU0ySZhQzc0ZNxUqRK3HA6Vw-agbsX5Wd6EKsH0O3dOd0frsXOHtJPQg3XIBRM0c6ZG6dH4aQXXN0YMElHb4QRyRN1SW5qbXx-D_Gm2zPYKhuB-wDrm98XdDeOfO55ZZWTe5rdpqDu_Amr0Per_RbkCt5llTOOWuFvaqyLYaBccQyBw" />
+                    </div>
+                    <div
+                        class="h-20 bg-surface-container-low rounded-lg flex items-center justify-center border border-[#E1E4E8] opacity-70 grayscale hover:grayscale-0 hover:opacity-100 transition-all p-4">
+                        <img alt="Logo Partenaire 2" class="max-h-full max-w-full"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBeWPKX0KYMskfRAUrjonAVPKQpSGvwlxTabV0tEa-yu2m-KpLmWzLIsDoSsf6HQ7xnByQNfmnHt4tJEcWLU6QXJY1nxtXNX9Na4rnI0yln8rYkcCi1ut-sJtnsbX5TZv_1qPt01jO8AFdbuas-BJRPzA5WdjE8_We9vE0EuTtPKPukS7LpYdoCZU2bnVPEw_BEQp_iNI800Z4Hvo6TG1iAMuLmEsOuoC8RVMvIfFofAdK7gl34Sxx7oej1HpgR62Ti2-tdMyHdzqI" />
+                    </div>
+                    <div
+                        class="h-20 bg-surface-container-low rounded-lg flex items-center justify-center border border-[#E1E4E8] opacity-70 grayscale hover:grayscale-0 hover:opacity-100 transition-all p-4">
+                        <img alt="Logo Partenaire 3" class="max-h-full max-w-full"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCly1_L65kf7STrz1V2jMRqMWyvQEpdFPIeJj9I9kJ-aEiJcXBOyX5mQniVHGcylww7FNmesg94H41A7MYYpKfn8XAxyM5AHl1FbIfM2lal-OJl6IMHYFZFeXh1HsaXVP7C--Zg_6lOE4NT4fwMm_yeKwkWpAGJcEZFYfDYnpHDvygVERV6eRrXFkSbSRQZnl4yA4Z93ru3FDBK245ktPAp5j2NNpunCoFO9c7BlI9KymlphrNQijoOZE-iTf7ucNIfFWFZo4u0C58" />
+                    </div>
+                    <div
+                        class="h-20 bg-surface-container-low rounded-lg flex items-center justify-center border border-[#E1E4E8] opacity-70 grayscale hover:grayscale-0 hover:opacity-100 transition-all p-4">
+                        <img alt="Logo Partenaire 4" class="max-h-full max-w-full"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIZx0kswXMd26Ny4GtQRb_PKn6cjIoIOtJSYMNh4bjPTz8d6hRyFw7sR5DoQlIfXU0g-609aIPVB_aF3M4GUoi6eQUL-mxVG769aGXyyqNiXiPMGZGpMkmOYeK1S_-QLMiNME2IDaFFQNvuWTTNogNd_daOQeR7VQNq0_aoWRVse3rEGdWRNfv8ra6E-9aLtdCyr1M9_98-2k611zgnPqB2qHM3Blt1AWTb9fSGTzCUgl6LFzn6COjNzv1QtZmkcvZpzJDcpkcCCw" />
+                    </div>
+                </div>
+            </div>
+            <!-- Contact -->
+            <div class="bg-primary p-8 rounded-xl text-white shadow-xl flex flex-col justify-between">
+                <div>
+                    <h2 class="font-h2 text-h2 mb-4 text-white">Contactez-nous</h2>
+                    <p class="font-body-md mb-8 text-white/80">Vous avez un projet, une suggestion ou souhaitez devenir
+                        partenaire ? Écrivez-nous.</p>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4">
+                            <span class="material-symbols-outlined text-white" data-icon="mail">mail</span>
+                            <span class="font-code">contact@laravel.ci</span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <span class="material-symbols-outlined text-white"
+                                data-icon="location_on">location_on</span>
+                            <span class="font-code">Cocody, Abidjan, Côte d'Ivoire</span>
+                        </div>
+                    </div>
+                </div>
+                <button
+                    class="mt-8 w-full bg-white text-primary py-4 rounded-lg font-code font-bold hover:bg-opacity-90 transition-transform active:scale-[0.98]">
+                    Envoyer un message
+                </button>
+            </div>
+        </section>
+    </main>
+    <!-- Footer -->
+    <!-- FOOTER UNIFIE -->
+    <footer class="bg-[#F8F9FA] w-full border-t border-[#E1E4E8] mt-auto">
+        <div
+            class="max-w-[1200px] mx-auto px-4 sm:px-4 sm:px-6 py-10 sm:py-12 grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+            <div class="col-span-2 md:col-span-1">
+                <a href="index.html"
+                    class="text-lg font-bold text-[#FF6600] mb-4 inline-flex items-center gap-2 font-['JetBrains_Mono']">
+                    <span class="material-symbols-outlined text-xl">developer_mode</span>
+                    Laravel CI
+                </a>
+                <p class="font-['JetBrains_Mono'] text-sm text-slate-500 mb-5 mt-3">La première communauté Laravel en
+                    Côte d'Ivoire.</p>
+                <div class="flex gap-3">
+                    <a class="w-9 h-9 bg-white border border-[#E1E4E8] rounded-full flex items-center justify-center text-slate-600 hover:text-[#FF6600] hover:border-[#FF6600] transition-colors"
+                        href="#"><span class="material-symbols-outlined text-base">public</span></a>
+                    <a class="w-9 h-9 bg-white border border-[#E1E4E8] rounded-full flex items-center justify-center text-slate-600 hover:text-[#FF6600] hover:border-[#FF6600] transition-colors"
+                        href="#"><span class="material-symbols-outlined text-base">rss_feed</span></a>
+                </div>
+            </div>
+            <div>
+                <div
+                    class="font-bold text-slate-900 mb-4 sm:mb-6 font-['JetBrains_Mono'] text-xs uppercase tracking-widest">
+                    Communauté</div>
+                <ul class="space-y-3 font-['JetBrains_Mono'] text-sm">
+                    <li><a class="text-slate-500 hover:text-[#FF6600] hover:translate-x-1 transition-all inline-block"
+                            href="forum.html">Forum</a></li>
+                    <li><a class="text-slate-500 hover:text-[#FF6600] hover:translate-x-1 transition-all inline-block"
+                            href="evenements.html">Événements</a></li>
+                    <li><a class="text-slate-500 hover:text-[#FF6600] hover:translate-x-1 transition-all inline-block"
+                            href="apropos.html">À propos</a></li>
+                    <li><a class="text-slate-500 hover:text-[#FF6600] hover:translate-x-1 transition-all inline-block"
+                            href="profilmembre.html">Profil membre</a></li>
+                </ul>
+            </div>
+            <div>
+                <div
+                    class="font-bold text-slate-900 mb-4 sm:mb-6 font-['JetBrains_Mono'] text-xs uppercase tracking-widest">
+                    Plateforme</div>
+                <ul class="space-y-3 font-['JetBrains_Mono'] text-sm">
+                    <li><a class="text-slate-500 hover:text-[#FF6600] hover:translate-x-1 transition-all inline-block"
+                            href="blog.html">Blog</a></li>
+                    <li><a class="text-slate-500 hover:text-[#FF6600] hover:translate-x-1 transition-all inline-block"
+                            href="job.html">Job Board</a></li>
+                    <li><a class="text-slate-500 hover:text-[#FF6600] hover:translate-x-1 transition-all inline-block"
+                            href="connexion.html">Connexion</a></li>
+                    <li><a class="text-slate-500 hover:text-[#FF6600] hover:translate-x-1 transition-all inline-block"
+                            href="inscription.html">Inscription</a></li>
+                </ul>
+            </div>
+            <div>
+                <div
+                    class="font-bold text-slate-900 mb-4 sm:mb-6 font-['JetBrains_Mono'] text-xs uppercase tracking-widest">
+                    Légal</div>
+                <ul class="space-y-3 font-['JetBrains_Mono'] text-sm">
+                    <li><a class="text-slate-500 hover:text-[#FF6600] hover:translate-x-1 transition-all inline-block"
+                            href="#">Mentions légales</a></li>
+                    <li><a class="text-slate-500 hover:text-[#FF6600] hover:translate-x-1 transition-all inline-block"
+                            href="#">Confidentialité</a></li>
+                    <li><a class="text-slate-500 hover:text-[#FF6600] hover:translate-x-1 transition-all inline-block"
+                            href="#">Cookies</a></li>
+                </ul>
+            </div>
+        </div>
+        <div
+            class="max-w-[1200px] mx-auto px-4 sm:px-4 sm:px-6 py-6 sm:py-8 border-t border-[#E1E4E8] flex flex-col sm:flex-row justify-between items-center gap-3">
+            <p class="font-['JetBrains_Mono'] text-sm text-slate-500 text-center sm:text-left">© 2026 Laravel Côte
+                d'Ivoire — Open Source MIT 🇨🇮</p>
+            <div class="flex gap-4 font-['JetBrains_Mono'] text-sm text-slate-500">
+                <a class="hover:text-[#FF6600]" href="#">Contact</a>
+                <a class="hover:text-[#FF6600]" href="#">Mentions légales</a>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
