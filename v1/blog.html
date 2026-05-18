@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html class="light" lang="fr">
+<head>
+    <title>Blog & Ressources — Laravel CI</title>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-background": "#261812","on-primary-fixed-variant": "#7c2e00","on-tertiary-fixed-variant": "#00497b","on-error-container": "#93000a","tertiary-fixed-dim": "#9ccaff","on-tertiary": "#ffffff","primary": "#a33e00","tertiary-fixed": "#d0e4ff","surface-container": "#ffe9e1","on-primary-container": "#561d00","surface-container-low": "#fff1ec","on-surface": "#261812","on-primary-fixed": "#360f00","secondary-fixed": "#7efba4","inverse-primary": "#ffb596","primary-fixed-dim": "#ffb596","surface-bright": "#fff8f6","on-secondary": "#ffffff","on-secondary-fixed": "#00210c","on-tertiary-fixed": "#001d35","on-surface-variant": "#5a4136","surface-container-highest": "#f8ddd2","surface-container-lowest": "#ffffff","secondary": "#006d37","tertiary-container": "#009cfc","on-secondary-container": "#007239","on-tertiary-container": "#003155","tertiary": "#0062a1","primary-fixed": "#ffdbcd","on-primary": "#ffffff","surface-container-high": "#fee2d8","inverse-on-surface": "#ffede7","error-container": "#ffdad6","surface-tint": "#a33e00","surface-dim": "#f0d4ca","surface-variant": "#f8ddd2","secondary-container": "#7bf8a1","on-secondary-fixed-variant": "#005228","on-error": "#ffffff","secondary-fixed-dim": "#61de8a","primary-container": "#ff6600","surface": "#fff8f6","error": "#ba1a1a","outline-variant": "#e3bfb1","outline": "#8e7164","background": "#fff8f6","inverse-surface": "#3d2d26"
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem","lg": "0.5rem","xl": "0.75rem","full": "9999px" },
+                    spacing: { "unit": "4px","gutter": "24px","lg": "24px","xs": "4px","md": "16px","xl": "48px","container-max": "1200px","sm": "8px","accent-bar": "6px" },
+                    fontFamily: { "code": ["JetBrains Mono"],"h2": ["JetBrains Mono"],"label": ["JetBrains Mono"],"body-lg": ["Inter"],"body-md": ["Inter"],"h3": ["JetBrains Mono"],"h1": ["JetBrains Mono"] },
+                    fontSize: { "code": ["14px",{"lineHeight":"1.5","fontWeight":"400"}],"h2": ["32px",{"lineHeight":"1.3","fontWeight":"600"}],"label": ["12px",{"lineHeight":"1.0","fontWeight":"500"}],"body-lg": ["18px",{"lineHeight":"1.6","fontWeight":"400"}],"body-md": ["16px",{"lineHeight":"1.6","fontWeight":"400"}],"h3": ["24px",{"lineHeight":"1.4","fontWeight":"600"}],"h1": ["40px",{"lineHeight":"1.2","letterSpacing":"-0.02em","fontWeight":"700"}] }
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        /* Mobile menu slide-down */
+        #mobile-menu { max-height: 0; overflow: hidden; transition: max-height 0.35s ease, opacity 0.3s ease; opacity: 0; }
+        #mobile-menu.open { max-height: 520px; opacity: 1; }
+        /* Responsive font sizes */
+        @media (max-width: 640px) {
+            .text-h1 { font-size: 26px !important; }
+            .text-h2 { font-size: 22px !important; }
+            .text-h3 { font-size: 18px !important; }
+        }
+        @media (min-width: 641px) and (max-width: 1023px) {
+            .text-h1 { font-size: 32px !important; }
+            .text-h2 { font-size: 26px !important; }
+        }
+        /* Ensure images are always fluid */
+        img { max-width: 100%; height: auto; }
+        /* Prevent horizontal overflow on mobile */
+        body { overflow-x: hidden; }
+        /* Responsive tables */
+        .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    
+        /* ── Global mobile overflow prevention ── */
+        *, *::before, *::after { box-sizing: border-box; }
+        body { overflow-x: hidden; max-width: 100vw; }
+        img, video, iframe, table { max-width: 100%; }
+        pre, code { overflow-x: auto; white-space: pre-wrap; word-break: break-word; }
+        /* Responsive banner padding */
+        .banner-inner { padding: 2rem 1rem; }
+        @media (min-width: 640px)  { .banner-inner { padding: 3rem 2rem; } }
+        @media (min-width: 1024px) { .banner-inner { padding: 4rem 3rem; } }
+        /* Tabs/chips scroll on mobile */
+        .chips-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 4px; }
+        .chips-scroll::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+
+<body class="bg-background text-on-background font-body-md selection:bg-primary-container selection:text-white">
+
+    <!-- ═══════════════════════════════════════════════════════
+         HEADER UNIFIÉ — Responsive
+    ═══════════════════════════════════════════════════════ -->
+    <header class="bg-white sticky top-0 z-[100] border-t-[6px] border-[#FF6600] border-b border-[#E1E4E8] shadow-[0_4px_10px_rgba(0,0,0,0.04)]">
+        <div class="max-w-[1200px] mx-auto px-4 sm:px-6">
+            <!-- Barre principale -->
+            <div class="h-16 sm:h-20 flex items-center justify-between gap-4">
+
+                <!-- Logo -->
+                <a href="index.html" class="text-lg sm:text-xl font-black text-[#FF6600] flex items-center gap-2 font-['JetBrains_Mono'] tracking-tight shrink-0">
+                    <span class="material-symbols-outlined text-2xl sm:text-3xl">developer_mode</span>
+                    Laravel CI
+                </a>
+
+                <!-- Nav desktop (≥ lg) -->
+                <nav class="hidden lg:flex gap-6 xl:gap-8 items-center font-['JetBrains_Mono'] text-sm tracking-tight flex-1 justify-center">
+                    <a href="forum.html"      class="text-slate-600 hover:text-[#FF6600] transition-all duration-200 py-1 border-b-2 border-transparent hover:border-[#FF6600]">Forum</a>
+                    <a href="blog.html"       class="text-slate-600 hover:text-[#FF6600] transition-all duration-200 py-1 border-b-2 border-transparent hover:border-[#FF6600]">Blog</a>
+                    <a href="evenements.html" class="text-slate-600 hover:text-[#FF6600] transition-all duration-200 py-1 border-b-2 border-transparent hover:border-[#FF6600]">Événements</a>
+                    <a href="job.html"        class="text-slate-600 hover:text-[#FF6600] transition-all duration-200 py-1 border-b-2 border-transparent hover:border-[#FF6600]">Job Board</a>
+                    <a href="apropos.html"    class="text-slate-600 hover:text-[#FF6600] transition-all duration-200 py-1 border-b-2 border-transparent hover:border-[#FF6600]">À propos</a>
+                </nav>
+
+                <!-- Actions desktop -->
+                <div class="hidden lg:flex items-center gap-3">
+                    <a href="connexion.html"  class="text-slate-600 hover:text-[#FF6600] font-['JetBrains_Mono'] text-sm px-4 py-2 rounded-lg hover:bg-slate-50 active:scale-95 transition-all">Connexion</a>
+                    <a href="inscription.html" class="bg-[#FF6600] text-white px-5 py-2.5 rounded-lg font-bold font-['JetBrains_Mono'] text-sm active:scale-95 transition-transform shadow-sm hover:shadow-md hover:opacity-90">Rejoindre</a>
+                </div>
+
+                <!-- Hamburger (< lg) -->
+                <button id="hamburger-btn" aria-label="Menu" aria-expanded="false"
+                    class="lg:hidden flex flex-col justify-center items-center w-10 h-10 rounded-lg hover:bg-slate-100 transition-colors gap-[5px] shrink-0">
+                    <span id="ham-line-1" class="block w-5 h-0.5 bg-slate-700 transition-all duration-300 origin-center"></span>
+                    <span id="ham-line-2" class="block w-5 h-0.5 bg-slate-700 transition-all duration-300"></span>
+                    <span id="ham-line-3" class="block w-5 h-0.5 bg-slate-700 transition-all duration-300 origin-center"></span>
+                </button>
+            </div>
+
+            <!-- ─── Menu Mobile — slide-down ─── -->
+            <div id="mobile-menu" class="lg:hidden border-t border-[#E1E4E8]">
+                <nav class="py-3 flex flex-col gap-1 font-['JetBrains_Mono'] text-sm">
+                    <a href="forum.html"      class="px-3 py-3.5 rounded-lg text-slate-700 hover:text-[#FF6600] hover:bg-orange-50 transition-all flex items-center gap-3 border-b border-[#F0F0F0]">
+                        <span class="material-symbols-outlined text-[20px] text-[#FF6600]">forum</span>Forum
+                    </a>
+                    <a href="blog.html"       class="px-3 py-3.5 rounded-lg text-slate-700 hover:text-[#FF6600] hover:bg-orange-50 transition-all flex items-center gap-3 border-b border-[#F0F0F0]">
+                        <span class="material-symbols-outlined text-[20px] text-[#FF6600]">article</span>Blog
+                    </a>
+                    <a href="evenements.html" class="px-3 py-3.5 rounded-lg text-slate-700 hover:text-[#FF6600] hover:bg-orange-50 transition-all flex items-center gap-3 border-b border-[#F0F0F0]">
+                        <span class="material-symbols-outlined text-[20px] text-[#FF6600]">event</span>Événements
+                    </a>
+                    <a href="job.html"        class="px-3 py-3.5 rounded-lg text-slate-700 hover:text-[#FF6600] hover:bg-orange-50 transition-all flex items-center gap-3 border-b border-[#F0F0F0]">
+                        <span class="material-symbols-outlined text-[20px] text-[#FF6600]">work</span>Job Board
+                    </a>
+                    <a href="apropos.html"    class="px-3 py-3.5 rounded-lg text-slate-700 hover:text-[#FF6600] hover:bg-orange-50 transition-all flex items-center gap-3">
+                        <span class="material-symbols-outlined text-[20px] text-[#FF6600]">info</span>À propos
+                    </a>
+                </nav>
+                <div class="pb-4 pt-2 border-t border-[#E1E4E8] flex flex-col gap-2.5">
+                    <a href="connexion.html"  class="w-full text-center py-3.5 font-['JetBrains_Mono'] text-sm font-bold text-slate-700 border border-[#E1E4E8] rounded-lg hover:bg-slate-50 transition-colors">Connexion</a>
+                    <a href="inscription.html" class="w-full py-3.5 text-center bg-[#FF6600] text-white rounded-lg font-bold font-['JetBrains_Mono'] text-sm hover:opacity-90 transition-opacity">Rejoindre la communauté</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-full max-w-[1200px] mx-auto px-6 py-12">
+        <!-- Hero Banner -->
+        <section
+            class="relative bg-white rounded-xl overflow-hidden border border-[#E1E4E8] shadow-[0_4px_10px_rgba(0,0,0,0.04)] mb-12">
+            <div class="absolute top-0 left-0 w-full h-[6px] bg-[#FF6600]"></div>
+            <div class="line-pattern absolute inset-0 opacity-40"></div>
+            <div class="relative px-4 sm:px-8 md:px-12 py-10 sm:py-16 text-center">
+                <h1 class="font-h1 text-h1 text-on-background mb-4">Le Blog de la Communauté</h1>
+                <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">Explorez les dernières
+                    actualités, tutoriels approfondis et ressources exclusives de l'écosystème Laravel en Côte d'Ivoire.
+                </p>
+            </div>
+        </section>
+        <!-- Filters & Navigation -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+            <div class="flex p-1 bg-surface-container-low rounded-xl w-full sm:w-fit overflow-x-auto">
+                <button
+                    class="px-6 py-2 bg-white text-[#FF6600] font-code text-sm font-bold rounded-lg shadow-sm">Articles</button>
+                <button
+                    class="px-6 py-2 text-on-surface-variant font-code text-sm hover:text-[#FF6600] transition-colors">Tutoriels</button>
+                <button
+                    class="px-6 py-2 text-on-surface-variant font-code text-sm hover:text-[#FF6600] transition-colors">Ressources</button>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="font-label text-label text-outline uppercase tracking-wider">Niveau :</span>
+                <div class="flex gap-2">
+                    <span
+                        class="px-3 py-1 bg-secondary-container text-on-secondary-container font-code text-xs rounded-full cursor-pointer hover:opacity-80 transition-opacity">Débutant</span>
+                    <span
+                        class="px-3 py-1 bg-surface-container-highest text-on-surface-variant font-code text-xs rounded-full cursor-pointer hover:bg-orange-100 transition-colors">Intermédiaire</span>
+                    <span
+                        class="px-3 py-1 bg-surface-container-highest text-on-surface-variant font-code text-xs rounded-full cursor-pointer hover:bg-orange-100 transition-colors">Avancé</span>
+                </div>
+            </div>
+        </div>
+        <!-- Featured Article -->
+        <article
+            class="group relative bg-white border border-[#E1E4E8] rounded-xl overflow-hidden shadow-[0_4px_10px_rgba(0,0,0,0.04)] mb-12 flex flex-col sm:flex-row">
+            <div class="absolute top-0 left-0 w-full h-[6px] bg-[#FF6600] z-10"></div>
+            <div class="w-full sm:w-3/5 h-52 sm:h-64 md:h-auto overflow-hidden">
+                <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    data-alt="A wide, high-resolution cinematic shot of a clean workspace featuring a laptop with Laravel code on the screen. The room is flooded with bright, natural ivory light, creating a professional and clean tech aesthetic. Soft orange accents are visible in the office decor, matching the brand's primary color palette. The composition is modern and minimalist, highlighting a focus on precision and high-end software development."
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCaPumKo1ZQ_OPuXxFxg4w7fNaMxSsu9HuS-7pTk-NAs68ZENgr674LVIbq0uprLU0zbsDGj2OvtSFzp4nITcZQe4PtqJsb_WzW-RjiMoq7uhsO2h8YaZRnQVOemI5nN6Grs0fMlWof1H2RQ3GNhgYsxBmYDJFGRhjl4mGkypcrsfofM5Fe8y4zdHCuqSU2k0sbK9-OVADizFoujBqf315lqLI_bmtaqcdTT7q4Q4jWyHP4ZPriAq8RFQ2G8jSAbIWiUzuvCA2noxY" />
+            </div>
+            <div class="w-full sm:w-2/5 p-5 sm:p-8 flex flex-col justify-center">
+                <div class="flex items-center gap-2 mb-4">
+                    <span
+                        class="px-2 py-0.5 bg-orange-100 text-[#FF6600] font-code text-[10px] font-bold uppercase rounded">A
+                        la une</span>
+                    <span class="text-outline font-code text-xs">15 Octobre 2024</span>
+                </div>
+                <h2 class="font-h2 text-h2 text-on-background mb-4 leading-tight">Optimiser vos applications Laravel
+                    pour la production</h2>
+                <p class="text-on-surface-variant font-body-md mb-6">Découvrez les meilleures pratiques pour sécuriser
+                    et accélérer vos déploiements Laravel sur des environnements cloud modernes.</p>
+                <div class="flex items-center gap-3">
+                    <img class="w-10 h-10 rounded-full border-2 border-white shadow-sm"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbIH4hUczF_H-dUC12lMQ0a9PvkwCkOzb4odVBh8xBRAyNRpmYqWb5OMEnxL0D0kT1_zmSJQa_wZeGyoZF9DbRJhim8j_KzYeYui9RrK2wm_fxwxXvjbBIMrbE3N4UUdxPcDTuoROFJuDKLXyxpeJCbCTD7vLNZgHUPdS3wTDbYFsBsj0JQr8WXEp-I6cJ1ZgJOE1UyqGI3a23a_KrztQ3L75wQo-d1TZV6YgQbHxS3f3tS8n0Flykmd5WyKSyeaTJBl9D9g4t7w4" />
+                    <div>
+                        <p class="text-sm font-bold text-on-background">Koffi Arnaud</p>
+                        <p class="text-xs text-outline">Lead Developer</p>
+                    </div>
+                </div>
+            </div>
+        </article>
+        <!-- Article Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Card 1 -->
+            <article
+                class="bg-white border border-[#E1E4E8] rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col">
+                <div class="h-[6px] bg-[#FF6600]"></div>
+                <div class="h-48 overflow-hidden">
+                    <img class="w-full h-full object-cover"
+                        data-alt="A detailed, macro view of a keyboard with backlighting in a soft white glow. The background is a clean, minimalist developer studio with subtle orange lighting elements. The overall atmosphere is focused and technological, capturing the essence of a late-night coding session in a professional, light-mode environment. High contrast between the hardware textures and the soft ambient light."
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBf-jTWCYrhOdSQ1yXRxgGUOUK2t8X--Dqu2MBRc-5b6ULVF94HydlzDxvcOZA7ZGgP5BkPKmf4HcDGcwWlw2AgDcs_L4hz06ur-o7vBeI3QrHRm3NrIOYxekmhGUc_Ku8TpBSVic55bz5tazZYVl0KaP1axoiMqvAeHPVKkU6GQRxiVcOISwyZ5m936Xb3pgm5IKmM71opeBzA5BG-R2Mh4yg-oNxqBzv2-gLnNkbUYY0CUkNtF7cTcrUDFV7t2ZQ0f7XpmKbRRJY" />
+                </div>
+                <div class="p-6 flex-grow flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="font-code text-xs text-[#FF6600] font-bold">Tutoriel</span>
+                        <span class="font-code text-xs text-outline">8 min de lecture</span>
+                    </div>
+                    <h3
+                        class="font-h3 text-h3 text-on-background mb-3 hover:text-[#FF6600] transition-colors cursor-pointer">
+                        Maîtriser Eloquent : Relations et Performance</h3>
+                    <p class="text-on-surface-variant text-body-md mb-6 line-clamp-3">Tout ce que vous devez savoir sur
+                        les relations One-to-Many, Polymorphism et le Lazy Loading vs Eager Loading.</p>
+                    <div class="mt-auto flex items-center gap-3 pt-6 border-t border-slate-50">
+                        <div class="w-8 h-8 rounded-full bg-slate-200"></div>
+                        <span class="text-xs font-medium text-on-surface">Jean-Marc Yao</span>
+                    </div>
+                </div>
+            </article>
+            <!-- Card 2 -->
+            <article
+                class="bg-white border border-[#E1E4E8] rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col">
+                <div class="h-[6px] bg-secondary"></div>
+                <div class="h-48 overflow-hidden">
+                    <img class="w-full h-full object-cover"
+                        data-alt="A vibrant, modern flat illustration showing interconnected icons representing digital community and Laravel architecture. The style is clean, using a palette of white, soft grays, and energetic orange highlights. The lighting is even and bright, suggesting a fresh and collaborative community atmosphere. The design is geometric and technical yet welcoming."
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3CP45CuYsDzTLDLpgO-yCx7fQPOqhgnAl1Q_Wkd9G-M1Td2PP-lnw2Ty9l6usXtN9S4zXGCU_Vp2liBe_0md_TR67xovm3GWljZ3cR64NIe_af81Pfrh2kzRhPwg1MXxMZiEpdN8zX8K9PrUei89SeFJv6qbxPv5HB2meXK0_mH-y35YvdDK9U3JZY5gbYzsnDADnq-umbimrLW18Fsb8MXqEsdMAy4iJ3kRSbKgN8tShr2-Bm3AuddxyJPCBv_L6vwkk4ZoVV48" />
+                </div>
+                <div class="p-6 flex-grow flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="font-code text-xs text-secondary font-bold">Actualité</span>
+                        <span class="font-code text-xs text-outline">5 min de lecture</span>
+                    </div>
+                    <h3
+                        class="font-h3 text-h3 text-on-background mb-3 hover:text-secondary transition-colors cursor-pointer">
+                        Retour sur le Laravel Meetup Abidjan 2024</h3>
+                    <p class="text-on-surface-variant text-body-md mb-6 line-clamp-3">Les moments forts, les conférences
+                        et les innovations présentées lors de notre dernier grand rassemblement annuel.</p>
+                    <div class="mt-auto flex items-center gap-3 pt-6 border-t border-slate-50">
+                        <div class="w-8 h-8 rounded-full bg-slate-200"></div>
+                        <span class="text-xs font-medium text-on-surface">Marie-Ève Kouadio</span>
+                    </div>
+                </div>
+            </article>
+            <!-- Card 3 -->
+            <article
+                class="bg-white border border-[#E1E4E8] rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col">
+                <div class="h-[6px] bg-tertiary"></div>
+                <div class="h-48 overflow-hidden">
+                    <img class="w-full h-full object-cover"
+                        data-alt="An abstract visualization of cloud infrastructure and data packets moving through a network. The aesthetic is clean and futuristic with a light background and primary blue and orange data streams. Sharp lines and precise geometric patterns emphasize technical reliability and high-speed connectivity. Soft, diffused shadows give depth to the floating technical elements."
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_nU_I9G6K7-RlGKtLrbkfZesRHCG24Ui5U8UO68SxgKmWYI6lgsG91QXvooOm1sDat6yBTBt1HDhbt-McTvYYY09PQWF5SaIh7L6YDS4b1Kt9h7Xbfli6ASSWbVjOFMQbnAn3te_7k2KQoDRqIo8xoMOvzXhkBYJT_ZlW9YUOlzw10bL_CPlglERTWDmhUje_pNmjKnxi82uYKFq9PSXbk9c6FWjnh3fUWcYLtXUMCd9sgDQ72j7ylshhEq0ASmC5kDSCHRzVhhA" />
+                </div>
+                <div class="p-6 flex-grow flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="font-code text-xs text-tertiary font-bold">Ressource</span>
+                        <span class="font-code text-xs text-outline">12 min de lecture</span>
+                    </div>
+                    <h3
+                        class="font-h3 text-h3 text-on-background mb-3 hover:text-tertiary transition-colors cursor-pointer">
+                        Cheat Sheet : Laravel Security Best Practices</h3>
+                    <p class="text-on-surface-variant text-body-md mb-6 line-clamp-3">Un guide complet et actionnable
+                        pour blinder vos applications contre les attaques les plus courantes.</p>
+                    <div class="mt-auto flex items-center gap-3 pt-6 border-t border-slate-50">
+                        <div class="w-8 h-8 rounded-full bg-slate-200"></div>
+                        <span class="text-xs font-medium text-on-surface">Idriss Traoré</span>
+                    </div>
+                </div>
+            </article>
+        </div>
+        <!-- Pagination -->
+        <div class="mt-16 flex justify-center items-center gap-4">
+            <button
+                class="w-10 h-10 rounded-lg border border-[#E1E4E8] flex items-center justify-center text-slate-400 hover:text-[#FF6600] hover:border-[#FF6600] transition-all">
+                <span class="material-symbols-outlined">chevron_left</span>
+            </button>
+            <button
+                class="w-10 h-10 rounded-lg bg-[#FF6600] text-white font-code text-sm font-bold shadow-sm">1</button>
+            <button
+                class="w-10 h-10 rounded-lg border border-[#E1E4E8] text-slate-600 font-code text-sm hover:text-[#FF6600] hover:border-[#FF6600] transition-all">2</button>
+            <button
+                class="w-10 h-10 rounded-lg border border-[#E1E4E8] text-slate-600 font-code text-sm hover:text-[#FF6600] hover:border-[#FF6600] transition-all">3</button>
+            <span class="text-slate-400">...</span>
+            <button
+                class="w-10 h-10 rounded-lg border border-[#E1E4E8] flex items-center justify-center text-slate-400 hover:text-[#FF6600] hover:border-[#FF6600] transition-all">
+                <span class="material-symbols-outlined">chevron_right</span>
+            </button>
+        </div>
+    </main>
+
+    <!-- ═══════════════════════════════════════════════════════
+         FOOTER UNIFIÉ — Responsive
+    ═══════════════════════════════════════════════════════ -->
+    <footer class="bg-[#F8F9FA] w-full border-t border-[#E1E4E8]">
+        <div class="max-w-[1200px] mx-auto px-4 sm:px-6 py-10 sm:py-12 grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+            <!-- Brand -->
+            <div class="col-span-2 md:col-span-1">
+                <a href="index.html" class="text-lg font-bold text-[#FF6600] mb-4 inline-flex items-center gap-2 font-['JetBrains_Mono']">
+                    <span class="material-symbols-outlined text-xl">developer_mode</span>
+                    Laravel CI
+                </a>
+                <p class="font-['JetBrains_Mono'] text-sm text-slate-500 mb-5 mt-3">La première communauté de développeurs Laravel en Côte d'Ivoire.</p>
+                <div class="flex gap-3">
+                    <a class="w-9 h-9 bg-white border border-[#E1E4E8] rounded-full flex items-center justify-center text-slate-600 hover:text-[#FF6600] hover:border-[#FF6600] transition-colors" href="#"><span class="material-symbols-outlined text-base">public</span></a>
+                    <a class="w-9 h-9 bg-white border border-[#E1E4E8] rounded-full flex items-center justify-center text-slate-600 hover:text-[#FF6600] hover:border-[#FF6600] transition-colors" href="#"><span class="material-symbols-outlined text-base">rss_feed</span></a>
+                </div>
+            </div>
+            <!-- Communauté -->
+            <div>
+                <div class="font-bold text-slate-800 mb-4 sm:mb-6 font-['JetBrains_Mono'] text-xs uppercase tracking-widest">Communauté</div>
+                <ul class="space-y-3 font-['JetBrains_Mono'] text-sm">
+                    <li><a class="text-slate-500 hover:text-[#FF6600] hover:translate-x-1 transition-all inline-block" href="forum.html">Forum</a></li>
+                    <li><a class="text-slate-500 hover:text-[#FF6600] hover:translate-x-1 transition-all inline-block" href="#">Slack</a></li>
+                    <li><a class="text-slate-500 hover:text-[#FF6600] hover:translate-x-1 transition-all inline-block" href="evenements.html">Événements</a></li>
+                    <li><a class="text-slate-500 hover:text-[#FF6600] hover:translate-x-1 transition-all inline-block" href="apropos.html">À propos</a></li>
+                </ul>
+            </div>
+            <!-- Plateforme -->
+            <div>
+                <div class="font-bold text-slate-800 mb-4 sm:mb-6 font-['JetBrains_Mono'] text-xs uppercase tracking-widest">Plateforme</div>
+                <ul class="space-y-3 font-['JetBrains_Mono'] text-sm">
+                    <li><a class="text-slate-500 hover:text-[#FF6600] hover:translate-x-1 transition-all inline-block" href="blog.html">Blog</a></li>
+                    <li><a class="text-slate-500 hover:text-[#FF6600] hover:translate-x-1 transition-all inline-block" href="job.html">Job Board</a></li>
+                    <li><a class="text-slate-500 hover:text-[#FF6600] hover:translate-x-1 transition-all inline-block" href="connexion.html">Connexion</a></li>
+                    <li><a class="text-slate-500 hover:text-[#FF6600] hover:translate-x-1 transition-all inline-block" href="inscription.html">Inscription</a></li>
+                </ul>
+            </div>
+            <!-- Légal -->
+            <div>
+                <div class="font-bold text-slate-800 mb-4 sm:mb-6 font-['JetBrains_Mono'] text-xs uppercase tracking-widest">Légal</div>
+                <ul class="space-y-3 font-['JetBrains_Mono'] text-sm">
+                    <li><a class="text-slate-500 hover:text-[#FF6600] hover:translate-x-1 transition-all inline-block" href="#">Mentions Légales</a></li>
+                    <li><a class="text-slate-500 hover:text-[#FF6600] hover:translate-x-1 transition-all inline-block" href="#">Privacy Policy</a></li>
+                    <li><a class="text-slate-500 hover:text-[#FF6600] hover:translate-x-1 transition-all inline-block" href="#">Cookies</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="max-w-[1200px] mx-auto px-4 sm:px-6 py-5 sm:py-6 border-t border-[#E1E4E8] flex flex-col sm:flex-row justify-between items-center gap-3">
+            <p class="font-['JetBrains_Mono'] text-sm text-slate-500 text-center sm:text-left">© 2026 Laravel Côte d'Ivoire. Made with precision and passion. 🇨🇮</p>
+            <div class="flex gap-4 font-['JetBrains_Mono'] text-sm text-slate-500">
+                <a class="hover:text-[#FF6600]" href="#">Contact</a>
+                <a class="hover:text-[#FF6600]" href="#">Mentions Légales</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        (function() {
+            const btn  = document.getElementById('hamburger-btn');
+            const menu = document.getElementById('mobile-menu');
+            const l1   = document.getElementById('ham-line-1');
+            const l2   = document.getElementById('ham-line-2');
+            const l3   = document.getElementById('ham-line-3');
+            if (!btn || !menu) return;
+            let open = false;
+
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                open = !open;
+                btn.setAttribute('aria-expanded', open);
+                menu.classList.toggle('open', open);
+                if (open) {
+                    l1.style.transform = 'translateY(7px) rotate(45deg)';
+                    l2.style.opacity   = '0';
+                    l3.style.transform = 'translateY(-7px) rotate(-45deg)';
+                } else {
+                    l1.style.transform = '';
+                    l2.style.opacity   = '1';
+                    l3.style.transform = '';
+                }
+            });
+
+            // Close on outside click
+            document.addEventListener('click', (e) => {
+                if (open && !btn.contains(e.target) && !menu.contains(e.target)) {
+                    open = false;
+                    btn.setAttribute('aria-expanded', false);
+                    menu.classList.remove('open');
+                    l1.style.transform = '';
+                    l2.style.opacity   = '1';
+                    l3.style.transform = '';
+                }
+            });
+
+            // Close on escape
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && open) btn.click();
+            });
+        })();
+    </script>
+
+</body>
+</html>
