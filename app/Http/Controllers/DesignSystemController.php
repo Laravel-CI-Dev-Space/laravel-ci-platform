@@ -6,18 +6,7 @@ class DesignSystemController extends Controller
 {
     public function index()
     {
-        return view('design-system', [
-            'event'  => $this->event(),
-            'post'   => $this->post(),
-            'thread' => $this->thread(),
-            'job'    => $this->job(),
-            'member' => $this->member(),
-        ]);
-    }
-
-    private function event(): array
-    {
-        return [
+        $event = [
             'title'       => 'Laravel CI Meetup #25',
             'date'        => '15 Oct.',
             'location'    => 'Orange Fab, Abidjan',
@@ -30,11 +19,8 @@ class DesignSystemController extends Controller
             'cta_label'   => 'Réserver ma place',
             'cta_url'     => '#',
         ];
-    }
 
-    private function post(): array
-    {
-        return [
+        $post = [
             'title'        => 'Optimiser vos requêtes Eloquent pour les gros volumes',
             'excerpt'      => 'Découvrez les patterns essentiels pour éviter le problème N+1 dans vos applications Laravel à fort trafic.',
             'image'        => null,
@@ -44,11 +30,8 @@ class DesignSystemController extends Controller
             'published_at' => '12 Mai 2026',
             'url'          => '#',
         ];
-    }
 
-    private function thread(): array
-    {
-        return [
+        $thread = [
             'title'     => 'Comment optimiser les requêtes Eloquent avec des relations polymorphes ?',
             'excerpt'   => "J'ai un souci de performance N+1 sur mon dashboard où je charge plusieurs types de notifications…",
             'status'    => 'open',
@@ -60,11 +43,8 @@ class DesignSystemController extends Controller
             'posted_at' => 'Il y a 2 heures',
             'url'       => '#',
         ];
-    }
 
-    private function job(): array
-    {
-        return [
+        $job = [
             'title'     => 'Développeur Fullstack Senior',
             'company'   => 'Yango',
             'logo'      => null,
@@ -76,15 +56,39 @@ class DesignSystemController extends Controller
             'posted_at' => 'Hier',
             'url'       => '#',
         ];
-    }
 
-    private function member(): array
-    {
-        return [
+        $member = [
             'username' => 'Yao_Laravel',
             'avatar'   => null,
             'points'   => 1240,
             'url'      => '#',
+        ];
+
+        $snippets = $this->snippets();
+
+        return view('design-system', compact('event', 'post', 'thread', 'job', 'member', 'snippets'));
+    }
+
+    private function snippets(): array
+    {
+        return [
+            'stat' => <<<'SNIPPET'
+<x-card.stat value="500+" label="Membres Actifs">
+    <x-slot:icon>
+        <svg class="size-6 shrink-0 text-white" fill="none" stroke-width="1.5"
+            stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
+        </svg>
+    </x-slot:icon>
+</x-card.stat>
+SNIPPET,
+            'stat_sec' => '<x-card.stat-secondary icon="forum" value="1.2k" description="Messages mensuels sur le forum" />',
+            'event'    => '<x-card.event :event="$event" />',
+            'post'     => '<x-card.post :post="$post" />',
+            'thread'   => '<x-card.forum-thread :thread="$thread" />',
+            'job'      => '<x-card.job :job="$job" />',
+            'member'   => '<x-card.member :member="$member" :rank="1" />',
         ];
     }
 }
