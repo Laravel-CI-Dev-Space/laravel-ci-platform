@@ -16,6 +16,7 @@
         ['id' => 'members', 'label' => 'Membres'],
         ['id' => 'progress-bar', 'label' => 'Barre de progression'],
         ['id' => 'badges', 'label' => 'Badges'],
+        ['id' => 'avatar', 'label' => 'Avatar'],
     ];
 @endphp
 
@@ -278,6 +279,47 @@
                                 <x-badge-rounded label="CDI" color="green" />
                                 <x-badge-rounded label="Remote" color="purple" />
                                 <x-badge-rounded label="Hier" color="gray" />
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <hr class="border-gray-200">
+
+                {{-- ===== Avatar ===== --}}
+                <section id="avatar" data-section>
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold text-gray-900">Avatar</h2>
+                        <p class="text-sm text-gray-500 mt-1">
+                            Lien cliquable avec image ou initiale en fallback, ring coloré et sous-titre optionnel.
+                            Props : <code class="text-xs bg-gray-100 px-1 rounded">name</code>,
+                            <code class="text-xs bg-gray-100 px-1 rounded">src</code>,
+                            <code class="text-xs bg-gray-100 px-1 rounded">subtitle</code>,
+                            <code class="text-xs bg-gray-100 px-1 rounded">href</code>.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl">
+                        <div class="rounded-xl overflow-hidden border border-gray-200 bg-white">
+                            <div class="flex items-center justify-between px-4 py-2 bg-gray-50 border-b border-gray-200">
+                                <span class="text-xs font-mono text-gray-400">x-avatar — avec image</span>
+                                @include('design-system._copy-btn', ['snippet' => $snippets['avatar']])
+                            </div>
+                            <div class="p-4">
+                                <x-avatar
+                                    name="Tom Cook"
+                                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                    subtitle="Voir le profil" />
+                            </div>
+                        </div>
+
+                        <div class="rounded-xl overflow-hidden border border-gray-200 bg-white">
+                            <div class="flex items-center justify-between px-4 py-2 bg-gray-50 border-b border-gray-200">
+                                <span class="text-xs font-mono text-gray-400">x-avatar — fallback initiale</span>
+                                @include('design-system._copy-btn', ['snippet' => $snippets['avatar']])
+                            </div>
+                            <div class="p-4">
+                                <x-avatar name="Kouassi Dev" subtitle="Voir le profil" />
                             </div>
                         </div>
                     </div>
