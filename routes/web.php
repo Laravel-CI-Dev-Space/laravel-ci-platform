@@ -26,6 +26,13 @@ Route::post('/logout', function () {
     return redirect()->route('home');
 })->name('logout')->middleware('auth');
 
+// ─── PROFIL ───────────────────────────────────────────────
+Route::middleware(['auth', 'active'])
+    ->group(function () {
+        Route::get('/profil/completer', \App\Livewire\EditProfile::class)
+            ->name('profile.edit');
+    });
+
 // ─── REDIRECT DASHBOARD SELON RÔLE ───────────────────────
 Route::get('/dashboard', function () {
     $user = auth()->user();
@@ -33,59 +40,46 @@ Route::get('/dashboard', function () {
     if ($user->hasRole('super-admin')) {
         return redirect()->route('dashboard.super-admin');
     }
-
     if ($user->hasRole('admin')) {
         return redirect()->route('dashboard.admin');
     }
-
     if ($user->hasRole('moderateur')) {
         return redirect()->route('dashboard.moderateur');
     }
-
     if ($user->hasRole('membre-actif')) {
         return redirect()->route('dashboard.membre');
     }
 
-    // Rôle inconnu
     auth()->logout();
     return redirect()->route('login')
         ->with('error', 'Accès non autorisé.');
 
-})->name('dashboard')->middleware(['auth', 'active']);
+})->name('dashboard')->middleware(['auth', 'active', 'profile.complete']);
 
-// ─── ZONE SUPER ADMIN ────────────────────────────────────
-Route::middleware(['auth', 'active', 'role:super-admin'])
+// ─── SUPER ADMIN ──────────────────────────────────────────
+Route::middleware(['auth', 'active', 'profile.complete', 'role:super-admin'])
     ->prefix('dashboard/super-admin')
     ->group(function () {
-        Route::get('/', function () {
-            return redirect('/admin');
-        })->name('dashboard.super-admin');
+        Route::get('/', fn () => redirect('/admin'))->name('dashboard.super-admin');
     });
 
-// ─── ZONE ADMIN ──────────────────────────────────────────
-Route::middleware(['auth', 'active', 'role:admin'])
+// ─── ADMIN ────────────────────────────────────────────────
+Route::middleware(['auth', 'active', 'profile.complete', 'role:admin'])
     ->prefix('dashboard/admin')
     ->group(function () {
-        Route::get('/', function () {
-            return redirect('/admin');
-        })->name('dashboard.admin');
+        Route::get('/', fn () => redirect('/admin'))->name('dashboard.admin');
     });
 
-// ─── ZONE MODÉRATEUR ─────────────────────────────────────
-Route::middleware(['auth', 'active', 'role:moderateur'])
+// ─── MODÉRATEUR ───────────────────────────────────────────
+Route::middleware(['auth', 'active', 'profile.complete', 'role:moderateur'])
     ->prefix('dashboard/moderateur')
     ->group(function () {
-        Route::get('/', function () {
-            return view('dashboard.moderateur.index');
-        })->name('dashboard.moderateur');
+        Route::get('/', fn () => view('dashboard.moderateur.index'))->name('dashboard.moderateur');
     });
 
-// ─── ZONE MEMBRE ACTIF ───────────────────────────────────
-// Suspendu temporairement = accès autorisé mais bannière d'avertissement
-Route::middleware(['auth', 'active', 'role:membre-actif'])
+// ─── MEMBRE ACTIF ─────────────────────────────────────────
+Route::middleware(['auth', 'active', 'profile.complete', 'role:membre-actif'])
     ->prefix('dashboard/membre')
     ->group(function () {
-        Route::get('/', function () {
-            return view('dashboard.membre.index');
-        })->name('dashboard.membre');
+        Route::get('/', fn () => view('dashboard.membre.index'))->name('dashboard.membre');
     });

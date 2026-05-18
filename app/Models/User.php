@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 #[Fillable([
     'name',
@@ -118,5 +119,22 @@ class User extends Authenticatable
     public function githubUrl(): string
     {
         return "https://github.com/{$this->github_username}";
+    }
+
+
+    /**
+     * Un utilisateur a un profil.
+     */
+    public function profile(): HasOne
+    {
+        return $this->hasOne(Profile::class);
+    }
+
+    /**
+     * Vérifie si le membre a complété son profil (au moins créé).
+     */
+    public function hasCompletedProfile(): bool
+    {
+        return $this->profile !== null;
     }
 }
