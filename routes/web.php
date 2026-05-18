@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Http\Controllers\Auth\SocialiteController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DesignSystemController;
 
 // ─── PAGE D'ACCUEIL ───────────────────────────────────────
 Route::get('/', function () {
@@ -83,3 +86,5 @@ Route::middleware(['auth', 'active', 'profile.complete', 'role:membre-actif'])
     ->group(function () {
         Route::get('/', fn () => view('dashboard.membre.index'))->name('dashboard.membre');
     });
+
+    Route::get('design-system', [DesignSystemController::class, 'index']);
