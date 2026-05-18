@@ -9,13 +9,13 @@
 @php
     $nav = [
         ['id' => 'stats', 'label' => 'Stats primaires'],
-        ['id' => 'stats-secondary', 'label' => 'Stats secondaires'],
         ['id' => 'events', 'label' => 'Événements'],
         ['id' => 'posts', 'label' => 'Articles'],
         ['id' => 'threads', 'label' => 'Forum'],
         ['id' => 'jobs', 'label' => 'Emplois'],
         ['id' => 'members', 'label' => 'Membres'],
         ['id' => 'progress-bar', 'label' => 'Barre de progression'],
+        ['id' => 'badges', 'label' => 'Badges'],
     ];
 @endphp
 
@@ -104,29 +104,6 @@
                                         </svg>
                                     </x-slot:icon>
                                 </x-card.stat-modern>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <hr class="border-gray-200">
-
-                {{-- ===== Stats secondaires ===== --}}
-                <section id="stats-secondary" data-section>
-                    <div class="mb-6">
-                        <h2 class="text-2xl font-bold text-gray-900">Card Stats secondaires</h2>
-                        <p class="text-sm text-gray-500 mt-1">Stats compactes pour sidebar ou bandes de métriques.</p>
-                    </div>
-
-                    <div class="max-w-xs">
-                        <div class="rounded-xl overflow-hidden border border-gray-200 bg-white">
-                            <div class="flex items-center justify-between px-4 py-2 bg-gray-50 border-b border-gray-200">
-                                <span class="text-xs font-mono text-gray-400">x-card.stat-secondary</span>
-                                @include('design-system._copy-btn', ['snippet' => $snippets['stat_sec']])
-                            </div>
-                            <div class="p-4">
-                                <x-card.stat-secondary icon="forum" value="1.2k"
-                                    description="Messages mensuels sur le forum" />
                             </div>
                         </div>
                     </div>
@@ -259,6 +236,48 @@
                             </div>
                             <div class="p-4">
                                 <x-progress-bar label="38 / 50 inscrits" value="12 restante(s)" :percent="76" />
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <hr class="border-gray-200">
+
+                {{-- ===== Badges ===== --}}
+                <section id="badges" data-section>
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold text-gray-900">Badges</h2>
+                        <p class="text-sm text-gray-500 mt-1">
+                            <code class="text-xs bg-gray-100 px-1 rounded">x-badge</code> — label seul, style neutre.
+                            <code class="text-xs bg-gray-100 px-1 rounded">x-badge-rounded</code> — arrondi complet avec prop
+                            <code class="text-xs bg-gray-100 px-1 rounded">color</code> (red, green, blue, yellow, purple, orange, gray).
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl">
+                        <div class="rounded-xl overflow-hidden border border-gray-200 bg-white">
+                            <div class="flex items-center justify-between px-4 py-2 bg-gray-50 border-b border-gray-200">
+                                <span class="text-xs font-mono text-gray-400">x-badge</span>
+                                @include('design-system._copy-btn', ['snippet' => $snippets['badge']])
+                            </div>
+                            <div class="p-4 flex flex-wrap gap-2">
+                                <x-badge label="Meetup" />
+                                <x-badge label="Architecture" />
+                                <x-badge label="Laravel 11" />
+                            </div>
+                        </div>
+
+                        <div class="rounded-xl overflow-hidden border border-gray-200 bg-white">
+                            <div class="flex items-center justify-between px-4 py-2 bg-gray-50 border-b border-gray-200">
+                                <span class="text-xs font-mono text-gray-400">x-badge-rounded</span>
+                                @include('design-system._copy-btn', ['snippet' => $snippets['badge_rounded']])
+                            </div>
+                            <div class="p-4 flex flex-wrap gap-2">
+                                <x-badge-rounded label="Laravel 11" color="red" />
+                                <x-badge-rounded label="Alpine.js" color="blue" />
+                                <x-badge-rounded label="CDI" color="green" />
+                                <x-badge-rounded label="Remote" color="purple" />
+                                <x-badge-rounded label="Hier" color="gray" />
                             </div>
                         </div>
                     </div>

@@ -110,7 +110,9 @@ SNIPPET,
             'thread'   => '<x-card.forum-thread :thread="$thread" />',
             'job'      => '<x-card.job :job="$job" />',
             'member'       => '<x-card.member :member="$member" :rank="1" />',
-            'progress_bar' => '<x-progress-bar label="38 / 50 inscrits" value="12 restante(s)" :percent="76" />',
+            'badge'         => '<x-badge label="Meetup" />',
+            'badge_rounded' => '<x-badge-rounded label="Laravel 11" color="red" />',
+            'progress_bar'  => '<x-progress-bar label="38 / 50 inscrits" value="12 restante(s)" :percent="76" />',
         ];
     }
 }
