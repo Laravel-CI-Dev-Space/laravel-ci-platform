@@ -1,7 +1,7 @@
 @props(['thread'])
 
 <div
-    class="group relative bg-white border border-gray-200 rounded-xl p-5 divide-y divide-gray-100 space-y-4 hover:border-primary transition-colors">
+    class="group relative bg-white border border-gray-200 rounded-xl p-5 divide-y divide-gray-100 space-y-4 hover:border-primary/50 transition-colors">
     <div class="pb-4 space-y-3">
         <div class="flex items-center gap-x-2">
             @if (!empty($thread['tags']))

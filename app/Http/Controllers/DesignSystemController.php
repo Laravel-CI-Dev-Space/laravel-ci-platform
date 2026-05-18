@@ -21,8 +21,8 @@ class DesignSystemController extends Controller
         ];
 
         $post = [
-            'title'        => 'Optimiser vos requêtes Eloquent pour les gros volumes',
-            'excerpt'      => 'Découvrez les patterns essentiels pour éviter le problème N+1 dans vos applications Laravel à fort trafic.',
+            'title'        => 'Optimiser vos requêtes Eloquent',
+            'excerpt'      => 'Découvrez les patterns essentiels pour éviter le problème N+1 dans vos app.',
             'image'        => null,
             'category'     => 'Architecture',
             'read_time'    => 10,
