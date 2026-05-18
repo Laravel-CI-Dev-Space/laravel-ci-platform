@@ -13,7 +13,6 @@
         ['id' => 'posts', 'label' => 'Articles'],
         ['id' => 'threads', 'label' => 'Forum'],
         ['id' => 'jobs', 'label' => 'Emplois'],
-        ['id' => 'members', 'label' => 'Membres'],
         ['id' => 'progress-bar', 'label' => 'Barre de progression'],
         ['id' => 'badges', 'label' => 'Badges'],
         ['id' => 'avatar', 'label' => 'Avatar'],
@@ -193,29 +192,6 @@
                             </div>
                             <div class="p-4">
                                 <x-card.job :job="$job" />
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <hr class="border-gray-200">
-
-                {{-- ===== Membres ===== --}}
-                <section id="members" data-section>
-                    <div class="mb-6">
-                        <h2 class="text-2xl font-bold text-gray-900">Card Membre</h2>
-                        <p class="text-sm text-gray-500 mt-1">Avatar (fallback initiales), pseudo, points, badge rang
-                            🥇🥈🥉.</p>
-                    </div>
-
-                    <div class="max-w-xs">
-                        <div class="rounded-xl overflow-hidden border border-gray-200 bg-white">
-                            <div class="flex items-center justify-between px-4 py-2 bg-gray-50 border-b border-gray-200">
-                                <span class="text-xs font-mono text-gray-400">x-card.member</span>
-                                @include('design-system._copy-btn', ['snippet' => $snippets['member']])
-                            </div>
-                            <div class="p-4">
-                                <x-card.member :member="$member" :rank="1" />
                             </div>
                         </div>
                     </div>

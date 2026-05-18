@@ -18,8 +18,8 @@
                 </div>
             @endif
         </div>
-        <div class="ml-2">
-            <p class="text-xs font-medium text-gray-700 group-hover:text-gray-900">
+        <div class="ml-1.5">
+            <p class="text-xs font-semibold text-gray-700 group-hover:text-gray-900">
                 {{ $name }}
             </p>
             @if ($subtitle)

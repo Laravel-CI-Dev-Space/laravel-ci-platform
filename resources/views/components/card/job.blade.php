@@ -1,23 +1,25 @@
 @props(['job'])
 
 @php
-$contractColors = [
-    'CDI'       => 'bg-green-50 text-green-700 border border-green-200',
-    'CDD'       => 'bg-blue-50 text-blue-700 border border-blue-200',
-    'Freelance' => 'bg-orange-50 text-orange-700 border border-orange-200',
-    'Stage'     => 'bg-purple-50 text-purple-700 border border-purple-200',
-];
-$contractClass = $contractColors[$job['contract']] ?? 'bg-gray-100 text-gray-600 border border-gray-200';
+    $contractColors = [
+        'CDI' => 'green',
+        'CDD' => 'blue',
+        'Freelance' => 'orange',
+        'Stage' => 'purple',
+    ];
+
+    $contractClass = $contractColors[$job['contract']] ?? 'gray';
 @endphp
 
 <div class="bg-white rounded-2xl p-5 flex flex-col gap-4 border border-gray-100 shadow-sm">
     {{-- Entreprise --}}
     <div class="flex items-center gap-3">
-        @if(!empty($job['logo']))
+        @if (!empty($job['logo']))
             <img src="{{ $job['logo'] }}" alt="{{ $job['company'] }}"
-                 class="w-12 h-12 rounded-xl object-contain bg-gray-50 p-1 border border-gray-100 shrink-0">
+                class="w-12 h-12 rounded-xl object-contain bg-gray-50 p-1 border border-gray-100 shrink-0">
         @else
-            <div class="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center text-[#E3342F] font-bold text-lg shrink-0">
+            <div
+                class="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center text-[#E3342F] font-bold text-lg shrink-0">
                 {{ strtoupper(substr($job['company'], 0, 1)) }}
             </div>
         @endif
@@ -27,33 +29,35 @@ $contractClass = $contractColors[$job['contract']] ?? 'bg-gray-100 text-gray-600
         </div>
     </div>
 
-    {{-- Badges contrat / remote / localisation --}}
     <div class="flex flex-wrap gap-2">
-        <span class="text-xs font-medium {{ $contractClass }} px-2.5 py-1 rounded-full">
-            {{ $job['contract'] }}
-        </span>
-        @if($job['remote'])
-            <span class="text-xs font-medium bg-teal-50 text-teal-700 border border-teal-200 px-2.5 py-1 rounded-full">
-                Remote
-            </span>
+        <x-badge-rounded :label="$job['contract']" :color="$contractClass" />
+
+        @if ($job['remote'])
+            <x-badge-rounded label="Remote" color="gray" />
         @endif
-        <span class="text-xs font-medium bg-gray-100 text-gray-600 px-2.5 py-1 rounded-full flex items-center gap-1">
-            <span class="material-icons text-sm">location_on</span>
-            {{ $job['location'] }}
-        </span>
+
+        <x-badge-rounded :label="$job['location']" color="gray">
+            <x-slot:icon>
+                <svg class="size-3.5" data-slot="icon" fill="none" stroke-width="2" stroke="currentColor"
+                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z">
+                    </path>
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"></path>
+                </svg>
+            </x-slot:icon>
+        </x-badge-rounded>
     </div>
 
-    {{-- Stack --}}
     <div class="flex flex-wrap gap-1.5">
-        @foreach($job['stack'] as $tech)
-            <span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded font-mono">{{ $tech }}</span>
+        @foreach ($job['stack'] as $tech)
+            <x-badge :label="$tech" />
         @endforeach
     </div>
 
-    {{-- Footer : salaire + date + CTA --}}
     <div class="flex items-center justify-between pt-3 border-t border-gray-100">
         <div class="text-xs text-gray-500">
-            @if(!empty($job['salary']))
+            @if (!empty($job['salary']))
                 <span class="text-gray-900 font-semibold">{{ $job['salary'] }}</span>
             @else
                 Salaire non précisé
@@ -62,7 +66,7 @@ $contractClass = $contractColors[$job['contract']] ?? 'bg-gray-100 text-gray-600
         <div class="flex items-center gap-3">
             <span class="text-xs text-gray-400">{{ $job['posted_at'] }}</span>
             <a href="{{ $job['url'] }}"
-               class="text-xs bg-[#E3342F] hover:bg-[#C0392B] text-white font-semibold px-3 py-1.5 rounded-lg transition-colors">
+                class="text-xs bg-[#E3342F] hover:bg-[#C0392B] text-white font-semibold px-3 py-1.5 rounded-lg transition-colors">
                 Postuler
             </a>
         </div>

@@ -3,13 +3,17 @@
 <div
     class="group relative bg-white border border-gray-200 rounded-xl p-5 divide-y divide-gray-100 space-y-4 hover:border-primary transition-colors">
     <div class="pb-4 space-y-3">
-        @if (!empty($thread['tags']))
-            <div class="flex flex-wrap gap-1.5">
-                @foreach ($thread['tags'] as $tag)
-                    <x-badge-rounded :label="$tag" color="gray" />
-                @endforeach
-            </div>
-        @endif
+        <div class="flex items-center gap-x-2">
+            @if (!empty($thread['tags']))
+                <div class="flex flex-wrap gap-1.5">
+                    @foreach ($thread['tags'] as $tag)
+                        <x-badge :label="$tag" />
+                    @endforeach
+                </div>
+            @endif
+            <span class="text-[10px] text-gray-700">•</span>
+            <span class="text-xs text-gray-500">Posté il y a 5 heures</span>
+        </div>
 
         <h3 class="text-base font-semibold text-gray-900 leading-snug">
             <a href="{{ $thread['url'] }}" class="hover:text-primary transition-colors">
@@ -24,7 +28,7 @@
     </div>
 
     <div class="flex items-center justify-between">
-        <x-avatar :name="$thread['author']['name']" :src="$thread['author']['avatar']" :subtitle="$thread['posted_at']" />
+        <x-avatar :name="$thread['author']['name']" :src="$thread['author']['avatar']" />
 
         <div class="flex items-center gap-3 text-xs text-gray-400">
             @if ($thread['votes'] > 0)
