@@ -15,6 +15,7 @@
         ['id' => 'threads', 'label' => 'Forum'],
         ['id' => 'jobs', 'label' => 'Emplois'],
         ['id' => 'members', 'label' => 'Membres'],
+        ['id' => 'progress-bar', 'label' => 'Barre de progression'],
     ];
 @endphp
 
@@ -88,7 +89,9 @@
                         <div class="rounded-xl overflow-hidden border border-gray-200 bg-white">
                             <div class="flex items-center justify-between px-4 py-2 bg-gray-50 border-b border-gray-200">
                                 <span class="text-xs font-mono text-gray-400">x-card.stat-modern</span>
-                                @include('design-system._copy-btn', ['snippet' => $snippets['stat_moderne']])
+                                @include('design-system._copy-btn', [
+                                    'snippet' => $snippets['stat_moderne'],
+                                ])
                             </div>
                             <div class="p-4">
                                 <x-card.stat-modern value="{{ $statModerne['value'] }}" label="{{ $statModerne['label'] }}"
@@ -235,6 +238,27 @@
                             </div>
                             <div class="p-4">
                                 <x-card.member :member="$member" :rank="1" />
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <hr class="border-gray-200">
+
+                {{-- ===== Barre de progression ===== --}}
+                <section id="progress-bar" data-section>
+                    <h2 class="mb-6 text-2xl font-bold text-gray-900">Progress Bar</h2>
+
+                    <div class="max-w-xs">
+                        <div class="rounded-xl overflow-hidden border border-gray-200 bg-white">
+                            <div class="flex items-center justify-between px-4 py-2 bg-gray-50 border-b border-gray-200">
+                                <span class="text-xs font-mono text-gray-400">x-progress-bar</span>
+                                @include('design-system._copy-btn', [
+                                    'snippet' => $snippets['progress_bar'],
+                                ])
+                            </div>
+                            <div class="p-4">
+                                <x-progress-bar label="38 / 50 inscrits" value="12 restante(s)" :percent="76" />
                             </div>
                         </div>
                     </div>
