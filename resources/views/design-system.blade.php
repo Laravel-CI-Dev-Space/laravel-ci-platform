@@ -163,7 +163,7 @@
                         <p class="text-sm text-gray-500 mt-1">Label coloré, tags, votes/réponses, indicateur statut.</p>
                     </div>
 
-                    <div class="max-w-lg">
+                    <div class="max-w-2xl">
                         <div class="rounded-xl overflow-hidden border border-gray-200 bg-white">
                             <div class="flex items-center justify-between px-4 py-2 bg-gray-50 border-b border-gray-200">
                                 <span class="text-xs font-mono text-gray-400">x-card.forum-thread</span>

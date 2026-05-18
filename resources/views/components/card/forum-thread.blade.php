@@ -1,69 +1,54 @@
 @props(['thread'])
 
-@php
-$labelColors = [
-    'AIDE'  => 'bg-blue-50 text-blue-700 border border-blue-200',
-    'DÉBAT' => 'bg-purple-50 text-purple-700 border border-purple-200',
-    'OFFRE' => 'bg-green-50 text-green-700 border border-green-200',
-];
-$labelClass = $labelColors[$thread['label']] ?? 'bg-gray-100 text-gray-600 border border-gray-200';
+<div
+    class="group relative bg-white border border-gray-200 rounded-xl p-5 divide-y divide-gray-100 space-y-4 hover:border-primary transition-colors">
+    <div class="pb-4 space-y-3">
+        @if (!empty($thread['tags']))
+            <div class="flex flex-wrap gap-1.5">
+                @foreach ($thread['tags'] as $tag)
+                    <x-badge-rounded :label="$tag" color="gray" />
+                @endforeach
+            </div>
+        @endif
 
-[$statusIcon, $statusClass] = match($thread['status']) {
-    'resolved'   => ['check_circle', 'text-green-500'],
-    'unanswered' => ['help_outline', 'text-gray-300'],
-    default      => ['radio_button_unchecked', 'text-amber-400'],
-};
-@endphp
+        <h3 class="text-base font-semibold text-gray-900 leading-snug">
+            <a href="{{ $thread['url'] }}" class="hover:text-primary transition-colors">
+                <span class="absolute inset-0"></span>
+                {{ $thread['title'] }}
+            </a>
+        </h3>
 
-<div class="bg-white rounded-2xl p-5 flex flex-col gap-3 border border-gray-100 shadow-sm">
-    {{-- Header : label + statut --}}
-    <div class="flex items-center justify-between gap-3">
-        <span class="text-xs font-bold {{ $labelClass }} px-2.5 py-1 rounded-full uppercase tracking-wide">
-            {{ $thread['label'] }}
-        </span>
-        <span class="material-icons text-xl {{ $statusClass }}" title="{{ $thread['status'] }}">{{ $statusIcon }}</span>
+        <p class="text-sm text-gray-500 line-clamp-2">
+            {{ $thread['excerpt'] }}
+        </p>
     </div>
 
-    {{-- Titre + extrait --}}
-    <div>
-        <a href="{{ $thread['url'] }}"
-           class="text-gray-900 font-semibold text-sm leading-snug hover:text-[#E3342F] transition-colors font-[Nunito]">
-            {{ $thread['title'] }}
-        </a>
-        <p class="mt-1 text-xs text-gray-500 line-clamp-2">{{ $thread['excerpt'] }}</p>
-    </div>
+    <div class="flex items-center justify-between">
+        <x-avatar :name="$thread['author']['name']" :src="$thread['author']['avatar']" :subtitle="$thread['posted_at']" />
 
-    {{-- Tags --}}
-    @if(!empty($thread['tags']))
-        <div class="flex flex-wrap gap-1.5">
-            @foreach($thread['tags'] as $tag)
-                <span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">{{ $tag }}</span>
-            @endforeach
-        </div>
-    @endif
-
-    {{-- Footer : votes, réponses, auteur --}}
-    <div class="flex items-center gap-4 pt-3 border-t border-gray-100 text-xs text-gray-400">
-        <span class="flex items-center gap-1">
-            <span class="material-icons text-sm">thumb_up</span>
-            {{ $thread['votes'] }}
-        </span>
-        <span class="flex items-center gap-1">
-            <span class="material-icons text-sm">forum</span>
-            {{ $thread['replies'] }}
-        </span>
-
-        <span class="flex items-center gap-1.5 ml-auto text-gray-500">
-            @if(!empty($thread['author']['avatar']))
-                <img src="{{ $thread['author']['avatar'] }}" class="w-5 h-5 rounded-full" alt="{{ $thread['author']['name'] }}">
-            @else
-                <div class="w-5 h-5 rounded-full bg-red-50 flex items-center justify-center text-[#E3342F] text-[10px] font-bold shrink-0">
-                    {{ strtoupper(substr($thread['author']['name'], 0, 1)) }}
+        <div class="flex items-center gap-3 text-xs text-gray-400">
+            @if ($thread['votes'] > 0)
+                <div class="flex items-center gap-1">
+                    <svg class="size-4 shrink-0" data-slot="icon" fill="none" stroke-width="1.5"
+                        stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z">
+                        </path>
+                    </svg>
+                    <span>{{ $thread['votes'] }}</span>
                 </div>
             @endif
-            <span>{{ $thread['author']['name'] }}</span>
-            <span class="text-gray-300">·</span>
-            <span>{{ $thread['posted_at'] }}</span>
-        </span>
+
+            @if ($thread['replies'] > 0)
+                <div class="flex items-center gap-1">
+                    <svg class="size-4 shrink-0" fill="none" stroke-width="1.5" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 0 1 1.037-.443 48.282 48.282 0 0 0 5.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
+                    </svg>
+                    <span>{{ $thread['replies'] }}</span>
+                </div>
+            @endif
+        </div>
     </div>
 </div>
