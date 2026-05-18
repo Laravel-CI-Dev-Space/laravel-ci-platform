@@ -1,5 +1,7 @@
 *.log
 .DS_Store
+.claude/
+.ddev/
 .env
 .env.backup
 .env.production
@@ -8,6 +10,7 @@
 /.codex
 /.cursor/
 /.idea
+/CLAUDE.md
 /.nova
 /.phpunit.cache
 /.vscode
