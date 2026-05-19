@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+class FilamentAdminAccess
+{
+    /**
+     * Seuls super-admin et admin peuvent accéder au panel Filament.
+     * Les autres sont redirigés vers leur dashboard.
+     */
+    public function handle(Request $request, Closure $next): Response
+    {
+        if (
+            auth()->check() &&
+            ! auth()->user()->hasAnyRole(['super-admin', 'admin'])
+        ) {
+            return redirect()->route('dashboard');
+        }
+
+        return $next($request);
+    }
+}
