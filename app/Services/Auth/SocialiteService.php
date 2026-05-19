@@ -4,11 +4,16 @@ namespace App\Services\Auth;
 
 use App\Exceptions\AccountSuspendedException;
 use App\Models\User;
+use App\Services\NotificationService;
 use Illuminate\Support\Facades\Log;
 use Laravel\Socialite\Contracts\User as GithubUser;
 
 class SocialiteService
 {
+    public function __construct(
+        private readonly NotificationService $notificationService
+    ) {}
+
     /**
      * Trouve un user existant ou en crée un nouveau depuis GitHub.
      */
@@ -50,6 +55,9 @@ class SocialiteService
 
         $user->assignRole('membre-actif');
 
+        // Envoyer l'email de bienvenue
+        $this->notificationService->sendWelcome($user);
+
         Log::info("Nouveau membre créé : {$user->github_username}");
 
         return $user;
@@ -67,9 +75,6 @@ class SocialiteService
         if ($user->isBanned()) {
             throw new AccountSuspendedException();
         }
-
-        // Suspension temporaire — connexion autorisée, dashboard limité
-        // Le CheckMemberActive middleware gère l'affichage de la bannière
 
         $user->update([
             'name'            => $githubUser->getName() ?? $githubUser->getNickname(),

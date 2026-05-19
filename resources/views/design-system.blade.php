@@ -1,8 +1,5 @@
 @extends('layouts.base')
 
-@push('head')
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-@endpush
 
 @section('title', 'Design System')
 
@@ -25,13 +22,13 @@
         {{-- ── Top bar ──────────────────────────────────────────── --}}
         <header
             class="sticky top-0 z-30 bg-white/90 backdrop-blur border-b border-gray-200 px-6 py-4 flex items-center gap-3">
-            <span class="material-icons text-primary">palette</span>
+            <i class="fa-solid fa-palette text-primary text-lg"></i>
             <div>
                 <h1 class="text-lg font-bold leading-none text-gray-900">Design System</h1>
                 <p class="text-xs text-gray-400 mt-0.5">Laravel Côte d'Ivoire — composants Blade</p>
             </div>
-            <span class="ml-auto text-xs text-gray-500 bg-gray-100 px-3 py-1.5 rounded-lg flex items-center gap-1">
-                <span class="material-icons text-sm">layers</span>
+            <span class="ml-auto text-xs text-gray-500 bg-gray-100 px-3 py-1.5 rounded-lg flex items-center gap-1.5">
+                <i class="fa-solid fa-layer-group text-sm"></i>
                 Cards
             </span>
         </header>
