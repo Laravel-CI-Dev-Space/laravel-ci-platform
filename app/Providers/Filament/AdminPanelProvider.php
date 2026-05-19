@@ -34,7 +34,7 @@ class AdminPanelProvider extends PanelProvider
                 'gray'    => Color::Slate,
             ])
 
-            ->brandName('🐘 Laravel CI — Admin')
+            ->brandName('Laravel CI — Admin')
             ->brandLogo(asset('assets/logo.jpeg'))
             ->brandLogoHeight('2rem')
             ->favicon(asset('assets/logo.jpeg'))
