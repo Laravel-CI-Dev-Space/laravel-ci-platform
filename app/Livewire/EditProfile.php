@@ -3,20 +3,21 @@
 namespace App\Livewire;
 
 use App\Models\Profile;
+use App\Services\AssetService;
 use App\Services\CountryService;
-use Illuminate\Support\Facades\File;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-    use App\Services\AssetService;
-
 
 class EditProfile extends Component
 {
     use WithFileUploads;
 
     // Fichiers
-    public $avatarFile        = null;
-    public $cvFile            = null;
+    /** @var \Livewire\Features\SupportFileUploads\TemporaryUploadedFile|null */
+    public $avatarFile = null;
+    /** @var \Livewire\Features\SupportFileUploads\TemporaryUploadedFile|null */
+    public $cvFile     = null;
+
     public ?string $currentAvatar = null;
     public ?string $currentCv     = null;
 
@@ -48,13 +49,14 @@ class EditProfile extends Component
 
     public function mount(): void
     {
+        /** @var \App\Models\User $user */
         $user    = auth()->user();
         $profile = $user->profile;
 
         $this->isFirstTime = $profile === null;
 
         if ($profile) {
-            $this->currentAvatar     = $profile->avatarUrl();
+            $this->currentAvatar     = $profile->avatarUrl($user->avatar);
             $this->currentCv         = $profile->cvUrl();
             $this->pays              = $profile->pays ?? '';
             $this->ville             = $profile->ville ?? '';
@@ -73,9 +75,6 @@ class EditProfile extends Component
         }
     }
 
-    /**
-     * Toggle item prédéfini de la stack.
-     */
     public function toggleStackItem(string $item): void
     {
         if (in_array($item, $this->stack_technique)) {
@@ -87,9 +86,6 @@ class EditProfile extends Component
         }
     }
 
-    /**
-     * Ajoute un item custom à la stack.
-     */
     public function addStackItem(): void
     {
         $item = trim($this->newStackItem);
@@ -99,9 +95,6 @@ class EditProfile extends Component
         $this->newStackItem = '';
     }
 
-    /**
-     * Retire un item de la stack.
-     */
     public function removeStackItem(string $item): void
     {
         $this->stack_technique = array_values(
@@ -127,65 +120,11 @@ class EditProfile extends Component
         ];
     }
 
-    // public function save(): void
-    // {
-    //     $this->validate();
-
-    //     $user = auth()->user();
-
-    //     $data = [
-    //         'user_id'           => $user->id,
-    //         'pays'              => $this->pays ?: null,
-    //         'ville'             => $this->ville ?: null,
-    //         'commune'           => $this->commune ?: null,
-    //         'biographie'        => $this->biographie ?: null,
-    //         'niveau_laravel'    => $this->niveau_laravel ?: null,
-    //         'annees_experience' => $this->annees_experience ?: null,
-    //         'stack_technique'   => count($this->stack_technique) > 0 ? $this->stack_technique : null,
-    //         'niveau_academique' => $this->niveau_academique ?: null,
-    //         'poste'             => $this->poste ?: null,
-    //         'lien_portfolio'    => $this->lien_portfolio ?: null,
-    //     ];
-
-    //     // Upload avatar
-    //     if ($this->avatarFile) {
-    //         if ($user->profile?->avatar) {
-    //             $old = public_path('assets/avatars/' . $user->profile->avatar);
-    //             if (File::exists($old)) File::delete($old);
-    //         }
-    //         $filename       = 'avatar_' . $user->id . '_' . time() . '.' . $this->avatarFile->getClientOriginalExtension();
-    //         $this->avatarFile->move(public_path('assets/avatars'), $filename);
-    //         $data['avatar'] = $filename;
-    //     }
-
-    //     // Upload CV
-    //     if ($this->cvFile) {
-    //         if ($user->profile?->cv) {
-    //             $old = public_path('assets/cv/' . $user->profile->cv);
-    //             if (File::exists($old)) File::delete($old);
-    //         }
-    //         $filename      = 'cv_' . $user->id . '_' . time() . '.' . $this->cvFile->getClientOriginalExtension();
-    //         $this->cvFile->move(public_path('assets/cv'), $filename);
-    //         $data['cv']    = $filename;
-    //     }
-
-    //     $profile = Profile::updateOrCreate(['user_id' => $user->id], $data);
-
-    //     // Rafraîchir l'état
-    //     $this->completionRate = $profile->completionRate();
-    //     $this->missingFields  = $profile->missingFields();
-    //     $this->currentAvatar  = $profile->avatarUrl();
-    //     $this->currentCv      = $profile->cvUrl();
-    //     $this->avatarFile     = null;
-    //     $this->cvFile         = null;
-
-    //     session()->flash('success', 'Profil sauvegardé avec succès.');
-    // }
-
     public function save(AssetService $assetService): void
     {
         $this->validate();
 
+        /** @var \App\Models\User $user */
         $user = auth()->user();
 
         $data = [
@@ -202,18 +141,16 @@ class EditProfile extends Component
             'lien_portfolio'    => $this->lien_portfolio ?: null,
         ];
 
-        // Upload avatar via AssetService
         if ($this->avatarFile) {
             $data['avatar'] = $assetService->upload(
-                file:    $this->avatarFile,
-                folder:  'avatars',
-                prefix:  'avatar',
-                userId:  $user->id,
-                old:     $user->profile?->avatar,
+                file:   $this->avatarFile,
+                folder: 'avatars',
+                prefix: 'avatar',
+                userId: $user->id,
+                old:    $user->profile?->avatar,
             );
         }
 
-        // Upload CV via AssetService
         if ($this->cvFile) {
             $data['cv'] = $assetService->upload(
                 file:   $this->cvFile,
@@ -226,10 +163,9 @@ class EditProfile extends Component
 
         $profile = Profile::updateOrCreate(['user_id' => $user->id], $data);
 
-        // Rafraîchir l'état
         $this->completionRate = $profile->completionRate();
         $this->missingFields  = $profile->missingFields();
-        $this->currentAvatar  = $profile->avatarUrl();
+        $this->currentAvatar  = $profile->avatarUrl($user->avatar);
         $this->currentCv      = $profile->cvUrl();
         $this->avatarFile     = null;
         $this->cvFile         = null;
@@ -237,7 +173,7 @@ class EditProfile extends Component
         session()->flash('success', 'Profil sauvegardé avec succès.');
     }
 
-    public function render(CountryService $countryService)
+    public function render(CountryService $countryService): \Illuminate\View\View
     {
         return view('livewire.edit-profile', [
             'countries'          => $countryService->getCountries(),
