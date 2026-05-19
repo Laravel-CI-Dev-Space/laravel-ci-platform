@@ -67,7 +67,10 @@ class Profile extends Model
         $filled = collect($this->completionFields)
             ->filter(function ($field) {
                 $value = $this->$field;
-                if (is_array($value)) return count($value) > 0;
+                if (is_array($value)) {
+                    return count($value) > 0;
+                }
+
                 return ! empty($value);
             })
             ->count();
@@ -94,7 +97,10 @@ class Profile extends Model
         return collect($this->completionFields)
             ->filter(function ($field) {
                 $value = $this->$field;
-                if (is_array($value)) return count($value) === 0;
+                if (is_array($value)) {
+                    return count($value) === 0;
+                }
+
                 return empty($value);
             })
             ->map(fn ($field) => $labels[$field] ?? $field)

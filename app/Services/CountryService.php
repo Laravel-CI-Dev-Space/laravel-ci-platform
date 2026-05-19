@@ -65,11 +65,12 @@ class CountryService
     private function fallback(): array
     {
         $pays = [
-            "Bénin", "Burkina Faso", "Cameroun", "Côte d'Ivoire",
-            "France", "Gabon", "Ghana", "Guinée", "Mali", "Maroc",
-            "Mauritanie", "Niger", "Nigeria", "RD Congo",
-            "Sénégal", "Togo", "Tunisie",
+            'Bénin', 'Burkina Faso', 'Cameroun', "Côte d'Ivoire",
+            'France', 'Gabon', 'Ghana', 'Guinée', 'Mali', 'Maroc',
+            'Mauritanie', 'Niger', 'Nigeria', 'RD Congo',
+            'Sénégal', 'Togo', 'Tunisie',
         ];
+
         return array_combine($pays, $pays);
     }
 }

@@ -23,7 +23,7 @@ class SocialiteController extends Controller
     {
         try {
             $githubUser = Socialite::driver('github')->user();
-            $user = $this->socialiteService->findOrCreateUser($githubUser);
+            $user       = $this->socialiteService->findOrCreateUser($githubUser);
 
             auth()->login($user, remember: true);
 

@@ -24,7 +24,8 @@ class EditProfile extends Component
     public $cvFile     = null;
 
     public ?string $currentAvatar = null;
-    public ?string $currentCv     = null;
+
+    public ?string $currentCv = null;
 
     // Localisation
     public string $country  = '';
@@ -48,9 +49,11 @@ class EditProfile extends Component
     public string $portfolio_url = '';
 
     // État
-    public bool  $isFirstTime    = false;
-    public int   $completionRate = 0;
-    public array $missingFields  = [];
+    public bool $isFirstTime = false;
+
+    public int $completionRate = 0;
+
+    public array $missingFields = [];
 
     public function mount(): void
     {
@@ -159,11 +162,11 @@ class EditProfile extends Component
 
         if ($this->cvFile) {
             $data['cv'] = $assetService->upload(
-                file:   $this->cvFile,
+                file: $this->cvFile,
                 folder: 'cv',
                 prefix: 'cv',
                 userId: $user->id,
-                old:    $user->profile?->cv,
+                old: $user->profile?->cv,
             );
         }
 
