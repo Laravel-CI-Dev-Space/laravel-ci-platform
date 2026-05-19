@@ -146,13 +146,21 @@ class Profile extends Model
 
     /**
      * URL avatar — uploadé ou GitHub par défaut.
+     * Passer $fallback depuis le contexte appelant évite le lazy load inverse vers User.
      */
-    public function avatarUrl(): string
+    public function avatarUrl(?string $fallback = null): string
     {
         if ($this->avatar) {
             return asset('assets/avatars/' . $this->avatar);
         }
-        return $this->user->avatar;
+
+        if ($fallback !== null) {
+            return $fallback;
+        }
+
+        return $this->relationLoaded('user')
+            ? $this->user->avatar
+            : ($this->user()->value('avatar') ?? '');
     }
 
     /**
