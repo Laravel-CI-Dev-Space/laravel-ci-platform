@@ -65,4 +65,4 @@ Route::middleware(['auth', 'active', 'profile.complete', 'role:membre-actif'])
         Route::get('/', fn () => view('dashboard.membre.index'))->name('dashboard.membre');
     });
 
-    Route::get('design-system', [DesignSystemController::class, 'index']);
+Route::get('design-system', [DesignSystemController::class, 'index']);
