@@ -14,11 +14,15 @@ class EnsureProfileComplete
      */
     public function handle(Request $request, Closure $next): Response
     {
+        /** @var \App\Models\User|null $user */
+        $user = auth()->user();
+
         if (
-            auth()->check()
-            && ! auth()->user()->hasCompletedProfile()
+            $user
+            && ! $user->hasCompletedProfile()
             && ! $request->routeIs('profile.edit')
             && ! $request->routeIs('logout')
+            && ! $request->is('admin*')
         ) {
             return redirect()->route('profile.edit');
         }
