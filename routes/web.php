@@ -1,9 +1,11 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthController;
+declare(strict_types=1);
+
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DesignSystemController;
 
 // ─── PAGE D'ACCUEIL ───────────────────────────────────────
 Route::get('/', fn () => view('welcome'))->name('home');
@@ -60,5 +62,7 @@ Route::middleware(['auth', 'active', 'profile.complete', 'role:moderateur'])
 Route::middleware(['auth', 'active', 'profile.complete', 'role:membre-actif'])
     ->prefix('dashboard/membre')
     ->group(function () {
-        Route::get('/', [DashboardController::class, 'membre'])->name('dashboard.membre');
+        Route::get('/', fn () => view('dashboard.membre.index'))->name('dashboard.membre');
     });
+
+    Route::get('design-system', [DesignSystemController::class, 'index']);
