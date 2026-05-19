@@ -1,393 +1,452 @@
-<div>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: sans-serif; background: #f5f5f5; color: #1C1C2E; }
+<div class="min-h-screen bg-gray-50">
+@php
+    $field  = 'w-full border-[1.5px] rounded-lg px-3 py-2.5 text-sm text-[#1C1C2E] bg-white focus:outline-none focus:border-primary transition-colors';
+    $select = $field . ' appearance-none';
 
-        .navbar {
-            background: #1C1C2E; padding: 1rem 2rem;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .navbar .brand { color: #FF6600; font-weight: bold; font-size: 1.2rem; }
-        .navbar .user  { display: flex; align-items: center; gap: 1rem; color: #fff; font-size: 0.9rem; }
-        .navbar img    { width: 36px; height: 36px; border-radius: 50%; border: 2px solid #FF6600; object-fit: cover; }
+    $sectionIcon = 'flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 shrink-0';
+@endphp
 
-        .container { max-width: 720px; margin: 2rem auto; padding: 0 1rem; }
-
-        .page-header { margin-bottom: 1.5rem; }
-        .page-title  { font-size: 1.4rem; font-weight: 800; color: #1C1C2E; }
-        .page-title span { color: #FF6600; }
-        .page-subtitle { font-size: 0.9rem; color: #888; margin-top: 0.25rem; }
-
-        .completion-card {
-            background: #fff; border-radius: 12px;
-            padding: 1.25rem 1.5rem; margin-bottom: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        }
-        .completion-header {
-            display: flex; justify-content: space-between;
-            align-items: center; margin-bottom: 0.75rem;
-        }
-        .completion-header span { font-size: 0.85rem; font-weight: 600; color: #444; }
-        .completion-header strong { font-size: 1.1rem; color: #FF6600; }
-        .progress-bar { height: 8px; background: #eee; border-radius: 99px; overflow: hidden; }
-        .progress-bar .fill {
-            height: 100%; border-radius: 99px;
-            background: linear-gradient(90deg, #FF6600, #ff9340);
-            transition: width 0.5s ease;
-        }
-        .missing-fields { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.75rem; }
-        .missing-tag {
-            background: #FFF0E6; color: #FF6600;
-            font-size: 0.75rem; padding: 0.2rem 0.6rem;
-            border-radius: 99px; border: 1px solid #FFD0B0;
-        }
-
-        .card {
-            background: #fff; border-radius: 12px;
-            padding: 1.75rem; margin-bottom: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        }
-        .card-title {
-            font-size: 0.82rem; text-transform: uppercase;
-            letter-spacing: 1px; color: #888; margin-bottom: 1.25rem;
-            padding-bottom: 0.5rem; border-bottom: 2px solid #FF6600; display: inline-block;
-        }
-
-        .avatar-row { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1.25rem; }
-        .avatar-row img { width: 80px; height: 80px; border-radius: 50%; border: 3px solid #FF6600; object-fit: cover; }
-        .avatar-info strong { display: block; font-size: 0.95rem; color: #1C1C2E; }
-        .avatar-info small  { color: #888; font-size: 0.82rem; }
-
-        .form-group { margin-bottom: 1.1rem; }
-        .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: #444; margin-bottom: 0.4rem; }
-        .optional { color: #aaa; font-weight: 400; font-size: 0.78rem; }
-
-        .form-control {
-            width: 100%; padding: 0.65rem 0.9rem;
-            border: 1.5px solid #ddd; border-radius: 8px;
-            font-size: 0.95rem; color: #1C1C2E;
-            background: #fafafa; transition: border-color 0.2s; appearance: none;
-        }
-        .form-control:focus { outline: none; border-color: #FF6600; background: #fff; }
-        .form-control.is-error { border-color: #C0392B; }
-        textarea.form-control { resize: vertical; min-height: 100px; }
-
-        .error-msg { font-size: 0.8rem; color: #C0392B; margin-top: 0.3rem; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-
-        .file-input {
-            width: 100%; padding: 0.5rem;
-            border: 1.5px dashed #ddd; border-radius: 8px;
-            background: #fafafa; font-size: 0.85rem; cursor: pointer;
-        }
-        .file-input:focus { outline: none; border-color: #FF6600; }
-
-        .avatar-preview {
-            width: 55px; height: 55px; border-radius: 50%;
-            object-fit: cover; border: 2px solid #FF6600; margin-top: 0.5rem;
-        }
-
-        .cv-current {
-            display: inline-flex; align-items: center; gap: 0.5rem;
-            background: #EAF4FB; color: #1a5276; padding: 0.4rem 0.8rem;
-            border-radius: 6px; font-size: 0.82rem; text-decoration: none; margin-top: 0.5rem;
-        }
-
-        .stack-predefined { margin-bottom: 1rem; }
-        .stack-category { font-size: 0.78rem; color: #888; margin-bottom: 0.4rem; font-weight: 600; text-transform: uppercase; }
-        .stack-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.75rem; }
-        .stack-tag {
-            padding: 0.3rem 0.75rem; border-radius: 99px;
-            font-size: 0.82rem; cursor: pointer; border: 1.5px solid #ddd;
-            background: #fafafa; color: #555; transition: all 0.15s;
-        }
-        .stack-tag:hover    { border-color: #FF6600; color: #FF6600; }
-        .stack-tag.selected { background: #FF6600; color: #fff; border-color: #FF6600; }
-
-        .stack-selected { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.75rem; }
-        .stack-selected-tag {
-            display: inline-flex; align-items: center; gap: 0.4rem;
-            background: #1C1C2E; color: #fff; padding: 0.3rem 0.75rem;
-            border-radius: 99px; font-size: 0.82rem;
-        }
-        .stack-selected-tag button {
-            background: none; border: none; color: #FF6600;
-            cursor: pointer; font-size: 1rem; line-height: 1; padding: 0;
-        }
-
-        .stack-custom { display: flex; gap: 0.5rem; margin-top: 0.75rem; }
-        .stack-custom input { flex: 1; }
-        .stack-custom button {
-            padding: 0.5rem 1rem; background: #1C1C2E; color: #fff;
-            border: none; border-radius: 8px; cursor: pointer;
-            font-size: 0.85rem; font-weight: 600; white-space: nowrap;
-        }
-        .stack-custom button:hover { background: #FF6600; }
-
-        .alert-info {
-            background: #EAF4FB; border-left: 4px solid #2980B9;
-            border-radius: 6px; padding: 0.75rem 1rem;
-            font-size: 0.85rem; color: #1a5276; margin-bottom: 1.5rem;
-        }
-        .alert-success {
-            background: #D5F5E3; border-left: 4px solid #2ECC71;
-            border-radius: 6px; padding: 0.75rem 1rem;
-            font-size: 0.85rem; color: #1E8449; margin-bottom: 1.5rem;
-        }
-
-        .btn-submit {
-            width: 100%; padding: 0.85rem; background: #FF6600;
-            color: #fff; border: none; border-radius: 8px;
-            font-size: 1rem; font-weight: 700; cursor: pointer;
-            transition: background 0.2s, transform 0.1s;
-        }
-        .btn-submit:hover    { background: #e05500; transform: translateY(-1px); }
-        .btn-submit:disabled { background: #ddd; color: #999; cursor: not-allowed; transform: none; }
-
-        .back-link { display: inline-block; margin-top: 1rem; font-size: 0.85rem; color: #888; text-decoration: none; }
-        .back-link:hover { color: #FF6600; }
-
-        @media (max-width: 580px) { .form-row { grid-template-columns: 1fr; } }
-    </style>
-
-    {{-- NAVBAR --}}
-    <nav class="navbar">
-        <span class="brand">🐘 Laravel CI</span>
-        <div class="user">
-            <img src="{{ $currentAvatar }}" alt="avatar">
-            <span>{{ auth()->user()->name }}</span>
-        </div>
+    {{-- ══ Navbar ══════════════════════════════════════════════ --}}
+    <nav class="sticky top-0 z-20 bg-[#1C1C2E] px-6 py-3 flex items-center justify-between shadow-lg">
+        <a href="{{ route('dashboard') }}" class="flex items-center gap-2.5">
+            <img src="{{ asset('assets/logo.jpeg') }}" alt="Laravel CI"
+                 class="w-8 h-8 rounded-full border-2 border-primary object-cover">
+            <span class="font-extrabold text-lg text-white">
+                Laravel <span class="text-primary">CI</span>
+            </span>
+        </a>
+        <x-avatar
+            :src="$currentAvatar"
+            :name="auth()->user()->name"
+            :subtitle="'@' . auth()->user()->github_username"
+            class="[&_img]:border-primary [&_p]:text-white [&_p:last-child]:text-gray-400"
+        />
     </nav>
 
-    <div class="container">
-
-        {{-- HEADER --}}
-        <div class="page-header">
-            @if($isFirstTime)
-                <h1 class="page-title">Bienvenue sur <span>Laravel CI</span> ! 🎉</h1>
-                <p class="page-subtitle">Complétez votre profil pour accéder à la plateforme. Vous pouvez sauvegarder à tout moment et revenir plus tard.</p>
-            @else
-                <h1 class="page-title">Mon <span>profil</span></h1>
-                <p class="page-subtitle">Mettez à jour vos informations. Plus votre profil est complet, plus vous êtes visible dans la communauté.</p>
-            @endif
-        </div>
-
-        {{-- MESSAGES --}}
+    {{-- ══ En-tête page ════════════════════════════════════════ --}}
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 pt-8 pb-4">
         @if($isFirstTime)
-            <div class="alert-info">ℹ️ Vous pouvez sauvegarder maintenant et revenir compléter votre profil plus tard.</div>
+            <h1 class="text-2xl font-extrabold text-[#1C1C2E]">
+                Bienvenue sur <span class="text-primary">Laravel CI</span> !
+            </h1>
+            <p class="text-sm text-gray-500 mt-1">
+                Complétez votre profil pour accéder à la plateforme. Vous pouvez sauvegarder à tout moment.
+            </p>
+        @else
+            <h1 class="text-2xl font-extrabold text-[#1C1C2E]">
+                Mon <span class="text-primary">profil</span>
+            </h1>
+            <p class="text-sm text-gray-500 mt-1">
+                Plus votre profil est complet, plus vous êtes visible dans la communauté.
+            </p>
+        @endif
+
+        {{-- Alertes --}}
+        @if($isFirstTime)
+            <div class="flex items-start gap-2 bg-blue-50 border-l-4 border-blue-400 rounded-md p-3 mt-4 text-sm text-blue-700">
+                <i class="fa-solid fa-circle-info mt-0.5 shrink-0"></i>
+                <span>Vous pouvez sauvegarder maintenant et revenir compléter votre profil plus tard.</span>
+            </div>
         @endif
 
         @if(session('success'))
-            <div class="alert-success">✅ {{ session('success') }}</div>
+            <div class="flex items-start gap-2 bg-green-50 border-l-4 border-green-500 rounded-md p-3 mt-4 text-sm text-green-700">
+                <i class="fa-solid fa-circle-check mt-0.5 shrink-0"></i>
+                <span>{{ session('success') }}</span>
+            </div>
         @endif
+    </div>
 
-        {{-- TAUX DE COMPLÉTION --}}
-        @if(!$isFirstTime)
-            <div class="completion-card">
-                <div class="completion-header">
-                    <span>Complétion du profil</span>
-                    <strong>{{ $completionRate }}%</strong>
+    {{-- ══ Layout 2 colonnes ═══════════════════════════════════ --}}
+    <form wire:submit="save">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 pb-12 flex flex-col lg:flex-row gap-6 items-start">
+
+        {{-- ── Sidebar (sticky) ───────────────────────────────── --}}
+        <aside class="w-full lg:w-72 shrink-0 lg:sticky lg:top-15.25 space-y-4">
+
+            {{-- Avatar + identité --}}
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 text-center">
+                <div class="relative inline-block mb-3">
+                    <img src="{{ $currentAvatar }}" alt="{{ auth()->user()->name }}"
+                         class="w-20 h-20 rounded-full border-[3px] border-primary object-cover mx-auto">
+                    @if($avatarFile)
+                        <img src="{{ $avatarFile->temporaryUrl() }}" alt="preview"
+                             class="absolute inset-0 w-20 h-20 rounded-full border-[3px] border-primary object-cover">
+                    @endif
+                    <span class="absolute bottom-0.5 right-0.5 w-4 h-4 bg-green-400 border-2 border-white rounded-full"></span>
                 </div>
-                <div class="progress-bar">
-                    <div class="fill" style="width: {{ $completionRate }}%"></div>
+                <p class="font-bold text-[#1C1C2E] text-sm">{{ auth()->user()->name }}</p>
+                <p class="text-xs text-gray-400 mt-0.5">{{ '@' . auth()->user()->github_username }}</p>
+                <x-badge-rounded label="membre-actif" color="green" class="mt-2" />
+            </div>
+
+            {{-- Stat complétion (uniquement si profil existant) --}}
+            @if(!$isFirstTime)
+                <x-card.stat :value="$completionRate . '%'" label="Profil complété">
+                    <x-slot:icon>
+                        <i class="fa-solid fa-circle-user text-white text-lg"></i>
+                    </x-slot:icon>
+                </x-card.stat>
+
+                {{-- Progress bar séparée --}}
+                <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
+                    <x-progress-bar
+                        label="Complétion"
+                        value="{{ $completionRate }}%"
+                        :percent="$completionRate"
+                    />
+
+                    @if(count($missingFields) > 0)
+                        <p class="text-xs text-gray-400 mt-3 mb-2 font-semibold">Champs manquants</p>
+                        <div class="flex flex-wrap gap-1.5">
+                            @foreach($missingFields as $f)
+                                <x-badge-rounded :label="$f" color="orange" />
+                            @endforeach
+                        </div>
+                    @else
+                        <p class="text-xs text-green-600 font-semibold mt-3 flex items-center gap-1">
+                            <i class="fa-solid fa-circle-check"></i> Profil complet
+                        </p>
+                    @endif
                 </div>
-                @if(count($missingFields) > 0)
-                    <div class="missing-fields">
-                        @foreach($missingFields as $field)
-                            <span class="missing-tag">{{ $field }}</span>
-                        @endforeach
-                    </div>
+            @endif
+
+            {{-- Navigation rapide --}}
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-4 hidden lg:block">
+                <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2">Sections</p>
+                <nav class="space-y-0.5 text-sm">
+                    @foreach([
+                        ['photo',       'fa-camera',          'Photo de profil'],
+                        ['localisation','fa-location-dot',    'Localisation'],
+                        ['apropos',     'fa-pen-nib',         'À propos'],
+                        ['technique',   'fa-code',            'Profil technique'],
+                        ['academique',  'fa-graduation-cap',  'Académique & pro'],
+                        ['liens',       'fa-link',            'Liens & Documents'],
+                    ] as [$id, $icon, $title])
+                        <a href="#{{ $id }}"
+                           class="flex items-center gap-2 text-gray-500 hover:text-primary hover:bg-primary/5 px-2 py-1.5 rounded-lg transition-colors">
+                            <i class="fa-solid fa-{{ $icon }} w-4 text-center text-xs"></i>
+                            {{ $title }}
+                        </a>
+                    @endforeach
+                </nav>
+            </div>
+
+            {{-- Bouton sauvegarde (desktop) --}}
+            <div class="hidden lg:block">
+                <button type="submit" wire:loading.attr="disabled"
+                        class="w-full flex items-center justify-center gap-2 py-3 bg-primary text-white font-bold text-sm rounded-xl hover:bg-orange-500 transition-colors disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed shadow-lg shadow-primary/20">
+                    <span wire:loading.remove>
+                        <i class="fa-solid fa-floppy-disk mr-1"></i>Sauvegarder
+                    </span>
+                    <span wire:loading class="flex items-center gap-2">
+                        <i class="fa-solid fa-circle-notch fa-spin"></i>Enregistrement...
+                    </span>
+                </button>
+
+                @if(!$isFirstTime)
+                    <a href="{{ route('dashboard') }}"
+                       class="mt-2 flex items-center justify-center gap-1.5 text-xs text-gray-400 hover:text-primary transition-colors">
+                        <i class="fa-solid fa-arrow-left"></i>Retour au dashboard
+                    </a>
                 @endif
             </div>
-        @endif
 
-        <form wire:submit="save">
+        </aside>
 
-            {{-- AVATAR --}}
-            <div class="card">
-                <div class="card-title">Photo de profil</div>
-                <div class="avatar-row">
-                    <img src="{{ $currentAvatar }}" alt="avatar">
-                    <div class="avatar-info">
-                        <strong>{{ auth()->user()->name }}</strong>
-                        <small>{{ '@' . auth()->user()->github_username }}</small>
+        {{-- ── Sections de formulaire ──────────────────────────── --}}
+        <div class="flex-1 min-w-0 space-y-4">
+
+            {{-- ─ Photo de profil ─ --}}
+            <section id="photo" class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+                <div class="flex items-center gap-2.5 mb-5">
+                    <div class="{{ $sectionIcon }}">
+                        <i class="fa-solid fa-camera text-primary text-sm"></i>
+                    </div>
+                    <h2 class="text-sm font-bold text-gray-900">Photo de profil</h2>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">
+                        Changer l'avatar
+                        <span class="normal-case font-normal text-gray-400 ml-1">(JPG, PNG — max 2 Mo)</span>
+                    </label>
+                    <input type="file" wire:model="avatarFile" accept="image/*"
+                           class="w-full text-sm text-gray-500 border-2 border-dashed border-gray-200 rounded-lg p-2.5 bg-gray-50 cursor-pointer hover:border-primary transition-colors file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary">
+                    @error('avatarFile')
+                        <p class="text-xs text-red-600 mt-1.5 flex items-center gap-1">
+                            <i class="fa-solid fa-triangle-exclamation"></i>{{ $message }}
+                        </p>
+                    @enderror
+                </div>
+            </section>
+
+            {{-- ─ Localisation ─ --}}
+            <section id="localisation" class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+                <div class="flex items-center gap-2.5 mb-5">
+                    <div class="{{ $sectionIcon }}">
+                        <i class="fa-solid fa-location-dot text-primary text-sm"></i>
+                    </div>
+                    <h2 class="text-sm font-bold text-gray-900">Localisation</h2>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">
+                            Pays <span class="normal-case font-normal text-gray-400">(optionnel)</span>
+                        </label>
+                        <select wire:model="pays"
+                                @class([$select, 'border-red-400' => $errors->has('pays'), 'border-gray-200' => !$errors->has('pays')])>
+                            <option value="">-- Sélectionnez votre pays --</option>
+                            @foreach($countries as $key => $label)
+                                <option value="{{ $key }}">{{ $label }}</option>
+                            @endforeach
+                        </select>
+                        @error('pays') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">
+                                Ville <span class="normal-case font-normal text-gray-400">(optionnel)</span>
+                            </label>
+                            <input type="text" wire:model="ville" placeholder="Ex : Abidjan"
+                                   @class([$field, 'border-red-400' => $errors->has('ville'), 'border-gray-200' => !$errors->has('ville')])>
+                            @error('ville') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">
+                                Commune <span class="normal-case font-normal text-gray-400">(optionnel)</span>
+                            </label>
+                            <input type="text" wire:model="commune" placeholder="Ex : Cocody"
+                                   @class([$field, 'border-red-400' => $errors->has('commune'), 'border-gray-200' => !$errors->has('commune')])>
+                            @error('commune') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
+                        </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label>Changer l'avatar <span class="optional">(JPG, PNG — max 2Mo)</span></label>
-                    <input type="file" class="file-input" wire:model="avatarFile" accept="image/*">
-                    @if($avatarFile)
-                        <img src="{{ $avatarFile->temporaryUrl() }}" class="avatar-preview" alt="preview">
-                    @endif
-                    @error('avatarFile') <span class="error-msg">{{ $message }}</span> @enderror
-                </div>
-            </div>
+            </section>
 
-            {{-- LOCALISATION --}}
-            <div class="card">
-                <div class="card-title">Localisation</div>
-                <div class="form-group">
-                    <label>Pays <span class="optional">(optionnel)</span></label>
-                    <select wire:model="pays" class="form-control @error('pays') is-error @enderror">
-                        <option value="">-- Sélectionnez votre pays --</option>
-                        @foreach($countries as $key => $label)
-                            <option value="{{ $key }}">{{ $label }}</option>
-                        @endforeach
-                    </select>
-                    @error('pays') <span class="error-msg">{{ $message }}</span> @enderror
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Ville <span class="optional">(optionnel)</span></label>
-                        <input type="text" wire:model="ville" placeholder="Ex: Abidjan"
-                               class="form-control @error('ville') is-error @enderror">
-                        @error('ville') <span class="error-msg">{{ $message }}</span> @enderror
+            {{-- ─ À propos ─ --}}
+            <section id="apropos" class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+                <div class="flex items-center gap-2.5 mb-5">
+                    <div class="{{ $sectionIcon }}">
+                        <i class="fa-solid fa-pen-nib text-primary text-sm"></i>
                     </div>
-                    <div class="form-group">
-                        <label>Commune <span class="optional">(optionnel)</span></label>
-                        <input type="text" wire:model="commune" placeholder="Ex: Cocody"
-                               class="form-control @error('commune') is-error @enderror">
-                        @error('commune') <span class="error-msg">{{ $message }}</span> @enderror
-                    </div>
+                    <h2 class="text-sm font-bold text-gray-900">À propos</h2>
                 </div>
-            </div>
 
-            {{-- BIOGRAPHIE --}}
-            <div class="card">
-                <div class="card-title">À propos</div>
-                <div class="form-group">
-                    <label>Biographie <span class="optional">(optionnel — max 1000 caractères)</span></label>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">
+                        Biographie <span class="normal-case font-normal text-gray-400">(optionnel — max 1000 caractères)</span>
+                    </label>
                     <textarea wire:model="biographie"
                               placeholder="Parlez de vous, de votre parcours, de vos projets..."
-                              class="form-control @error('biographie') is-error @enderror"
-                              maxlength="1000"></textarea>
-                    <small style="color:#aaa; font-size:0.78rem;">{{ strlen($biographie) }} / 1000</small>
-                    @error('biographie') <span class="error-msg">{{ $message }}</span> @enderror
+                              maxlength="1000" rows="5"
+                              @class([$field . ' resize-y', 'border-red-400' => $errors->has('biographie'), 'border-gray-200' => !$errors->has('biographie')])></textarea>
+                    <div class="flex items-center justify-between mt-1">
+                        <div>@error('biographie') <p class="text-xs text-red-600">{{ $message }}</p> @enderror</div>
+                        <span class="text-xs text-gray-400">{{ strlen($biographie) }}/1000</span>
+                    </div>
                 </div>
-            </div>
+            </section>
 
-            {{-- PROFIL TECHNIQUE --}}
-            <div class="card">
-                <div class="card-title">Profil technique</div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Niveau en Laravel <span class="optional">(optionnel)</span></label>
-                        <select wire:model="niveau_laravel" class="form-control @error('niveau_laravel') is-error @enderror">
+            {{-- ─ Profil technique ─ --}}
+            <section id="technique" class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+                <div class="flex items-center gap-2.5 mb-5">
+                    <div class="{{ $sectionIcon }}">
+                        <i class="fa-solid fa-code text-primary text-sm"></i>
+                    </div>
+                    <h2 class="text-sm font-bold text-gray-900">Profil technique</h2>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">
+                            Niveau Laravel <span class="normal-case font-normal text-gray-400">(optionnel)</span>
+                        </label>
+                        <select wire:model="niveau_laravel"
+                                @class([$select, 'border-red-400' => $errors->has('niveau_laravel'), 'border-gray-200' => !$errors->has('niveau_laravel')])>
                             <option value="">-- Sélectionnez --</option>
                             @foreach($niveauxLaravel as $value => $label)
                                 <option value="{{ $value }}">{{ $label }}</option>
                             @endforeach
                         </select>
-                        @error('niveau_laravel') <span class="error-msg">{{ $message }}</span> @enderror
+                        @error('niveau_laravel') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
                     </div>
-                    <div class="form-group">
-                        <label>Années d'expérience <span class="optional">(optionnel)</span></label>
-                        <select wire:model="annees_experience" class="form-control @error('annees_experience') is-error @enderror">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">
+                            Années d'expérience <span class="normal-case font-normal text-gray-400">(optionnel)</span>
+                        </label>
+                        <select wire:model="annees_experience"
+                                @class([$select, 'border-red-400' => $errors->has('annees_experience'), 'border-gray-200' => !$errors->has('annees_experience')])>
                             <option value="">-- Sélectionnez --</option>
                             @foreach($anneesExperience as $value => $label)
                                 <option value="{{ $value }}">{{ $label }}</option>
                             @endforeach
                         </select>
-                        @error('annees_experience') <span class="error-msg">{{ $message }}</span> @enderror
+                        @error('annees_experience') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
                     </div>
                 </div>
 
-                {{-- STACK TECHNIQUE --}}
-                <div class="form-group">
-                    <label>Stack technique <span class="optional">(optionnel)</span></label>
-                    <div class="stack-predefined">
-                        @foreach($stackPredefined as $category => $items)
-                            <div class="stack-category">{{ $category }}</div>
-                            <div class="stack-tags">
-                                @foreach($items as $item)
-                                    <span wire:click="toggleStackItem('{{ $item }}')"
-                                          class="stack-tag {{ in_array($item, $stack_technique) ? 'selected' : '' }}">
-                                        {{ $item }}
-                                    </span>
-                                @endforeach
-                            </div>
-                        @endforeach
-                    </div>
-                    <div class="stack-custom">
+                {{-- Stack technique ─────────────────────────── --}}
+                <div>
+                    <label class="block text-xs font-semibold text-gray-500 mb-3 uppercase tracking-wide">
+                        Stack technique <span class="normal-case font-normal text-gray-400">(optionnel)</span>
+                    </label>
+
+                    @foreach($stackPredefined as $category => $items)
+                        <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2 mt-3 first:mt-0">
+                            {{ $category }}
+                        </p>
+                        <div class="flex flex-wrap gap-1.5 mb-1">
+                            @foreach($items as $item)
+                                <button type="button" wire:click="toggleStackItem('{{ $item }}')"
+                                        @class([
+                                            'px-2.5 py-1 rounded-full text-xs font-medium border-[1.5px] transition-all',
+                                            'bg-primary text-white border-primary shadow-sm' => in_array($item, $stack_technique),
+                                            'bg-gray-50 text-gray-500 border-gray-200 hover:border-primary hover:text-primary' => !in_array($item, $stack_technique),
+                                        ])>
+                                    {{ $item }}
+                                </button>
+                            @endforeach
+                        </div>
+                    @endforeach
+
+                    {{-- Ajout custom --}}
+                    <div class="flex gap-2 mt-4">
                         <input type="text" wire:model="newStackItem"
                                wire:keydown.enter.prevent="addStackItem"
                                placeholder="Ajouter un autre outil..."
-                               class="form-control">
-                        <button type="button" wire:click="addStackItem">+ Ajouter</button>
+                               class="flex-1 border-[1.5px] border-gray-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:border-primary transition-colors">
+                        <button type="button" wire:click="addStackItem"
+                                class="px-3 py-2 bg-[#1C1C2E] hover:bg-primary text-white text-sm font-semibold rounded-lg transition-colors whitespace-nowrap">
+                            <i class="fa-solid fa-plus mr-1"></i>Ajouter
+                        </button>
                     </div>
+
+                    {{-- Tags sélectionnés --}}
                     @if(count($stack_technique) > 0)
-                        <div class="stack-selected">
+                        <div class="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-gray-100">
                             @foreach($stack_technique as $item)
-                                <span class="stack-selected-tag">
+                                <span class="inline-flex items-center gap-1.5 bg-[#1C1C2E] text-white text-xs font-medium px-2.5 py-1 rounded-full">
                                     {{ $item }}
-                                    <button type="button" wire:click="removeStackItem('{{ $item }}')">×</button>
+                                    <button type="button" wire:click="removeStackItem('{{ $item }}')"
+                                            class="text-primary hover:text-orange-300">
+                                        <i class="fa-solid fa-xmark text-[10px]"></i>
+                                    </button>
                                 </span>
                             @endforeach
                         </div>
                     @endif
                 </div>
-            </div>
+            </section>
 
-            {{-- ACADÉMIQUE & PRO --}}
-            <div class="card">
-                <div class="card-title">Parcours académique & professionnel</div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Niveau académique <span class="optional">(optionnel)</span></label>
-                        <select wire:model="niveau_academique" class="form-control @error('niveau_academique') is-error @enderror">
+            {{-- ─ Académique & pro ─ --}}
+            <section id="academique" class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+                <div class="flex items-center gap-2.5 mb-5">
+                    <div class="{{ $sectionIcon }}">
+                        <i class="fa-solid fa-graduation-cap text-primary text-sm"></i>
+                    </div>
+                    <h2 class="text-sm font-bold text-gray-900">Parcours académique &amp; professionnel</h2>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">
+                            Niveau académique <span class="normal-case font-normal text-gray-400">(optionnel)</span>
+                        </label>
+                        <select wire:model="niveau_academique"
+                                @class([$select, 'border-red-400' => $errors->has('niveau_academique'), 'border-gray-200' => !$errors->has('niveau_academique')])>
                             <option value="">-- Sélectionnez --</option>
                             @foreach($niveauxAcademiques as $value => $label)
                                 <option value="{{ $value }}">{{ $label }}</option>
                             @endforeach
                         </select>
-                        @error('niveau_academique') <span class="error-msg">{{ $message }}</span> @enderror
+                        @error('niveau_academique') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
                     </div>
-                    <div class="form-group">
-                        <label>Situation professionnelle <span class="optional">(optionnel)</span></label>
-                        <select wire:model="poste" class="form-control @error('poste') is-error @enderror">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">
+                            Situation professionnelle <span class="normal-case font-normal text-gray-400">(optionnel)</span>
+                        </label>
+                        <select wire:model="poste"
+                                @class([$select, 'border-red-400' => $errors->has('poste'), 'border-gray-200' => !$errors->has('poste')])>
                             <option value="">-- Sélectionnez --</option>
                             @foreach($postes as $value => $label)
                                 <option value="{{ $value }}">{{ $label }}</option>
                             @endforeach
                         </select>
-                        @error('poste') <span class="error-msg">{{ $message }}</span> @enderror
+                        @error('poste') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
                     </div>
                 </div>
+            </section>
+
+            {{-- ─ Liens & Documents ─ --}}
+            <section id="liens" class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+                <div class="flex items-center gap-2.5 mb-5">
+                    <div class="{{ $sectionIcon }}">
+                        <i class="fa-solid fa-link text-primary text-sm"></i>
+                    </div>
+                    <h2 class="text-sm font-bold text-gray-900">Liens &amp; Documents</h2>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">
+                            Portfolio <span class="normal-case font-normal text-gray-400">(optionnel)</span>
+                        </label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-3 flex items-center text-gray-400 pointer-events-none">
+                                <i class="fa-solid fa-globe text-xs"></i>
+                            </span>
+                            <input type="url" wire:model="lien_portfolio"
+                                   placeholder="https://mon-portfolio.com"
+                                   @class([$field . ' pl-8', 'border-red-400' => $errors->has('lien_portfolio'), 'border-gray-200' => !$errors->has('lien_portfolio')])>
+                        </div>
+                        @error('lien_portfolio') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">
+                            CV <span class="normal-case font-normal text-gray-400">(optionnel — PDF, Word, image — max 5 Mo)</span>
+                        </label>
+                        <input type="file" wire:model="cvFile"
+                               accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                               class="w-full text-sm text-gray-500 border-2 border-dashed border-gray-200 rounded-lg p-2.5 bg-gray-50 cursor-pointer hover:border-primary transition-colors file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary">
+                        @if($currentCv && !$cvFile)
+                            <a href="{{ $currentCv }}" target="_blank"
+                               class="inline-flex items-center gap-2 bg-blue-50 text-blue-700 text-xs font-medium px-3 py-1.5 rounded-lg mt-2 hover:bg-blue-100 transition-colors">
+                                <i class="fa-solid fa-file-pdf"></i>
+                                CV actuel — voir
+                            </a>
+                        @endif
+                        @error('cvFile') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
+                    </div>
+                </div>
+            </section>
+
+            {{-- ─ Bouton sauvegarde (mobile) ─ --}}
+            <div class="lg:hidden">
+                <button type="submit" wire:loading.attr="disabled"
+                        class="w-full flex items-center justify-center gap-2 py-3.5 bg-primary text-white font-bold rounded-xl hover:bg-orange-500 transition-colors disabled:bg-gray-200 disabled:text-gray-400 shadow-lg shadow-primary/20">
+                    <span wire:loading.remove>
+                        <i class="fa-solid fa-floppy-disk mr-1"></i>Sauvegarder le profil
+                    </span>
+                    <span wire:loading class="flex items-center gap-2">
+                        <i class="fa-solid fa-circle-notch fa-spin"></i>Enregistrement...
+                    </span>
+                </button>
+                @if(!$isFirstTime)
+                    <a href="{{ route('dashboard') }}"
+                       class="mt-3 flex items-center justify-center gap-1.5 text-sm text-gray-400 hover:text-primary transition-colors">
+                        <i class="fa-solid fa-arrow-left text-xs"></i>
+                        Retour au dashboard
+                    </a>
+                @endif
             </div>
 
-            {{-- LIENS & CV --}}
-            <div class="card">
-                <div class="card-title">Liens & Documents</div>
-                <div class="form-group">
-                    <label>Lien portfolio <span class="optional">(optionnel)</span></label>
-                    <input type="url" wire:model="lien_portfolio"
-                           placeholder="https://mon-portfolio.com"
-                           class="form-control @error('lien_portfolio') is-error @enderror">
-                    @error('lien_portfolio') <span class="error-msg">{{ $message }}</span> @enderror
-                </div>
-                <div class="form-group">
-                    <label>CV <span class="optional">(optionnel — PDF, Word, image — max 5Mo)</span></label>
-                    <input type="file" class="file-input" wire:model="cvFile"
-                           accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
-                    @if($currentCv && !$cvFile)
-                        <a href="{{ $currentCv }}" target="_blank" class="cv-current">
-                            📄 CV actuel — voir
-                        </a>
-                    @endif
-                    @error('cvFile') <span class="error-msg">{{ $message }}</span> @enderror
-                </div>
-            </div>
+        </div>{{-- /form sections --}}
 
-            {{-- SUBMIT --}}
-            <button type="submit" class="btn-submit" wire:loading.attr="disabled">
-                <span wire:loading.remove>💾 Sauvegarder le profil</span>
-                <span wire:loading>Enregistrement en cours...</span>
-            </button>
+    </div>{{-- /layout --}}
+    </form>
 
-            @if(!$isFirstTime)
-                <a href="{{ route('dashboard') }}" class="back-link">← Retour au dashboard</a>
-            @endif
-
-        </form>
-    </div>
 </div>
