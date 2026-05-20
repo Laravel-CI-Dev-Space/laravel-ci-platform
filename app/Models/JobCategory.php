@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+#[Fillable(['name', 'slug'])]
+class JobCategory extends Model
+{
+    public $timestamps = false;
+
+    public function jobOffers(): HasMany
+    {
+        return $this->hasMany(JobOffer::class, 'category_id');
+    }
+}
