@@ -34,9 +34,7 @@ export default defineConfig(async () => {
     );
 
     if (existsSync(localConfigPath)) {
-        const { default: local } = await import(
-            pathToFileURL(localConfigPath).href
-        );
+        const { default: local } = await import(pathToFileURL(localConfigPath).href);
 
         return mergeConfig(config, local);
     }
