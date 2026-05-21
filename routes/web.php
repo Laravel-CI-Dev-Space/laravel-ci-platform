@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\SocialiteController;
+use App\Http\Controllers\CvController;
 use App\Http\Controllers\DashboardController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DesignSystemController;
+use Illuminate\Support\Facades\Route;
 
 // ─── PAGE D'ACCUEIL ───────────────────────────────────────
 Route::get('/', fn () => view('welcome'))->name('home');
@@ -17,53 +18,66 @@ Route::get('/login', fn () => view('auth.login'))
     ->middleware('guest');
 
 Route::get('/auth/github/redirect', [SocialiteController::class, 'redirect'])
-    ->name('auth.github.redirect');
+    ->name('auth.github.redirect')
+    ->middleware('guest');
 
 Route::get('/auth/github/callback', [SocialiteController::class, 'callback'])
-    ->name('auth.github.callback');
+    ->name('auth.github.callback')
+    ->middleware('throttle:20,1');
 
 Route::post('/logout', [AuthController::class, 'logout'])
     ->name('logout')
     ->middleware('auth');
 
-// ─── PROFIL ───────────────────────────────────────────────
-Route::middleware(['auth', 'active'])
-    ->group(function () {
-        Route::get('/profil/completer', \App\Livewire\EditProfile::class)
-            ->name('profile.edit');
-    });
+// ─── ROUTES AUTHENTIFIÉES ─────────────────────────────────
+Route::middleware(['auth', 'active'])->group(function () {
 
-// ─── REDIRECT DASHBOARD SELON RÔLE ───────────────────────
-Route::get('/dashboard', [DashboardController::class, 'redirect'])
-    ->name('dashboard')
-    ->middleware(['auth', 'active', 'profile.complete']);
+    // Profil — accessible même sans profil complété
+    Route::get('/profil/completer', \App\Livewire\EditProfile::class)
+        ->name('profile.edit');
 
-// ─── SUPER ADMIN ──────────────────────────────────────────
-Route::middleware(['auth', 'active', 'profile.complete', 'role:super-admin'])
-    ->prefix('dashboard/super-admin')
-    ->group(function () {
-        Route::get('/', [DashboardController::class, 'adminPanel'])->name('dashboard.super-admin');
-    });
+    // CV — sert le fichier depuis le disque privé avec vérification auth
+    Route::get('/cv/{userId}', [CvController::class, 'download'])
+        ->name('cv.download')
+        ->whereNumber('userId');
 
-// ─── ADMIN ────────────────────────────────────────────────
-Route::middleware(['auth', 'active', 'profile.complete', 'role:admin'])
-    ->prefix('dashboard/admin')
-    ->group(function () {
-        Route::get('/', [DashboardController::class, 'adminPanel'])->name('dashboard.admin');
-    });
+    // ─── ROUTES NÉCESSITANT UN PROFIL COMPLET ─────────────
+    Route::middleware('profile.complete')->group(function () {
 
-// ─── MODÉRATEUR ───────────────────────────────────────────
-Route::middleware(['auth', 'active', 'profile.complete', 'role:moderateur'])
-    ->prefix('dashboard/moderateur')
-    ->group(function () {
-        Route::get('/', [DashboardController::class, 'moderateur'])->name('dashboard.moderateur');
-    });
+        // Redirection vers le bon dashboard selon le rôle
+        Route::get('/dashboard', [DashboardController::class, 'redirect'])
+            ->name('dashboard');
 
-// ─── MEMBRE ACTIF ─────────────────────────────────────────
-Route::middleware(['auth', 'active', 'profile.complete', 'role:membre-actif'])
-    ->prefix('dashboard/membre')
-    ->group(function () {
-        Route::get('/', fn () => view('dashboard.membre.index'))->name('dashboard.membre');
-    });
+        // Super admin
+        Route::middleware('role:super-admin')
+            ->prefix('dashboard/super-admin')
+            ->group(function () {
+                Route::get('/', [DashboardController::class, 'adminPanel'])
+                    ->name('dashboard.super-admin');
+            });
+
+        // Admin
+        Route::middleware('role:admin')
+            ->prefix('dashboard/admin')
+            ->group(function () {
+                Route::get('/', [DashboardController::class, 'adminPanel'])
+                    ->name('dashboard.admin');
+            });
+
+        // Modérateur
+        Route::middleware('role:moderateur')
+            ->prefix('dashboard/moderateur')
+            ->group(function () {
+                Route::get('/', [DashboardController::class, 'moderateur'])
+                    ->name('dashboard.moderateur');
+            });
+
+        // Membre actif
+        Route::middleware('role:membre-actif')
+            ->prefix('dashboard/membre')
+            ->group(function () {
+                Route::get('/', [DashboardController::class, 'membre'])
+                    ->name('dashboard.membre');
+            });
 
     Route::get('design-system', [DesignSystemController::class, 'index']);
