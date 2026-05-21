@@ -195,14 +195,14 @@
                         <label class="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">
                             Pays <span class="normal-case font-normal text-gray-400">(optionnel)</span>
                         </label>
-                        <select wire:model="pays"
-                                @class([$select, 'border-red-400' => $errors->has('pays'), 'border-gray-200' => !$errors->has('pays')])>
+                        <select wire:model="country"
+                                @class([$select, 'border-red-400' => $errors->has('country'), 'border-gray-200' => !$errors->has('country')])>
                             <option value="">-- Sélectionnez votre pays --</option>
                             @foreach($countries as $key => $label)
                                 <option value="{{ $key }}">{{ $label }}</option>
                             @endforeach
                         </select>
-                        @error('pays') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
+                        @error('country') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -210,17 +210,17 @@
                             <label class="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">
                                 Ville <span class="normal-case font-normal text-gray-400">(optionnel)</span>
                             </label>
-                            <input type="text" wire:model="ville" placeholder="Ex : Abidjan"
-                                   @class([$field, 'border-red-400' => $errors->has('ville'), 'border-gray-200' => !$errors->has('ville')])>
-                            @error('ville') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
+                            <input type="text" wire:model="city" placeholder="Ex : Abidjan"
+                                   @class([$field, 'border-red-400' => $errors->has('city'), 'border-gray-200' => !$errors->has('city')])>
+                            @error('city') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">
                                 Commune <span class="normal-case font-normal text-gray-400">(optionnel)</span>
                             </label>
-                            <input type="text" wire:model="commune" placeholder="Ex : Cocody"
-                                   @class([$field, 'border-red-400' => $errors->has('commune'), 'border-gray-200' => !$errors->has('commune')])>
-                            @error('commune') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
+                            <input type="text" wire:model="district" placeholder="Ex : Cocody"
+                                   @class([$field, 'border-red-400' => $errors->has('district'), 'border-gray-200' => !$errors->has('district')])>
+                            @error('district') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
                         </div>
                     </div>
                 </div>
@@ -239,13 +239,13 @@
                     <label class="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">
                         Biographie <span class="normal-case font-normal text-gray-400">(optionnel — max 1000 caractères)</span>
                     </label>
-                    <textarea wire:model="biographie"
+                    <textarea wire:model="bio"
                               placeholder="Parlez de vous, de votre parcours, de vos projets..."
                               maxlength="1000" rows="5"
-                              @class([$field . ' resize-y', 'border-red-400' => $errors->has('biographie'), 'border-gray-200' => !$errors->has('biographie')])></textarea>
+                              @class([$field . ' resize-y', 'border-red-400' => $errors->has('bio'), 'border-gray-200' => !$errors->has('bio')])></textarea>
                     <div class="flex items-center justify-between mt-1">
-                        <div>@error('biographie') <p class="text-xs text-red-600">{{ $message }}</p> @enderror</div>
-                        <span class="text-xs text-gray-400">{{ strlen($biographie) }}/1000</span>
+                        <div>@error('bio') <p class="text-xs text-red-600">{{ $message }}</p> @enderror</div>
+                        <span class="text-xs text-gray-400">{{ strlen($bio) }}/1000</span>
                     </div>
                 </div>
             </section>
@@ -264,27 +264,27 @@
                         <label class="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">
                             Niveau Laravel <span class="normal-case font-normal text-gray-400">(optionnel)</span>
                         </label>
-                        <select wire:model="niveau_laravel"
-                                @class([$select, 'border-red-400' => $errors->has('niveau_laravel'), 'border-gray-200' => !$errors->has('niveau_laravel')])>
+                        <select wire:model="laravel_level"
+                                @class([$select, 'border-red-400' => $errors->has('laravel_level'), 'border-gray-200' => !$errors->has('laravel_level')])>
                             <option value="">-- Sélectionnez --</option>
-                            @foreach($niveauxLaravel as $value => $label)
+                            @foreach($laravelLevels as $value => $label)
                                 <option value="{{ $value }}">{{ $label }}</option>
                             @endforeach
                         </select>
-                        @error('niveau_laravel') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
+                        @error('laravel_level') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">
                             Années d'expérience <span class="normal-case font-normal text-gray-400">(optionnel)</span>
                         </label>
-                        <select wire:model="annees_experience"
-                                @class([$select, 'border-red-400' => $errors->has('annees_experience'), 'border-gray-200' => !$errors->has('annees_experience')])>
+                        <select wire:model="years_experience"
+                                @class([$select, 'border-red-400' => $errors->has('years_experience'), 'border-gray-200' => !$errors->has('years_experience')])>
                             <option value="">-- Sélectionnez --</option>
-                            @foreach($anneesExperience as $value => $label)
+                            @foreach($yearsExperience as $value => $label)
                                 <option value="{{ $value }}">{{ $label }}</option>
                             @endforeach
                         </select>
-                        @error('annees_experience') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
+                        @error('years_experience') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
                     </div>
                 </div>
 
@@ -303,8 +303,8 @@
                                 <button type="button" wire:click="toggleStackItem('{{ $item }}')"
                                         @class([
                                             'px-2.5 py-1 rounded-full text-xs font-medium border-[1.5px] transition-all',
-                                            'bg-primary text-white border-primary shadow-sm' => in_array($item, $stack_technique),
-                                            'bg-gray-50 text-gray-500 border-gray-200 hover:border-primary hover:text-primary' => !in_array($item, $stack_technique),
+                                            'bg-primary text-white border-primary shadow-sm' => in_array($item, $tech_stack),
+                                            'bg-gray-50 text-gray-500 border-gray-200 hover:border-primary hover:text-primary' => !in_array($item, $tech_stack),
                                         ])>
                                     {{ $item }}
                                 </button>
@@ -325,9 +325,9 @@
                     </div>
 
                     {{-- Tags sélectionnés --}}
-                    @if(count($stack_technique) > 0)
+                    @if(count($tech_stack) > 0)
                         <div class="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-gray-100">
-                            @foreach($stack_technique as $item)
+                            @foreach($tech_stack as $item)
                                 <span class="inline-flex items-center gap-1.5 bg-[#1C1C2E] text-white text-xs font-medium px-2.5 py-1 rounded-full">
                                     {{ $item }}
                                     <button type="button" wire:click="removeStackItem('{{ $item }}')"
@@ -355,27 +355,27 @@
                         <label class="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">
                             Niveau académique <span class="normal-case font-normal text-gray-400">(optionnel)</span>
                         </label>
-                        <select wire:model="niveau_academique"
-                                @class([$select, 'border-red-400' => $errors->has('niveau_academique'), 'border-gray-200' => !$errors->has('niveau_academique')])>
+                        <select wire:model="academic_level"
+                                @class([$select, 'border-red-400' => $errors->has('academic_level'), 'border-gray-200' => !$errors->has('academic_level')])>
                             <option value="">-- Sélectionnez --</option>
-                            @foreach($niveauxAcademiques as $value => $label)
+                            @foreach($academicLevels as $value => $label)
                                 <option value="{{ $value }}">{{ $label }}</option>
                             @endforeach
                         </select>
-                        @error('niveau_academique') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
+                        @error('academic_level') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">
                             Situation professionnelle <span class="normal-case font-normal text-gray-400">(optionnel)</span>
                         </label>
-                        <select wire:model="poste"
-                                @class([$select, 'border-red-400' => $errors->has('poste'), 'border-gray-200' => !$errors->has('poste')])>
+                        <select wire:model="job_status"
+                                @class([$select, 'border-red-400' => $errors->has('job_status'), 'border-gray-200' => !$errors->has('job_status')])>
                             <option value="">-- Sélectionnez --</option>
-                            @foreach($postes as $value => $label)
+                            @foreach($jobStatuses as $value => $label)
                                 <option value="{{ $value }}">{{ $label }}</option>
                             @endforeach
                         </select>
-                        @error('poste') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
+                        @error('job_status') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
                     </div>
                 </div>
             </section>
@@ -398,11 +398,11 @@
                             <span class="absolute inset-y-0 left-3 flex items-center text-gray-400 pointer-events-none">
                                 <i class="fa-solid fa-globe text-xs"></i>
                             </span>
-                            <input type="url" wire:model="lien_portfolio"
+                            <input type="url" wire:model="portfolio_url"
                                    placeholder="https://mon-portfolio.com"
-                                   @class([$field . ' pl-8', 'border-red-400' => $errors->has('lien_portfolio'), 'border-gray-200' => !$errors->has('lien_portfolio')])>
+                                   @class([$field . ' pl-8', 'border-red-400' => $errors->has('portfolio_url'), 'border-gray-200' => !$errors->has('portfolio_url')])>
                         </div>
-                        @error('lien_portfolio') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
+                        @error('portfolio_url') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     <div>
