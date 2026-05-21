@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Filament\Facades\Filament;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -9,6 +10,7 @@ class DashboardController extends Controller
 {
     public function redirect(): RedirectResponse
     {
+        /** @var \App\Models\User $user */
         $user = auth()->user();
 
         if ($user->hasRole('super-admin'))  return redirect()->route('dashboard.super-admin');
@@ -23,7 +25,7 @@ class DashboardController extends Controller
 
     public function adminPanel(): RedirectResponse
     {
-        return redirect('/admin');
+        return redirect(Filament::getPanel('admin')->getUrl());
     }
 
     public function moderateur(): View

@@ -2,9 +2,10 @@
 
 namespace App\Services\Auth;
 
-use App\Exceptions\AccountSuspendedException;
+use App\Exceptions\AccountBannedException;
 use App\Models\User;
 use App\Services\NotificationService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Laravel\Socialite\Contracts\User as GithubUser;
 
@@ -16,30 +17,32 @@ class SocialiteService
 
     /**
      * Trouve un user existant ou en crée un nouveau depuis GitHub.
+     * Enveloppé dans une transaction pour garantir que User + rôle sont atomiques.
      */
     public function findOrCreateUser(GithubUser $githubUser): User
     {
-        // Chercher par github_id d'abord (le plus fiable)
-        $user = User::where('github_id', $githubUser->getId())->first();
+        $created = false;
 
-        if ($user) {
-            return $this->updateUser($user, $githubUser);
+        $user = DB::transaction(function () use ($githubUser, &$created) {
+            $user = User::where('github_id', $githubUser->getId())->first()
+                 ?? User::where('email', $githubUser->getEmail())->first();
+
+            if ($user) {
+                return $this->updateUser($user, $githubUser);
+            }
+
+            $created = true;
+            return $this->createUser($githubUser);
+        });
+
+        // Envoi du mail APRÈS la transaction — évite le dispatch sur rollback
+        if ($created) {
+            $this->notificationService->sendWelcome($user);
         }
 
-        // Chercher par email si github_id pas trouvé
-        $user = User::where('email', $githubUser->getEmail())->first();
-
-        if ($user) {
-            return $this->updateUser($user, $githubUser);
-        }
-
-        // Créer un nouveau user
-        return $this->createUser($githubUser);
+        return $user;
     }
 
-    /**
-     * Crée un nouveau membre depuis les données GitHub.
-     */
     private function createUser(GithubUser $githubUser): User
     {
         $user = User::create([
@@ -55,9 +58,6 @@ class SocialiteService
 
         $user->assignRole('membre-actif');
 
-        // Envoyer l'email de bienvenue
-        $this->notificationService->sendWelcome($user);
-
         Log::info("Nouveau membre créé : {$user->github_username}");
 
         return $user;
@@ -65,15 +65,13 @@ class SocialiteService
 
     /**
      * Met à jour les infos GitHub d'un user existant.
-     *
-     * Seul le ban définitif (is_active = false) bloque la connexion.
-     * La suspension temporaire (suspended_until) laisse passer — accès dashboard limité.
+     * Le ban définitif (is_active = false) bloque la connexion.
+     * La suspension temporaire laisse passer — accès dashboard limité.
      */
     private function updateUser(User $user, GithubUser $githubUser): User
     {
-        // Ban définitif — bloque la connexion
         if ($user->isBanned()) {
-            throw new AccountSuspendedException();
+            throw new AccountBannedException();
         }
 
         $user->update([
