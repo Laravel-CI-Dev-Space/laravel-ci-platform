@@ -7,61 +7,34 @@ use Illuminate\Support\Facades\Http;
 
 class CountryService
 {
-    private const CACHE_KEY = 'countries_list';
-    private const CACHE_TTL = 24 * 60 * 60; // 24h en secondes
-
     /**
      * Récupère la liste des pays depuis RestCountries.
-     * Cache::lock évite le thundering herd : si plusieurs requêtes arrivent
-     * simultanément lors d'une expiration, une seule appelle l'API externe.
+     * Mise en cache 24h.
      */
     public function getCountries(): array
     {
-        if ($cached = Cache::get(self::CACHE_KEY)) {
-            return $cached;
-        }
+        return Cache::remember('countries_list', now()->addHours(24), function () {
+            $response = Http::get('https://restcountries.com/v3.1/all', [
+                'fields' => 'name',
+            ]);
 
-        $lock = Cache::lock('countries_rebuild', 10);
-
-        try {
-            if ($lock->get()) {
-                // Re-vérifier après acquisition du verrou (une autre requête a peut-être déjà peuplé le cache)
-                if ($cached = Cache::get(self::CACHE_KEY)) {
-                    return $cached;
-                }
-
-                $countries = $this->fetchFromApi();
-                Cache::put(self::CACHE_KEY, $countries, self::CACHE_TTL);
-
-                return $countries;
+            if ($response->failed()) {
+                return $this->fallback();
             }
-        } finally {
-            $lock->release();
-        }
 
-        // Verrou non obtenu dans le délai — retourner le fallback sans bloquer
-        return $this->fallback();
+            return collect($response->json())
+                ->map(fn ($c) => $c['name']['common'] ?? null)
+                ->filter()
+                ->sort()
+                ->values()
+                ->mapWithKeys(fn ($name) => [$name => $name])
+                ->toArray();
+        });
     }
 
-    private function fetchFromApi(): array
-    {
-        $response = Http::get('https://restcountries.com/v3.1/all', [
-            'fields' => 'name',
-        ]);
-
-        if ($response->failed()) {
-            return $this->fallback();
-        }
-
-        return collect($response->json())
-            ->map(fn ($c) => $c['name']['common'] ?? null)
-            ->filter()
-            ->sort()
-            ->values()
-            ->mapWithKeys(fn ($name) => [$name => $name])
-            ->toArray();
-    }
-
+    /**
+     * Fallback si API indisponible.
+     */
     private function fallback(): array
     {
         $pays = [

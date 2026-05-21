@@ -10,39 +10,66 @@ use Illuminate\Support\Facades\Mail;
 class NotificationService
 {
     /**
-     * Envoie l'email de bienvenue en file d'attente après inscription.
+     * Envoie l'email de bienvenue après inscription.
+     * Appelé dans SocialiteService::createUser()
      */
     public function sendWelcome(User $user): void
     {
         try {
-            Mail::to($user->email)->queue(new WelcomeMail($user));
+            Mail::to($user->email)->send(new WelcomeMail($user));
         } catch (\Exception $e) {
+            // On log l'erreur mais on ne bloque pas l'inscription
             Log::error("Email bienvenue échoué pour {$user->email} : {$e->getMessage()}");
         }
     }
 
-    public function sendNewAnswer(User $user, mixed $question): void
+    /**
+     * Envoie une notification de nouvelle réponse sur le forum.
+     * Appelé par Abdoul dans QuestionService
+     */
+    public function sendNewAnswer(User $user, $question): void
     {
-        // TODO: implémenter — Mail::to($user->email)->queue(new NewAnswerMail($user, $question));
+        // À implémenter par Emmanuel — module notifications
+        // Mail::to($user->email)->send(new NewAnswerMail($user, $question));
     }
 
-    public function sendEventReminder(User $user, mixed $event): void
+    /**
+     * Envoie un rappel d'événement.
+     * Appelé par Roger dans EventService
+     */
+    public function sendEventReminder(User $user, $event): void
     {
-        // TODO: implémenter — Mail::to($user->email)->queue(new EventReminderMail($user, $event));
+        // À implémenter par Emmanuel — module notifications
+        // Mail::to($user->email)->send(new EventReminderMail($user, $event));
     }
 
-    public function sendJobAlert(User $user, mixed $offer): void
+    /**
+     * Envoie une alerte emploi.
+     * Appelé par Roger dans JobOfferService
+     */
+    public function sendJobAlert(User $user, $offer): void
     {
-        // TODO: implémenter — Mail::to($user->email)->queue(new JobAlertMail($user, $offer));
+        // À implémenter par Emmanuel — module notifications
+        // Mail::to($user->email)->send(new JobAlertMail($user, $offer));
     }
 
-    public function sendArticlePublished(User $user, mixed $article): void
+    /**
+     * Envoie une notification de publication d'article.
+     * Appelé par Emmanuel dans ArticleService
+     */
+    public function sendArticlePublished(User $user, $article): void
     {
-        // TODO: implémenter — Mail::to($user->email)->queue(new ArticlePublishedMail($user, $article));
+        // À implémenter par Emmanuel — module notifications
+        // Mail::to($user->email)->send(new ArticlePublishedMail($user, $article));
     }
 
-    public function sendEventConfirmation(User $user, mixed $event): void
+    /**
+     * Envoie une confirmation d'inscription à un événement.
+     * Appelé par Roger dans EventService
+     */
+    public function sendEventConfirmation(User $user, $event): void
     {
-        // TODO: implémenter — Mail::to($user->email)->queue(new EventConfirmationMail($user, $event));
+        // À implémenter par Emmanuel — module notifications
+        // Mail::to($user->email)->send(new EventConfirmationMail($user, $event));
     }
 }

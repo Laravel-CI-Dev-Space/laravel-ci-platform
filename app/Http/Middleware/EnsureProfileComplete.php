@@ -4,15 +4,13 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response;
 
 class EnsureProfileComplete
 {
     /**
-     * Redirige vers la page profil si le membre n'a pas encore créé son profil.
-     * Cache 10 min l'existence du profil pour éviter une requête SQL sur chaque requête.
-     * Le cache est invalidé dans EditProfile::save() après création.
+     * Redirige vers la page profil si le membre n'a pas encore
+     * créé son profil (première connexion).
      */
     public function handle(Request $request, Closure $next): Response
     {
@@ -21,7 +19,7 @@ class EnsureProfileComplete
 
         if (
             $user
-            && ! $this->hasProfile($user->id)
+            && ! $user->hasCompletedProfile()
             && ! $request->routeIs('profile.edit')
             && ! $request->routeIs('logout')
             && ! $request->is('admin*')
@@ -30,14 +28,5 @@ class EnsureProfileComplete
         }
 
         return $next($request);
-    }
-
-    private function hasProfile(int $userId): bool
-    {
-        return Cache::remember(
-            "user_has_profile_{$userId}",
-            600,
-            fn () => \App\Models\Profile::where('user_id', $userId)->exists()
-        );
     }
 }
