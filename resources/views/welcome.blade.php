@@ -1,685 +1,120 @@
-<!DOCTYPE html>
-<html class="light" lang="fr">
+@extends('layouts.base')
 
-<head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="{{ asset('assets/app.css') }}" />
-</head>
+@section('title', 'Laravel CI — Hub des développeurs Laravel ivoiriens')
 
-<body class="bg-background text-on-background font-body-md selection:bg-primary-container selection:text-white">
+@section('body')
+<div class="min-h-screen bg-[#1C1C2E] text-white">
 
-    <!-- ═══════════════════════════════════════════════════════
-         HEADER UNIFIÉ
-    ═══════════════════════════════════════════════════════ -->
-    <!-- HEADER UNIFIE RESPONSIVE -->
-    <header
-        class="bg-white sticky top-0 z-[100] border-t-[6px] border-[#FF6600] border-b border-[#E1E4E8] shadow-[0_4px_10px_rgba(0,0,0,0.04)]">
-        <div class="max-w-[1200px] mx-auto px-4 sm:px-4 sm:px-6">
-            <div class="h-16 sm:h-20 flex items-center justify-between gap-4">
-                <a href="index.html"
-                    class="text-lg sm:text-xl font-black text-[#FF6600] flex items-center gap-2 font-['JetBrains_Mono'] tracking-tight shrink-0">
-                    <span class="material-symbols-outlined text-2xl sm:text-3xl">developer_mode</span>
-                    Laravel CI
-                </a>
-                <nav class="hidden lg:flex gap-6 xl:gap-8 items-center flex-1 justify-center">
-                    <a href="forum.html"
-                        class="text-slate-600 hover:text-[#FF6600] transition-all duration-200 py-1 border-b-2 border-transparent hover:border-[#FF6600] font-['JetBrains_Mono'] text-sm tracking-tight">Forum</a>
-                    <a href="blog.html"
-                        class="text-slate-600 hover:text-[#FF6600] transition-all duration-200 py-1 border-b-2 border-transparent hover:border-[#FF6600] font-['JetBrains_Mono'] text-sm tracking-tight">Blog</a>
-                    <a href="evenements.html"
-                        class="text-slate-600 hover:text-[#FF6600] transition-all duration-200 py-1 border-b-2 border-transparent hover:border-[#FF6600] font-['JetBrains_Mono'] text-sm tracking-tight">Événements</a>
-                    <a href="job.html"
-                        class="text-slate-600 hover:text-[#FF6600] transition-all duration-200 py-1 border-b-2 border-transparent hover:border-[#FF6600] font-['JetBrains_Mono'] text-sm tracking-tight">Job
-                        Board</a>
-                    <a href="apropos.html"
-                        class="text-slate-600 hover:text-[#FF6600] transition-all duration-200 py-1 border-b-2 border-transparent hover:border-[#FF6600] font-['JetBrains_Mono'] text-sm tracking-tight">À
-                        propos</a>
-                </nav>
-                <div class="hidden lg:flex items-center gap-3">
-                    <a href="connexion.html"
-                        class="text-slate-600 hover:text-[#FF6600] font-['JetBrains_Mono'] text-sm px-4 py-2 rounded-lg hover:bg-slate-50 active:scale-95 transition-all">Connexion</a>
-                    <a href="inscription.html"
-                        class="bg-[#FF6600] text-white px-5 py-2.5 rounded-lg font-bold font-['JetBrains_Mono'] text-sm active:scale-95 transition-transform shadow-sm hover:shadow-md">Rejoindre</a>
-                </div>
-                <button id="hamburger-btn" aria-label="Menu" aria-expanded="false"
-                    class="lg:hidden flex flex-col justify-center items-center w-10 h-10 rounded-lg hover:bg-slate-100 transition-colors gap-[5px] shrink-0">
-                    <span id="ham-line-1"
-                        class="block w-5 h-0.5 bg-slate-700 transition-all duration-300 origin-center"></span>
-                    <span id="ham-line-2" class="block w-5 h-0.5 bg-slate-700 transition-all duration-300"></span>
-                    <span id="ham-line-3"
-                        class="block w-5 h-0.5 bg-slate-700 transition-all duration-300 origin-center"></span>
-                </button>
-            </div>
-            <div id="mobile-menu" class="lg:hidden border-t border-[#E1E4E8]">
-                <nav class="py-4 flex flex-col gap-1">
-                    <a href="forum.html"
-                        class="px-3 py-3 rounded-lg text-slate-700 hover:text-[#FF6600] hover:bg-orange-50 transition-all flex items-center gap-3 font-['JetBrains_Mono'] text-sm"><span
-                            class="material-symbols-outlined text-[18px]">forum</span>Forum</a>
-                    <a href="blog.html"
-                        class="px-3 py-3 rounded-lg text-slate-700 hover:text-[#FF6600] hover:bg-orange-50 transition-all flex items-center gap-3 font-['JetBrains_Mono'] text-sm"><span
-                            class="material-symbols-outlined text-[18px]">article</span>Blog</a>
-                    <a href="evenements.html"
-                        class="px-3 py-3 rounded-lg text-slate-700 hover:text-[#FF6600] hover:bg-orange-50 transition-all flex items-center gap-3 font-['JetBrains_Mono'] text-sm"><span
-                            class="material-symbols-outlined text-[18px]">event</span>Événements</a>
-                    <a href="job.html"
-                        class="px-3 py-3 rounded-lg text-slate-700 hover:text-[#FF6600] hover:bg-orange-50 transition-all flex items-center gap-3 font-['JetBrains_Mono'] text-sm"><span
-                            class="material-symbols-outlined text-[18px]">work</span>Job Board</a>
-                    <a href="apropos.html"
-                        class="px-3 py-3 rounded-lg text-slate-700 hover:text-[#FF6600] hover:bg-orange-50 transition-all flex items-center gap-3 font-['JetBrains_Mono'] text-sm"><span
-                            class="material-symbols-outlined text-[18px]">info</span>À propos</a>
-                </nav>
-                <div class="pb-4 pt-2 border-t border-[#E1E4E8] flex flex-col gap-2">
-                    <a href="connexion.html"
-                        class="w-full text-center py-3 font-['JetBrains_Mono'] text-sm font-bold text-[#FF6600] border border-[#FF6600] hover:bg-orange-50 rounded-lg transition-colors">Connexion</a>
-                    <a href="inscription.html"
-                        class="w-full py-3 bg-[#FF6600] text-white text-center rounded-lg font-bold font-['JetBrains_Mono'] text-sm hover:opacity-90 transition-opacity">Rejoindre
-                        la communauté</a>
-                </div>
-            </div>
+    {{-- ── Navigation ───────────────────────────────────────── --}}
+    <header class="max-w-5xl mx-auto px-6 py-5 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <img src="{{ asset('assets/logo.jpeg') }}" alt="Laravel CI"
+                 class="w-9 h-9 rounded-full border-2 border-primary object-cover">
+            <span class="font-extrabold text-lg">
+                Laravel <span class="text-primary">CI</span>
+            </span>
         </div>
+
+        <nav class="flex items-center gap-3">
+            <a href="{{ route('events.index') }}"
+               class="hidden sm:inline px-4 py-2 text-white/80 hover:text-white text-sm font-medium transition-colors">
+                Événements
+            </a>
+            @auth
+                <a href="{{ route('dashboard') }}"
+                   class="px-4 py-2 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-orange-500 transition-colors">
+                    <i class="fa-solid fa-gauge-high mr-1.5"></i>Dashboard
+                </a>
+            @else
+                <a href="{{ route('login') }}"
+                   class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white text-sm font-medium rounded-lg transition-colors border border-white/20">
+                    <i class="fa-brands fa-github mr-1.5"></i>Se connecter
+                </a>
+            @endauth
+        </nav>
     </header>
 
-    <main>
-        <!-- ═══════════════════════════════════════════════
-             Hero Section
-        ═══════════════════════════════════════════════ -->
-        <section class="relative min-h-[90vh] sm:min-h-screen flex items-center bg-white overflow-hidden">
-            <div class="absolute inset-y-0 right-0 w-1/2 opacity-10 pointer-events-none hidden lg:block code-rain">
-                <div class="font-code text-primary p-12 space-y-8 select-none">
-                    <div class="translate-x-12">&lt;?php <br /> Route::get('/', function () { <br /> return
-                        view('community'); <br /> });</div>
-                    <div class="translate-x-24">class Community extends Model { <br /> use HasFactory; <br /> }</div>
-                    <div class="translate-x-8">php artisan make:event IvoryCoastMeetup</div>
-                    <div class="translate-x-32">collect($devs)-&gt;filter(fn($d) =&gt; $d-&gt;isIvorian());</div>
-                </div>
-            </div>
-            <div
-                class="max-w-[1200px] mx-auto px-4 sm:px-4 sm:px-6 w-full grid lg:grid-cols-2 gap-8 lg:gap-12 items-center py-12 sm:py-16 lg:py-0">
-                <div class="space-y-6 sm:space-y-8 relative z-10">
-                    <div
-                        class="inline-flex items-center gap-2 bg-surface-container px-3 py-1.5 rounded-full border border-primary-fixed-dim shadow-sm">
-                        <span class="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
-                        <span class="font-label text-primary uppercase tracking-widest text-[10px]">Communauté · Laravel
-                            · Côte d'Ivoire</span>
-                    </div>
-                    <h1 class="font-h1 text-h1 text-on-background max-w-xl">
-                        La communauté Laravel de <span class="text-primary border-r-4 border-primary pr-2">Côte
-                            d'Ivoire</span>
-                    </h1>
-                    <p class="font-body-lg text-body-lg text-on-surface-variant max-w-lg">
-                        Partagez, apprenez et grandissez avec plus de <span class="font-bold text-on-background">500
-                            développeurs</span> passionnés par l'écosystème Laravel au pays des Éléphants.
-                    </p>
-                    <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2 sm:pt-4">
-                        <button
-                            class="bg-primary text-white px-6 sm:px-8 py-3.5 sm:py-4 rounded-lg font-bold font-label text-md shadow-lg shadow-primary/20 active:scale-95 transition-transform flex items-center justify-center gap-2">
-                            Rejoindre le Slack <span class="material-symbols-outlined">north_east</span>
-                        </button>
-                        <button
-                            class="bg-surface-container-low text-primary border border-primary-fixed-dim px-6 sm:px-8 py-3.5 sm:py-4 rounded-lg font-bold font-label text-md active:scale-95 transition-transform text-center">
-                            Voir le Manifeste
-                        </button>
-                    </div>
-                    <div class="grid grid-cols-3 gap-4 sm:gap-8 pt-6 sm:pt-8 border-t border-outline-variant">
-                        <div>
-                            <div class="font-h3 text-h3 text-on-background">500+</div>
-                            <div class="font-label text-outline uppercase tracking-tighter text-[10px] sm:text-xs">
-                                Membres Actifs</div>
-                        </div>
-                        <div>
-                            <div class="font-h3 text-h3 text-on-background">24</div>
-                            <div class="font-label text-outline uppercase tracking-tighter text-[10px] sm:text-xs">
-                                Meetups Organisés</div>
-                        </div>
-                        <div>
-                            <div class="font-h3 text-h3 text-on-background">150+</div>
-                            <div class="font-label text-outline uppercase tracking-tighter text-[10px] sm:text-xs">
-                                Offres d'Emploi</div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Terminal Mockup -->
-                <div class="hidden lg:block">
-                    <div
-                        class="bg-slate-900 rounded-xl shadow-2xl overflow-hidden border border-slate-700 aspect-video flex flex-col font-code text-sm">
-                        <div
-                            class="bg-slate-800/50 px-4 py-2 flex items-center justify-between border-b border-slate-700">
-                            <div class="flex gap-1.5">
-                                <div class="w-3 h-3 rounded-full bg-red-500"></div>
-                                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
-                                <div class="w-3 h-3 rounded-full bg-green-500"></div>
-                            </div>
-                            <div class="text-slate-400 text-xs">bash — laravel-ci</div>
-                            <div class="w-12"></div>
-                        </div>
-                        <div class="p-6 text-slate-300 space-y-2">
-                            <div class="flex gap-2">
-                                <span class="text-green-400">guest@laravel-ci:~$</span>
-                                <span>php artisan community:join --region=CI</span>
-                            </div>
-                            <div class="text-blue-400">Traitement de l'adhésion...</div>
-                            <div class="text-slate-500">[DONE] Attribution du badge "Senior Ivoirian Artisan"</div>
-                            <div class="text-slate-500">[DONE] Synchronisation avec Slack #général</div>
-                            <div class="pt-4 flex gap-2">
-                                <span class="text-green-400">guest@laravel-ci:~$</span>
-                                <span class="animate-pulse">|</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+    {{-- ── Hero ─────────────────────────────────────────────── --}}
+    <section class="max-w-3xl mx-auto px-6 pt-16 pb-20 text-center">
+        <span class="inline-flex items-center gap-2 bg-primary/15 text-primary border border-primary/30 text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
+            <i class="fa-solid fa-circle-dot text-[8px]"></i>
+            Communauté open source — Côte d'Ivoire
+        </span>
 
-        <!-- ═══════════════════════════════════════════════
-             Chiffres Clés
-        ═══════════════════════════════════════════════ -->
-        <section class="py-10 sm:py-xl bg-surface-container-lowest">
-            <div class="max-w-[1200px] mx-auto px-4 sm:px-4 sm:px-6 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-lg">
-                <div
-                    class="bg-white p-4 sm:p-lg rounded-xl border border-outline-variant relative overflow-hidden group shadow-sm">
-                    <div class="absolute top-0 left-0 w-full h-[6px] bg-primary"></div>
-                    <span class="material-symbols-outlined text-primary mb-3 text-2xl sm:text-3xl block">groups</span>
-                    <h4 class="font-h3 text-xl sm:text-h3 text-on-background">1.2k</h4>
-                    <p class="font-body-md text-sm sm:text-body-md text-on-surface-variant">Messages mensuels sur le
-                        forum</p>
-                </div>
-                <div
-                    class="bg-white p-4 sm:p-lg rounded-xl border border-outline-variant relative overflow-hidden group shadow-sm">
-                    <div class="absolute top-0 left-0 w-full h-[6px] bg-secondary"></div>
-                    <span
-                        class="material-symbols-outlined text-secondary mb-3 text-2xl sm:text-3xl block">verified</span>
-                    <h4 class="font-h3 text-xl sm:text-h3 text-on-background">45</h4>
-                    <p class="font-body-md text-sm sm:text-body-md text-on-surface-variant">Entreprises partenaires
-                        locales</p>
-                </div>
-                <div
-                    class="bg-white p-4 sm:p-lg rounded-xl border border-outline-variant relative overflow-hidden group shadow-sm">
-                    <div class="absolute top-0 left-0 w-full h-[6px] bg-tertiary"></div>
-                    <span class="material-symbols-outlined text-tertiary mb-3 text-2xl sm:text-3xl block">school</span>
-                    <h4 class="font-h3 text-xl sm:text-h3 text-on-background">12</h4>
-                    <p class="font-body-md text-sm sm:text-body-md text-on-surface-variant">Certifications Laravel
-                        passées</p>
-                </div>
-                <div
-                    class="bg-white p-4 sm:p-lg rounded-xl border border-outline-variant relative overflow-hidden group shadow-sm">
-                    <div class="absolute top-0 left-0 w-full h-[6px] bg-primary"></div>
-                    <span class="material-symbols-outlined text-primary mb-3 text-2xl sm:text-3xl block">terminal</span>
-                    <h4 class="font-h3 text-xl sm:text-h3 text-on-background">85%</h4>
-                    <p class="font-body-md text-sm sm:text-body-md text-on-surface-variant">Projets PHP sous Laravel en
-                        CI</p>
-                </div>
-            </div>
-        </section>
+        <h1 class="text-4xl sm:text-5xl font-extrabold leading-tight mb-5">
+            Le hub des développeurs<br>
+            <span class="text-primary">Laravel ivoiriens</span>
+        </h1>
 
-        <!-- ═══════════════════════════════════════════════
-             Pourquoi rejoindre
-        ═══════════════════════════════════════════════ -->
-        <section class="py-10 sm:py-xl">
-            <div class="max-w-[1200px] mx-auto px-4 sm:px-4 sm:px-6">
-                <div class="text-center mb-10 sm:mb-16">
-                    <h2 class="font-h2 text-h2 text-on-background mb-3 sm:mb-4">Pourquoi faire partie de l'aventure ?
-                    </h2>
-                    <p class="font-body-lg text-on-surface-variant max-w-2xl mx-auto">Plus qu'un groupe de développeurs,
-                        une famille technique qui bâtit le futur du web ivoirien.</p>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-lg">
-                    <div class="space-y-4">
-                        <div
-                            class="w-14 h-14 sm:w-16 sm:h-16 bg-primary-container/10 flex items-center justify-center rounded-2xl">
-                            <span class="material-symbols-outlined text-primary text-2xl sm:text-3xl">psychology</span>
-                        </div>
-                        <h3 class="font-h3 text-h3 text-on-background">Apprentissage continu</h3>
-                        <p class="text-on-surface-variant leading-relaxed">Accédez à des formations exclusives, des
-                            revues de code entre pairs et des ateliers techniques hebdomadaires.</p>
-                    </div>
-                    <div class="space-y-4">
-                        <div
-                            class="w-14 h-14 sm:w-16 sm:h-16 bg-secondary-container/10 flex items-center justify-center rounded-2xl">
-                            <span class="material-symbols-outlined text-secondary text-2xl sm:text-3xl">handshake</span>
-                        </div>
-                        <h3 class="font-h3 text-h3 text-on-background">Networking Local</h3>
-                        <p class="text-on-surface-variant leading-relaxed">Rencontrez les CTOs et leads développeurs des
-                            plus grandes startups et entreprises de Côte d'Ivoire.</p>
-                    </div>
-                    <div class="space-y-4">
-                        <div
-                            class="w-14 h-14 sm:w-16 sm:h-16 bg-tertiary-container/10 flex items-center justify-center rounded-2xl">
-                            <span
-                                class="material-symbols-outlined text-tertiary text-2xl sm:text-3xl">rocket_launch</span>
-                        </div>
-                        <h3 class="font-h3 text-h3 text-on-background">Opportunités Pro</h3>
-                        <p class="text-on-surface-variant leading-relaxed">Recevez en priorité des offres d'emploi
-                            exclusives adaptées à votre profil de développeur Laravel.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <p class="text-gray-400 text-lg leading-relaxed mb-8 max-w-xl mx-auto">
+            Rejoignez une communauté de plus de 500 développeurs passionnés.
+            Forum, événements, offres d'emploi et ressources Laravel — tout en un.
+        </p>
 
-        <!-- ═══════════════════════════════════════════════
-             Prochains événements
-        ═══════════════════════════════════════════════ -->
-        <section class="py-10 sm:py-xl bg-surface-bright">
-            <div class="max-w-[1200px] mx-auto px-4 sm:px-4 sm:px-6">
-                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-end mb-8 sm:mb-12 gap-4">
-                    <div>
-                        <h2 class="font-h2 text-h2 text-on-background mb-2">Événements à venir</h2>
-                        <p class="font-body-md text-on-surface-variant">Préparez votre agenda, ça va coder fort !</p>
-                    </div>
-                    <a class="text-primary font-bold flex items-center gap-2 font-label uppercase text-xs hover:gap-3 transition-all self-start sm:self-auto"
-                        href="#">Tous les événements <span class="material-symbols-outlined">arrow_forward</span></a>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-lg">
-                    <!-- Event 1 -->
-                    <div
-                        class="bg-white rounded-xl border border-outline-variant overflow-hidden group shadow-sm hover:shadow-md transition-shadow">
-                        <div class="h-40 overflow-hidden relative">
-                            <img alt="Meetup Laravel"
-                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAshRPtwTn0p934mt3AwYX5nlKdrDoUtWMVa2Gsyb6DSSDrKGzYOc8vun7YU1_okX-6Cb7Sc--EP-OlYll2Ti2HCDoRqa8866aJIDlRgquSbA4ohQbLpYT7HCE196QH1adtX3Ju_WDJO8CPg7FF6yqw60VDPJk-ADhb-fXjGrLyKfNmprm-5mGop9qAF98Go5WOUkD6SrtVhfXmJFahtgudguKE4ewM02hSBzZq83QhzRb9o2zDwsrhzSsug2W3BGrStRYkbdcB5bQ" />
-                            <div
-                                class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-lg text-center font-label">
-                                <div class="text-primary font-bold text-lg">15</div>
-                                <div class="text-[10px] uppercase text-on-surface">Oct.</div>
-                            </div>
-                        </div>
-                        <div class="p-4 sm:p-6 space-y-4">
-                            <h4 class="font-h3 text-xl text-on-background">Laravel CI Meetup #25</h4>
-                            <p class="text-sm text-on-surface-variant line-clamp-2">Focus sur Laravel 11 et les
-                                nouvelles fonctionnalités de Reverb. Lieu: Orange Fab, Abidjan.</p>
-                            <div class="space-y-2">
-                                <div class="flex justify-between text-xs font-label">
-                                    <span class="text-outline uppercase">Places restantes</span>
-                                    <span class="text-primary font-bold">12/50</span>
-                                </div>
-                                <div class="w-full h-2 bg-surface-container rounded-full overflow-hidden">
-                                    <div class="h-full bg-primary w-[76%] rounded-full"></div>
-                                </div>
-                            </div>
-                            <button
-                                class="w-full py-3 bg-primary-container/10 text-primary font-bold rounded-lg hover:bg-primary hover:text-white transition-colors">Réserver
-                                ma place</button>
-                        </div>
-                    </div>
-                    <!-- Event 2 -->
-                    <div
-                        class="bg-white rounded-xl border border-outline-variant overflow-hidden group shadow-sm hover:shadow-md transition-shadow">
-                        <div class="h-40 overflow-hidden relative">
-                            <img alt="Atelier Code"
-                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4U1eGuKFQHoDScFFRrKjZa2h0IqtEYUjzBmZsTPaRK0aKOWX66VaJDy4_SS4Ql_JICPDt6qj459FSAWFMNFB0sUjmt5Vsmsz8jWOhsQWqGRLJlD3bmTSIE_WK1ZRFx4WKROsCWgJfzCOq3eW5wjTEScDaYPtTbFSbIBH1NLqRhv3NMftZA47RcAeq3CB7I5LcJ-H5QUclTCZfVDiDkfEw6HKosXuJsdt7NJYT23uycQxLEf92Nz2MSfJ2XjyGk0hbsPX8CxOZfBw" />
-                            <div
-                                class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-lg text-center font-label">
-                                <div class="text-secondary font-bold text-lg">22</div>
-                                <div class="text-[10px] uppercase text-on-surface">Oct.</div>
-                            </div>
-                        </div>
-                        <div class="p-4 sm:p-6 space-y-4">
-                            <h4 class="font-h3 text-xl text-on-background">Atelier Livewire 3</h4>
-                            <p class="text-sm text-on-surface-variant line-clamp-2">Maîtrisez Livewire 3 pour créer des
-                                interfaces réactives sans quitter le PHP. Workshop en ligne.</p>
-                            <div class="space-y-2">
-                                <div class="flex justify-between text-xs font-label">
-                                    <span class="text-outline uppercase">Places restantes</span>
-                                    <span class="text-secondary font-bold">05/100</span>
-                                </div>
-                                <div class="w-full h-2 bg-surface-container rounded-full overflow-hidden">
-                                    <div class="h-full bg-secondary w-[95%] rounded-full"></div>
-                                </div>
-                            </div>
-                            <button
-                                class="w-full py-3 bg-secondary-container/10 text-secondary font-bold rounded-lg hover:bg-secondary hover:text-white transition-colors">Derniers
-                                tickets</button>
-                        </div>
-                    </div>
-                    <!-- Event 3 -->
-                    <div
-                        class="bg-white rounded-xl border border-outline-variant overflow-hidden group shadow-sm hover:shadow-md transition-shadow sm:col-span-2 lg:col-span-1">
-                        <div class="h-40 overflow-hidden relative">
-                            <img alt="Hackathon"
-                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAf5k1AHL1vAm1wyrmrVcVp9YRINn7bSdjTTBQBbuxGyTnfiVm8ib_M4d7pcA4yDbOp6uX2R1Vqr1IlA0eYOHs-in0hNhZQVn7esJRU8TeaEeX6ILmjK99YKm7nGoMR8410QtguLwl_JEGHE7szOFDXfzZ_xFTAZjUjpP_v92mChKVs_S7yluL3OyhDYif7_4TdV2jOSIH6Q5gXQPgm5brIgS22-fjHatXss7bJGj4gvxVdacv6Z_whQMzlOm3IzEMx1RqwIbHb0FY" />
-                            <div
-                                class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-lg text-center font-label">
-                                <div class="text-tertiary font-bold text-lg">05</div>
-                                <div class="text-[10px] uppercase text-on-surface">Nov.</div>
-                            </div>
-                        </div>
-                        <div class="p-4 sm:p-6 space-y-4">
-                            <h4 class="font-h3 text-xl text-on-background">CI-Laravel Hackathon</h4>
-                            <p class="text-sm text-on-surface-variant line-clamp-2">48h pour créer une solution
-                                open-source utile au développement local. Prix à gagner !</p>
-                            <div class="space-y-2">
-                                <div class="flex justify-between text-xs font-label">
-                                    <span class="text-outline uppercase">Places restantes</span>
-                                    <span class="text-tertiary font-bold">32/40</span>
-                                </div>
-                                <div class="w-full h-2 bg-surface-container rounded-full overflow-hidden">
-                                    <div class="h-full bg-tertiary w-[20%] rounded-full"></div>
-                                </div>
-                            </div>
-                            <button
-                                class="w-full py-3 bg-tertiary-container/10 text-tertiary font-bold rounded-lg hover:bg-tertiary hover:text-white transition-colors">S'inscrire
-                                à l'équipe</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        @guest
+            <a href="{{ route('login') }}"
+               class="inline-flex items-center gap-3 px-7 py-3.5 bg-primary text-white font-bold text-base rounded-xl hover:bg-orange-500 transition-colors shadow-lg shadow-primary/25">
+                <svg viewBox="0 0 24 24" class="w-5 h-5 fill-white shrink-0" aria-hidden="true">
+                    <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+                </svg>
+                Rejoindre avec GitHub
+            </a>
+        @else
+            <a href="{{ route('dashboard') }}"
+               class="inline-flex items-center gap-2 px-7 py-3.5 bg-primary text-white font-bold text-base rounded-xl hover:bg-orange-500 transition-colors">
+                <i class="fa-solid fa-arrow-right"></i>
+                Accéder à mon espace
+            </a>
+        @endguest
+    </section>
 
-        <!-- ═══════════════════════════════════════════════
-             Derniers articles & Forum
-        ═══════════════════════════════════════════════ -->
-        <section class="py-10 sm:py-xl">
-            <div class="max-w-[1200px] mx-auto px-4 sm:px-4 sm:px-6">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 sm:gap-xl">
-                    <!-- Blog Section -->
-                    <div class="lg:col-span-2 space-y-6 sm:space-y-8">
-                        <div class="flex items-center gap-4">
-                            <h2 class="font-h2 text-h2 text-on-background">Derniers Articles</h2>
-                            <div class="h-[2px] flex-grow bg-outline-variant"></div>
-                        </div>
-                        <!-- Featured Blog -->
-                        <div
-                            class="relative rounded-2xl overflow-hidden group border border-outline-variant shadow-lg h-72 sm:h-96">
-                            <img alt="Featured Post"
-                                class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdh0TodAnbXJO6FArieTT1dQzT9WD-DreC4g1Kkei4JyaIBCVrYAo0jXbhO0bcRfPlOZ8wGN0eUz1LPP60M9U4ZjZQFR4ynAQXubySyedBowsmQ2qArycpUQNtoJpTavUxvj83K07t_OeZa2jgPKtkM1ms_VtPjOtDwaEsKAXvfN_76xdkqXkuJcd589YNATnRTPgax08yJr2pjfMycjBBgcUNmlH3qK5_QkoQWPK1t5jYdsQXVnJwYvbiknNo5b9zR_AG_0VqYd4" />
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent">
-                            </div>
-                            <div class="absolute bottom-0 left-0 p-5 sm:p-8 space-y-3 sm:space-y-4">
-                                <div class="flex gap-2">
-                                    <span
-                                        class="bg-primary text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-tighter">Architecture</span>
-                                    <span
-                                        class="bg-white/20 backdrop-blur text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-tighter">10
-                                        min read</span>
-                                </div>
-                                <h3 class="text-white text-xl sm:text-3xl font-h2">Optimiser vos requêtes Eloquent pour
-                                    les gros volumes de données</h3>
-                                <p class="text-white/80 max-w-xl font-body-md hidden sm:block">Découvrez comment passer
-                                    de 30s à 300ms de temps de réponse en utilisant les indexations et le lazy loading
-                                    correctement...</p>
-                                <div class="flex items-center gap-3">
-                                    <div
-                                        class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-slate-200 border-2 border-white">
-                                    </div>
-                                    <span class="text-white font-label text-xs sm:text-sm">Par Jean-Marc Koffi</span>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Grid Small Blog -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-lg">
-                            <div class="flex gap-4 group">
-                                <div
-                                    class="w-20 h-20 sm:w-24 sm:h-24 shrink-0 rounded-lg overflow-hidden border border-outline-variant">
-                                    <img alt="Article 2"
-                                        class="w-full h-full object-cover group-hover:scale-110 transition-transform"
-                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrziWp8N56FQLx2LeN7XRfk5ZXPYMNhHGyC-eY3vsfwhVP9jNL-8cTLVIUSwA2OAH1ky_4jvxYYB5_7dcTcoBMEWt3ifUjazDRGvJnn-N0n8BfJV8nWAggB-RRvWwCtLXWElekAFLeMlaFBbSvjOm13eU5c0azjniZjw1OxS3rd48-k8HyoQvTuqUdYe_bxu-338RpNzSgq5hriBgrti4Yf7eaF911OBaXLLvtNhv2WalLL3CQoi-yUxRhbWsEACPkJz3WmF7QvQw" />
-                                </div>
-                                <div class="space-y-1">
-                                    <h5
-                                        class="font-bold text-on-background group-hover:text-primary transition-colors text-sm sm:text-base">
-                                        Laravel Pulse : Monitorer son application en temps réel</h5>
-                                    <p class="text-xs text-on-surface-variant line-clamp-2">L'outil indispensable pour
-                                        surveiller la santé de vos serveurs de production en Côte d'Ivoire.</p>
-                                </div>
-                            </div>
-                            <div class="flex gap-4 group">
-                                <div
-                                    class="w-20 h-20 sm:w-24 sm:h-24 shrink-0 rounded-lg overflow-hidden border border-outline-variant">
-                                    <img alt="Article 3"
-                                        class="w-full h-full object-cover group-hover:scale-110 transition-transform"
-                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6dYt3tIgPzlW35Yz8W9X8GfCY4lekKYTOOSCFozPmCxNEgjck5iLieQRJIpjFmCF-F4u72xjxgKKNmFhvd7LUcGyESzwkebFvPp6uxpDSsHYh0Z8E3UcyQWe4SX5FkOAfqJZbdLvo6ezTkfDo2QJgB0CohKbEN9xPpY7aeBaPghITfR8FP9zHGYVo9cWUndqPWjaVo0AEHMySoZzVLppaDiSjN0MRGuIj-rsK5o7CwauFtLAh2wgd2uMrAK0lYalDQiVCb2jWUY" />
-                                </div>
-                                <div class="space-y-1">
-                                    <h5
-                                        class="font-bold text-on-background group-hover:text-primary transition-colors text-sm sm:text-base">
-                                        Déployer sur AWS depuis Abidjan : Guide complet</h5>
-                                    <p class="text-xs text-on-surface-variant line-clamp-2">Les meilleures pratiques
-                                        pour minimiser la latence et sécuriser vos instances EC2.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Forum Activity Section -->
-                    <div class="space-y-6 sm:space-y-8">
-                        <div class="flex items-center gap-4">
-                            <h2 class="font-h2 text-h2 text-on-background whitespace-nowrap">Forum Actif</h2>
-                            <div class="h-[2px] flex-grow bg-outline-variant"></div>
-                        </div>
-                        <div
-                            class="bg-white rounded-xl border border-outline-variant divide-y divide-outline-variant shadow-sm">
-                            <a class="p-4 block hover:bg-surface-container-low transition-colors" href="#">
-                                <div class="flex justify-between items-start mb-1">
-                                    <span
-                                        class="text-xs font-bold text-primary px-2 py-0.5 bg-primary-container/10 rounded">AIDE</span>
-                                    <span class="text-[10px] text-outline">Il y a 5m</span>
-                                </div>
-                                <h6 class="font-bold text-sm text-on-background">Erreur 419 Page Expired sur production
-                                </h6>
-                                <div class="flex items-center gap-2 mt-2">
-                                    <div class="w-5 h-5 rounded-full bg-slate-300"></div>
-                                    <span class="text-[10px] text-on-surface-variant">Par @idriss_dev</span>
-                                    <span class="text-[10px] ml-auto flex items-center gap-1"><span
-                                            class="material-symbols-outlined text-sm">chat_bubble</span> 12</span>
-                                </div>
-                            </a>
-                            <a class="p-4 block hover:bg-surface-container-low transition-colors" href="#">
-                                <div class="flex justify-between items-start mb-1">
-                                    <span
-                                        class="text-xs font-bold text-secondary px-2 py-0.5 bg-secondary-container/10 rounded">DÉBAT</span>
-                                    <span class="text-[10px] text-outline">Il y a 2h</span>
-                                </div>
-                                <h6 class="font-bold text-sm text-on-background">Filament PHP vs Nova pour un ERP ?</h6>
-                                <div class="flex items-center gap-2 mt-2">
-                                    <div class="w-5 h-5 rounded-full bg-slate-300"></div>
-                                    <span class="text-[10px] text-on-surface-variant">Par @mariam_pro</span>
-                                    <span class="text-[10px] ml-auto flex items-center gap-1"><span
-                                            class="material-symbols-outlined text-sm">chat_bubble</span> 45</span>
-                                </div>
-                            </a>
-                            <a class="p-4 block hover:bg-surface-container-low transition-colors" href="#">
-                                <div class="flex justify-between items-start mb-1">
-                                    <span
-                                        class="text-xs font-bold text-tertiary px-2 py-0.5 bg-tertiary-container/10 rounded">OFFRE</span>
-                                    <span class="text-[10px] text-outline">Hier</span>
-                                </div>
-                                <h6 class="font-bold text-sm text-on-background">[CDI] Développeur Fullstack Senior @
-                                    Yango</h6>
-                                <div class="flex items-center gap-2 mt-2">
-                                    <div class="w-5 h-5 rounded-full bg-slate-300"></div>
-                                    <span class="text-[10px] text-on-surface-variant">Par @hr_team</span>
-                                    <span class="text-[10px] ml-auto flex items-center gap-1"><span
-                                            class="material-symbols-outlined text-sm">visibility</span> 234</span>
-                                </div>
-                            </a>
-                        </div>
-                        <div
-                            class="bg-primary-container p-5 sm:p-6 rounded-xl text-white relative overflow-hidden group">
-                            <div class="relative z-10">
-                                <h4 class="font-bold text-lg mb-2">Un problème de code ?</h4>
-                                <p class="text-white/80 text-sm mb-4">Posez votre question à la communauté et recevez
-                                    une réponse en moins de 15 minutes.</p>
-                                <button class="bg-white text-primary font-bold px-4 py-2 rounded-lg text-sm">Poser ma
-                                    question</button>
-                            </div>
-                            <span
-                                class="material-symbols-outlined absolute -bottom-4 -right-4 text-9xl opacity-10 group-hover:rotate-12 transition-transform">help_center</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+    {{-- ── Features ─────────────────────────────────────────── --}}
+    <section class="bg-white/5 border-y border-white/10">
+        <div class="max-w-5xl mx-auto px-6 py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
-        <!-- ═══════════════════════════════════════════════
-             Témoignages
-        ═══════════════════════════════════════════════ -->
-        <section class="py-10 sm:py-xl bg-white">
-            <div class="max-w-[1200px] mx-auto px-4 sm:px-4 sm:px-6">
-                <div class="text-center mb-10 sm:mb-16">
-                    <h2 class="font-h2 text-h2 text-on-background">Ce qu'ils en disent</h2>
+            <div class="text-center">
+                <div class="inline-flex items-center justify-center w-12 h-12 bg-primary/15 rounded-xl mb-4">
+                    <i class="fa-solid fa-comments text-primary text-xl"></i>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-lg">
-                    <div class="bg-surface-container-low p-6 sm:p-8 rounded-2xl relative shadow-sm">
-                        <span
-                            class="material-symbols-outlined text-primary/20 text-5xl sm:text-6xl absolute top-4 right-6 sm:right-8">format_quote</span>
-                        <p class="font-body-lg text-on-surface-variant italic mb-6">"Grâce à Laravel Côte d'Ivoire, j'ai
-                            pu trouver mon premier poste de développeur senior. La qualité des échanges et l'entraide
-                            sont tout simplement incroyables."</p>
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-slate-200"></div>
-                            <div>
-                                <div class="font-bold text-on-background">Abdoulaye Traoré</div>
-                                <div class="text-xs text-outline uppercase tracking-widest font-label">Lead Dev @
-                                    GreenTech</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-surface-container-low p-6 sm:p-8 rounded-2xl relative shadow-sm">
-                        <span
-                            class="material-symbols-outlined text-primary/20 text-5xl sm:text-6xl absolute top-4 right-6 sm:right-8">format_quote</span>
-                        <p class="font-body-lg text-on-surface-variant italic mb-6">"Le meetup mensuel est devenu mon
-                            rendez-vous technique préféré à Abidjan. On y apprend toujours quelque chose de nouveau sur
-                            l'écosystème Laravel."</p>
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-slate-200"></div>
-                            <div>
-                                <div class="font-bold text-on-background">Sarah Bamba</div>
-                                <div class="text-xs text-outline uppercase tracking-widest font-label">Consultante
-                                    Freelance</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <h3 class="font-bold text-white mb-1">Forum technique</h3>
+                <p class="text-sm text-gray-400">Posez vos questions Laravel, entraidez-vous.</p>
             </div>
-        </section>
 
-        <!-- ═══════════════════════════════════════════════
-             Partenaires
-        ═══════════════════════════════════════════════ -->
-        <section class="py-10 sm:py-12 border-y border-outline-variant bg-surface-bright">
-            <div class="max-w-[1200px] mx-auto px-4 sm:px-4 sm:px-6">
-                <p class="text-center text-outline font-label uppercase tracking-widest text-[10px] mb-6 sm:mb-8">Ils
-                    soutiennent l'artisanat ivoirien</p>
-                <div
-                    class="flex flex-wrap justify-center items-center gap-6 sm:gap-12 opacity-40 grayscale hover:grayscale-0 transition-all duration-500">
-                    <div class="font-black text-xl sm:text-2xl tracking-tighter">ORANGE</div>
-                    <div class="font-black text-xl sm:text-2xl tracking-tighter">CINETPAY</div>
-                    <div class="font-black text-xl sm:text-2xl tracking-tighter">BIZAO</div>
-                    <div class="font-black text-xl sm:text-2xl tracking-tighter">YANGO</div>
-                    <div class="font-black text-xl sm:text-2xl tracking-tighter">TECH HUB</div>
+            <div class="text-center">
+                <div class="inline-flex items-center justify-center w-12 h-12 bg-primary/15 rounded-xl mb-4">
+                    <i class="fa-solid fa-newspaper text-primary text-xl"></i>
                 </div>
+                <h3 class="font-bold text-white mb-1">Blog & ressources</h3>
+                <p class="text-sm text-gray-400">Tutoriels, boilerplates et guides PDF.</p>
             </div>
-        </section>
 
-        <!-- ═══════════════════════════════════════════════
-             CTA Final
-        ═══════════════════════════════════════════════ -->
-        <section class="py-16 sm:py-24 px-4 sm:px-6">
-            <div
-                class="max-w-[1000px] mx-auto bg-[#FFF4EC] rounded-[1.5rem] sm:rounded-[2rem] p-8 sm:p-12 text-center space-y-6 sm:space-y-8 relative overflow-hidden">
-                <div class="absolute -top-12 -left-12 w-48 h-48 bg-primary/5 rounded-full blur-3xl"></div>
-                <div class="absolute -bottom-12 -right-12 w-48 h-48 bg-secondary/5 rounded-full blur-3xl"></div>
-                <h2 class="font-h1 text-3xl sm:text-4xl text-on-background max-w-2xl mx-auto">Prêt à devenir un meilleur
-                    artisan Laravel ?</h2>
-                <p class="text-on-surface-variant text-base sm:text-lg max-w-xl mx-auto">Rejoignez gratuitement la
-                    communauté dès aujourd'hui et commencez à échanger avec vos pairs.</p>
-                <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
-                    <button
-                        class="w-full sm:w-auto bg-primary text-white px-8 sm:px-10 py-4 sm:py-5 rounded-xl font-bold font-label text-base sm:text-lg shadow-xl shadow-primary/30 hover:-translate-y-1 transition-all">S'inscrire
-                        maintenant</button>
-                    <button
-                        class="w-full sm:w-auto bg-white border border-outline-variant px-8 sm:px-10 py-4 sm:py-5 rounded-xl font-bold font-label text-base sm:text-lg hover:bg-slate-50 transition-all">Parcourir
-                        le forum</button>
+            <div class="text-center">
+                <div class="inline-flex items-center justify-center w-12 h-12 bg-primary/15 rounded-xl mb-4">
+                    <i class="fa-solid fa-calendar-days text-primary text-xl"></i>
                 </div>
-                <p class="text-xs text-outline font-label">Déjà 542 membres nous ont rejoint ce mois-ci.</p>
+                <h3 class="font-bold text-white mb-1">Événements</h3>
+                <p class="text-sm text-gray-400">Meetups, hackathons et talks en ligne.</p>
             </div>
-        </section>
-    </main>
 
-    <!-- ═══════════════════════════════════════════════════════
-         FOOTER UNIFIÉ
-    ═══════════════════════════════════════════════════════ -->
-    <!-- FOOTER UNIFIE -->
-    <footer class="bg-[#F8F9FA] w-full border-t border-[#E1E4E8] mt-auto">
-        <div
-            class="max-w-[1200px] mx-auto px-4 sm:px-4 sm:px-6 py-10 sm:py-12 grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
-            <div class="col-span-2 md:col-span-1">
-                <a href="index.html"
-                    class="text-lg font-bold text-[#FF6600] mb-4 inline-flex items-center gap-2 font-['JetBrains_Mono']">
-                    <span class="material-symbols-outlined text-xl">developer_mode</span>
-                    Laravel CI
-                </a>
-                <p class="font-['JetBrains_Mono'] text-sm text-slate-500 mb-5 mt-3">La première communauté Laravel en
-                    Côte d'Ivoire.</p>
-                <div class="flex gap-3">
-                    <a class="w-9 h-9 bg-white border border-[#E1E4E8] rounded-full flex items-center justify-center text-slate-600 hover:text-[#FF6600] hover:border-[#FF6600] transition-colors"
-                        href="#"><span class="material-symbols-outlined text-base">public</span></a>
-                    <a class="w-9 h-9 bg-white border border-[#E1E4E8] rounded-full flex items-center justify-center text-slate-600 hover:text-[#FF6600] hover:border-[#FF6600] transition-colors"
-                        href="#"><span class="material-symbols-outlined text-base">rss_feed</span></a>
+            <div class="text-center">
+                <div class="inline-flex items-center justify-center w-12 h-12 bg-primary/15 rounded-xl mb-4">
+                    <i class="fa-solid fa-briefcase text-primary text-xl"></i>
                 </div>
+                <h3 class="font-bold text-white mb-1">Job Board</h3>
+                <p class="text-sm text-gray-400">Offres Laravel en Côte d'Ivoire et en remote.</p>
             </div>
-            <div>
-                <div
-                    class="font-bold text-slate-900 mb-4 sm:mb-6 font-['JetBrains_Mono'] text-xs uppercase tracking-widest">
-                    Communauté</div>
-                <ul class="space-y-3 font-['JetBrains_Mono'] text-sm">
-                    <li><a class="text-slate-500 hover:text-[#FF6600] hover:translate-x-1 transition-all inline-block"
-                            href="forum.html">Forum</a></li>
-                    <li><a class="text-slate-500 hover:text-[#FF6600] hover:translate-x-1 transition-all inline-block"
-                            href="evenements.html">Événements</a></li>
-                    <li><a class="text-slate-500 hover:text-[#FF6600] hover:translate-x-1 transition-all inline-block"
-                            href="apropos.html">À propos</a></li>
-                    <li><a class="text-slate-500 hover:text-[#FF6600] hover:translate-x-1 transition-all inline-block"
-                            href="profilmembre.html">Profil membre</a></li>
-                </ul>
-            </div>
-            <div>
-                <div
-                    class="font-bold text-slate-900 mb-4 sm:mb-6 font-['JetBrains_Mono'] text-xs uppercase tracking-widest">
-                    Plateforme</div>
-                <ul class="space-y-3 font-['JetBrains_Mono'] text-sm">
-                    <li><a class="text-slate-500 hover:text-[#FF6600] hover:translate-x-1 transition-all inline-block"
-                            href="blog.html">Blog</a></li>
-                    <li><a class="text-slate-500 hover:text-[#FF6600] hover:translate-x-1 transition-all inline-block"
-                            href="job.html">Job Board</a></li>
-                    <li><a class="text-slate-500 hover:text-[#FF6600] hover:translate-x-1 transition-all inline-block"
-                            href="connexion.html">Connexion</a></li>
-                    <li><a class="text-slate-500 hover:text-[#FF6600] hover:translate-x-1 transition-all inline-block"
-                            href="inscription.html">Inscription</a></li>
-                </ul>
-            </div>
-            <div>
-                <div
-                    class="font-bold text-slate-900 mb-4 sm:mb-6 font-['JetBrains_Mono'] text-xs uppercase tracking-widest">
-                    Légal</div>
-                <ul class="space-y-3 font-['JetBrains_Mono'] text-sm">
-                    <li><a class="text-slate-500 hover:text-[#FF6600] hover:translate-x-1 transition-all inline-block"
-                            href="#">Mentions légales</a></li>
-                    <li><a class="text-slate-500 hover:text-[#FF6600] hover:translate-x-1 transition-all inline-block"
-                            href="#">Confidentialité</a></li>
-                    <li><a class="text-slate-500 hover:text-[#FF6600] hover:translate-x-1 transition-all inline-block"
-                            href="#">Cookies</a></li>
-                </ul>
-            </div>
+
         </div>
-        <div
-            class="max-w-[1200px] mx-auto px-4 sm:px-4 sm:px-6 py-6 sm:py-8 border-t border-[#E1E4E8] flex flex-col sm:flex-row justify-between items-center gap-3">
-            <p class="font-['JetBrains_Mono'] text-sm text-slate-500 text-center sm:text-left">© 2026 Laravel Côte
-                d'Ivoire — Open Source MIT 🇨🇮</p>
-            <div class="flex gap-4 font-['JetBrains_Mono'] text-sm text-slate-500">
-                <a class="hover:text-[#FF6600]" href="#">Contact</a>
-                <a class="hover:text-[#FF6600]" href="#">Mentions légales</a>
-            </div>
-        </div>
+    </section>
+
+    {{-- ── Footer ───────────────────────────────────────────── --}}
+    <footer class="max-w-5xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500">
+        <span>
+            <span class="text-primary font-semibold">Laravel Côte d'Ivoire</span>
+            &mdash; 2026 &mdash; Open Source MIT
+        </span>
+        <span>v{{ app()->version() }}</span>
     </footer>
 
-
-    <script src="{{asset('assets/app.js')}}"></script>
-</body>
-
-</html>
+</div>
+@endsection
