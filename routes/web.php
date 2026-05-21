@@ -80,4 +80,4 @@ Route::middleware(['auth', 'active'])->group(function () {
                     ->name('dashboard.membre');
             });
 
-    Route::get('design-system', [DesignSystemController::class, 'index']);
+Route::get('design-system', [DesignSystemController::class, 'index']);
