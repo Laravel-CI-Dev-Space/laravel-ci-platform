@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\CvController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DesignSystemController;
+use App\Livewire\EditProfile;
 use Illuminate\Support\Facades\Route;
 
 // ─── PAGE D'ACCUEIL ───────────────────────────────────────
@@ -33,7 +34,7 @@ Route::post('/logout', [AuthController::class, 'logout'])
 Route::middleware(['auth', 'active'])->group(function () {
 
     // Profil — accessible même sans profil complété
-    Route::get('/profil/completer', \App\Livewire\EditProfile::class)
+    Route::get('/profil/completer', EditProfile::class)
         ->name('profile.edit');
 
     // CV — sert le fichier depuis le disque privé avec vérification auth
@@ -79,5 +80,8 @@ Route::middleware(['auth', 'active'])->group(function () {
                 Route::get('/', [DashboardController::class, 'membre'])
                     ->name('dashboard.membre');
             });
+
+    });
+});
 
 Route::get('design-system', [DesignSystemController::class, 'index']);

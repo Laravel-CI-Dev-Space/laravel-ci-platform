@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Http;
 class CountryService
 {
     private const CACHE_KEY = 'countries_list';
+
     private const CACHE_TTL = 24 * 60 * 60; // 24h en secondes
 
     /**

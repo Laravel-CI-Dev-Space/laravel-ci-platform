@@ -7,10 +7,13 @@ use App\Enums\JobStatus;
 use App\Enums\LaravelLevel;
 use App\Enums\YearsExperience;
 use App\Models\Profile;
+use App\Models\User;
 use App\Services\AssetService;
 use App\Services\CountryService;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\View\View;
 use Livewire\Component;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
 
 class EditProfile extends Component
@@ -18,32 +21,39 @@ class EditProfile extends Component
     use WithFileUploads;
 
     // Fichiers
-    /** @var \Livewire\Features\SupportFileUploads\TemporaryUploadedFile|null */
+    /** @var TemporaryUploadedFile|null */
     public $avatarFile = null;
-    /** @var \Livewire\Features\SupportFileUploads\TemporaryUploadedFile|null */
-    public $cvFile     = null;
+
+    /** @var TemporaryUploadedFile|null */
+    public $cvFile = null;
 
     public ?string $currentAvatar = null;
 
     public ?string $currentCv = null;
 
     // Localisation
-    public string $country  = '';
-    public string $city     = '';
+    public string $country = '';
+
+    public string $city = '';
+
     public string $district = '';
 
     // Infos perso
     public string $bio = '';
 
     // Technique
-    public string $laravel_level    = '';
+    public string $laravel_level = '';
+
     public string $years_experience = '';
-    public array  $tech_stack       = [];
-    public string $newStackItem     = '';
+
+    public array $tech_stack = [];
+
+    public string $newStackItem = '';
 
     // Académique & pro
     public string $academic_level = '';
-    public string $job_status     = '';
+
+    public string $job_status = '';
 
     // Liens
     public string $portfolio_url = '';
@@ -57,27 +67,27 @@ class EditProfile extends Component
 
     public function mount(): void
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user    = auth()->user();
         $profile = $user->profile;
 
         $this->isFirstTime = $profile === null;
 
         if ($profile) {
-            $this->currentAvatar   = $profile->avatarUrl($user->avatar);
-            $this->currentCv       = $profile->cvUrl();
-            $this->country         = $profile->country ?? '';
-            $this->city            = $profile->city ?? '';
-            $this->district        = $profile->district ?? '';
-            $this->bio             = $profile->bio ?? '';
-            $this->laravel_level   = $profile->laravel_level ?? '';
+            $this->currentAvatar    = $profile->avatarUrl($user->avatar);
+            $this->currentCv        = $profile->cvUrl();
+            $this->country          = $profile->country          ?? '';
+            $this->city             = $profile->city             ?? '';
+            $this->district         = $profile->district         ?? '';
+            $this->bio              = $profile->bio              ?? '';
+            $this->laravel_level    = $profile->laravel_level    ?? '';
             $this->years_experience = $profile->years_experience ?? '';
-            $this->tech_stack      = $profile->tech_stack ?? [];
-            $this->academic_level  = $profile->academic_level ?? '';
-            $this->job_status      = $profile->job_status ?? '';
-            $this->portfolio_url   = $profile->portfolio_url ?? '';
-            $this->completionRate  = $profile->completionRate();
-            $this->missingFields   = $profile->missingFields();
+            $this->tech_stack       = $profile->tech_stack       ?? [];
+            $this->academic_level   = $profile->academic_level   ?? '';
+            $this->job_status       = $profile->job_status       ?? '';
+            $this->portfolio_url    = $profile->portfolio_url    ?? '';
+            $this->completionRate   = $profile->completionRate();
+            $this->missingFields    = $profile->missingFields();
         } else {
             $this->currentAvatar = $user->avatar;
         }
@@ -113,19 +123,19 @@ class EditProfile extends Component
     protected function rules(): array
     {
         return [
-            'country'         => ['nullable', 'string', 'max:100'],
-            'city'            => ['nullable', 'string', 'max:100'],
-            'district'        => ['nullable', 'string', 'max:100'],
-            'bio'             => ['nullable', 'string', 'max:1000'],
-            'laravel_level'   => ['nullable', 'in:' . implode(',', array_column(LaravelLevel::cases(), 'value'))],
-            'years_experience'=> ['nullable', 'in:' . implode(',', array_column(YearsExperience::cases(), 'value'))],
-            'tech_stack'      => ['nullable', 'array'],
-            'tech_stack.*'    => ['string', 'max:50'],
-            'academic_level'  => ['nullable', 'in:' . implode(',', array_column(AcademicLevel::cases(), 'value'))],
-            'job_status'      => ['nullable', 'in:' . implode(',', array_column(JobStatus::cases(), 'value'))],
-            'portfolio_url'   => ['nullable', 'url', 'max:255'],
-            'avatarFile'      => ['nullable', 'image', 'max:2048'],
-            'cvFile'          => ['nullable', 'mimes:pdf,doc,docx,jpg,jpeg,png', 'max:5120'],
+            'country'          => ['nullable', 'string', 'max:100'],
+            'city'             => ['nullable', 'string', 'max:100'],
+            'district'         => ['nullable', 'string', 'max:100'],
+            'bio'              => ['nullable', 'string', 'max:1000'],
+            'laravel_level'    => ['nullable', 'in:' . implode(',', array_column(LaravelLevel::cases(), 'value'))],
+            'years_experience' => ['nullable', 'in:' . implode(',', array_column(YearsExperience::cases(), 'value'))],
+            'tech_stack'       => ['nullable', 'array'],
+            'tech_stack.*'     => ['string', 'max:50'],
+            'academic_level'   => ['nullable', 'in:' . implode(',', array_column(AcademicLevel::cases(), 'value'))],
+            'job_status'       => ['nullable', 'in:' . implode(',', array_column(JobStatus::cases(), 'value'))],
+            'portfolio_url'    => ['nullable', 'url', 'max:255'],
+            'avatarFile'       => ['nullable', 'image', 'max:2048'],
+            'cvFile'           => ['nullable', 'mimes:pdf,doc,docx,jpg,jpeg,png', 'max:5120'],
         ];
     }
 
@@ -133,7 +143,7 @@ class EditProfile extends Component
     {
         $this->validate();
 
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = auth()->user();
 
         $data = [
@@ -152,11 +162,11 @@ class EditProfile extends Component
 
         if ($this->avatarFile) {
             $data['avatar'] = $assetService->upload(
-                file:   $this->avatarFile,
+                file: $this->avatarFile,
                 folder: 'avatars',
                 prefix: 'avatar',
                 userId: $user->id,
-                old:    $user->profile?->avatar,
+                old: $user->profile?->avatar,
             );
         }
 
@@ -185,15 +195,15 @@ class EditProfile extends Component
         session()->flash('success', 'Profil sauvegardé avec succès.');
     }
 
-    public function render(CountryService $countryService): \Illuminate\View\View
+    public function render(CountryService $countryService): View
     {
         return view('livewire.edit-profile', [
-            'countries'        => $countryService->getCountries(),
-            'laravelLevels'    => LaravelLevel::labels(),
-            'yearsExperience'  => YearsExperience::labels(),
-            'academicLevels'   => AcademicLevel::labels(),
-            'jobStatuses'      => JobStatus::labels(),
-            'stackPredefined'  => Profile::$stackPredefined,
+            'countries'       => $countryService->getCountries(),
+            'laravelLevels'   => LaravelLevel::labels(),
+            'yearsExperience' => YearsExperience::labels(),
+            'academicLevels'  => AcademicLevel::labels(),
+            'jobStatuses'     => JobStatus::labels(),
+            'stackPredefined' => Profile::$stackPredefined,
         ]);
     }
 }

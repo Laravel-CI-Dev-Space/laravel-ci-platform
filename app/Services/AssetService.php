@@ -12,11 +12,11 @@ class AssetService
      * Avatars → disque public (accès direct).
      * CVs → disque local (servis via CvController avec auth).
      *
-     * @param  mixed       $file   UploadedFile ou Livewire TemporaryUploadedFile
-     * @param  string      $folder Sous-dossier (ex: avatars, cv)
-     * @param  string      $prefix Préfixe du nom de fichier
-     * @param  int         $userId ID de l'utilisateur
-     * @param  string|null $old    Ancien fichier à supprimer
+     * @param  mixed  $file  UploadedFile ou Livewire TemporaryUploadedFile
+     * @param  string  $folder  Sous-dossier (ex: avatars, cv)
+     * @param  string  $prefix  Préfixe du nom de fichier
+     * @param  int  $userId  ID de l'utilisateur
+     * @param  string|null  $old  Ancien fichier à supprimer
      * @return string Nom du fichier sauvegardé
      */
     public function upload(
