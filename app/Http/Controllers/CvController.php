@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Profile;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -15,7 +16,7 @@ class CvController extends Controller
      */
     public function download(int $userId): StreamedResponse|RedirectResponse
     {
-        /** @var \App\Models\User $viewer */
+        /** @var User $viewer */
         $viewer = auth()->user();
 
         abort_unless(

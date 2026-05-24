@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Profile;
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -16,7 +18,7 @@ class EnsureProfileComplete
      */
     public function handle(Request $request, Closure $next): Response
     {
-        /** @var \App\Models\User|null $user */
+        /** @var User|null $user */
         $user = auth()->user();
 
         if (
@@ -37,7 +39,7 @@ class EnsureProfileComplete
         return Cache::remember(
             "user_has_profile_{$userId}",
             600,
-            fn () => \App\Models\Profile::where('user_id', $userId)->exists()
+            fn () => Profile::where('user_id', $userId)->exists()
         );
     }
 }

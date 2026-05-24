@@ -6,10 +6,10 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 #[Fillable([
     'name',
@@ -26,7 +26,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, HasRoles;
+    use HasFactory, HasRoles, Notifiable;
 
     /**
      * Cast des attributs.
@@ -49,10 +49,10 @@ class User extends Authenticatable
     public function scopeActive($query)
     {
         return $query->where('is_active', true)
-                     ->where(function ($q) {
-                         $q->whereNull('suspended_until')
-                           ->orWhere('suspended_until', '<', now());
-                     });
+            ->where(function ($q) {
+                $q->whereNull('suspended_until')
+                    ->orWhere('suspended_until', '<', now());
+            });
     }
 
     /**
@@ -69,8 +69,8 @@ class User extends Authenticatable
     public function scopeSuspended($query)
     {
         return $query->where('is_active', true)
-                     ->whereNotNull('suspended_until')
-                     ->where('suspended_until', '>', now());
+            ->whereNotNull('suspended_until')
+            ->where('suspended_until', '>', now());
     }
 
     // ─── HELPERS ─────────────────────────────────────────
@@ -120,7 +120,6 @@ class User extends Authenticatable
     {
         return "https://github.com/{$this->github_username}";
     }
-
 
     /**
      * Un utilisateur a un profil.

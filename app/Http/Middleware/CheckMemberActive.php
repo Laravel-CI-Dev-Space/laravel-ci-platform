@@ -26,6 +26,7 @@ class CheckMemberActive
         // Banni définitivement — logout immédiat
         if ($user->isBanned()) {
             auth()->logout();
+
             return redirect()->route('login')
                 ->with('error', 'Votre compte a été banni. Contactez un administrateur.');
         }

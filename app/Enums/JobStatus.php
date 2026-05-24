@@ -4,11 +4,11 @@ namespace App\Enums;
 
 enum JobStatus: string
 {
-    case Employed      = 'en_fonction';
-    case Student       = 'etudiant';
-    case Entrepreneur  = 'entrepreneur';
-    case JobSeeking    = 'recherche_emploi';
-    case Freelance     = 'freelance';
+    case Employed     = 'en_fonction';
+    case Student      = 'etudiant';
+    case Entrepreneur = 'entrepreneur';
+    case JobSeeking   = 'recherche_emploi';
+    case Freelance    = 'freelance';
 
     public function label(): string
     {
