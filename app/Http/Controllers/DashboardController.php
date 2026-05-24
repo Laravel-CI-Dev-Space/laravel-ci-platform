@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use Filament\Facades\Filament;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -9,12 +11,21 @@ class DashboardController extends Controller
 {
     public function redirect(): RedirectResponse
     {
+        /** @var User $user */
         $user = auth()->user();
 
-        if ($user->hasRole('super-admin'))  return redirect()->route('dashboard.super-admin');
-        if ($user->hasRole('admin'))        return redirect()->route('dashboard.admin');
-        if ($user->hasRole('moderateur'))   return redirect()->route('dashboard.moderateur');
-        if ($user->hasRole('membre-actif')) return redirect()->route('dashboard.membre');
+        if ($user->hasRole('super-admin')) {
+            return redirect()->route('dashboard.super-admin');
+        }
+        if ($user->hasRole('admin')) {
+            return redirect()->route('dashboard.admin');
+        }
+        if ($user->hasRole('moderateur')) {
+            return redirect()->route('dashboard.moderateur');
+        }
+        if ($user->hasRole('membre-actif')) {
+            return redirect()->route('dashboard.membre');
+        }
 
         auth()->logout();
 
@@ -23,7 +34,7 @@ class DashboardController extends Controller
 
     public function adminPanel(): RedirectResponse
     {
-        return redirect('/admin');
+        return redirect(Filament::getPanel('admin')->getUrl());
     }
 
     public function moderateur(): View

@@ -16,11 +16,11 @@ class UserSeeder extends Seeder
         $admin = User::firstOrCreate(
             ['email' => 'wilson@laravelci.com'],
             [
-                'name'             => 'Kouassi Yanne Cedric Wilson',
-                'avatar'           => 'https://avatars.githubusercontent.com/u/167759591?v=4',
-                'github_id'        => '167759591',
-                'github_username'  => 'Ky-Wilson',
-                'is_active'        => true,
+                'name'              => 'Kouassi Yanne Cedric Wilson',
+                'avatar'            => 'https://avatars.githubusercontent.com/u/167759591?v=4',
+                'github_id'         => '167759591',
+                'github_username'   => 'Ky-Wilson',
+                'is_active'         => true,
                 'email_verified_at' => now(),
             ]
         );

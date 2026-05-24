@@ -2,7 +2,8 @@
 
 namespace App\Filament\Resources\Users\Schemas;
 
-use App\Models\Profile;
+use App\Enums\JobStatus;
+use App\Enums\LaravelLevel;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
@@ -73,22 +74,22 @@ class UserInfolist
             Section::make('Profil')
                 ->columns(2)
                 ->schema([
-                    TextEntry::make('profile.pays')
+                    TextEntry::make('profile.country')
                         ->label('Pays')
                         ->placeholder('—'),
 
-                    TextEntry::make('profile.ville')
+                    TextEntry::make('profile.city')
                         ->label('Ville')
                         ->placeholder('—'),
 
-                    TextEntry::make('profile.niveau_laravel')
+                    TextEntry::make('profile.laravel_level')
                         ->label('Niveau Laravel')
-                        ->formatStateUsing(fn ($state) => Profile::$niveauxLaravel[$state] ?? '—')
+                        ->formatStateUsing(fn ($state) => LaravelLevel::tryFrom($state ?? '')?->label() ?? '—')
                         ->placeholder('—'),
 
-                    TextEntry::make('profile.poste')
+                    TextEntry::make('profile.job_status')
                         ->label('Situation')
-                        ->formatStateUsing(fn ($state) => Profile::$postes[$state] ?? '—')
+                        ->formatStateUsing(fn ($state) => JobStatus::tryFrom($state ?? '')?->label() ?? '—')
                         ->placeholder('—'),
                 ]),
         ]);
