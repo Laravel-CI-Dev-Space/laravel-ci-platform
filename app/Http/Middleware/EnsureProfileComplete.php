@@ -17,7 +17,7 @@ class EnsureProfileComplete
      */
     public function handle(Request $request, Closure $next): Response
     {
-        /** @var \App\Models\User|null $user */
+        /** @var User|null $user */
         $user = auth()->user();
 
         if (

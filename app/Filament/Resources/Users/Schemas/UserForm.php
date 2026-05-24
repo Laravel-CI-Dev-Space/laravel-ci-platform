@@ -48,6 +48,7 @@ class UserForm
                                             ->title('Enter a GitHub username first')
                                             ->warning()
                                             ->send();
+
                                         return;
                                     }
 

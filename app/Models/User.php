@@ -26,7 +26,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, HasRoles;
+    use HasFactory, HasRoles, Notifiable;
 
     protected function casts(): array
     {
@@ -44,10 +44,10 @@ class User extends Authenticatable
     public function scopeActive($query)
     {
         return $query->where('is_active', true)
-                     ->where(function ($q) {
-                         $q->whereNull('suspended_until')
-                           ->orWhere('suspended_until', '<', now());
-                     });
+            ->where(function ($q) {
+                $q->whereNull('suspended_until')
+                    ->orWhere('suspended_until', '<', now());
+            });
     }
 
     /** Users who are permanently banned (is_active = false). */
@@ -60,8 +60,8 @@ class User extends Authenticatable
     public function scopeSuspended($query)
     {
         return $query->where('is_active', true)
-                     ->whereNotNull('suspended_until')
-                     ->where('suspended_until', '>', now());
+            ->whereNotNull('suspended_until')
+            ->where('suspended_until', '>', now());
     }
 
     // ─── HELPERS ─────────────────────────────────────────

@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\CvController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DesignSystemController;
+use App\Livewire\EditProfile;
 use Illuminate\Support\Facades\Route;
 
 // ─── HOME ──────────────────────────────────────────────────

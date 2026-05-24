@@ -4,11 +4,11 @@ namespace App\Enums;
 
 enum YearsExperience: string
 {
-    case LessThanOne  = 'moins_1_an';
-    case OneToThree   = '1_3_ans';
-    case ThreeToFive  = '3_5_ans';
-    case FiveToTen    = '5_10_ans';
-    case MoreThanTen  = 'plus_10_ans';
+    case LessThanOne = 'moins_1_an';
+    case OneToThree  = '1_3_ans';
+    case ThreeToFive = '3_5_ans';
+    case FiveToTen   = '5_10_ans';
+    case MoreThanTen = 'plus_10_ans';
 
     public function label(): string
     {

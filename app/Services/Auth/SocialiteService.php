@@ -34,6 +34,7 @@ class SocialiteService
             }
 
             $created = true;
+
             return $this->createUser($githubUser);
         });
 
@@ -72,7 +73,7 @@ class SocialiteService
     private function updateUser(User $user, GithubUser $githubUser): User
     {
         if ($user->isBanned()) {
-            throw new AccountBannedException();
+            throw new AccountBannedException;
         }
 
         $user->update([

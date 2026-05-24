@@ -7,11 +7,13 @@ use App\Enums\JobStatus;
 use App\Enums\LaravelLevel;
 use App\Enums\YearsExperience;
 use App\Models\Profile;
+use App\Models\User;
 use App\Services\AssetService;
 use App\Services\CountryService;
 use Illuminate\Support\Facades\Cache;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
 
 class EditProfile extends Component
@@ -20,41 +22,51 @@ class EditProfile extends Component
 
     /** @var \Livewire\Features\SupportFileUploads\TemporaryUploadedFile|null */
     public $avatarFile = null;
-    /** @var \Livewire\Features\SupportFileUploads\TemporaryUploadedFile|null */
-    public $cvFile     = null;
+
+    /** @var TemporaryUploadedFile|null */
+    public $cvFile = null;
 
     public ?string $currentAvatar = null;
-    public ?string $currentCv     = null;
+
+    public ?string $currentCv = null;
 
     // Localisation
-    public string $country  = '';
-    public string $city     = '';
+    public string $country = '';
+
+    public string $city = '';
+
     public string $district = '';
 
     // Infos perso
     public string $bio = '';
 
     // Technique
-    public string $laravel_level    = '';
+    public string $laravel_level = '';
+
     public string $years_experience = '';
-    public array  $tech_stack       = [];
-    public string $newStackItem     = '';
+
+    public array $tech_stack = [];
+
+    public string $newStackItem = '';
 
     // Académique & pro
     public string $academic_level = '';
-    public string $job_status     = '';
+
+    public string $job_status = '';
 
     // Liens
     public string $portfolio_url = '';
 
     // État
-    public bool  $isFirstTime    = false;
-    public int   $completionRate = 0;
-    public array $missingFields  = [];
+    public bool $isFirstTime = false;
+
+    public int $completionRate = 0;
+
+    public array $missingFields = [];
 
     public function mount(): void
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user    = auth()->user();
         $profile = $user->profile;
 
@@ -130,7 +142,7 @@ class EditProfile extends Component
     {
         $this->validate();
 
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = auth()->user();
 
         $data = [
@@ -149,21 +161,21 @@ class EditProfile extends Component
 
         if ($this->avatarFile) {
             $data['avatar'] = $assetService->upload(
-                file:   $this->avatarFile,
+                file: $this->avatarFile,
                 folder: 'avatars',
                 prefix: 'avatar',
                 userId: $user->id,
-                old:    $user->profile?->avatar,
+                old: $user->profile?->avatar,
             );
         }
 
         if ($this->cvFile) {
             $data['cv'] = $assetService->upload(
-                file:   $this->cvFile,
+                file: $this->cvFile,
                 folder: 'cv',
                 prefix: 'cv',
                 userId: $user->id,
-                old:    $user->profile?->cv,
+                old: $user->profile?->cv,
             );
         }
 
