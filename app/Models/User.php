@@ -28,9 +28,6 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, HasRoles, Notifiable;
 
-    /**
-     * Cast des attributs.
-     */
     protected function casts(): array
     {
         return [
@@ -43,9 +40,7 @@ class User extends Authenticatable
 
     // ─── SCOPES ──────────────────────────────────────────
 
-    /**
-     * Membres actifs et non suspendus.
-     */
+    /** Users who are fully active (not banned, not suspended). */
     public function scopeActive($query)
     {
         return $query->where('is_active', true)
@@ -55,17 +50,13 @@ class User extends Authenticatable
             });
     }
 
-    /**
-     * Membres bannis définitivement.
-     */
+    /** Users who are permanently banned (is_active = false). */
     public function scopeBanned($query)
     {
         return $query->where('is_active', false);
     }
 
-    /**
-     * Membres suspendus temporairement.
-     */
+    /** Users who are temporarily suspended (suspended_until in the future). */
     public function scopeSuspended($query)
     {
         return $query->where('is_active', true)
@@ -75,17 +66,13 @@ class User extends Authenticatable
 
     // ─── HELPERS ─────────────────────────────────────────
 
-    /**
-     * Vérifie si le membre est banni définitivement.
-     */
+    /** Returns true if the account is permanently banned (is_active = false). */
     public function isBanned(): bool
     {
         return ! $this->is_active;
     }
 
-    /**
-     * Vérifie si le membre est suspendu temporairement.
-     */
+    /** Returns true if the account is temporarily suspended. */
     public function isSuspended(): bool
     {
         return $this->is_active
@@ -93,17 +80,13 @@ class User extends Authenticatable
             && $this->suspended_until->isFuture();
     }
 
-    /**
-     * Vérifie si le membre est pleinement actif.
-     */
+    /** Returns true if the account is fully active (not banned, not suspended). */
     public function isActive(): bool
     {
         return $this->is_active && ! $this->isSuspended();
     }
 
-    /**
-     * Retourne les jours restants de suspension.
-     */
+    /** Returns the number of days remaining in a temporary suspension. */
     public function suspensionDaysLeft(): int
     {
         if (! $this->isSuspended()) {
@@ -113,25 +96,20 @@ class User extends Authenticatable
         return (int) now()->diffInDays($this->suspended_until);
     }
 
-    /**
-     * Retourne l'URL du profil GitHub du membre.
-     */
+    /** Returns the public GitHub profile URL for this user. */
     public function githubUrl(): string
     {
         return "https://github.com/{$this->github_username}";
     }
 
-    /**
-     * Un utilisateur a un profil.
-     */
+    // ─── RELATIONS ───────────────────────────────────────
+
     public function profile(): HasOne
     {
         return $this->hasOne(Profile::class);
     }
 
-    /**
-     * Vérifie si le membre a complété son profil (au moins créé).
-     */
+    /** Returns true if the user has created their profile at least once. */
     public function hasCompletedProfile(): bool
     {
         return $this->profile !== null;

@@ -9,6 +9,7 @@ use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
+    /** Redirects the authenticated user to their role-specific dashboard. */
     public function redirect(): RedirectResponse
     {
         /** @var User $user */
@@ -32,6 +33,7 @@ class DashboardController extends Controller
         return redirect()->route('login')->with('error', 'Accès non autorisé.');
     }
 
+    /** Redirects admins and super-admins to the Filament admin panel. */
     public function adminPanel(): RedirectResponse
     {
         return redirect(Filament::getPanel('admin')->getUrl());

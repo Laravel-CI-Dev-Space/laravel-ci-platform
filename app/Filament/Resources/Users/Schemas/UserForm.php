@@ -20,11 +20,11 @@ class UserForm
     {
         return $schema->components([
 
-            Section::make('Informations GitHub')
+            Section::make('GitHub Information')
                 ->columns(2)
                 ->schema([
                     TextInput::make('name')
-                        ->label('Nom complet')
+                        ->label('Full name')
                         ->required(),
 
                     TextInput::make('email')
@@ -33,19 +33,19 @@ class UserForm
                         ->required(),
 
                     TextInput::make('github_username')
-                        ->label('Username GitHub')
+                        ->label('GitHub username')
                         ->prefix('@')
                         ->required()
                         ->suffixAction(
                             Action::make('resolveGithubId')
                                 ->icon('heroicon-o-magnifying-glass')
-                                ->tooltip('Récupérer le GitHub ID depuis ce username')
+                                ->tooltip('Fetch GitHub ID from this username')
                                 ->action(function (Get $get, Set $set) {
                                     $username = trim((string) $get('github_username'));
 
                                     if (! $username) {
                                         Notification::make()
-                                            ->title('Entrez un username GitHub d\'abord')
+                                            ->title('Enter a GitHub username first')
                                             ->warning()
                                             ->send();
 
@@ -62,12 +62,12 @@ class UserForm
                                         $set('github_id', $githubId);
 
                                         Notification::make()
-                                            ->title("GitHub ID résolu : {$githubId}")
+                                            ->title("GitHub ID resolved: {$githubId}")
                                             ->success()
                                             ->send();
                                     } else {
                                         Notification::make()
-                                            ->title("Utilisateur GitHub « {$username} » introuvable")
+                                            ->title("GitHub user \"{$username}\" not found")
                                             ->danger()
                                             ->send();
                                     }
@@ -76,33 +76,33 @@ class UserForm
 
                     TextInput::make('github_id')
                         ->label('GitHub ID')
-                        ->placeholder('Cliquer sur 🔍 pour résoudre depuis le username')
+                        ->placeholder('Click 🔍 to resolve from username')
                         ->required()
                         ->unique(ignoreRecord: true),
                 ]),
 
-            Section::make('Statut du compte')
+            Section::make('Account status')
                 ->columns(2)
                 ->schema([
                     Toggle::make('is_active')
-                        ->label('Compte actif')
-                        ->helperText('Désactiver = bannissement définitif')
+                        ->label('Active account')
+                        ->helperText('Deactivating = permanent ban')
                         ->onColor('success')
                         ->offColor('danger'),
 
                     DateTimePicker::make('suspended_until')
-                        ->label('Suspendu jusqu\'au')
-                        ->helperText('Laisser vide pour aucune suspension')
+                        ->label('Suspended until')
+                        ->helperText('Leave empty for no suspension')
                         ->nullable(),
 
                     Select::make('roles')
-                        ->label('Rôle')
+                        ->label('Role')
                         ->relationship('roles', 'name')
                         ->preload()
                         ->searchable(),
 
                     DateTimePicker::make('last_login_at')
-                        ->label('Dernière connexion')
+                        ->label('Last login')
                         ->disabled(),
                 ]),
         ]);

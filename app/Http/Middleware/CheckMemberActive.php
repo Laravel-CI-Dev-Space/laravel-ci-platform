@@ -9,11 +9,11 @@ use Symfony\Component\HttpFoundation\Response;
 class CheckMemberActive
 {
     /**
-     * Vérifie l'état du compte à chaque requête authentifiée.
+     * Checks account status on every authenticated request.
      *
-     * is_active = false      → banni définitivement, logout immédiat
-     * suspended_until futur  → suspendu temporairement, accès dashboard limité
-     * suspended_until passé  → lève la suspension automatiquement
+     * is_active = false            → permanently banned, immediate logout
+     * suspended_until in the past  → suspension expired, auto-lifted
+     * suspended_until in the future → temporarily suspended, limited access
      */
     public function handle(Request $request, Closure $next): Response
     {
@@ -23,7 +23,7 @@ class CheckMemberActive
 
         $user = auth()->user();
 
-        // Banni définitivement — logout immédiat
+        // Permanently banned — log out immediately
         if ($user->isBanned()) {
             auth()->logout();
 
@@ -31,16 +31,22 @@ class CheckMemberActive
                 ->with('error', 'Votre compte a été banni. Contactez un administrateur.');
         }
 
-        // Suspension expirée — on la lève automatiquement
+        // Suspension expired — lift it automatically and let the user through
         if ($user->suspended_until !== null && $user->suspended_until->isPast()) {
             $user->update(['suspended_until' => null]);
+            return $next($request);
         }
 
-        // Suspendu temporairement — accès dashboard mais flag en session
+        // Temporarily suspended — log out and show the suspension end date
         if ($user->isSuspended()) {
-            session(['suspended' => true, 'suspended_until' => $user->suspended_until]);
-        } else {
-            session()->forget(['suspended', 'suspended_until']);
+            auth()->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            $until = $user->suspended_until->format('d/m/Y à H:i');
+
+            return redirect()->route('login')
+                ->with('error', "Votre compte est suspendu jusqu'au {$until}. Contactez un administrateur.");
         }
 
         return $next($request);

@@ -11,7 +11,7 @@ use App\Models\User;
 use App\Services\AssetService;
 use App\Services\CountryService;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\View\View;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
@@ -20,8 +20,7 @@ class EditProfile extends Component
 {
     use WithFileUploads;
 
-    // Fichiers
-    /** @var TemporaryUploadedFile|null */
+    /** @var \Livewire\Features\SupportFileUploads\TemporaryUploadedFile|null */
     public $avatarFile = null;
 
     /** @var TemporaryUploadedFile|null */
@@ -76,16 +75,16 @@ class EditProfile extends Component
         if ($profile) {
             $this->currentAvatar    = $profile->avatarUrl($user->avatar);
             $this->currentCv        = $profile->cvUrl();
-            $this->country          = $profile->country          ?? '';
-            $this->city             = $profile->city             ?? '';
-            $this->district         = $profile->district         ?? '';
-            $this->bio              = $profile->bio              ?? '';
-            $this->laravel_level    = $profile->laravel_level    ?? '';
+            $this->country          = $profile->country ?? '';
+            $this->city             = $profile->city ?? '';
+            $this->district         = $profile->district ?? '';
+            $this->bio              = $profile->bio ?? '';
+            $this->laravel_level    = $profile->laravel_level ?? '';
             $this->years_experience = $profile->years_experience ?? '';
-            $this->tech_stack       = $profile->tech_stack       ?? [];
-            $this->academic_level   = $profile->academic_level   ?? '';
-            $this->job_status       = $profile->job_status       ?? '';
-            $this->portfolio_url    = $profile->portfolio_url    ?? '';
+            $this->tech_stack       = $profile->tech_stack ?? [];
+            $this->academic_level   = $profile->academic_level ?? '';
+            $this->job_status       = $profile->job_status ?? '';
+            $this->portfolio_url    = $profile->portfolio_url ?? '';
             $this->completionRate   = $profile->completionRate();
             $this->missingFields    = $profile->missingFields();
         } else {
@@ -182,7 +181,7 @@ class EditProfile extends Component
 
         $profile = Profile::updateOrCreate(['user_id' => $user->id], $data);
 
-        // Invalider le cache d'existence du profil utilisé dans EnsureProfileComplete
+        // Invalidate the profile-existence cache used by EnsureProfileComplete middleware
         Cache::forget("user_has_profile_{$user->id}");
 
         $this->completionRate = $profile->completionRate();
@@ -195,10 +194,19 @@ class EditProfile extends Component
         session()->flash('success', 'Profil sauvegardé avec succès.');
     }
 
-    public function render(CountryService $countryService): View
+    /**
+     * Countries loaded once per component lifecycle via #[Computed].
+     * Not serialized in Livewire state — avoids sending 250 entries on every server roundtrip.
+     */
+    #[Computed]
+    public function countries(): array
+    {
+        return app(CountryService::class)->getCountries();
+    }
+
+    public function render(): \Illuminate\View\View
     {
         return view('livewire.edit-profile', [
-            'countries'       => $countryService->getCountries(),
             'laravelLevels'   => LaravelLevel::labels(),
             'yearsExperience' => YearsExperience::labels(),
             'academicLevels'  => AcademicLevel::labels(),

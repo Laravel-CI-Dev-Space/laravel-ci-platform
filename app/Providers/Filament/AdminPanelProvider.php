@@ -7,7 +7,6 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Navigation\NavigationGroup;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -39,7 +38,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogoHeight('2rem')
             ->favicon(asset('assets/logo.jpeg'))
 
-            // Pas de login Filament — on utilise notre auth GitHub
+            // No Filament login page — authentication is handled via GitHub OAuth
             ->login(false)
             ->authGuard('web')
 
@@ -50,11 +49,12 @@ class AdminPanelProvider extends PanelProvider
             ->pages([Dashboard::class])
             ->widgets([AccountWidget::class])
 
+            // Uncomment to enable navigation groups once modules are implemented:
             // ->navigationGroups([
-            //     NavigationGroup::make('Membres')->icon('heroicon-o-users'),
-            //     NavigationGroup::make('Contenu')->icon('heroicon-o-document-text'),
-            //     NavigationGroup::make('Communauté')->icon('heroicon-o-calendar'),
-            //     NavigationGroup::make('Configuration')->icon('heroicon-o-cog-6-tooth')->collapsed(),
+            //     NavigationGroup::make('Members')->icon('heroicon-o-users'),
+            //     NavigationGroup::make('Content')->icon('heroicon-o-document-text'),
+            //     NavigationGroup::make('Community')->icon('heroicon-o-calendar'),
+            //     NavigationGroup::make('Settings')->icon('heroicon-o-cog-6-tooth')->collapsed(),
             // ])
 
             ->middleware([
@@ -70,7 +70,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-                FilamentAdminAccess::class,  // ← vérifie le rôle
+                FilamentAdminAccess::class, // enforces super-admin or admin role
             ]);
     }
 }
