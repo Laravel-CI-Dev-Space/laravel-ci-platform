@@ -9,8 +9,8 @@ use Symfony\Component\HttpFoundation\Response;
 class FilamentAdminAccess
 {
     /**
-     * Seuls super-admin et admin peuvent accéder au panel Filament.
-     * Les autres sont redirigés vers leur dashboard.
+     * Only super-admin and admin roles may access the Filament panel.
+     * Other authenticated users are redirected to their dashboard.
      */
     public function handle(Request $request, Closure $next): Response
     {

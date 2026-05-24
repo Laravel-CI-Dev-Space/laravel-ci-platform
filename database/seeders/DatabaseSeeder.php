@@ -7,8 +7,8 @@ use Illuminate\Database\Seeder;
 class DatabaseSeeder extends Seeder
 {
     /**
-     * Lance tous les seeders dans le bon ordre.
-     * RoleSeeder doit toujours être en premier.
+     * Runs all seeders in the correct order.
+     * RoleSeeder must always run first so users can be assigned roles.
      */
     public function run(): void
     {

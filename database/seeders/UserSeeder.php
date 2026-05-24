@@ -8,8 +8,8 @@ use Illuminate\Database\Seeder;
 class UserSeeder extends Seeder
 {
     /**
-     * Crée un super admin de test.
-     * Remplacer les valeurs par vos vraies infos GitHub.
+     * Creates the default super-admin account.
+     * Update the values below with the actual GitHub account details before running.
      */
     public function run(): void
     {
@@ -27,6 +27,6 @@ class UserSeeder extends Seeder
 
         $admin->assignRole('super-admin');
 
-        $this->command->info('✅ Super Admin créé avec succès.');
+        $this->command->info('Super admin created successfully.');
     }
 }

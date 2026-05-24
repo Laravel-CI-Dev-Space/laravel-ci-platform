@@ -41,7 +41,6 @@
             </p>
         @endif
 
-        {{-- Alertes --}}
         @if($isFirstTime)
             <div class="flex items-start gap-2 bg-blue-50 border-l-4 border-blue-400 rounded-md p-3 mt-4 text-sm text-blue-700">
                 <i class="fa-solid fa-circle-info mt-0.5 shrink-0"></i>
@@ -61,10 +60,9 @@
     <form wire:submit="save">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 pb-12 flex flex-col lg:flex-row gap-6 items-start">
 
-        {{-- ── Sidebar (sticky) ───────────────────────────────── --}}
+        {{-- ── Sidebar ─────────────────────────────────────────── --}}
         <aside class="w-full lg:w-72 shrink-0 lg:sticky lg:top-15.25 space-y-4">
 
-            {{-- Avatar + identité --}}
             <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 text-center">
                 <div class="relative inline-block mb-3">
                     <img src="{{ $currentAvatar }}" alt="{{ auth()->user()->name }}"
@@ -80,7 +78,6 @@
                 <x-badge-rounded label="membre-actif" color="green" class="mt-2" />
             </div>
 
-            {{-- Stat complétion (uniquement si profil existant) --}}
             @if(!$isFirstTime)
                 <x-card.stat :value="$completionRate . '%'" label="Profil complété">
                     <x-slot:icon>
@@ -88,13 +85,8 @@
                     </x-slot:icon>
                 </x-card.stat>
 
-                {{-- Progress bar séparée --}}
                 <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
-                    <x-progress-bar
-                        label="Complétion"
-                        value="{{ $completionRate }}%"
-                        :percent="$completionRate"
-                    />
+                    <x-progress-bar label="Complétion" value="{{ $completionRate }}%" :percent="$completionRate" />
 
                     @if(count($missingFields) > 0)
                         <p class="text-xs text-gray-400 mt-3 mb-2 font-semibold">Champs manquants</p>
@@ -111,17 +103,16 @@
                 </div>
             @endif
 
-            {{-- Navigation rapide --}}
             <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-4 hidden lg:block">
                 <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2">Sections</p>
                 <nav class="space-y-0.5 text-sm">
                     @foreach([
-                        ['photo',       'fa-camera',          'Photo de profil'],
-                        ['localisation','fa-location-dot',    'Localisation'],
-                        ['apropos',     'fa-pen-nib',         'À propos'],
-                        ['technique',   'fa-code',            'Profil technique'],
-                        ['academique',  'fa-graduation-cap',  'Académique & pro'],
-                        ['liens',       'fa-link',            'Liens & Documents'],
+                        ['photo',       'fa-camera',         'Photo de profil'],
+                        ['localisation','fa-location-dot',   'Localisation'],
+                        ['apropos',     'fa-pen-nib',        'À propos'],
+                        ['technique',   'fa-code',           'Profil technique'],
+                        ['academique',  'fa-graduation-cap', 'Académique & pro'],
+                        ['liens',       'fa-link',           'Liens & Documents'],
                     ] as [$id, $icon, $title])
                         <a href="#{{ $id }}"
                            class="flex items-center gap-2 text-gray-500 hover:text-primary hover:bg-primary/5 px-2 py-1.5 rounded-lg transition-colors">
@@ -132,7 +123,6 @@
                 </nav>
             </div>
 
-            {{-- Bouton sauvegarde (desktop) --}}
             <div class="hidden lg:block">
                 <button type="submit" wire:loading.attr="disabled"
                         class="w-full flex items-center justify-center gap-2 py-3 bg-primary text-white font-bold text-sm rounded-xl hover:bg-orange-500 transition-colors disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed shadow-lg shadow-primary/20">
@@ -143,7 +133,6 @@
                         <i class="fa-solid fa-circle-notch fa-spin"></i>Enregistrement...
                     </span>
                 </button>
-
                 @if(!$isFirstTime)
                     <a href="{{ route('dashboard') }}"
                        class="mt-2 flex items-center justify-center gap-1.5 text-xs text-gray-400 hover:text-primary transition-colors">
@@ -154,22 +143,18 @@
 
         </aside>
 
-        {{-- ── Sections de formulaire ──────────────────────────── --}}
+        {{-- ── Sections ──────────────────────────────────────────── --}}
         <div class="flex-1 min-w-0 space-y-4">
 
-            {{-- ─ Photo de profil ─ --}}
+            {{-- Photo de profil --}}
             <section id="photo" class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
                 <div class="flex items-center gap-2.5 mb-5">
-                    <div class="{{ $sectionIcon }}">
-                        <i class="fa-solid fa-camera text-primary text-sm"></i>
-                    </div>
+                    <div class="{{ $sectionIcon }}"><i class="fa-solid fa-camera text-primary text-sm"></i></div>
                     <h2 class="text-sm font-bold text-gray-900">Photo de profil</h2>
                 </div>
-
                 <div>
                     <label class="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">
-                        Changer l'avatar
-                        <span class="normal-case font-normal text-gray-400 ml-1">(JPG, PNG — max 2 Mo)</span>
+                        Changer l'avatar <span class="normal-case font-normal text-gray-400 ml-1">(JPG, PNG — max 2 Mo)</span>
                     </label>
                     <input type="file" wire:model="avatarFile" accept="image/*"
                            class="w-full text-sm text-gray-500 border-2 border-dashed border-gray-200 rounded-lg p-2.5 bg-gray-50 cursor-pointer hover:border-primary transition-colors file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary">
@@ -181,15 +166,12 @@
                 </div>
             </section>
 
-            {{-- ─ Localisation ─ --}}
+            {{-- Localisation --}}
             <section id="localisation" class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
                 <div class="flex items-center gap-2.5 mb-5">
-                    <div class="{{ $sectionIcon }}">
-                        <i class="fa-solid fa-location-dot text-primary text-sm"></i>
-                    </div>
+                    <div class="{{ $sectionIcon }}"><i class="fa-solid fa-location-dot text-primary text-sm"></i></div>
                     <h2 class="text-sm font-bold text-gray-900">Localisation</h2>
                 </div>
-
                 <div class="space-y-4">
                     <div>
                         <label class="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">
@@ -204,13 +186,12 @@
                         </select>
                         @error('country') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
                     </div>
-
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">
                                 Ville <span class="normal-case font-normal text-gray-400">(optionnel)</span>
                             </label>
-                            <input type="text" wire:model="city" placeholder="Ex : Abidjan"
+                            <input type="text" wire:model.blur="city" placeholder="Ex : Abidjan"
                                    @class([$field, 'border-red-400' => $errors->has('city'), 'border-gray-200' => !$errors->has('city')])>
                             @error('city') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
                         </div>
@@ -218,7 +199,7 @@
                             <label class="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">
                                 Commune <span class="normal-case font-normal text-gray-400">(optionnel)</span>
                             </label>
-                            <input type="text" wire:model="district" placeholder="Ex : Cocody"
+                            <input type="text" wire:model.blur="district" placeholder="Ex : Cocody"
                                    @class([$field, 'border-red-400' => $errors->has('district'), 'border-gray-200' => !$errors->has('district')])>
                             @error('district') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
                         </div>
@@ -226,20 +207,17 @@
                 </div>
             </section>
 
-            {{-- ─ À propos ─ --}}
+            {{-- À propos --}}
             <section id="apropos" class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
                 <div class="flex items-center gap-2.5 mb-5">
-                    <div class="{{ $sectionIcon }}">
-                        <i class="fa-solid fa-pen-nib text-primary text-sm"></i>
-                    </div>
+                    <div class="{{ $sectionIcon }}"><i class="fa-solid fa-pen-nib text-primary text-sm"></i></div>
                     <h2 class="text-sm font-bold text-gray-900">À propos</h2>
                 </div>
-
                 <div>
                     <label class="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">
                         Biographie <span class="normal-case font-normal text-gray-400">(optionnel — max 1000 caractères)</span>
                     </label>
-                    <textarea wire:model="bio"
+                    <textarea wire:model.blur="bio"
                               placeholder="Parlez de vous, de votre parcours, de vos projets..."
                               maxlength="1000" rows="5"
                               @class([$field . ' resize-y', 'border-red-400' => $errors->has('bio'), 'border-gray-200' => !$errors->has('bio')])></textarea>
@@ -250,15 +228,12 @@
                 </div>
             </section>
 
-            {{-- ─ Profil technique ─ --}}
+            {{-- Profil technique --}}
             <section id="technique" class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
                 <div class="flex items-center gap-2.5 mb-5">
-                    <div class="{{ $sectionIcon }}">
-                        <i class="fa-solid fa-code text-primary text-sm"></i>
-                    </div>
+                    <div class="{{ $sectionIcon }}"><i class="fa-solid fa-code text-primary text-sm"></i></div>
                     <h2 class="text-sm font-bold text-gray-900">Profil technique</h2>
                 </div>
-
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                     <div>
                         <label class="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">
@@ -288,16 +263,13 @@
                     </div>
                 </div>
 
-                {{-- Stack technique ─────────────────────────── --}}
+                {{-- Stack technique --}}
                 <div>
                     <label class="block text-xs font-semibold text-gray-500 mb-3 uppercase tracking-wide">
                         Stack technique <span class="normal-case font-normal text-gray-400">(optionnel)</span>
                     </label>
-
                     @foreach($stackPredefined as $category => $items)
-                        <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2 mt-3 first:mt-0">
-                            {{ $category }}
-                        </p>
+                        <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2 mt-3 first:mt-0">{{ $category }}</p>
                         <div class="flex flex-wrap gap-1.5 mb-1">
                             @foreach($items as $item)
                                 <button type="button" wire:click="toggleStackItem('{{ $item }}')"
@@ -312,7 +284,6 @@
                         </div>
                     @endforeach
 
-                    {{-- Ajout custom --}}
                     <div class="flex gap-2 mt-4">
                         <input type="text" wire:model="newStackItem"
                                wire:keydown.enter.prevent="addStackItem"
@@ -324,14 +295,12 @@
                         </button>
                     </div>
 
-                    {{-- Tags sélectionnés --}}
                     @if(count($tech_stack) > 0)
                         <div class="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-gray-100">
                             @foreach($tech_stack as $item)
                                 <span class="inline-flex items-center gap-1.5 bg-[#1C1C2E] text-white text-xs font-medium px-2.5 py-1 rounded-full">
                                     {{ $item }}
-                                    <button type="button" wire:click="removeStackItem('{{ $item }}')"
-                                            class="text-primary hover:text-orange-300">
+                                    <button type="button" wire:click="removeStackItem('{{ $item }}')" class="text-primary hover:text-orange-300">
                                         <i class="fa-solid fa-xmark text-[10px]"></i>
                                     </button>
                                 </span>
@@ -341,15 +310,12 @@
                 </div>
             </section>
 
-            {{-- ─ Académique & pro ─ --}}
+            {{-- Académique & pro --}}
             <section id="academique" class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
                 <div class="flex items-center gap-2.5 mb-5">
-                    <div class="{{ $sectionIcon }}">
-                        <i class="fa-solid fa-graduation-cap text-primary text-sm"></i>
-                    </div>
+                    <div class="{{ $sectionIcon }}"><i class="fa-solid fa-graduation-cap text-primary text-sm"></i></div>
                     <h2 class="text-sm font-bold text-gray-900">Parcours académique &amp; professionnel</h2>
                 </div>
-
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">
@@ -380,15 +346,12 @@
                 </div>
             </section>
 
-            {{-- ─ Liens & Documents ─ --}}
+            {{-- Liens & Documents --}}
             <section id="liens" class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
                 <div class="flex items-center gap-2.5 mb-5">
-                    <div class="{{ $sectionIcon }}">
-                        <i class="fa-solid fa-link text-primary text-sm"></i>
-                    </div>
+                    <div class="{{ $sectionIcon }}"><i class="fa-solid fa-link text-primary text-sm"></i></div>
                     <h2 class="text-sm font-bold text-gray-900">Liens &amp; Documents</h2>
                 </div>
-
                 <div class="space-y-4">
                     <div>
                         <label class="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">
@@ -398,25 +361,21 @@
                             <span class="absolute inset-y-0 left-3 flex items-center text-gray-400 pointer-events-none">
                                 <i class="fa-solid fa-globe text-xs"></i>
                             </span>
-                            <input type="url" wire:model="portfolio_url"
-                                   placeholder="https://mon-portfolio.com"
+                            <input type="url" wire:model.blur="portfolio_url" placeholder="https://mon-portfolio.com"
                                    @class([$field . ' pl-8', 'border-red-400' => $errors->has('portfolio_url'), 'border-gray-200' => !$errors->has('portfolio_url')])>
                         </div>
                         @error('portfolio_url') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
                     </div>
-
                     <div>
                         <label class="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">
                             CV <span class="normal-case font-normal text-gray-400">(optionnel — PDF, Word, image — max 5 Mo)</span>
                         </label>
-                        <input type="file" wire:model="cvFile"
-                               accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                        <input type="file" wire:model="cvFile" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                                class="w-full text-sm text-gray-500 border-2 border-dashed border-gray-200 rounded-lg p-2.5 bg-gray-50 cursor-pointer hover:border-primary transition-colors file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary">
                         @if($currentCv && !$cvFile)
                             <a href="{{ $currentCv }}" target="_blank"
                                class="inline-flex items-center gap-2 bg-blue-50 text-blue-700 text-xs font-medium px-3 py-1.5 rounded-lg mt-2 hover:bg-blue-100 transition-colors">
-                                <i class="fa-solid fa-file-pdf"></i>
-                                CV actuel — voir
+                                <i class="fa-solid fa-file-pdf"></i>CV actuel — voir
                             </a>
                         @endif
                         @error('cvFile') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
@@ -424,13 +383,11 @@
                 </div>
             </section>
 
-            {{-- ─ Bouton sauvegarde (mobile) ─ --}}
+            {{-- Bouton sauvegarde (mobile) --}}
             <div class="lg:hidden">
                 <button type="submit" wire:loading.attr="disabled"
                         class="w-full flex items-center justify-center gap-2 py-3.5 bg-primary text-white font-bold rounded-xl hover:bg-orange-500 transition-colors disabled:bg-gray-200 disabled:text-gray-400 shadow-lg shadow-primary/20">
-                    <span wire:loading.remove>
-                        <i class="fa-solid fa-floppy-disk mr-1"></i>Sauvegarder le profil
-                    </span>
+                    <span wire:loading.remove><i class="fa-solid fa-floppy-disk mr-1"></i>Sauvegarder le profil</span>
                     <span wire:loading class="flex items-center gap-2">
                         <i class="fa-solid fa-circle-notch fa-spin"></i>Enregistrement...
                     </span>
@@ -438,14 +395,12 @@
                 @if(!$isFirstTime)
                     <a href="{{ route('dashboard') }}"
                        class="mt-3 flex items-center justify-center gap-1.5 text-sm text-gray-400 hover:text-primary transition-colors">
-                        <i class="fa-solid fa-arrow-left text-xs"></i>
-                        Retour au dashboard
+                        <i class="fa-solid fa-arrow-left text-xs"></i>Retour au dashboard
                     </a>
                 @endif
             </div>
 
         </div>{{-- /form sections --}}
-
     </div>{{-- /layout --}}
     </form>
 

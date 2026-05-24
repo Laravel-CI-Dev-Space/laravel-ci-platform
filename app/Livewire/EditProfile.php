@@ -11,7 +11,7 @@ use App\Models\User;
 use App\Services\AssetService;
 use App\Services\CountryService;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\View\View;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
@@ -20,7 +20,6 @@ class EditProfile extends Component
 {
     use WithFileUploads;
 
-    // Fichiers
     /** @var TemporaryUploadedFile|null */
     public $avatarFile = null;
 
@@ -182,7 +181,7 @@ class EditProfile extends Component
 
         $profile = Profile::updateOrCreate(['user_id' => $user->id], $data);
 
-        // Invalider le cache d'existence du profil utilisé dans EnsureProfileComplete
+        // Invalidate the profile-existence cache used by EnsureProfileComplete middleware
         Cache::forget("user_has_profile_{$user->id}");
 
         $this->completionRate = $profile->completionRate();
@@ -195,10 +194,15 @@ class EditProfile extends Component
         session()->flash('success', 'Profil sauvegardé avec succès.');
     }
 
-    public function render(CountryService $countryService): View
+    #[Computed]
+    public function countries(): array
+    {
+        return app(CountryService::class)->getCountries();
+    }
+
+    public function render(): \Illuminate\View\View
     {
         return view('livewire.edit-profile', [
-            'countries'       => $countryService->getCountries(),
             'laravelLevels'   => LaravelLevel::labels(),
             'yearsExperience' => YearsExperience::labels(),
             'academicLevels'  => AcademicLevel::labels(),

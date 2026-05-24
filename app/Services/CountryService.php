@@ -8,13 +8,12 @@ use Illuminate\Support\Facades\Http;
 class CountryService
 {
     private const CACHE_KEY = 'countries_list';
-
-    private const CACHE_TTL = 24 * 60 * 60; // 24h en secondes
+    private const CACHE_TTL = 24 * 60 * 60; // 24 hours in seconds
 
     /**
-     * Récupère la liste des pays depuis RestCountries.
-     * Cache::lock évite le thundering herd : si plusieurs requêtes arrivent
-     * simultanément lors d'une expiration, une seule appelle l'API externe.
+     * Fetches the country list from RestCountries API, cached for 24 hours.
+     * Cache::lock prevents the thundering herd problem: if many requests hit
+     * simultaneously on a cache miss, only one calls the external API.
      */
     public function getCountries(): array
     {
@@ -26,7 +25,7 @@ class CountryService
 
         try {
             if ($lock->get()) {
-                // Re-vérifier après acquisition du verrou (une autre requête a peut-être déjà peuplé le cache)
+                // Re-check after acquiring the lock — another request may have populated it
                 if ($cached = Cache::get(self::CACHE_KEY)) {
                     return $cached;
                 }
@@ -40,7 +39,7 @@ class CountryService
             $lock->release();
         }
 
-        // Verrou non obtenu dans le délai — retourner le fallback sans bloquer
+        // Could not acquire lock within timeout — return fallback without blocking
         return $this->fallback();
     }
 
@@ -63,15 +62,16 @@ class CountryService
             ->toArray();
     }
 
+    /** Fallback list of West/Central African countries used when the API is unavailable. */
     private function fallback(): array
     {
-        $pays = [
-            'Bénin', 'Burkina Faso', 'Cameroun', "Côte d'Ivoire",
-            'France', 'Gabon', 'Ghana', 'Guinée', 'Mali', 'Maroc',
-            'Mauritanie', 'Niger', 'Nigeria', 'RD Congo',
-            'Sénégal', 'Togo', 'Tunisie',
+        $countries = [
+            "Bénin", "Burkina Faso", "Cameroun", "Côte d'Ivoire",
+            "France", "Gabon", "Ghana", "Guinée", "Mali", "Maroc",
+            "Mauritanie", "Niger", "Nigeria", "RD Congo",
+            "Sénégal", "Togo", "Tunisie",
         ];
 
-        return array_combine($pays, $pays);
+        return array_combine($countries, $countries);
     }
 }
