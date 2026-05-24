@@ -34,7 +34,7 @@ Route::post('/logout', [AuthController::class, 'logout'])
 Route::middleware(['auth', 'active'])->group(function () {
 
     // Profile — accessible even before completing the profile
-    Route::get('/profil/completer', \App\Livewire\EditProfile::class)
+    Route::get('/profil/completer', EditProfile::class)
         ->name('profile.edit');
 
     // CV download — served from private disk with authentication check
