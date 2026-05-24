@@ -27,7 +27,7 @@ class UserResource extends Resource
     protected static ?string $pluralModelLabel = 'Membres';
     protected static ?int    $navigationSort   = 1;
 
-    // navigationGroup via méthode pour éviter le conflit de type
+    // Defined as a method to avoid a Filament type conflict with the string|BackedEnum property
     public static function getNavigationGroup(): ?string
     {
         return 'Membres';
@@ -64,8 +64,8 @@ class UserResource extends Resource
     }
 
     /**
-     * Super admin voit tout — admin ne voit pas les super-admins.
-     * Eager loading roles + profile pour éviter les N+1 dans la table et l'infolist.
+     * Super-admin sees all users. Admin cannot see super-admin accounts.
+     * Eager-loads roles + profile to prevent N+1 in the table and infolist.
      */
     public static function getEloquentQuery(): Builder
     {

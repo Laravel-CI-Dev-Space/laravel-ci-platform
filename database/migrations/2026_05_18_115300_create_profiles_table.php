@@ -6,29 +6,25 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Table profiles — profil complet du membre
-     * Tous les champs sont nullable — sauvegarde progressive
-     */
     public function up(): void
     {
         Schema::create('profiles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
 
-            // Avatar uploadé
+            // Uploaded profile picture (filename only, served from public/assets/avatars)
             $table->string('avatar')->nullable();
 
-            // Localisation
-            $table->string('pays')->nullable();
-            $table->string('ville')->nullable();
-            $table->string('commune')->nullable();
+            // Location
+            $table->string('country')->nullable();
+            $table->string('city')->nullable();
+            $table->string('district')->nullable();
 
-            // Biographie
-            $table->text('biographie')->nullable();
+            // Biography
+            $table->text('bio')->nullable();
 
-            // Profil technique
-            $table->enum('niveau_laravel', [
+            // Technical profile
+            $table->enum('laravel_level', [
                 'debutant',
                 'intermediaire',
                 'avance',
@@ -36,7 +32,7 @@ return new class extends Migration
                 'maitre',
             ])->nullable();
 
-            $table->enum('annees_experience', [
+            $table->enum('years_experience', [
                 'moins_1_an',
                 '1_3_ans',
                 '3_5_ans',
@@ -44,19 +40,19 @@ return new class extends Migration
                 'plus_10_ans',
             ])->nullable();
 
-            // Stack technique — stockée en JSON
-            $table->json('stack_technique')->nullable();
+            // Tech stack stored as JSON array
+            $table->json('tech_stack')->nullable();
 
-            // Niveau académique
-            $table->enum('niveau_academique', [
+            // Academic background
+            $table->enum('academic_level', [
                 'bts',
                 'licence',
                 'master_ingenieur',
                 'doctorat',
             ])->nullable();
 
-            // Situation professionnelle
-            $table->enum('poste', [
+            // Professional situation
+            $table->enum('job_status', [
                 'en_fonction',
                 'etudiant',
                 'entrepreneur',
@@ -64,10 +60,10 @@ return new class extends Migration
                 'freelance',
             ])->nullable();
 
-            // Liens
-            $table->string('lien_portfolio')->nullable();
+            // Links
+            $table->string('portfolio_url')->nullable();
 
-            // CV — PDF, Word ou image
+            // CV — PDF, Word or image (filename only, served from public/assets/cv)
             $table->string('cv')->nullable();
 
             $table->timestamps();

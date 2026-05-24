@@ -11,9 +11,10 @@
 
         <div class="flex items-center gap-4">
             <div class="flex items-center gap-2 text-white text-sm">
-                <img src="{{ auth()->user()->avatar }}"
+                <img src="{{ auth()->user()->avatar ?? asset('assets/logo.jpeg') }}"
                      alt="{{ auth()->user()->name }}"
-                     class="w-8 h-8 rounded-full border-2 border-primary object-cover">
+                     class="w-8 h-8 rounded-full border-2 border-primary object-cover"
+                     onerror="this.src='{{ asset('assets/logo.jpeg') }}'">
                 <span class="hidden sm:inline font-medium">{{ auth()->user()->name }}</span>
             </div>
 

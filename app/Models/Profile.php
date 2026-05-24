@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\Storage;
 
 #[Fillable([
     'user_id',
@@ -112,13 +111,12 @@ class Profile extends Model
     // ─── HELPERS ─────────────────────────────────────────
 
     /**
-     * URL avatar — uploadé (disque public) ou GitHub par défaut.
-     * Passer $fallback depuis le contexte appelant évite le lazy load inverse vers User.
+     * URL avatar — uploadé (public/assets/avatars) ou GitHub par défaut.
      */
     public function avatarUrl(?string $fallback = null): string
     {
         if ($this->avatar) {
-            return Storage::disk('public')->url("avatars/{$this->avatar}");
+            return asset('assets/avatars/' . $this->avatar);
         }
 
         if ($fallback !== null) {
@@ -130,12 +128,9 @@ class Profile extends Model
             : ($this->user()->value('avatar') ?? '');
     }
 
-    /**
-     * Route sécurisée vers le CV (authentification requise).
-     */
     public function cvUrl(): ?string
     {
-        return $this->cv ? route('cv.download', $this->user_id) : null;
+        return $this->cv ? asset('assets/cv/' . $this->cv) : null;
     }
 
     public function laravelLevelLabel(): string

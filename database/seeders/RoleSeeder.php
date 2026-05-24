@@ -8,8 +8,8 @@ use Spatie\Permission\Models\Role;
 class RoleSeeder extends Seeder
 {
     /**
-     * Crée les rôles de base de la plateforme.
-     * membre-inactif retiré — géré par is_active et suspended_until
+     * Creates the platform roles.
+     * Account suspension is handled via is_active and suspended_until — no inactive role needed.
      */
     public function run(): void
     {
@@ -24,6 +24,6 @@ class RoleSeeder extends Seeder
             Role::firstOrCreate(['name' => $role, 'guard_name' => 'web']);
         }
 
-        $this->command->info('✅ Rôles créés avec succès.');
+        $this->command->info('Roles created successfully.');
     }
 }

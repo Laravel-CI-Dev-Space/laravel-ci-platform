@@ -16,14 +16,16 @@ class SocialiteService
     ) {}
 
     /**
-     * Trouve un user existant ou en crée un nouveau depuis GitHub.
-     * Enveloppé dans une transaction pour garantir que User + rôle sont atomiques.
+     * Finds an existing user or creates a new one from GitHub OAuth data.
+     * Wrapped in a DB transaction so User + role assignment are atomic.
+     * Welcome email is dispatched after the transaction to avoid queue dispatch on rollback.
      */
     public function findOrCreateUser(GithubUser $githubUser): User
     {
         $created = false;
 
         $user = DB::transaction(function () use ($githubUser, &$created) {
+            // Look up by github_id first (most reliable identifier)
             $user = User::where('github_id', $githubUser->getId())->first()
                  ?? User::where('email', $githubUser->getEmail())->first();
 
@@ -35,7 +37,6 @@ class SocialiteService
             return $this->createUser($githubUser);
         });
 
-        // Envoi du mail APRÈS la transaction — évite le dispatch sur rollback
         if ($created) {
             $this->notificationService->sendWelcome($user);
         }
@@ -58,15 +59,15 @@ class SocialiteService
 
         $user->assignRole('membre-actif');
 
-        Log::info("Nouveau membre créé : {$user->github_username}");
+        Log::info("New member registered: {$user->github_username}");
 
         return $user;
     }
 
     /**
-     * Met à jour les infos GitHub d'un user existant.
-     * Le ban définitif (is_active = false) bloque la connexion.
-     * La suspension temporaire laisse passer — accès dashboard limité.
+     * Updates GitHub data for a returning user.
+     * Only a permanent ban (is_active = false) blocks login.
+     * Temporary suspension passes through — dashboard access is limited instead.
      */
     private function updateUser(User $user, GithubUser $githubUser): User
     {

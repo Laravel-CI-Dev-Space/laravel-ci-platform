@@ -7,33 +7,36 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Exécute les migrations.
-     * is_active       → false = banni définitivement, bloqué à la connexion
-     * suspended_until → null = pas suspendu, date future = suspendu temporairement
+     * is_active       → false = permanently banned, blocked at login
+     * suspended_until → null = not suspended, future date = temporarily suspended
      */
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
 
-            // Informations de base récupérées depuis GitHub
+            // Basic info pulled from GitHub OAuth
             $table->string('name');
             $table->string('email')->unique();
             $table->string('avatar')->nullable();
 
-            // OAuth GitHub — Socialite
+            // GitHub OAuth — Socialite
             $table->string('github_id')->unique();
             $table->string('github_username')->unique();
 
-            // Statut du compte
-            $table->boolean('is_active')->default(true);          // false = banni définitivement
-            $table->timestamp('suspended_until')->nullable();      // null = pas suspendu
+            // Account status
+            $table->boolean('is_active')->default(true);     // false = permanently banned
+            $table->timestamp('suspended_until')->nullable(); // null = not suspended
 
-            // Activité
+            // Indexed for frequent status queries
+            $table->index('is_active');
+            $table->index('suspended_until');
+
+            // Activity tracking
             $table->timestamp('last_login_at')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
-            $table->timestamps(); // created_at = date inscription
+            $table->timestamps(); // created_at = registration date
         });
 
         Schema::create('sessions', function (Blueprint $table) {
@@ -46,9 +49,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Annule les migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('users');

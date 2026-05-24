@@ -14,11 +14,13 @@ class SocialiteController extends Controller
         private readonly SocialiteService $socialiteService
     ) {}
 
+    /** Redirects the user to GitHub for authentication. */
     public function redirect(): RedirectResponse
     {
         return Socialite::driver('github')->redirect();
     }
 
+    /** Handles the GitHub OAuth callback, logs the user in and redirects to their dashboard. */
     public function callback(): RedirectResponse
     {
         try {
