@@ -1,3 +1,4 @@
+// database/migrations/2026_05_28_000008_create_article_tag_table.php
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -6,20 +7,15 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('article_tag', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->foreignId('article_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('tag_id')->constrained()->cascadeOnDelete();
+            $table->primary(['article_id', 'tag_id']);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('article_tag');
