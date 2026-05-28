@@ -2,31 +2,119 @@
 
 namespace Database\Seeders;
 
+use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Creates the default super-admin account.
-     * Update the values below with the actual GitHub account details before running.
-     */
     public function run(): void
     {
-        $admin = User::firstOrCreate(
+        // Super Admin
+        $superAdmin = User::firstOrCreate(
             ['email' => 'wilson@laravelci.com'],
             [
-                'name'              => 'Kouassi Yanne Cedric Wilson',
-                'avatar'            => 'https://avatars.githubusercontent.com/u/167759591?v=4',
+                'name'              => 'Wilson Kouassi',
                 'github_id'         => '167759591',
                 'github_username'   => 'Ky-Wilson',
+                'avatar'            => 'https://avatars.githubusercontent.com/u/167759591',
                 'is_active'         => true,
                 'email_verified_at' => now(),
+                'last_login_at'     => now(),
+            ]
+        );
+        $superAdmin->assignRole('super-admin');
+
+        Profile::firstOrCreate(
+            ['user_id' => $superAdmin->id],
+            [
+                'country'        => "Côte d'Ivoire",
+                'city'           => 'Abidjan',
+                'district'       => 'Cocody',
+                'bio'            => 'Lead Developer — Laravel Côte d\'Ivoire. Passionné de PHP et Laravel.',
+                'laravel_level'  => 'expert',
+                'years_experience' => '5_10_ans',
+                'tech_stack'     => ['Laravel', 'PHP', 'Livewire', 'Filament', 'Vue.js', 'MySQL', 'Docker'],
+                'academic_level' => 'master_ingenieur',
+                'job_status'     => 'en_fonction',
+                'portfolio_url'  => 'https://github.com/Ky-Wilson',
             ]
         );
 
-        $admin->assignRole('super-admin');
+        // Test Admin
+        $admin = User::firstOrCreate(
+            ['email' => 'admin@laravelci.com'],
+            [
+                'name'              => 'Admin Test',
+                'github_id'         => '11111111',
+                'github_username'   => 'admin-laravel-ci',
+                'avatar'            => 'https://ui-avatars.com/api/?name=Admin&color=fff&background=FF6600',
+                'is_active'         => true,
+                'email_verified_at' => now(),
+                'last_login_at'     => now(),
+            ]
+        );
+        $admin->assignRole('admin');
 
-        $this->command->info('Super admin created successfully.');
+        // Test Moderator
+        $moderator = User::firstOrCreate(
+            ['email' => 'moderator@laravelci.com'],
+            [
+                'name'              => 'Moderator Test',
+                'github_id'         => '22222222',
+                'github_username'   => 'mod-laravel-ci',
+                'avatar'            => 'https://ui-avatars.com/api/?name=Mod&color=fff&background=1C1C2E',
+                'is_active'         => true,
+                'email_verified_at' => now(),
+                'last_login_at'     => now(),
+            ]
+        );
+        $moderator->assignRole('moderator');
+
+        // Test Member
+        $member = User::firstOrCreate(
+            ['email' => 'member@laravelci.com'],
+            [
+                'name'              => 'Member Test',
+                'github_id'         => '33333333',
+                'github_username'   => 'member-laravel-ci',
+                'avatar'            => 'https://ui-avatars.com/api/?name=Member&color=fff&background=2ECC71',
+                'is_active'         => true,
+                'email_verified_at' => now(),
+                'last_login_at'     => now(),
+            ]
+        );
+        $member->assignRole('member');
+
+        // Suspended member (test)
+        $suspended = User::firstOrCreate(
+            ['email' => 'suspended@laravelci.com'],
+            [
+                'name'              => 'Suspended Test',
+                'github_id'         => '44444444',
+                'github_username'   => 'suspended-laravel-ci',
+                'avatar'            => 'https://ui-avatars.com/api/?name=Suspended&color=fff&background=E74C3C',
+                'is_active'         => true,
+                'suspended_until'   => now()->addDays(7),
+                'email_verified_at' => now(),
+            ]
+        );
+        $suspended->assignRole('member');
+
+        // Banned member (test)
+        $banned = User::firstOrCreate(
+            ['email' => 'banned@laravelci.com'],
+            [
+                'name'              => 'Banned Test',
+                'github_id'         => '55555555',
+                'github_username'   => 'banned-laravel-ci',
+                'avatar'            => 'https://ui-avatars.com/api/?name=Banned&color=fff&background=7F8C8D',
+                'is_active'         => false,
+                'email_verified_at' => now(),
+            ]
+        );
+        $banned->assignRole('member');
+
+        $this->command->info('✅ Users seeded (5 users : super-admin, admin, moderator, member, suspended, banned).');
     }
 }
