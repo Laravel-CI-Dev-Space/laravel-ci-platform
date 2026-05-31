@@ -1,0 +1,230 @@
+/* ============================================================
+   Laravel CI — Dashboard compiled styles
+   Compiled from templatedashboard/assets/scss/
+   ============================================================ */
+
+/* ── Google Fonts (Poppins) ─────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* ── CSS Variables (from _variables.scss) ─────────────────── */
+:root {
+  --lci-primary:     #E66239;
+  --lci-gray-50:     #fafafa;
+  --lci-gray-100:    #f5f5f5;
+  --lci-gray-200:    #e5e5e5;
+  --lci-gray-300:    #d4d4d4;
+  --lci-gray-400:    #a3a3a3;
+  --lci-gray-500:    #737373;
+  --lci-gray-600:    #525252;
+  --lci-gray-700:    #404040;
+  --lci-gray-800:    #262626;
+  --lci-success:     #00C951;
+  --lci-info:        #00B8DB;
+  --lci-warning:     #F0B100;
+  --lci-danger:      #FB2C36;
+  --sidebar-width:   240px;
+  --sidebar-collapsed-width: 60px;
+  --topbar-height:   60px;
+}
+
+/* ── Base ─────────────────────────────────────────────────── */
+body {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.875rem;
+  background-color: var(--lci-gray-50);
+  color: var(--lci-gray-800);
+}
+
+/* Override Bootstrap primary color */
+.btn-primary,
+.bg-primary { background-color: var(--lci-primary) !important; border-color: var(--lci-primary) !important; }
+.text-primary { color: var(--lci-primary) !important; }
+.border-primary { border-color: var(--lci-primary) !important; }
+.btn-primary:hover { background-color: #d4542b !important; border-color: #d4542b !important; }
+.btn-outline-primary { color: var(--lci-primary) !important; border-color: var(--lci-primary) !important; }
+.btn-outline-primary:hover { background-color: var(--lci-primary) !important; color: #fff !important; }
+a { color: var(--lci-gray-700); }
+a:hover { color: var(--lci-primary); }
+
+/* ── Overlay (mobile sidebar) ─────────────────────────────── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(1px);
+  display: none;
+  z-index: 1029;
+}
+.overlay.show { display: block; }
+
+/* ── Sidebar ─────────────────────────────────────────────── */
+.sidebar {
+  width: var(--sidebar-width);
+  background: #fff;
+  transition: width 0.3s, left 0.3s;
+  border-right: 1px solid var(--lci-gray-200);
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding-top: var(--topbar-height);
+  z-index: 1030;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.sidebar .nav-link {
+  color: var(--lci-gray-800);
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+  font-weight: 400;
+  gap: 12px;
+  white-space: nowrap;
+  margin: 1px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.15s, color 0.15s;
+}
+.sidebar .nav-link:hover {
+  color: var(--lci-primary);
+  background-color: rgba(230, 98, 57, 0.09);
+}
+.sidebar .nav-link.active {
+  color: var(--lci-primary);
+  background-color: rgba(230, 98, 57, 0.09);
+  font-weight: 500;
+}
+.sidebar .nav-link .ti { font-size: 18px; }
+.sidebar .nav-text { transition: opacity 0.2s; }
+
+.logo-area {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: var(--topbar-height);
+  width: 100%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 17px;
+  color: var(--lci-gray-800);
+  border-bottom: 1px solid var(--lci-gray-200);
+  z-index: 10;
+}
+
+/* Collapsed sidebar */
+.sidebar.collapsed {
+  width: var(--sidebar-collapsed-width);
+}
+.sidebar.collapsed .nav-link {
+  margin: 0;
+  background-color: transparent;
+  padding: 8px 18px;
+  justify-content: center;
+}
+.sidebar.collapsed .nav-text,
+.sidebar.collapsed .logo-text { display: none; }
+
+/* ── Topbar ──────────────────────────────────────────────── */
+.topbar {
+  height: var(--topbar-height);
+  margin-left: var(--sidebar-width);
+  transition: margin-left 0.3s;
+  z-index: 1028;
+}
+.topbar.full { margin-left: var(--sidebar-collapsed-width); }
+
+/* ── Main content ────────────────────────────────────────── */
+.content {
+  margin-left: var(--sidebar-width);
+  transition: margin-left 0.3s;
+  min-height: 100vh;
+}
+.content.full { margin-left: var(--sidebar-collapsed-width); }
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 992px) {
+  .sidebar { left: calc(-1 * var(--sidebar-width)); }
+  .sidebar.mobile-show { left: 0; }
+  .topbar  { margin-left: 0 !important; width: 100% !important; }
+  .content { margin-left: 0 !important; }
+}
+
+/* ── Avatar ──────────────────────────────────────────────── */
+.avatar {
+  position: relative;
+  display: inline-block;
+  width: 3rem;
+  height: 3rem;
+  flex-shrink: 0;
+}
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.avatar-xs  { width: 1.5rem;  height: 1.5rem; }
+.avatar-sm  { width: 2rem;    height: 2rem; }
+.avatar-md  { width: 2.5rem;  height: 2.5rem; }
+.avatar-lg  { width: 3.5rem;  height: 3.5rem; }
+.avatar-xl  { width: 5rem;    height: 5rem; }
+.avatar-xxl { width: 7.5rem;  height: 7.5rem; }
+
+/* ── Card overrides ─────────────────────────────────────── */
+.card {
+  border: 1px solid var(--lci-gray-200);
+  box-shadow: 0 1px 3px rgba(0,0,0,.05);
+  border-radius: 0.5rem;
+}
+.card-header {
+  background: #fff;
+  border-bottom: 1px solid var(--lci-gray-200);
+  padding: 0.9rem 1.25rem;
+  font-weight: 500;
+}
+
+/* ── Stat card color bars ───────────────────────────────── */
+.stat-bar {
+  width: 4px;
+  border-radius: 4px;
+  min-height: 2.5rem;
+  align-self: stretch;
+}
+.stat-bar-primary { background: var(--lci-primary); }
+.stat-bar-success  { background: var(--lci-success); }
+.stat-bar-info     { background: var(--lci-info); }
+.stat-bar-warning  { background: var(--lci-warning); }
+
+/* ── Breadcrumb ──────────────────────────────────────────── */
+.breadcrumb-item + .breadcrumb-item::before { color: var(--lci-gray-400); }
+.breadcrumb-item a { color: var(--lci-gray-600); text-decoration: none; }
+.breadcrumb-item a:hover { color: var(--lci-primary); }
+.breadcrumb-item.active { color: var(--lci-gray-800); }
+
+/* ── Badges subtle (BS5 doesn't include them by default) ─── */
+.bg-success-subtle  { background-color: #dcfce7 !important; }
+.bg-warning-subtle  { background-color: #fef9c3 !important; }
+.bg-danger-subtle   { background-color: #fee2e2 !important; }
+.bg-info-subtle     { background-color: #e0f2fe !important; }
+.bg-primary-subtle  { background-color: #ffedd5 !important; }
+.bg-secondary-subtle { background-color: var(--lci-gray-100) !important; }
+.text-success  { color: var(--lci-success) !important; }
+.text-warning  { color: var(--lci-warning) !important; }
+.text-danger   { color: var(--lci-danger)  !important; }
+.text-info     { color: var(--lci-info)    !important; }
+
+/* ── Dropdown border-dashed ─────────────────────────────── */
+.border-dashed { border-style: dashed !important; }
+
+/* ── Nav section labels ─────────────────────────────────── */
+.nav-text-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--lci-gray-400);
+  padding: 0.5rem 1rem 0.25rem;
+}
