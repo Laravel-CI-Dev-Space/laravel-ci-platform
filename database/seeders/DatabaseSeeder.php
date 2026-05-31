@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             JobOfferCategorySeeder::class, // 3. Job categories
             JobSkillSeeder::class,       // 4. Job skills
             // UserSeeder::class,           // 5. Users (après roles)
+            QuestionSeeder::class,
         ]);
 
         $this->command->info('');
