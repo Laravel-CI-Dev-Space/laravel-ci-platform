@@ -18,6 +18,10 @@
                    class="px-3 py-2 rounded-lg {{ request()->routeIs('events.*') ? 'bg-primary/10 text-primary' : 'text-gray-600 hover:text-primary' }} transition-colors">
                     Événements
                 </a>
+                <a href="{{ route('jobs.index') }}"
+                   class="px-3 py-2 rounded-lg {{ request()->routeIs('jobs.*') ? 'bg-primary/10 text-primary' : 'text-gray-600 hover:text-primary' }} transition-colors">
+                    Emplois
+                </a>
 
                 @auth
                     <a href="{{ route('dashboard') }}"

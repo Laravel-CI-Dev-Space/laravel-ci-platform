@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DesignSystemController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\JobOfferController;
 use App\Livewire\EditProfile;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,24 @@ Route::controller(EventController::class)
         Route::get('/{event:slug}', 'show')->name('show');
         Route::post('/{event:slug}/register', 'register')
             ->name('register')
+            ->middleware(['auth', 'active', 'role:membre-actif']);
+    });
+
+// ─── JOB BOARD (Sprint Roger) ────────────────────────────
+Route::controller(JobOfferController::class)
+    ->prefix('jobs')
+    ->name('jobs.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')
+            ->name('create')
+            ->middleware(['auth', 'active', 'role:membre-actif']);
+        Route::post('/', 'store')
+            ->name('store')
+            ->middleware(['auth', 'active', 'role:membre-actif']);
+        Route::get('/{jobOffer}', 'show')->name('show');
+        Route::post('/{jobOffer}/apply', 'apply')
+            ->name('apply')
             ->middleware(['auth', 'active', 'role:membre-actif']);
     });
 

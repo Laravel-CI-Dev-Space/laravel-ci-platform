@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\CheckMemberActive;
 use App\Http\Middleware\EnsureProfileComplete;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -15,6 +16,9 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__ . '/../routes/console.php',
         health: '/up',
     )
+    ->withSchedule(function (Schedule $schedule) {
+        $schedule->command('job-offers:expire')->daily();
+    })
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             // Middleware custom
