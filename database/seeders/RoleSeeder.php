@@ -8,6 +8,10 @@ use Spatie\Permission\Models\Permission;
 
 class RoleSeeder extends Seeder
 {
+    /**
+     * Creates the platform roles.
+     * Account suspension is handled via is_active and suspended_until — no inactive role needed.
+     */
     public function run(): void
     {
         // Reset cached roles and permissions

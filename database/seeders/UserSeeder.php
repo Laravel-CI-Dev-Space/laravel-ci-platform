@@ -8,6 +8,10 @@ use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
 {
+    /**
+     * Creates the default super-admin account.
+     * Update the values below with the actual GitHub account details before running.
+     */
     public function run(): void
     {
         // Super Admin

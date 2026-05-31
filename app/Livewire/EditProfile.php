@@ -12,7 +12,7 @@ use App\Services\AssetService;
 use App\Services\CountryService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\Attributes\Layout;
@@ -78,16 +78,16 @@ class EditProfile extends Component
         if ($profile) {
             $this->currentAvatar    = $profile->avatarUrl($user->avatar);
             $this->currentCv        = $profile->cvUrl();
-            $this->country          = $profile->country          ?? '';
-            $this->city             = $profile->city             ?? '';
-            $this->district         = $profile->district         ?? '';
-            $this->bio              = $profile->bio              ?? '';
-            $this->laravel_level    = $profile->laravel_level    ?? '';
+            $this->country          = $profile->country ?? '';
+            $this->city             = $profile->city ?? '';
+            $this->district         = $profile->district ?? '';
+            $this->bio              = $profile->bio ?? '';
+            $this->laravel_level    = $profile->laravel_level ?? '';
             $this->years_experience = $profile->years_experience ?? '';
-            $this->tech_stack       = $profile->tech_stack       ?? [];
-            $this->academic_level   = $profile->academic_level   ?? '';
-            $this->job_status       = $profile->job_status       ?? '';
-            $this->portfolio_url    = $profile->portfolio_url    ?? '';
+            $this->tech_stack       = $profile->tech_stack ?? [];
+            $this->academic_level   = $profile->academic_level ?? '';
+            $this->job_status       = $profile->job_status ?? '';
+            $this->portfolio_url    = $profile->portfolio_url ?? '';
             $this->completionRate   = $profile->completionRate();
             $this->missingFields    = $profile->missingFields();
         } else {
@@ -197,6 +197,11 @@ class EditProfile extends Component
         session()->flash('success', 'Profil sauvegardé avec succès.');
     }
 
+    /**
+     * Countries loaded once per component lifecycle via #[Computed].
+     * Not serialized in Livewire state — avoids sending 250 entries on every server roundtrip.
+     */
+    #[Computed]
     public function countries(): array
     {
         return app(CountryService::class)->getCountries();
@@ -205,7 +210,6 @@ class EditProfile extends Component
     public function render(): \Illuminate\View\View
     {
         return view('livewire.edit-profile', [
-            'countries'       => $this->countries(),
             'laravelLevels'   => LaravelLevel::labels(),
             'yearsExperience' => YearsExperience::labels(),
             'academicLevels'  => AcademicLevel::labels(),
