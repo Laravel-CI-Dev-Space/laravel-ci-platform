@@ -1,57 +1,152 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-use App\Models\Answer;
-use App\Models\Comment;
-use App\Models\Report;
-use App\Models\Tag;
-use App\Models\User;
-use App\Models\Vote;
+use Carbon\Carbon;
+use Database\Factories\QuestionFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
-#[Fillable([
-    'user_id', 'title', 'slug', 'body', 'body_html', 'status',
-    'is_pinned', 'accepted_answer_id', 'views_count', 'votes_score',
-    'answers_count', 'comments_count', 'last_activity_at',
-])]
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property string $title
+ * @property string $slug
+ * @property string $content
+ * @property bool $pinned
+ * @property bool $closed
+ * @property int $views
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read User           $author
+ * @property-read string         $excerpt
+ */
+#[Fillable(['user_id', 'title', 'slug', 'content', 'pinned', 'closed', 'views'])]
 class Question extends Model
 {
+    /** @use HasFactory<QuestionFactory> */
     use HasFactory, SoftDeletes;
 
     protected function casts(): array
     {
         return [
-            'is_pinned'        => 'boolean',
-            'last_activity_at' => 'datetime',
-            'views_count'      => 'integer',
-            'votes_score'      => 'integer',
-            'answers_count'    => 'integer',
-            'comments_count'   => 'integer',
+            'pinned' => 'boolean',
+            'closed' => 'boolean',
+            'views'  => 'integer',
         ];
     }
 
-    public function user(): BelongsTo       { return $this->belongsTo(User::class); }
-    public function acceptedAnswer(): BelongsTo { return $this->belongsTo(Answer::class, 'accepted_answer_id'); }
-    public function answers(): HasMany      { return $this->hasMany(Answer::class); }
-    public function tags(): BelongsToMany  { return $this->belongsToMany(Tag::class); }
-    public function comments(): MorphMany  { return $this->morphMany(Comment::class, 'commentable'); }
-    public function votes(): MorphMany     { return $this->morphMany(Vote::class, 'votable'); }
-    public function reports(): MorphMany   { return $this->morphMany(Report::class, 'reportable'); }
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
+    public function author(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
-    public function scopePublished($query) { return $query->where('status', 'published'); }
-    public function scopePinned($query)    { return $query->where('is_pinned', true); }
-    public function scopeUnanswered($query){ return $query->where('answers_count', 0); }
-    public function scopePopular($query)   { return $query->orderByDesc('votes_score'); }
-    public function scopeRecent($query)    { return $query->orderByDesc('last_activity_at'); }
+    /*
+    |--------------------------------------------------------------------------
+    | Accessors
+    |--------------------------------------------------------------------------
+    */
+    protected function excerpt(): Attribute
+    {
+        return Attribute::make(
+            get: fn (): string => Str::limit(strip_tags($this->content), 150),
+        );
+    }
 
-    public function hasAcceptedAnswer(): bool { return $this->accepted_answer_id !== null; }
-    public function isOwnedBy(User $user): bool { return $this->user_id === $user->id; }
+    /*
+    |--------------------------------------------------------------------------
+    | Scopes
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * @param  Builder<Question>  $query
+     * @return Builder<Question>
+     */
+    public function scopePinned(Builder $query): Builder
+    {
+        return $query->where('pinned', true);
+    }
+
+    /**
+     * @param  Builder<Question>  $query
+     * @return Builder<Question>
+     */
+    public function scopeOpen(Builder $query): Builder
+    {
+        return $query->where('closed', false);
+    }
+
+    /**
+     * @param  Builder<Question>  $query
+     * @return Builder<Question>
+     */
+    public function scopeClosed(Builder $query): Builder
+    {
+        return $query->where('closed', true);
+    }
+
+    /**
+     * Tri : épinglées en tête, puis par date décroissante.
+     *
+     * @param  Builder<Question>  $query
+     * @return Builder<Question>
+     */
+    public function scopeByRecent(Builder $query): Builder
+    {
+        return $query->orderByDesc('pinned')->orderByDesc('created_at');
+    }
+
+    /**
+     * Tri : épinglées en tête, puis par nombre de vues décroissant.
+     *
+     * @param  Builder<Question>  $query
+     * @return Builder<Question>
+     */
+    public function scopeByPopular(Builder $query): Builder
+    {
+        return $query->orderByDesc('pinned')->orderByDesc('views');
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Helpers
+    |--------------------------------------------------------------------------
+    */
+
+    public function incrementViews(): void
+    {
+        $this->increment('views');
+    }
+
+    /**
+     * Génère un slug unique en ajoutant un suffixe numérique si nécessaire.
+     */
+    public static function generateSlug(string $title): string
+    {
+        $base = Str::slug($title);
+        $slug = $base;
+        $i    = 1;
+
+        while (static::withTrashed()->where('slug', $slug)->exists()) {
+            $slug = "{$base}-{$i}";
+            $i++;
+        }
+
+        return $slug;
+    }
 }
