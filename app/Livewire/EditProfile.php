@@ -10,17 +10,20 @@ use App\Models\Profile;
 use App\Models\User;
 use App\Services\AssetService;
 use App\Services\CountryService;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+use Livewire\Attributes\Layout;
 use Livewire\WithFileUploads;
 
+#[Layout('layouts.profile-setup')]
 class EditProfile extends Component
 {
     use WithFileUploads;
 
-    /** @var \Livewire\Features\SupportFileUploads\TemporaryUploadedFile|null */
+    /** @var TemporaryUploadedFile|null */
     public $avatarFile = null;
 
     /** @var TemporaryUploadedFile|null */
@@ -67,7 +70,7 @@ class EditProfile extends Component
     public function mount(): void
     {
         /** @var User $user */
-        $user    = auth()->user();
+        $user    = Auth::user();
         $profile = $user->profile;
 
         $this->isFirstTime = $profile === null;
@@ -143,7 +146,7 @@ class EditProfile extends Component
         $this->validate();
 
         /** @var User $user */
-        $user = auth()->user();
+        $user = Auth::user();
 
         $data = [
             'user_id'          => $user->id,

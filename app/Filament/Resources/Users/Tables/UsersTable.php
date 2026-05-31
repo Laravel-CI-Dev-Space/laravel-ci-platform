@@ -47,8 +47,8 @@ class UsersTable
                     ->color(fn (string $state): string => match ($state) {
                         'super-admin'  => 'danger',
                         'admin'        => 'warning',
-                        'moderateur'   => 'info',
-                        'membre-actif' => 'success',
+                        'moderator'  => 'info',
+                        'member'     => 'success',
                         default        => 'gray',
                     }),
 

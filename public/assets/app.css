@@ -1,0 +1,274 @@
+/* ============================================================
+   app.css — Styles communs Laravel CI Platform
+   ============================================================ */
+
+/* ── Reset & Base ── */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    overflow-x: hidden;
+    max-width: 100vw;
+}
+
+img, video, iframe, table {
+    max-width: 100%;
+}
+
+img {
+    height: auto;
+}
+
+pre, code {
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* ── Material Symbols ── */
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    vertical-align: middle;
+}
+
+/* ── Mobile Menu ── */
+#mobile-menu {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, opacity 0.3s ease;
+    opacity: 0;
+}
+
+#mobile-menu.open {
+    max-height: 520px;
+    opacity: 1;
+}
+
+/* ── Responsive Typography ── */
+@media (max-width: 640px) {
+    .text-h1 {
+        font-size: 26px !important;
+        line-height: 1.25 !important;
+    }
+
+    .text-h2 {
+        font-size: 22px !important;
+    }
+
+    .text-h3 {
+        font-size: 18px !important;
+    }
+}
+
+@media (min-width: 641px) and (max-width: 1023px) {
+    .text-h1 {
+        font-size: 32px !important;
+    }
+
+    .text-h2 {
+        font-size: 26px !important;
+    }
+}
+
+/* ── Banner ── */
+.banner-inner {
+    padding: 2rem 1rem;
+}
+
+@media (min-width: 640px) {
+    .banner-inner {
+        padding: 3rem 2rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .banner-inner {
+        padding: 4rem 3rem;
+    }
+}
+
+/* ── Scrollable Chips & Tabs ── */
+.chips-scroll,
+.tabs-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+}
+
+.chips-scroll::-webkit-scrollbar,
+.tabs-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+/* ── Responsive Tables ── */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ── Accent Bar ── */
+.accent-bar-orange {
+    border-top: 6px solid #FF6600;
+}
+
+/* ── Card Shadow ── */
+.card-shadow {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+    border: 1px solid #E1E4E8;
+}
+
+/* ── Code Rain (index hero) ── */
+.code-rain {
+    background: linear-gradient(180deg, rgba(255, 102, 0, 0) 0%, rgba(255, 102, 0, 0.05) 50%, rgba(255, 102, 0, 0) 100%);
+}
+
+/* ── Code Pattern (à propos) ── */
+.code-pattern {
+    background-image: radial-gradient(#FF6600 0.5px, transparent 0.5px);
+    background-size: 24px 24px;
+    opacity: 0.05;
+}
+
+/* ── Code Block (blog detail) ── */
+.code-block {
+    background-color: #F6F8FA;
+    border: 1px solid #E1E4E8;
+    border-radius: 8px;
+}
+
+/* ── Sidebar Sticky ── */
+.sidebar-sticky {
+    position: sticky;
+    top: 120px;
+}
+
+/* ── Code Shadow (404) ── */
+.code-shadow {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04), 1px 1px 0px #E1E4E8;
+}
+
+/* ── Calendar Grid Pattern (événements) ── */
+.calendar-grid-pattern {
+    background-image: linear-gradient(#E1E4E8 1px, transparent 1px), linear-gradient(90deg, #E1E4E8 1px, transparent 1px);
+    background-size: 40px 40px;
+}
+
+/* ── Active Nav Border ── */
+.active-nav-border {
+    border-bottom: 2px solid #FF6600;
+}
+
+/* ── Vote Button (forum detail mobile) ── */
+@media (max-width: 640px) {
+    .vote-btn {
+        font-size: 20px;
+    }
+}
+
+/* ── Markdown pre/code (forum detail) ── */
+.markdown-body pre {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: pre;
+    word-break: normal;
+}
+
+.markdown-body code {
+    word-break: break-word;
+}
+
+/* ── Focus Styles (forms) ── */
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(163, 62, 0, 0.12);
+    border-color: #a33e00 !important;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+/* ── Button Micro-animations ── */
+.btn-primary,
+button[type="submit"],
+a.btn {
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+.btn-primary:active,
+button[type="submit"]:active,
+a.btn:active {
+    transform: scale(0.97);
+}
+
+/* ── Card Hover States ── */
+.card-hover {
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.card-hover:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+}
+
+/* ── Loading Transitions ── */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease forwards;
+}
+
+/* ── Progress Bar Animation ── */
+@keyframes progressFill {
+    from { width: 0; }
+}
+
+.progress-bar {
+    animation: progressFill 0.8s ease-out forwards;
+}
+
+/* ── Password Strength Bar ── */
+.strength-bar {
+    height: 4px;
+    border-radius: 2px;
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+/* ── Scroll-to-top ── */
+#scroll-top-btn {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 44px;
+    height: 44px;
+    background: #FF6600;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 200;
+    box-shadow: 0 4px 12px rgba(255, 102, 0, 0.3);
+}
+
+#scroll-top-btn.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#scroll-top-btn:hover {
+    transform: translateY(-2px);
+}

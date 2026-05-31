@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Question — Laravel CI Forum</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a class="brand-logo" href="index.html"><span class="brand-mark"><img src="assets/img/logo-mark.png" alt="Laravel CI" /></span> Laravel CI</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-label="Toggle navigation"><i class="fa-solid fa-bars"></i></button>
+        <div class="collapse navbar-collapse" id="mainNav">
+          <ul class="navbar-nav main-nav mx-lg-auto mb-2 mb-lg-0">
+            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+            <li class="nav-item"><a class="nav-link active" href="forum.html">Forum</a></li>
+            <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
+            <li class="nav-item"><a class="nav-link" href="events.html">Events</a></li>
+            <li class="nav-item"><a class="nav-link" href="jobs.html">Jobs</a></li>
+            <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+          </ul>
+          <a href="login.html" class="btn btn-github"><i class="fa-brands fa-github"></i> Sign in with GitHub</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <div class="row align-items-center g-4">
+          <div class="col-lg-9">
+            <div class="breadcrumb-bar"><a href="index.html">Home</a> <i class="fa-solid fa-chevron-right"></i> <a href="forum.html">Forum</a> <i class="fa-solid fa-chevron-right"></i> <span>Multi-tenancy</span></div>
+            <h1 class="mb-3" style="font-size:var(--fs-h1)">How to structure a multi-tenant Laravel app for a fintech in Abidjan?</h1>
+            <div class="d-flex flex-wrap gap-3 align-items-center" style="font-size:.88rem;color:var(--muted)">
+              <span><i class="fa-regular fa-clock me-1"></i> Asked 2 hours ago</span>
+              <span><i class="fa-regular fa-eye me-1"></i> 1,204 views</span>
+              <span><i class="fa-solid fa-check text-green me-1"></i> Solved</span>
+            </div>
+          </div>
+          <div class="col-lg-3 d-none d-lg-block">
+            <div class="mascot-art" style="width:clamp(130px,12vw,170px)">
+              <span class="m-ring"></span><span class="m-blob"></span>
+              <img src="assets/img/mascot.png" alt="Laravel CI mascot" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-sm">
+      <div class="container">
+        <div class="row g-4">
+          <div class="col-lg-8">
+
+            <!-- QUESTION -->
+            <div class="answer-card">
+              <div class="d-flex gap-4">
+                <div class="vote-col" data-vote>
+                  <button class="vote-btn" data-dir="up" aria-label="Upvote"><i class="fa-solid fa-chevron-up"></i></button>
+                  <span class="vote-score">42</span>
+                  <button class="vote-btn" data-dir="down" aria-label="Downvote"><i class="fa-solid fa-chevron-down"></i></button>
+                </div>
+                <div class="flex-grow-1">
+                  <p>We're building a mobile money aggregator serving multiple merchants in Abidjan. Each merchant is a tenant and must <strong>never</strong> see another merchant's transactions. I'm torn between two approaches:</p>
+                  <p>Single database with a <code>tenant_id</code> column and global scopes, or a separate database per tenant. Here's my current scope:</p>
+                  <div class="code-block">
+                    <div class="code-head"><span class="lang">app/Models/Concerns/BelongsToTenant.php</span><button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button></div>
+                    <pre><span class="c-key">trait</span> <span class="c-fn">BelongsToTenant</span>
+{
+    <span class="c-key">protected static function</span> <span class="c-fn">bootBelongsToTenant</span>()
+    {
+        <span class="c-var">static</span>::addGlobalScope(<span class="c-key">new</span> <span class="c-fn">TenantScope</span>);
+
+        <span class="c-var">static</span>::creating(<span class="c-key">function</span> (<span class="c-var">$model</span>) {
+            <span class="c-var">$model</span>->tenant_id ??= <span class="c-fn">tenant</span>()->id;
+        });
+    }
+}</pre>
+                  </div>
+                  <p>Is the global scope approach safe enough for financial data, or should I go fully isolated? What would you ship to production?</p>
+                  <div class="q-tags my-3"><span class="tag">laravel-11</span><span class="tag">multi-tenancy</span><span class="tag">architecture</span><span class="tag">fintech</span></div>
+                  <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 pt-2">
+                    <div class="d-flex gap-3" style="font-size:.85rem">
+                      <a href="#" class="text-muted-2"><i class="fa-solid fa-share me-1"></i> Share</a>
+                      <a href="#" class="text-muted-2"><i class="fa-regular fa-bookmark me-1"></i> Save</a>
+                    </div>
+                    <div class="author-row"><span class="avatar av-1">KA</span><div class="meta"><div class="name">Kouamé Aristide</div><div class="sub">Backend dev · 2.1k rep</div></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <h2 class="section-heading my-4" style="font-size:var(--fs-h3)">3 Answers</h2>
+
+            <!-- ACCEPTED ANSWER -->
+            <div class="answer-card accepted">
+              <span class="badge-pill badge-green mb-3"><i class="fa-solid fa-circle-check"></i> Accepted Solution</span>
+              <div class="d-flex gap-4">
+                <div class="vote-col" data-vote>
+                  <button class="vote-btn" data-dir="up" aria-label="Upvote"><i class="fa-solid fa-chevron-up"></i></button>
+                  <span class="vote-score">58</span>
+                  <button class="vote-btn" data-dir="down" aria-label="Downvote"><i class="fa-solid fa-chevron-down"></i></button>
+                </div>
+                <div class="flex-grow-1">
+                  <p>For fintech, I'd <strong>start with a single database + global scopes</strong> and only move to database-per-tenant once you hit real scaling or compliance limits. The scope approach is safe if you enforce it at three layers:</p>
+                  <ol>
+                    <li>A global scope on every tenant-owned model (you have this).</li>
+                    <li>Auto-fill <code>tenant_id</code> on create (you have this too).</li>
+                    <li>A <strong>middleware</strong> that resolves the tenant once per request and fails closed.</li>
+                  </ol>
+                  <div class="code-block">
+                    <div class="code-head"><span class="lang">app/Http/Middleware/ResolveTenant.php</span><button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button></div>
+                    <pre><span class="c-key">public function</span> <span class="c-fn">handle</span>(<span class="c-var">$request</span>, <span class="c-fn">Closure</span> <span class="c-var">$next</span>)
+{
+    <span class="c-var">$tenant</span> = Tenant::<span class="c-fn">where</span>(<span class="c-str">'domain'</span>, <span class="c-var">$request</span>->getHost())
+        -><span class="c-fn">firstOr</span>(<span class="c-key">fn</span> () => <span class="c-fn">abort</span>(<span class="c-var">404</span>));
+
+    <span class="c-fn">app</span>()-><span class="c-fn">instance</span>(<span class="c-str">'tenant'</span>, <span class="c-var">$tenant</span>);
+
+    <span class="c-key">return</span> <span class="c-var">$next</span>(<span class="c-var">$request</span>);
+}</pre>
+                  </div>
+                  <blockquote style="border-left:4px solid var(--green);background:var(--green-100);padding:.9rem 1.2rem;border-radius:0 10px 10px 0;margin:1.2rem 0">The single biggest risk is a query that bypasses the scope — write a test that asserts every tenant model has the scope booted.</blockquote>
+                  <div class="d-flex justify-content-between align-items-center gap-3 pt-2 mt-3" style="border-top:1px solid var(--border)">
+                    <div class="d-flex gap-3" style="font-size:.85rem"><a href="#" class="text-muted-2"><i class="fa-solid fa-share me-1"></i> Share</a></div>
+                    <div class="author-row"><span class="avatar av-3">FD</span><div class="meta"><div class="name">Fatou Diallo</div><div class="sub">Lead engineer · 9.1k rep</div></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- OTHER ANSWER -->
+            <div class="answer-card">
+              <div class="d-flex gap-4">
+                <div class="vote-col" data-vote>
+                  <button class="vote-btn" data-dir="up" aria-label="Upvote"><i class="fa-solid fa-chevron-up"></i></button>
+                  <span class="vote-score">21</span>
+                  <button class="vote-btn" data-dir="down" aria-label="Downvote"><i class="fa-solid fa-chevron-down"></i></button>
+                </div>
+                <div class="flex-grow-1">
+                  <p>Counterpoint: if your merchants are banks or regulated PSPs, <strong>database-per-tenant</strong> can make audits and data residency far simpler. The <code class="mono">stancl/tenancy</code> package handles the switching cleanly and supports both models.</p>
+                  <p>Pick based on your compliance requirements, not just engineering taste.</p>
+                  <div class="d-flex justify-content-end pt-2 mt-3" style="border-top:1px solid var(--border)">
+                    <div class="author-row"><span class="avatar av-1">SB</span><div class="meta"><div class="name">Serge Brou</div><div class="sub">Architect · 12.4k rep</div></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ANSWER EDITOR -->
+            <div class="mt-5">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="section-heading mb-0" style="font-size:var(--fs-h3)">Your Answer</h2>
+                <button class="btn btn-ghost" id="previewToggle"><i class="fa-solid fa-eye"></i> Preview</button>
+              </div>
+              <div class="answer-editor">
+                <textarea class="form-control" id="answerEditor" placeholder="Share your solution. You can use Markdown and fenced code blocks…"></textarea>
+                <div class="d-none p-3" id="answerPreview" style="background:var(--light);border:1px solid var(--border);border-radius:var(--radius);min-height:160px"></div>
+                <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mt-3">
+                  <span class="text-muted-2" style="font-size:.82rem"><i class="fa-brands fa-markdown me-1"></i> Markdown supported · be kind and constructive</span>
+                  <button class="btn btn-brand"><i class="fa-solid fa-paper-plane"></i> Post your answer</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SIDEBAR -->
+          <div class="col-lg-4">
+            <div class="sidebar-card">
+              <div class="sidebar-title">Related questions</div>
+              <div class="tag-list">
+                <a class="tag-list-item" href="forum-detail.html"><span style="font-weight:500">Global scopes vs query scopes — when to use which?</span></a>
+                <a class="tag-list-item" href="forum-detail.html"><span style="font-weight:500">How to test multi-tenant isolation in Pest?</span></a>
+                <a class="tag-list-item" href="forum-detail.html"><span style="font-weight:500">Sharding a Laravel app across regions</span></a>
+                <a class="tag-list-item" href="forum-detail.html"><span style="font-weight:500">Caching strategies for tenant-scoped data</span></a>
+              </div>
+            </div>
+            <div class="sidebar-card">
+              <div class="sidebar-title">Question stats</div>
+              <div class="d-flex justify-content-between py-1"><span class="text-muted-2">Asked</span><strong>2 hours ago</strong></div>
+              <div class="d-flex justify-content-between py-1"><span class="text-muted-2">Viewed</span><strong>1,204 times</strong></div>
+              <div class="d-flex justify-content-between py-1"><span class="text-muted-2">Active</span><strong>34 min ago</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-4 col-md-6">
+          <a class="brand-logo mb-3" href="index.html"><span class="brand-mark"><img src="assets/img/logo-mark.png" alt="Laravel CI" /></span> Laravel CI</a>
+          <p style="max-width:22rem">The first structured developer community for Laravel &amp; PHP in Côte d'Ivoire and the Ivorian diaspora.</p>
+          <div class="social-row">
+            <a href="login.html" class="social-icon" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+            <a href="login.html" class="social-icon" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="login.html" class="social-icon" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+            <a href="login.html" class="social-icon" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-6 col-6"><h5>Quick Links</h5><ul class="footer-links"><li><a href="forum.html">Forum</a></li><li><a href="blog.html">Blog</a></li><li><a href="events.html">Events</a></li><li><a href="jobs.html">Jobs</a></li></ul></div>
+        <div class="col-lg-3 col-md-6 col-6"><h5>Community</h5><ul class="footer-links"><li><a href="about.html">About us</a></li><li><a href="login.html">Become a member</a></li><li><a href="forum.html">Code of conduct</a></li><li><a href="https://github.com" target="_blank" rel="noopener">Contribute on GitHub</a></li></ul></div>
+        <div class="col-lg-3 col-md-6"><h5>Contact</h5><ul class="footer-links"><li><a href="#"><i class="fa-solid fa-location-dot me-2"></i>Abidjan, Côte d'Ivoire</a></li><li><a href="mailto:hello@laravel.ci"><i class="fa-solid fa-envelope me-2"></i>hello@laravel.ci</a></li><li><a href="login.html"><i class="fa-brands fa-whatsapp me-2"></i>Join WhatsApp group</a></li></ul></div>
+      </div>
+      <div class="footer-bottom"><span>© 2026 Laravel Côte d'Ivoire · <span class="mono">MIT License</span></span><span>Built with <i class="fa-solid fa-heart heart"></i> in Côte d'Ivoire</span></div>
+    </div>
+  </footer>
+
+  <button class="scroll-top" id="scrollTop" aria-label="Scroll to top"><i class="fa-solid fa-arrow-up"></i></button>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
