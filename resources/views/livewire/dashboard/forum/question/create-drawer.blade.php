@@ -1,17 +1,9 @@
-{{--
-  open est entanglé avec $this->open (CreateDrawer).
-  Le bouton d'ouverture (dans Index) appelle wire:click="openCreateDrawer"
-  → Index dispatche un Livewire event 'open-create-drawer'
-  → #[On('open-create-drawer')] met $open = true côté serveur
-  → @entangle synce Alpine 'open' = true
-  → x-show="open" affiche overlay + panel
---}}
+
 <div
     x-data="{ open: @entangle('open') }"
     @open-create-drawer.window="open = true"
     @keydown.window.escape="open && $wire.closeDrawer()"
 >
-    {{-- ── Overlay ─────────────────────────────────────────────────────── --}}
     <div
         x-show="open"
         x-transition:enter="transition ease-out duration-200"
@@ -25,7 +17,6 @@
         style="display: none"
     ></div>
 
-    {{-- ── Panel ───────────────────────────────────────────────────────── --}}
     <div
         x-show="open"
         x-transition:enter="transform transition ease-out duration-300"
@@ -34,11 +25,10 @@
         x-transition:leave="transform transition ease-in duration-200"
         x-transition:leave-start="translate-x-0 opacity-100"
         x-transition:leave-end="translate-x-full opacity-0"
-        class="fixed top-8 right-8 bottom-8 z-50 w-[540px] max-w-[calc(100vw-4rem)] flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-2xl"
+        class="fixed top-2 right-2 bottom-3 z-50 w-3xl max-w-[calc(100vw-4rem)] flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl"
         @click.stop
         style="display: none"
     >
-        {{-- Header --}}
         <div class="flex shrink-0 items-start justify-between border-b border-gray-100 px-6 py-4">
             <div>
                 <h2 class="text-base font-semibold text-gray-900">{{ __('Poser une question') }}</h2>
@@ -55,11 +45,8 @@
             </button>
         </div>
 
-        {{-- Scrollable body --}}
         <div class="flex-1 overflow-y-auto px-6 py-5">
             <div class="space-y-5">
-
-                {{-- Titre --}}
                 <div class="space-y-1.5">
                     <label class="block text-sm font-medium text-gray-700">
                         {{ __('Titre') }} <span class="text-red-400">*</span>
@@ -81,7 +68,6 @@
                     @enderror
                 </div>
 
-                {{-- Contenu --}}
                 <div class="space-y-1.5">
                     <label class="block text-sm font-medium text-gray-700">
                         {{ __('Contenu') }} <span class="text-red-400">*</span>
@@ -103,11 +89,9 @@
                     @enderror
                     <p class="text-xs text-gray-400">{{ __('Minimum 30 caractères · Markdown supporté') }}</p>
                 </div>
-
             </div>
         </div>
 
-        {{-- Footer --}}
         <div class="flex shrink-0 items-center justify-end gap-2 border-t border-gray-100 px-6 py-4">
             <button wire:click="closeDrawer" type="button"
                 class="rounded-lg px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50 hover:text-gray-900">
