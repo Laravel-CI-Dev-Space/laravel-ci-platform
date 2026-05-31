@@ -61,10 +61,10 @@ class RoleSeeder extends Seeder
             Permission::firstOrCreate(['name' => $permission, 'guard_name' => 'web']);
         }
 
-        // Roles
-        $superAdmin = Role::firstOrCreate(['name' => 'super-admin', 'guard_name' => 'web']);
-        $admin      = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
-        $moderator  = Role::firstOrCreate(['name' => 'moderator', 'guard_name' => 'web']);
+        // Roles — names must match exactly what the app uses in hasRole() / middleware
+        $superAdmin = Role::firstOrCreate(['name' => 'super-admin',  'guard_name' => 'web']);
+        $admin      = Role::firstOrCreate(['name' => 'admin',        'guard_name' => 'web']);
+        $moderator = Role::firstOrCreate(['name' => 'moderator',   'guard_name' => 'web']);
         $member     = Role::firstOrCreate(['name' => 'member', 'guard_name' => 'web']);
 
         // Super admin — all permissions

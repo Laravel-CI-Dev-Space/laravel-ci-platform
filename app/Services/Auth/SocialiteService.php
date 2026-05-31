@@ -58,7 +58,7 @@ class SocialiteService
             'last_login_at'     => now(),
         ]);
 
-        $user->assignRole('membre-actif');
+        $user->assignRole('member');
 
         Log::info("New member registered: {$user->github_username}");
 

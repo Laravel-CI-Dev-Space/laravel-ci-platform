@@ -6,7 +6,9 @@ use App\Exceptions\AccountBannedException;
 use App\Http\Controllers\Controller;
 use App\Services\Auth\SocialiteService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
 use Laravel\Socialite\Facades\Socialite;
+use Laravel\Socialite\Two\InvalidStateException;
 
 class SocialiteController extends Controller
 {
@@ -36,7 +38,22 @@ class SocialiteController extends Controller
             return redirect()->route('login')
                 ->with('error', $e->getMessage());
 
+        } catch (InvalidStateException $e) {
+            Log::warning('GitHub OAuth: invalid state (possible session mismatch or double-click)', [
+                'url'        => request()->fullUrl(),
+                'session_id' => session()->getId(),
+            ]);
+
+            return redirect()->route('login')
+                ->with('error', 'Session OAuth expirée. Veuillez réessayer.');
+
         } catch (\Exception $e) {
+            Log::error('GitHub OAuth callback failed', [
+                'exception' => get_class($e),
+                'message'   => $e->getMessage(),
+                'trace'     => $e->getTraceAsString(),
+            ]);
+
             return redirect()->route('login')
                 ->with('error', 'Connexion GitHub échouée. Veuillez réessayer.');
         }
