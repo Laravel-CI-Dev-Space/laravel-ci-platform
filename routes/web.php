@@ -7,6 +7,8 @@ use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\CvController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DesignSystemController;
+use App\Http\Controllers\Forum\AnswerController;
+use App\Http\Controllers\Forum\QuestionController;
 use App\Livewire\EditProfile;
 use Illuminate\Support\Facades\Route;
 
@@ -14,25 +16,25 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', fn () => view('web.home'))->name('home');
 Route::get('/about', fn () => view('web.about'))->name('about');
 
-// ─── FORUM ─────────────────────────────────────────────────
+// ─── FORUM — Routes publiques ──────────────────────────────
 Route::prefix('forum')->name('forum.')->group(function () {
-    Route::get('/', fn () => view('web.forum.index'))->name('index');
+    Route::get('/', [QuestionController::class, 'index'])->name('index');
 
-    // Protected: create a question
-    Route::get('/ask', fn () => view('web.forum.index'))
-        ->name('create')
-        ->middleware(['auth', 'active', 'profile.complete']);
+    // Protégé: créer une question
+    Route::get('/ask', [QuestionController::class, 'create'])
+        ->name('ask')
+        ->middleware(['auth', 'active', 'profile.complete', 'role:member']);
 
-    // Protected: edit / delete own question
-    Route::patch('/{slug}', fn () => back())
-        ->name('edit')
-        ->middleware(['auth', 'active', 'profile.complete']);
-    Route::delete('/{slug}', fn () => redirect()->route('forum.index'))
-        ->name('destroy')
-        ->middleware(['auth', 'active', 'profile.complete']);
+    // Public: doit venir en dernier
+    Route::get('/{slug}', [QuestionController::class, 'show'])->name('show');
+});
 
-    // Public: must come last to avoid catching /ask /edit etc.
-    Route::get('/{slug}', fn (string $slug) => view('web.forum.show', compact('slug')))->name('show');
+// ─── FORUM — Routes authentifiées ─────────────────────────
+Route::middleware(['auth', 'active', 'profile.complete', 'role:member'])->group(function () {
+    Route::post('/forum/questions', [QuestionController::class, 'store'])
+        ->name('forum.questions.store');
+    Route::post('/forum/{question}/answers', [AnswerController::class, 'store'])
+        ->name('forum.answers.store');
 });
 
 // ─── BLOG ──────────────────────────────────────────────────
