@@ -65,7 +65,7 @@ Route::controller(EventController::class)
         Route::get('/{event:slug}', 'show')->name('show');
         Route::post('/{event:slug}/register', 'register')
             ->name('register')
-            ->middleware(['auth', 'active', 'role:membre-actif']);
+            ->middleware(['auth', 'active', 'role:member']);
     });
 
 // ─── JOB BOARD (Sprint Roger) ────────────────────────────
@@ -76,14 +76,14 @@ Route::controller(JobOfferController::class)
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')
             ->name('create')
-            ->middleware(['auth', 'active', 'role:membre-actif']);
+            ->middleware(['auth', 'active', 'role:member']);
         Route::post('/', 'store')
             ->name('store')
-            ->middleware(['auth', 'active', 'role:membre-actif']);
+            ->middleware(['auth', 'active', 'role:member']);
         Route::get('/{jobOffer}', 'show')->name('show');
         Route::post('/{jobOffer}/apply', 'apply')
             ->name('apply')
-            ->middleware(['auth', 'active', 'role:membre-actif']);
+            ->middleware(['auth', 'active', 'role:member']);
     });
 
 // ─── MEMBER PUBLIC PROFILE ─────────────────────────────────

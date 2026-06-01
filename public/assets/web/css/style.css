@@ -1489,6 +1489,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .pagination .page-link:hover { background: var(--orange-50); border-color: var(--orange); color: var(--orange); }
 .pagination .page-item.active .page-link { background: var(--orange); border-color: var(--orange); color: #fff; }
+.pagination .page-item.disabled .page-link { opacity: .45; cursor: not-allowed; background: transparent; }
 
 /* ================================
    SCROLL TOP + UTILITIES

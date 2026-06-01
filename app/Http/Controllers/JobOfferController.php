@@ -57,7 +57,7 @@ class JobOfferController extends Controller
         $categories = JobCategory::query()->orderBy('name')->get();
         $skills     = JobSkill::query()->orderBy('name')->get();
 
-        return view('jobs.index', [
+        return view('web.jobs.index', [
             'offers'     => $offers,
             'categories' => $categories,
             'skills'     => $skills,
@@ -79,14 +79,14 @@ class JobOfferController extends Controller
         $application = $jobOffer->applicationFor($user);
         $canApply    = $user?->can('apply', $jobOffer) ?? false;
 
-        return view('jobs.show', compact('jobOffer', 'application', 'canApply'));
+        return view('web.jobs.show', compact('jobOffer', 'application', 'canApply'));
     }
 
     public function create(): View
     {
         $this->authorize('create', JobOffer::class);
 
-        return view('jobs.create');
+        return view('web.jobs.create');
     }
 
     public function store(SubmitJobOfferRequest $request): RedirectResponse

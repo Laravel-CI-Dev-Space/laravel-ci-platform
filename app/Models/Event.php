@@ -170,6 +170,33 @@ class Event extends Model
     }
 
     /**
+     * Props pour le composant <x-web.event-card>.
+     *
+     * @return array<string, mixed>
+     */
+    public function toWebCardProps(): array
+    {
+        $taken    = (int) ($this->confirmed_registrations_count ?? $this->confirmedRegistrationsCount());
+        $total    = (int) ($this->capacity ?? 0);
+        $typeSlug = $this->type?->slug ?? 'meetup';
+
+        return [
+            'type'         => $typeSlug,
+            'typeLabel'    => $this->type?->name ?? 'Événement',
+            'title'        => $this->title,
+            'month'        => $this->start_date->translatedFormat('M'),
+            'day'          => $this->start_date->format('d'),
+            'time'         => $this->start_date->format('D H:i'),
+            'location'     => $this->location ?? $this->meeting_link ?? 'En ligne',
+            'spotsUsed'    => $taken,
+            'spotsTotal'   => $total,
+            'href'         => route('events.show', $this),
+            'registerHref' => route('events.show', $this),
+            'past'         => $this->end_date->isPast(),
+        ];
+    }
+
+    /**
      * Données pour le composant <x-card.event>.
      *
      * @return array<string, mixed>

@@ -46,7 +46,7 @@ class NotificationService
     public function sendEventConfirmation(User $user, Event $event): void
     {
         try {
-            Mail::to($user->email)->queue(new EventConfirmationMail($user, $event));
+            Mail::to($user->email)->send(new EventConfirmationMail($user, $event));
         } catch (\Exception $e) {
             Log::error("Event confirmation email failed for {$user->email}: {$e->getMessage()}");
         }

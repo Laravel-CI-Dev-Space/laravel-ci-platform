@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 #[Fillable([
     'company_id',
@@ -74,6 +75,31 @@ class JobOffer extends Model
         }
 
         return $this->applications()->where('user_id', $user->id)->first();
+    }
+
+    /**
+     * Props pour le composant <x-web.job-card>.
+     *
+     * @return array<string, mixed>
+     */
+    public function toWebCardProps(): array
+    {
+        $this->loadMissing(['company', 'skills']);
+
+        return [
+            'logoClass'    => 'cl-' . ((($this->id ?? 1) % 6) + 1),
+            'logoText'     => strtoupper(Str::substr($this->company->name, 0, 2)),
+            'title'        => $this->title,
+            'company'      => $this->company->name,
+            'location'     => $this->location,
+            'remote'       => $this->type === JobOfferType::REMOTE,
+            'description'  => Str::limit(strip_tags($this->description), 140),
+            'contractType' => $this->type->label(),
+            'tags'         => $this->skills->pluck('name')->all(),
+            'salary'       => $this->salary ?: '—',
+            'href'         => route('jobs.show', $this),
+            'badge'        => $this->created_at && $this->created_at->diffInDays(now()) <= 7 ? 'NEW' : null,
+        ];
     }
 
     /**

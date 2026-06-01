@@ -43,7 +43,7 @@ class EventController extends Controller
 
         $types = EventType::query()->orderBy('name')->get();
 
-        return view('events.index', [
+        return view('web.events.index', [
             'events' => $events,
             'types'  => $types,
             'period' => $period,
@@ -65,7 +65,7 @@ class EventController extends Controller
         $waitlist     = $event->waitlistEntryFor($user);
         $canRegister  = $user?->can('register', $event) ?? false;
 
-        return view('events.show', compact(
+        return view('web.events.show', compact(
             'event',
             'registration',
             'waitlist',

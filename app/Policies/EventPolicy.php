@@ -19,12 +19,12 @@ class EventPolicy
             return true;
         }
 
-        return $user !== null && $user->hasAnyRole(['super-admin', 'admin', 'moderateur']);
+        return $user !== null && $user->hasAnyRole(['super-admin', 'admin', 'moderator']);
     }
 
     public function register(User $user, Event $event): bool
     {
-        if (! $user->hasRole('membre-actif')) {
+        if (! $user->hasRole('member')) {
             return false;
         }
 
