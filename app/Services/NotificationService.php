@@ -11,70 +11,44 @@ use Illuminate\Support\Facades\Mail;
 
 class NotificationService
 {
-    /**
-     * Envoie l'email de bienvenue après inscription.
-     * Appelé dans SocialiteService::createUser()
-     */
+    /** Queues the welcome email after registration. */
     public function sendWelcome(User $user): void
     {
         try {
-            Mail::to($user->email)->send(new WelcomeMail($user));
+            Mail::to($user->email)->queue(new WelcomeMail($user));
         } catch (\Exception $e) {
-            // On log l'erreur mais on ne bloque pas l'inscription
-            Log::error("Email bienvenue échoué pour {$user->email} : {$e->getMessage()}");
+            Log::error("Welcome email failed for {$user->email}: {$e->getMessage()}");
         }
     }
 
-    /**
-     * Envoie une notification de nouvelle réponse sur le forum.
-     * Appelé par Abdoul dans QuestionService
-     */
-    public function sendNewAnswer(User $user, $question): void
+    // Stub methods below — parameters prefixed with _ are intentionally unused until implemented.
+
+    public function sendNewAnswer(User $_user, mixed $_question): void
     {
-        // À implémenter par Emmanuel — module notifications
-        // Mail::to($user->email)->send(new NewAnswerMail($user, $question));
+        // TODO: Mail::to($_user->email)->queue(new NewAnswerMail($_user, $_question));
     }
 
-    /**
-     * Envoie un rappel d'événement.
-     * Appelé par Roger dans EventService
-     */
-    public function sendEventReminder(User $user, $event): void
+    public function sendEventReminder(User $_user, mixed $_event): void
     {
-        // À implémenter par Emmanuel — module notifications
-        // Mail::to($user->email)->send(new EventReminderMail($user, $event));
+        // TODO: Mail::to($_user->email)->queue(new EventReminderMail($_user, $_event));
     }
 
-    /**
-     * Envoie une alerte emploi.
-     * Appelé par Roger dans JobOfferService
-     */
-    public function sendJobAlert(User $user, $offer): void
+    public function sendJobAlert(User $_user, mixed $_offer): void
     {
-        // À implémenter par Emmanuel — module notifications
-        // Mail::to($user->email)->send(new JobAlertMail($user, $offer));
+        // TODO: Mail::to($_user->email)->queue(new JobAlertMail($_user, $_offer));
     }
 
-    /**
-     * Envoie une notification de publication d'article.
-     * Appelé par Emmanuel dans ArticleService
-     */
-    public function sendArticlePublished(User $user, $article): void
+    public function sendArticlePublished(User $_user, mixed $_article): void
     {
-        // À implémenter par Emmanuel — module notifications
-        // Mail::to($user->email)->send(new ArticlePublishedMail($user, $article));
+        // TODO: Mail::to($_user->email)->queue(new ArticlePublishedMail($_user, $_article));
     }
 
-    /**
-     * Envoie une confirmation d'inscription à un événement.
-     * Appelé par Roger dans EventService
-     */
     public function sendEventConfirmation(User $user, Event $event): void
     {
         try {
-            Mail::to($user->email)->send(new EventConfirmationMail($user, $event));
+            Mail::to($user->email)->queue(new EventConfirmationMail($user, $event));
         } catch (\Exception $e) {
-            Log::error("Email confirmation event échoué pour {$user->email} : {$e->getMessage()}");
+            Log::error("Event confirmation email failed for {$user->email}: {$e->getMessage()}");
         }
     }
 }

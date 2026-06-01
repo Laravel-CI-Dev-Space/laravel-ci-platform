@@ -1,55 +1,27 @@
 *.log
 .DS_Store
-Thumbs.db
-
-# ─── Environnement local (ne pas versionner) ─────────────────
 .env
-.env.*
-!.env.example
-!.env.testing
-auth.json
-Homestead.json
-Homestead.yaml
-
-# ─── DDEV ───────────────────────────────────────────────────
-.ddev/
-
-# ─── Cursor ─────────────────────────────────────────────────
-.cursor/
-.cursorrules
-.cursorignore
-
-# ─── Claude / Codex ─────────────────────────────────────────
-.claude/
-CLAUDE.md
-.codex/
-
-# ─── Autres IDE ─────────────────────────────────────────────
-.idea/
-.nova/
-.vscode/
-.zed/
+.env.backup
+.env.production
 .phpactor.json
-
-# ─── Config locale Vite / overrides ─────────────────────────
-vite.config.local.js
-ROGER-SPRINT1.local.md
-*.local.md
-vite.config.local.ts
-*.local.yaml
-*.local.yml
-
-# ─── Dépendances & build ────────────────────────────────────
+.phpunit.result.cache
+/.codex
+/.cursor/
+/.idea
+/.nova
+/.phpunit.cache
+/.vscode
+/.zed
+/auth.json
 /node_modules
-/vendor
 /public/build
 /public/fonts-manifest.dev.json
 /public/hot
 /public/storage
-
-# ─── Laravel / PHP ──────────────────────────────────────────
-.phpunit.result.cache
-/.phpunit.cache
 /storage/*.key
 /storage/pail
+/vendor
 _ide_helper.php
+Homestead.json
+Homestead.yaml
+Thumbs.db
