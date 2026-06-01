@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('location')->nullable()->comment('Physical address');
             $table->string('online_url')->nullable()->comment('Zoom/Meet link');
             $table->string('cover_image')->nullable();
-            $table->timestamp('starts_at');
-            $table->timestamp('ends_at');
+            $table->dateTime('starts_at');
+            $table->dateTime('ends_at');
             $table->unsignedSmallInteger('capacity')->nullable()->comment('Max attendees, null = unlimited');
             $table->unsignedSmallInteger('registrations_count')->default(0)->comment('Cached count');
             $table->boolean('waitlist_enabled')->default(false);
