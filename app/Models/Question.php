@@ -2,12 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Answer;
-use App\Models\Comment;
-use App\Models\Report;
-use App\Models\Tag;
-use App\Models\User;
-use App\Models\Vote;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -38,20 +32,78 @@ class Question extends Model
         ];
     }
 
-    public function user(): BelongsTo       { return $this->belongsTo(User::class); }
-    public function acceptedAnswer(): BelongsTo { return $this->belongsTo(Answer::class, 'accepted_answer_id'); }
-    public function answers(): HasMany      { return $this->hasMany(Answer::class); }
-    public function tags(): BelongsToMany  { return $this->belongsToMany(Tag::class); }
-    public function comments(): MorphMany  { return $this->morphMany(Comment::class, 'commentable'); }
-    public function votes(): MorphMany     { return $this->morphMany(Vote::class, 'votable'); }
-    public function reports(): MorphMany   { return $this->morphMany(Report::class, 'reportable'); }
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
-    public function scopePublished($query) { return $query->where('status', 'published'); }
-    public function scopePinned($query)    { return $query->where('is_pinned', true); }
-    public function scopeUnanswered($query){ return $query->where('answers_count', 0); }
-    public function scopePopular($query)   { return $query->orderByDesc('votes_score'); }
-    public function scopeRecent($query)    { return $query->orderByDesc('last_activity_at'); }
+    public function acceptedAnswer(): BelongsTo
+    {
+        return $this->belongsTo(Answer::class, 'accepted_answer_id');
+    }
 
-    public function hasAcceptedAnswer(): bool { return $this->accepted_answer_id !== null; }
-    public function isOwnedBy(User $user): bool { return $this->user_id === $user->id; }
+    public function answers(): HasMany
+    {
+        return $this->hasMany(Answer::class);
+    }
+
+    public function tags(): BelongsToMany
+    {
+        return $this->belongsToMany(Tag::class);
+    }
+
+    public function comments(): MorphMany
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
+
+    public function votes(): MorphMany
+    {
+        return $this->morphMany(Vote::class, 'votable');
+    }
+
+    public function reports(): MorphMany
+    {
+        return $this->morphMany(Report::class, 'reportable');
+    }
+
+    public function scopePublished($query)
+    {
+        return $query->where('status', 'published');
+    }
+
+    public function scopePinned($query)
+    {
+        return $query->where('is_pinned', true);
+    }
+
+    public function scopeUnanswered($query)
+    {
+        return $query->where('answers_count', 0);
+    }
+
+    public function scopePopular($query)
+    {
+        return $query->orderByDesc('votes_score');
+    }
+
+    public function scopeRecent($query)
+    {
+        return $query->orderByDesc('last_activity_at');
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
+    public function hasAcceptedAnswer(): bool
+    {
+        return $this->accepted_answer_id !== null;
+    }
+
+    public function isOwnedBy(User $user): bool
+    {
+        return $this->user_id === $user->id;
+    }
 }

@@ -12,7 +12,7 @@ class QuestionDetail extends Component
 {
     public string $questionSlug = '';
 
-    public bool $showAnswerForm = false;
+    public bool $showAnswerForm = true;
 
     public function mount(string $slug): void
     {

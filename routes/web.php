@@ -35,6 +35,12 @@ Route::middleware(['auth', 'active', 'profile.complete', 'role:member'])->group(
         ->name('forum.questions.store');
     Route::post('/forum/{question}/answers', [AnswerController::class, 'store'])
         ->name('forum.answers.store');
+
+    // Édition et suppression d'une question par son auteur
+    Route::get('/forum/{question}/edit', [QuestionController::class, 'edit'])
+        ->name('forum.edit');
+    Route::delete('/forum/{question}', [QuestionController::class, 'destroy'])
+        ->name('forum.destroy');
 });
 
 // ─── BLOG ──────────────────────────────────────────────────
@@ -129,7 +135,15 @@ Route::middleware(['auth', 'active'])->group(function () {
             ->name('dashboard.member.')
             ->group(function () {
                 Route::get('/', fn () => view('dashboard.member.overview'))->name('overview');
-                Route::get('/questions', fn () => view('dashboard.member.questions'))->name('questions');
+                Route::get('/questions', function () {
+                    $questions = auth()->user()
+                        ->questions()
+                        ->with('tags')
+                        ->latest()
+                        ->paginate(15);
+
+                    return view('dashboard.member.questions', compact('questions'));
+                })->name('questions');
                 Route::get('/articles', fn () => view('dashboard.member.articles'))->name('articles');
                 Route::get('/events', fn () => view('dashboard.member.events'))->name('events');
                 Route::get('/applications', fn () => view('dashboard.member.applications'))->name('applications');

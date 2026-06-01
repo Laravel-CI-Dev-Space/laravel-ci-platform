@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Forum;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Forum\StoreQuestionRequest;
+use App\Models\Question;
 use App\Models\Tag;
 use App\Services\Forum\QuestionService;
 use Illuminate\Http\RedirectResponse;
@@ -60,5 +61,29 @@ class QuestionController extends Controller
         $this->questionService->incrementViews($question);
 
         return view('web.forum.show', compact('question', 'slug'));
+    }
+
+    /**
+     * Redirige vers le formulaire de modification (réutilise AskQuestion).
+     */
+    public function edit(Question $question): RedirectResponse
+    {
+        abort_unless($question->isOwnedBy(request()->user()), 403);
+
+        return redirect()->route('forum.show', $question->slug);
+    }
+
+    /**
+     * Supprime (soft-delete) une question appartenant à l'utilisateur.
+     */
+    public function destroy(Question $question): RedirectResponse
+    {
+        abort_unless($question->isOwnedBy(request()->user()), 403);
+
+        $question->delete();
+
+        return redirect()
+            ->route('forum.index')
+            ->with('success', 'Votre question a été supprimée.');
     }
 }
