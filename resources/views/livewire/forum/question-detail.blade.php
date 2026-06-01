@@ -74,13 +74,22 @@
                                 <i class="fa-solid fa-share me-1"></i> Partager
                             </a>
                             @auth
-                                @if (auth()->user()->id === $question->user_id && ! $question->hasAcceptedAnswer())
-                                    <button
-                                        wire:click="$dispatch('accept-answer', { answerId: {{ $answer->id }} })"
-                                        class="btn btn-ghost btn-sm text-green"
-                                    >
-                                        <i class="fa-solid fa-check me-1"></i> Accepter
-                                    </button>
+                                @if (auth()->user()->id === $question->user_id)
+                                    @if (! $answer->is_accepted && ! $question->hasAcceptedAnswer())
+                                        <button
+                                            wire:click="acceptAnswer({{ $answer->id }})"
+                                            class="btn btn-ghost btn-sm text-green"
+                                        >
+                                            <i class="fa-solid fa-check me-1"></i> Accepter
+                                        </button>
+                                    @elseif ($answer->is_accepted)
+                                        <button
+                                            wire:click="unacceptAnswer({{ $answer->id }})"
+                                            class="btn btn-ghost btn-sm text-muted-2"
+                                        >
+                                            <i class="fa-solid fa-xmark me-1"></i> Retirer
+                                        </button>
+                                    @endif
                                 @endif
                             @endauth
                         </div>
