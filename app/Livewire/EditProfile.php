@@ -12,10 +12,11 @@ use App\Services\AssetService;
 use App\Services\CountryService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\View\View;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
-use Livewire\Attributes\Layout;
 use Livewire\WithFileUploads;
 
 #[Layout('layouts.profile-setup')]
@@ -78,16 +79,16 @@ class EditProfile extends Component
         if ($profile) {
             $this->currentAvatar    = $profile->avatarUrl($user->avatar);
             $this->currentCv        = $profile->cvUrl();
-            $this->country          = $profile->country ?? '';
-            $this->city             = $profile->city ?? '';
-            $this->district         = $profile->district ?? '';
-            $this->bio              = $profile->bio ?? '';
-            $this->laravel_level    = $profile->laravel_level ?? '';
+            $this->country          = $profile->country          ?? '';
+            $this->city             = $profile->city             ?? '';
+            $this->district         = $profile->district         ?? '';
+            $this->bio              = $profile->bio              ?? '';
+            $this->laravel_level    = $profile->laravel_level    ?? '';
             $this->years_experience = $profile->years_experience ?? '';
-            $this->tech_stack       = $profile->tech_stack ?? [];
-            $this->academic_level   = $profile->academic_level ?? '';
-            $this->job_status       = $profile->job_status ?? '';
-            $this->portfolio_url    = $profile->portfolio_url ?? '';
+            $this->tech_stack       = $profile->tech_stack       ?? [];
+            $this->academic_level   = $profile->academic_level   ?? '';
+            $this->job_status       = $profile->job_status       ?? '';
+            $this->portfolio_url    = $profile->portfolio_url    ?? '';
             $this->completionRate   = $profile->completionRate();
             $this->missingFields    = $profile->missingFields();
         } else {
@@ -207,7 +208,7 @@ class EditProfile extends Component
         return app(CountryService::class)->getCountries();
     }
 
-    public function render(): \Illuminate\View\View
+    public function render(): View
     {
         return view('livewire.edit-profile', [
             'laravelLevels'   => LaravelLevel::labels(),
@@ -215,6 +216,7 @@ class EditProfile extends Component
             'academicLevels'  => AcademicLevel::labels(),
             'jobStatuses'     => JobStatus::labels(),
             'stackPredefined' => Profile::$stackPredefined,
+            'countries'       => $this->countries,
         ]);
     }
 }
