@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\SocialiteController;
+use App\Http\Controllers\Blog\ArticleController;
+use App\Http\Controllers\Blog\ResourceController;
 use App\Http\Controllers\CvController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DesignSystemController;
@@ -43,23 +45,36 @@ Route::middleware(['auth', 'active', 'profile.complete', 'role:member'])->group(
         ->name('forum.destroy');
 });
 
-// ─── BLOG ──────────────────────────────────────────────────
+// ─── BLOG — Routes publiques ───────────────────────────────
 Route::prefix('blog')->name('blog.')->group(function () {
-    Route::get('/', fn () => view('web.blog.index'))->name('index');
+    Route::get('/', [ArticleController::class, 'index'])->name('index');
 
-    // Protected
-    Route::get('/write', fn () => view('web.blog.index'))
+    // Protégé : soumettre un article
+    Route::get('/submit', [ArticleController::class, 'create'])
         ->name('create')
-        ->middleware(['auth', 'active', 'profile.complete']);
-    Route::get('/{slug}/edit', fn (string $slug) => view('web.blog.show', compact('slug')))
-        ->name('edit')
-        ->middleware(['auth', 'active', 'profile.complete']);
-    Route::delete('/{slug}', fn () => redirect()->route('blog.index'))
-        ->name('destroy')
-        ->middleware(['auth', 'active', 'profile.complete']);
+        ->middleware(['auth', 'active', 'profile.complete', 'role:member']);
 
-    // Public
-    Route::get('/{slug}', fn (string $slug) => view('web.blog.show', compact('slug')))->name('show');
+    // Public : doit venir en dernier
+    Route::get('/{slug}', [ArticleController::class, 'show'])->name('show');
+});
+
+// ─── RESSOURCES — Routes publiques + auth ─────────────────
+Route::prefix('resources')->name('resources.')->group(function () {
+    Route::get('/', [ResourceController::class, 'index'])->name('index');
+
+    Route::get('/{resource}/download', [ResourceController::class, 'download'])
+        ->name('download')
+        ->middleware(['auth', 'active']);
+});
+
+// ─── BLOG & RESSOURCES — Routes authentifiées ─────────────
+Route::middleware(['auth', 'active', 'profile.complete', 'role:member'])->group(function () {
+    Route::post('/blog/articles', [ArticleController::class, 'store'])
+        ->name('blog.articles.store');
+    Route::post('/blog/{article}/submit', [ArticleController::class, 'submit'])
+        ->name('blog.articles.submit');
+    Route::post('/resources', [ResourceController::class, 'store'])
+        ->name('resources.store');
 });
 
 // ─── EVENTS ────────────────────────────────────────────────

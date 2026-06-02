@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Mail\WelcomeMail;
+use App\Models\Article;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -36,9 +37,18 @@ class NotificationService
         // TODO: Mail::to($_user->email)->queue(new JobAlertMail($_user, $_offer));
     }
 
-    public function sendArticlePublished(User $_user, mixed $_article): void
+    /**
+     * Notifie l'auteur que son article a été publié.
+     */
+    public function sendArticlePublished(User $user, Article $article): void
     {
-        // TODO: Mail::to($_user->email)->queue(new ArticlePublishedMail($_user, $_article));
+        try {
+            // Mail::to($user->email)->send(new ArticlePublishedMail($user, $article));
+            // TODO: create ArticlePublishedMail in Sprint 2
+            Log::info("Article publié notifié à {$user->email} : {$article->title}");
+        } catch (\Exception $e) {
+            Log::error("Notification article publié échouée : {$e->getMessage()}");
+        }
     }
 
     public function sendEventConfirmation(User $_user, mixed $_event): void
