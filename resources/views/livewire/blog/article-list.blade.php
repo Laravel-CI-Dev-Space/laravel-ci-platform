@@ -44,8 +44,9 @@
             <div class="row g-4">
 
                 {{-- ═══ SIDEBAR FIXE ═══ --}}
-                <div class="col-lg-3">
-                    <div class="collapse d-lg-block" id="blogSidebar">
+                <div class="col-lg-3" style="align-self:flex-start;">
+                    <div class="collapse d-lg-block" id="blogSidebar"
+                         style="position:sticky; top:1.5rem;">
 
                         {{-- Tri --}}
                         <div class="sidebar-card">
@@ -62,7 +63,7 @@
                         </div>
 
                         {{-- Tags --}}
-                        <div class="sidebar-card">
+                        <div class="sidebar-card" x-data="{ shown: 5 }">
                             <div class="sidebar-title">
                                 Tags populaires
                                 @if ($tagId !== null)
@@ -77,12 +78,36 @@
                                 @foreach ($tags as $tag)
                                     <div wire:click="$set('tagId', {{ $tagId === $tag->id ? 'null' : $tag->id }})"
                                          class="tag-list-item {{ $tagId === $tag->id ? 'active' : '' }}"
-                                         style="cursor:pointer">
+                                         style="cursor:pointer"
+                                         x-show="{{ $loop->index }} < shown">
                                         <span class="mono">{{ $tag->name }}</span>
                                         <span class="count">{{ number_format($tag->usage_count) }}</span>
                                     </div>
                                 @endforeach
                             </div>
+
+                            {{-- Voir plus / Voir moins --}}
+                            @php $totalTags = $tags->count(); @endphp
+                            @if ($totalTags > 5)
+                                <button
+                                    x-show="shown < {{ $totalTags }}"
+                                    x-on:click="shown = Math.min(shown + 5, {{ $totalTags }})"
+                                    class="btn btn-ghost btn-sm w-100 mt-1"
+                                    style="font-size:.78rem; color:var(--orange)"
+                                >
+                                    <i class="fa-solid fa-chevron-down me-1"></i>
+                                    Voir plus
+                                    <span x-text="'(' + Math.min(5, {{ $totalTags }} - shown) + ' de plus)'"></span>
+                                </button>
+                                <button
+                                    x-show="shown >= {{ $totalTags }}"
+                                    x-on:click="shown = 5"
+                                    class="btn btn-ghost btn-sm w-100 mt-1"
+                                    style="font-size:.78rem; color:var(--muted)"
+                                >
+                                    <i class="fa-solid fa-chevron-up me-1"></i>Voir moins
+                                </button>
+                            @endif
                         </div>
 
                         {{-- Écrire --}}
