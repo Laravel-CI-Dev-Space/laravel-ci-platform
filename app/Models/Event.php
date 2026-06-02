@@ -154,6 +154,12 @@ class Event extends Model
             return false;
         }
 
+        $count = $this->confirmed_registrations_count ?? null;
+
+        if ($count !== null) {
+            return (int) $count >= $this->capacity;
+        }
+
         return $this->confirmedRegistrationsCount() >= $this->capacity;
     }
 
@@ -174,6 +180,10 @@ class Event extends Model
             return null;
         }
 
+        if ($this->relationLoaded('registrations')) {
+            return $this->registrations->first();
+        }
+
         return $this->registrations()->where('user_id', $user->id)->first();
     }
 
@@ -181,6 +191,10 @@ class Event extends Model
     {
         if ($user === null) {
             return null;
+        }
+
+        if ($this->relationLoaded('waitlists')) {
+            return $this->waitlists->first();
         }
 
         return $this->waitlists()->where('user_id', $user->id)->first();

@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Models\Event;
-use App\Models\EventType;
+use App\Queries\Events\EventDetailQuery;
 use App\Services\Events\EventService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class EventController extends Controller
@@ -15,62 +16,18 @@ class EventController extends Controller
         private readonly EventService $eventService,
     ) {}
 
-    public function index(Request $request): View
+    public function index(): View
     {
-        $period   = $request->string('period', 'upcoming')->toString();
-        $typeSlug = $request->string('type')->toString() ?: null;
-
-        $query = Event::query()
-            ->with(['type'])
-            ->withCount([
-                'registrations as confirmed_registrations_count' => fn ($q) => $q->where('status', 'confirmed'),
-            ]);
-
-        $query = match ($period) {
-            'past'  => $query->past(),
-            'all'   => $query->published(),
-            default => $query->upcoming(),
-        };
-
-        if ($typeSlug) {
-            $query->ofType($typeSlug);
-        }
-
-        $events = $query
-            ->orderBy('start_date')
-            ->paginate(9)
-            ->withQueryString();
-
-        $types = EventType::query()->orderBy('name')->get();
-
-        return view('web.events.index', [
-            'events' => $events,
-            'types'  => $types,
-            'period' => $period,
-            'type'   => $typeSlug,
-        ]);
+        return view('web.events.index');
     }
 
     public function show(Event $event): View
     {
         $this->authorize('view', $event);
 
-        $event->load(['type', 'speakers']);
-        $event->loadCount([
-            'registrations as confirmed_registrations_count' => fn ($q) => $q->where('status', 'confirmed'),
-        ]);
+        $event = EventDetailQuery::findBySlug($event->slug, auth()->id());
 
-        $user         = auth()->user();
-        $registration = $event->registrationFor($user);
-        $waitlist     = $event->waitlistEntryFor($user);
-        $canRegister  = $user?->can('register', $event) ?? false;
-
-        return view('web.events.show', compact(
-            'event',
-            'registration',
-            'waitlist',
-            'canRegister',
-        ));
+        return view('web.events.show', compact('event'));
     }
 
     public function register(Event $event): RedirectResponse

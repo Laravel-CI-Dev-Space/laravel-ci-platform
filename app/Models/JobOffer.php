@@ -74,6 +74,10 @@ class JobOffer extends Model
             return null;
         }
 
+        if ($this->relationLoaded('applications')) {
+            return $this->applications->first();
+        }
+
         return $this->applications()->where('user_id', $user->id)->first();
     }
 
