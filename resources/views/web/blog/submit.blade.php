@@ -25,9 +25,32 @@
 .lang-tile .ti { font-size:1.55rem; line-height:1; }
 .lang-tile .lt  { font-size:.72rem; font-weight:700; letter-spacing:.02em; }
 
-/* ── Monaco container ─────────────────────────── */
-#monacoContainer { height:340px; border-radius:0 0 var(--radius,.5rem) var(--radius,.5rem); overflow:hidden; }
-.monaco-back-btn { cursor:pointer; background:none; border:none; padding:0; color:inherit; }
+/* ── Code editor textarea ─────────────────────── */
+#codeEditor {
+    background: #0d1117 !important;
+    color: #e6edf3 !important;
+    -webkit-text-fill-color: #e6edf3 !important;
+    caret-color: #e6edf3;
+}
+#codeEditor::placeholder { color: #6e7681 !important; -webkit-text-fill-color: #6e7681 !important; }
+
+/* ── EasyMDE : code blocks plus visibles ─────── */
+.CodeMirror .cm-comment {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace !important;
+    background: rgba(110, 118, 129, .08);
+    border-radius: 3px;
+    color: #0550ae;
+}
+.CodeMirror-line .cm-string { color: #0a3069; }
+.CodeMirror .cm-formatting-code,
+.CodeMirror .cm-formatting-code-block { color: var(--orange, #e8590c); font-weight: 600; }
+
+/* ── Panneau d'aide formatage ────────────────── */
+.md-help-panel { background: #f6f8fa; border: 1px solid #d1d9e0; border-radius: 8px; }
+.md-help-panel .syntax-row { display: flex; gap: .75rem; align-items: flex-start; padding: .35rem 0; border-bottom: 1px solid #e8ebee; font-size: .8rem; }
+.md-help-panel .syntax-row:last-child { border-bottom: none; }
+.md-help-panel code { background: #e8ebee; padding: .1em .35em; border-radius: 4px; font-size: .78rem; font-family: 'JetBrains Mono', monospace; color: #0550ae; white-space: nowrap; }
+.md-help-panel .result { color: #57606a; flex-shrink: 0; width: 130px; }
 </style>
 @endpush
 
@@ -92,29 +115,56 @@
                     </div>
                 </div>
 
-                {{-- ── Étape 2 : éditeur Monaco ── --}}
+                {{-- ── Étape 2 : éditeur de code (textarea sombre) ── --}}
                 <div id="lpStep2" style="display:none">
-                    <div class="modal-header border-0 pb-1 d-flex align-items-center gap-2">
-                        <button class="monaco-back-btn" onclick="lpReset()" title="Retour">
-                            <i class="fa-solid fa-arrow-left text-muted"></i>
+                    <div class="modal-header border-0 pb-1 d-flex align-items-center gap-2"
+                         style="background:#161b22; border-radius:.5rem .5rem 0 0;">
+                        <button style="background:none;border:none;cursor:pointer;color:#aaa;padding:0"
+                                onclick="lpReset()" title="Retour">
+                            <i class="fa-solid fa-arrow-left"></i>
                         </button>
-                        <h6 class="modal-title fw-bold mb-0">
+                        <h6 class="modal-title fw-bold mb-0 text-white">
                             <i id="lpLangIcon" class="me-1"></i>
-                            Éditeur de code —
-                            <span id="lpLangLabel" class="text-orange"></span>
+                            <span id="lpLangLabel"></span>
+                            <span class="text-muted fw-normal" style="font-size:.8rem"> — éditeur de code</span>
                         </h6>
-                        <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" onclick="lpReset()"></button>
+                        <div class="ms-auto d-flex gap-2 align-items-center">
+                            <span class="text-muted" style="font-size:.72rem">Tab = 4 espaces</span>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                    onclick="lpReset()"></button>
+                        </div>
                     </div>
-                    <div style="padding:0 1rem;">
-                        <div id="monacoContainer"></div>
+                    {{-- Faux terminal header --}}
+                    <div style="background:#1a1b26; padding:.4rem 1rem; border-bottom:1px solid #30363d; display:flex; align-items:center; gap:.4rem;">
+                        <span style="width:12px;height:12px;border-radius:50%;background:#ff5f57;display:inline-block"></span>
+                        <span style="width:12px;height:12px;border-radius:50%;background:#ffbd2e;display:inline-block"></span>
+                        <span style="width:12px;height:12px;border-radius:50%;background:#28ca41;display:inline-block"></span>
+                        <span id="lpLangTab" class="ms-2 text-muted" style="font-size:.75rem;font-family:'JetBrains Mono',monospace"></span>
                     </div>
-                    <div class="modal-footer border-0 gap-2">
-                        <span class="text-muted me-auto" style="font-size:.78rem">
-                            <i class="fa-solid fa-keyboard me-1"></i>
-                            Ctrl+Shift+F pour formater · Ctrl+/ pour commenter
-                        </span>
-                        <button class="btn btn-ghost btn-sm" onclick="lpReset()">← Changer de langage</button>
-                        <button class="btn btn-brand btn-sm" onclick="lpInsert()">
+                    <div style="background:#0d1117; padding:0;">
+                        <textarea
+                            id="codeEditor"
+                            spellcheck="false"
+                            autocomplete="off"
+                            autocorrect="off"
+                            autocapitalize="off"
+                            placeholder="// Saisissez votre code ici…"
+                            style="
+                                width:100%; height:320px;
+                                background:#0d1117; color:#e6edf3;
+                                font-family:'JetBrains Mono','Fira Code',Consolas,monospace;
+                                font-size:.9rem; line-height:1.75;
+                                padding:1rem 1.25rem; border:none;
+                                resize:none; outline:none; tab-size:4;
+                                display:block;
+                            "
+                        ></textarea>
+                    </div>
+                    <div class="modal-footer border-0 gap-2" style="background:#161b22; border-radius:0 0 .5rem .5rem">
+                        <button class="btn btn-ghost btn-sm text-muted" onclick="lpReset()">
+                            <i class="fa-solid fa-arrow-left me-1"></i>Changer de langage
+                        </button>
+                        <button class="btn btn-brand btn-sm ms-auto" onclick="lpInsert()">
                             <i class="fa-solid fa-circle-plus me-1"></i>Insérer dans l'article
                         </button>
                     </div>
@@ -126,23 +176,17 @@
 @endsection
 
 @push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/highlight.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/easymde@2.18.0/dist/easymde.min.js"></script>
 <script>
-/* ══════════════════════════════════════════════════
-   EasyMDE — initialisation pure JS, sans Alpine.
-   Pourquoi : Livewire injecte Alpine AVANT @stack('scripts'),
-   donc alpine:init est déjà passé quand notre script s'exécute.
-   Solution : init sur DOMContentLoaded + livewire:navigated.
-   Sync → input caché wire:model.live.debounce.500ms="body".
-   ══════════════════════════════════════════════════ */
-
-require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs' } });
+/*
+ * EasyMDE — initialisation JS pure (sans Alpine, sans Monaco).
+ * Pourquoi sans Monaco : son AMD loader (loader.js) entre en conflit
+ * avec le module AMD nprogress bundlé par Livewire → Uncaught Error.
+ * Le code editor est remplacé par une <textarea> sombre monospace.
+ */
 
 var _easyMde      = null;
-var _monacoEditor = null;
-var _monacoReady  = false;
 var _selectedLang = 'text';
 
 /* ── Initialise EasyMDE ──────────────────────── */
@@ -240,13 +284,8 @@ document.addEventListener('livewire:navigated', function () {
 });
 
 /* ══════════════════════════════════════════════════
-   Monaco + Modal sélection de langage
+   Modal sélection de langage + textarea code editor
    ══════════════════════════════════════════════════ */
-var monacoLangMap = {
-    php:'php', javascript:'javascript', typescript:'typescript', html:'html',
-    css:'css', blade:'html', vue:'html', python:'python', sql:'sql',
-    bash:'shell', json:'json', yaml:'yaml', text:'plaintext'
-};
 var langMeta = {
     php:        { label:'PHP',         icon:'fa-brands fa-php',       color:'#8892BF' },
     javascript: { label:'JavaScript',  icon:'fa-brands fa-js',        color:'#e8a000' },
@@ -263,57 +302,81 @@ var langMeta = {
     text:       { label:'Texte brut',  icon:'fa-solid fa-file-lines', color:'#6C757D' }
 };
 
+/* Étape 1 → 2 : sélection du langage */
 function lpSelectLang(lang) {
     _selectedLang = lang;
-    var m = langMeta[lang] || { label:lang, icon:'fa-solid fa-code', color:'#6c757d' };
-    var iconEl  = document.getElementById('lpLangIcon');
-    var labelEl = document.getElementById('lpLangLabel');
-    iconEl.className   = m.icon + ' me-1';
-    iconEl.style.color = m.color;
-    labelEl.textContent = m.label;
+    var m = langMeta[lang] || { label: lang, icon: 'fa-solid fa-code', color: '#6c757d' };
+
+    document.getElementById('lpLangIcon').className   = m.icon + ' me-1';
+    document.getElementById('lpLangIcon').style.color  = m.color;
+    document.getElementById('lpLangLabel').textContent = m.label;
+    document.getElementById('lpLangTab').textContent   = lang + '.txt';
 
     document.getElementById('lpStep1').style.display = 'none';
     document.getElementById('lpStep2').style.display = 'block';
 
-    var monacoLang = monacoLangMap[lang] || 'plaintext';
-    if (!_monacoReady) {
-        require(['vs/editor/editor.main'], function () {
-            _monacoReady = true;
-            _monacoEditor = monaco.editor.create(document.getElementById('monacoContainer'), {
-                value: '', language: monacoLang, theme: 'vs-dark', fontSize: 14,
-                fontFamily: "'JetBrains Mono','Fira Code',Consolas,monospace",
-                minimap: { enabled: false }, scrollBeyondLastLine: false,
-                automaticLayout: true, wordWrap: 'off',
-                formatOnPaste: true, formatOnType: true, tabSize: 4,
-                lineNumbers: 'on', renderLineHighlight: 'line',
-                scrollbar: { verticalScrollbarSize: 6, horizontalScrollbarSize: 6 }
-            });
-            _monacoEditor.focus();
-        });
-    } else {
-        monaco.editor.setModelLanguage(_monacoEditor.getModel(), monacoLang);
-        _monacoEditor.setValue('');
-        _monacoEditor.focus();
-        _monacoEditor.layout();
+    var ta = document.getElementById('codeEditor');
+    if (ta) {
+        ta.value = '';
+        ta.placeholder = lpPlaceholder(lang);
+        setTimeout(function () { ta.focus(); }, 80);
     }
 }
 
+/* Placeholder contextuel par langage */
+function lpPlaceholder(lang) {
+    var ph = {
+        php:        '<?php\n\n// Votre code PHP ici\n',
+        javascript: '// Votre code JavaScript ici\n',
+        typescript: '// Votre code TypeScript ici\n',
+        html:       '<!-- Votre HTML ici -->\n',
+        css:        '/* Votre CSS ici */\n',
+        blade:      '{{-- Votre template Blade ici --}}\n',
+        sql:        '-- Votre requête SQL ici\nSELECT * FROM table;\n',
+        bash:       '#!/bin/bash\n# Votre script shell ici\n',
+        python:     '# Votre code Python ici\n',
+        json:       '{\n  "key": "value"\n}\n',
+        yaml:       '# Votre YAML ici\nkey: value\n',
+        vue:        '<template>\n  <!-- Votre template Vue -->\n</template>\n',
+    };
+    return ph[lang] || '// Votre code ici\n';
+}
+
+/* Tab → 4 espaces dans la textarea */
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Tab' && e.target && e.target.id === 'codeEditor') {
+        e.preventDefault();
+        var ta = e.target;
+        var s = ta.selectionStart;
+        var end = ta.selectionEnd;
+        ta.value = ta.value.substring(0, s) + '    ' + ta.value.substring(end);
+        ta.selectionStart = ta.selectionEnd = s + 4;
+    }
+});
+
+/* Retour à l'étape 1 */
 function lpReset() {
     document.getElementById('lpStep1').style.display = 'block';
     document.getElementById('lpStep2').style.display = 'none';
 }
 
+/* Insérer le code dans EasyMDE */
 function lpInsert() {
-    var code = _monacoEditor ? _monacoEditor.getValue() : '';
+    var ta   = document.getElementById('codeEditor');
+    var code = ta ? ta.value : '';
     if (!_easyMde) return;
-    _easyMde.codemirror.replaceSelection('```' + _selectedLang + '\n' + (code || '') + '\n```');
-    if (!code) {
-        var c = _easyMde.codemirror.getCursor();
-        _easyMde.codemirror.setCursor({ line: c.line - 1, ch: 0 });
+
+    var block = '```' + _selectedLang + '\n' + code + '\n```';
+    _easyMde.codemirror.replaceSelection(block);
+
+    if (!code.trim()) {
+        var cur = _easyMde.codemirror.getCursor();
+        _easyMde.codemirror.setCursor({ line: cur.line - 1, ch: 0 });
     }
     _easyMde.codemirror.focus();
-    var m = bootstrap.Modal.getInstance(document.getElementById('langPickerModal'));
-    if (m) m.hide();
+
+    var bsModal = bootstrap.Modal.getInstance(document.getElementById('langPickerModal'));
+    if (bsModal) bsModal.hide();
     lpReset();
 }
 </script>

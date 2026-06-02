@@ -96,6 +96,90 @@
                         <div wire:ignore id="mde-wrapper" data-initial="{{ e($body) }}">
                             <textarea id="article-mde"></textarea>
                         </div>
+
+                        {{-- ── Aide formatage ─────────────────────── --}}
+                        <div x-data="{ open: false }" class="mt-2">
+                            <button
+                                type="button"
+                                x-on:click="open = !open"
+                                class="btn btn-ghost btn-sm d-flex align-items-center gap-1"
+                                style="font-size:.8rem; color:var(--muted)"
+                            >
+                                <i class="fa-solid fa-circle-question text-orange"></i>
+                                <span x-text="open ? 'Masquer l\'aide' : 'Aide — syntaxe Markdown & blocs de code'"></span>
+                                <i class="fa-solid fa-chevron-down ms-1" style="font-size:.65rem; transition:.2s"
+                                   :style="open ? 'transform:rotate(180deg)' : ''"></i>
+                            </button>
+
+                            <div x-show="open" x-transition class="md-help-panel p-3 mt-1">
+                                <div class="row g-3">
+
+                                    {{-- Blocs de code --}}
+                                    <div class="col-md-6">
+                                        <div class="fw-semibold mb-2" style="font-size:.82rem">
+                                            <i class="fa-solid fa-terminal me-1 text-orange"></i>
+                                            Blocs de code (cliquez <strong>⌨</strong> dans la barre)
+                                        </div>
+                                        @foreach ([
+                                            ['``` ```php',         'PHP'],
+                                            ['``` ```javascript',  'JavaScript'],
+                                            ['``` ```html',        'HTML'],
+                                            ['``` ```css',         'CSS'],
+                                            ['``` ```sql',         'SQL'],
+                                            ['``` ```bash',        'Bash / Shell'],
+                                            ['``` ```json',        'JSON'],
+                                            ['``` ```python',      'Python'],
+                                        ] as [$syntax, $lang])
+                                            <div class="syntax-row">
+                                                <code>{{ $syntax }}</code>
+                                                <span class="result">→ {{ $lang }}</span>
+                                            </div>
+                                        @endforeach
+                                        <div class="mt-2 p-2 rounded" style="background:#0d1117; font-family:'JetBrains Mono',monospace; font-size:.75rem; color:#e6edf3;">
+                                            <span style="color:#6e7681">```php</span><br>
+                                            <span style="color:#7ee787">&lt;?php</span><br>
+                                            <span style="color:#e6edf3">echo </span><span style="color:#a5d6ff">"Laravel CI"</span><span style="color:#e6edf3">;</span><br>
+                                            <span style="color:#6e7681">```</span>
+                                        </div>
+                                    </div>
+
+                                    {{-- Formatage texte --}}
+                                    <div class="col-md-6">
+                                        <div class="fw-semibold mb-2" style="font-size:.82rem">
+                                            <i class="fa-brands fa-markdown me-1 text-orange"></i>
+                                            Formatage de texte
+                                        </div>
+                                        @foreach ([
+                                            ['**texte**',        'Gras'],
+                                            ['*texte*',          'Italique'],
+                                            ['~~texte~~',        'Barré'],
+                                            ['# Titre 1',        'Titre H1'],
+                                            ['## Titre 2',       'Titre H2'],
+                                            ['> Citation',       'Blockquote'],
+                                            ['`code inline`',    'Code inline'],
+                                            ['[texte](url)',      'Lien'],
+                                            ['- élément',        'Liste à puces'],
+                                            ['1. élément',       'Liste numérotée'],
+                                            ['| Col | Col |',    'Tableau'],
+                                        ] as [$syntax, $desc])
+                                            <div class="syntax-row">
+                                                <code>{{ $syntax }}</code>
+                                                <span class="result">{{ $desc }}</span>
+                                            </div>
+                                        @endforeach
+                                    </div>
+
+                                </div>
+
+                                <div class="mt-2 pt-2" style="border-top:1px solid #d1d9e0; font-size:.75rem; color:#57606a">
+                                    <i class="fa-solid fa-keyboard me-1"></i>
+                                    <strong>Ctrl+B</strong> Gras &nbsp;·&nbsp;
+                                    <strong>Ctrl+I</strong> Italique &nbsp;·&nbsp;
+                                    <strong>Ctrl+K</strong> Lien &nbsp;·&nbsp;
+                                    Bouton <strong>⌨</strong> → insérer un bloc de code avec sélection du langage
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

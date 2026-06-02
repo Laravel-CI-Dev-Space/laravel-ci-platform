@@ -1,5 +1,5 @@
 <div>
-    {{-- ===== EN-TÊTE DE PAGE ===== --}}
+    {{-- ===== EN-TÊTE ===== --}}
     <section class="page-hero">
         <div class="container">
             <div class="row align-items-center g-4">
@@ -10,15 +10,12 @@
                         <span>Blog</span>
                     </div>
                     <h1 class="mb-2">Blog &amp; Ressources</h1>
-                    <p class="lead mb-4">Tutoriels, analyses et ressources téléchargeables rédigés par la communauté Laravel ivoirienne.</p>
-
-                    {{-- Filtres par niveau --}}
+                    <p class="lead mb-3">Tutoriels, analyses et ressources rédigés par la communauté Laravel ivoirienne.</p>
+                    {{-- Niveau --}}
                     <div class="filter-pills">
                         @foreach (['all' => 'Tous', 'beginner' => 'Débutant', 'intermediate' => 'Intermédiaire', 'advanced' => 'Avancé'] as $value => $label)
-                            <button
-                                wire:click="$set('level', '{{ $value }}')"
-                                class="filter-pill {{ $level === $value ? 'active' : '' }}"
-                            >
+                            <button wire:click="$set('level','{{ $value }}')"
+                                    class="filter-pill {{ $level === $value ? 'active' : '' }}">
                                 {{ $label }}
                             </button>
                         @endforeach
@@ -34,139 +31,196 @@
         </div>
     </section>
 
-    {{-- ===== CONTENU PRINCIPAL ===== --}}
-    <section class="section">
+    {{-- ===== LAYOUT PRINCIPAL ===== --}}
+    <section class="section-sm">
         <div class="container">
 
-            {{-- Barre de filtres secondaires --}}
-            <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
-                <div class="d-flex align-items-center gap-2 flex-wrap">
-                    {{-- Filtre par tag --}}
-                    @foreach ($tags->take(8) as $tag)
-                        <button
-                            wire:click="$set('tagId', {{ $tagId === $tag->id ? 'null' : $tag->id }})"
-                            class="badge-pill {{ $tagId === $tag->id ? 'badge-active' : '' }}"
-                            style="cursor:pointer; background:{{ $tagId === $tag->id ? ($tag->color ?? 'var(--orange)') : 'var(--light)' }}; color:{{ $tagId === $tag->id ? '#fff' : 'var(--navy)' }}; border:none; padding:.3rem .8rem; border-radius:2rem; font-size:.82rem;"
-                        >
-                            {{ $tag->name }}
-                        </button>
-                    @endforeach
+            {{-- Toggle mobile sidebar --}}
+            <button class="btn btn-ghost d-lg-none mb-3 w-100" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#blogSidebar">
+                <i class="fa-solid fa-sliders me-1"></i> Filtres &amp; tags
+            </button>
 
-                    @if ($tagId !== null)
-                        <button wire:click="$set('tagId', null)" class="btn btn-ghost btn-sm">
-                            <i class="fa-solid fa-xmark me-1"></i>Effacer
-                        </button>
-                    @endif
-                </div>
+            <div class="row g-4">
 
-                {{-- Tri --}}
-                <div class="d-flex align-items-center gap-2">
-                    <span class="text-muted-2" style="font-size:.85rem">Trier :</span>
-                    @foreach (['recent' => 'Récents', 'popular' => 'Populaires', 'most-viewed' => 'Les plus vus'] as $value => $label)
-                        <button
-                            wire:click="$set('sort', '{{ $value }}')"
-                            class="filter-pill {{ $sort === $value ? 'active' : '' }}"
-                            style="font-size:.82rem;"
-                        >
-                            {{ $label }}
-                        </button>
-                    @endforeach
-                </div>
-            </div>
+                {{-- ═══ SIDEBAR FIXE ═══ --}}
+                <div class="col-lg-3">
+                    <div class="collapse d-lg-block" id="blogSidebar">
 
-            {{-- Compteur --}}
-            <p class="text-muted-2 mb-4">
-                <strong class="text-navy">{{ number_format($articles->total()) }}</strong>
-                article{{ $articles->total() !== 1 ? 's' : '' }}
-                @if ($level !== 'all')
-                    · niveau
-                    <strong>{{ ['beginner' => 'débutant', 'intermediate' => 'intermédiaire', 'advanced' => 'avancé'][$level] ?? $level }}</strong>
-                @endif
-            </p>
-
-            {{-- Grille d'articles --}}
-            @forelse ($articles as $article)
-                <div class="col-md-6 col-lg-4 reveal" style="display:inline-block; width:100%;">
-                    <article class="card-soft article-card mb-4">
-                        <div class="level-banner lv-{{ $article->level }}"></div>
-                        @if ($article->cover_image)
-                            <img
-                                src="{{ asset('assets/covers/' . $article->cover_image) }}"
-                                alt="{{ $article->title }}"
-                                style="width:100%; height:160px; object-fit:cover;"
-                            />
-                        @endif
-                        <div class="card-pad">
-                            <span class="badge-pill badge-{{ $article->level === 'beginner' ? 'green' : ($article->level === 'intermediate' ? 'orange' : 'red') }}">
-                                <span class="lv-dot" style="background:var(--level-{{ $article->level }})"></span>
-                                {{ ['beginner' => 'Débutant', 'intermediate' => 'Intermédiaire', 'advanced' => 'Avancé'][$article->level] ?? $article->level }}
-                            </span>
-                            <h3 class="art-title">
-                                <a href="{{ route('blog.show', $article->slug) }}">{{ $article->title }}</a>
-                            </h3>
-                            @if ($article->excerpt)
-                                <p class="art-excerpt">{{ $article->excerpt }}</p>
-                            @endif
-                            <div class="q-tags">
-                                @foreach ($article->tags->take(3) as $tag)
-                                    <span
-                                        class="tag"
-                                        wire:click="$set('tagId', {{ $tag->id }})"
-                                        style="cursor:pointer"
-                                    >
-                                        {{ $tag->name }}
-                                    </span>
+                        {{-- Tri --}}
+                        <div class="sidebar-card">
+                            <div class="sidebar-title">Trier par</div>
+                            <div class="filter-pills flex-column align-items-start">
+                                @foreach (['recent' => ['Récents', 'fa-clock-rotate-left'], 'popular' => ['Populaires', 'fa-fire'], 'most-viewed' => ['Les plus vus', 'fa-eye']] as $value => [$label, $icon])
+                                    <button wire:click="$set('sort','{{ $value }}')"
+                                            class="filter-pill w-100 text-start {{ $sort === $value ? 'active' : '' }}"
+                                            style="margin-bottom:.3rem">
+                                        <i class="fa-solid {{ $icon }} me-1"></i>{{ $label }}
+                                    </button>
                                 @endforeach
                             </div>
-                            <div class="art-foot">
-                                <div class="author-row">
-                                    @if ($article->author->avatar)
-                                        <img
-                                            src="{{ $article->author->avatar }}"
-                                            class="avatar avatar-sm"
-                                            alt="{{ $article->author->name }}"
-                                        />
-                                    @else
-                                        <span class="avatar avatar-sm av-1">
-                                            {{ strtoupper(substr($article->author->name, 0, 2)) }}
-                                        </span>
-                                    @endif
-                                    <div class="meta">
-                                        <div class="name">{{ $article->author->name }}</div>
+                        </div>
+
+                        {{-- Tags --}}
+                        <div class="sidebar-card">
+                            <div class="sidebar-title">
+                                Tags populaires
+                                @if ($tagId !== null)
+                                    <button wire:click="$set('tagId', null)"
+                                            class="btn btn-ghost btn-sm py-0 float-end"
+                                            style="font-size:.72rem">
+                                        <i class="fa-solid fa-xmark"></i> Effacer
+                                    </button>
+                                @endif
+                            </div>
+                            <div class="tag-list">
+                                @foreach ($tags as $tag)
+                                    <div wire:click="$set('tagId', {{ $tagId === $tag->id ? 'null' : $tag->id }})"
+                                         class="tag-list-item {{ $tagId === $tag->id ? 'active' : '' }}"
+                                         style="cursor:pointer">
+                                        <span class="mono">{{ $tag->name }}</span>
+                                        <span class="count">{{ number_format($tag->usage_count) }}</span>
                                     </div>
-                                </div>
-                                <span class="read-time">
-                                    <i class="fa-regular fa-clock"></i>
-                                    {{ $article->published_at?->diffForHumans() }}
-                                </span>
+                                @endforeach
                             </div>
                         </div>
-                    </article>
+
+                        {{-- Écrire --}}
+                        @auth
+                            <div class="sidebar-card text-center">
+                                <p class="text-muted-2 mb-2" style="font-size:.82rem">
+                                    Partagez vos connaissances avec la communauté
+                                </p>
+                                <a href="{{ route('blog.create') }}" class="btn btn-brand btn-sm w-100">
+                                    <i class="fa-solid fa-pen-to-square me-1"></i> Rédiger un article
+                                </a>
+                            </div>
+                        @endauth
+                    </div>
                 </div>
-            @empty
-                <div class="card-soft p-5 text-center">
-                    <i class="fa-regular fa-newspaper fa-2x mb-3 text-muted-2"></i>
-                    <p class="mb-3">Aucun article trouvé.</p>
-                    @auth
-                        <a href="{{ route('blog.create') }}" class="btn btn-brand">
-                            <i class="fa-solid fa-circle-plus"></i> Rédiger le premier article
+
+                {{-- ═══ GRILLE ARTICLES (3 par ligne) ═══ --}}
+                <div class="col-lg-9">
+
+                    {{-- Compteur --}}
+                    <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+                        <span class="text-muted-2" style="font-size:.88rem">
+                            <strong class="text-navy">{{ number_format($articles->total()) }}</strong>
+                            article{{ $articles->total() !== 1 ? 's' : '' }}
+                            @if ($level !== 'all')
+                                · <strong>{{ ['beginner' => 'Débutant', 'intermediate' => 'Intermédiaire', 'advanced' => 'Avancé'][$level] }}</strong>
+                            @endif
+                            @if ($tagId !== null)
+                                · tag actif
+                            @endif
+                        </span>
+                    </div>
+
+                    @forelse ($articles as $article)
+                        @php
+                            $levelLabels = ['beginner' => 'Débutant', 'intermediate' => 'Intermédiaire', 'advanced' => 'Avancé'];
+                            $levelColors = ['beginner' => 'var(--green,#2ecc71)', 'intermediate' => 'var(--orange,#e8590c)', 'advanced' => 'var(--level-advanced,#e74c3c)'];
+                            $levelBg     = ['beginner' => '#edfaf3', 'intermediate' => '#fff5f0', 'advanced' => '#fdeaec'];
+                            $readTime    = max(1, (int) round(str_word_count(strip_tags($article->body ?? '')) / 200));
+                        @endphp
+                        <div class="col-12 col-sm-6 col-xl-4 d-inline-flex" style="vertical-align:top; margin-bottom:1.25rem; padding:0 .4rem; width:33.333%;">
+                            <article class="card-soft article-card w-100 d-flex flex-column overflow-hidden"
+                                     style="border-top:3px solid {{ $levelColors[$article->level] ?? 'var(--orange)' }}; border-radius:.85rem;">
+
+                                {{-- Cover image --}}
+                                @if ($article->cover_image)
+                                    <a href="{{ route('blog.show', $article->slug) }}">
+                                        <img src="{{ asset('assets/covers/' . $article->cover_image) }}"
+                                             alt="{{ $article->title }}"
+                                             style="width:100%; height:150px; object-fit:cover;" />
+                                    </a>
+                                @endif
+
+                                <div class="card-pad flex-grow-1 d-flex flex-column">
+                                    {{-- Badge niveau --}}
+                                    <span class="badge-pill mb-2 d-inline-flex align-items-center gap-1"
+                                          style="background:{{ $levelBg[$article->level] ?? '#f5f5f5' }}; color:{{ $levelColors[$article->level] ?? 'var(--orange)' }}; font-size:.72rem; font-weight:700; border-radius:2rem; padding:.25rem .7rem; width:fit-content">
+                                        {{ $levelLabels[$article->level] ?? $article->level }}
+                                    </span>
+
+                                    {{-- Titre --}}
+                                    <h3 class="art-title mb-1" style="font-size:1rem; line-height:1.35">
+                                        <a href="{{ route('blog.show', $article->slug) }}">
+                                            {{ Str::limit($article->title, 65) }}
+                                        </a>
+                                    </h3>
+
+                                    {{-- Extrait --}}
+                                    @if ($article->excerpt)
+                                        <p class="art-excerpt mb-2" style="font-size:.83rem; line-height:1.55; color:var(--muted)">
+                                            {{ Str::limit($article->excerpt, 90) }}
+                                        </p>
+                                    @endif
+
+                                    {{-- Tags --}}
+                                    @if ($article->tags->isNotEmpty())
+                                        <div class="q-tags mb-auto">
+                                            @foreach ($article->tags->take(3) as $tag)
+                                                <span class="tag" style="cursor:pointer; font-size:.72rem"
+                                                      wire:click="$set('tagId', {{ $tag->id }})">
+                                                    {{ $tag->name }}
+                                                </span>
+                                            @endforeach
+                                        </div>
+                                    @endif
+
+                                    {{-- Auteur + Meta --}}
+                                    <div class="art-foot mt-2 pt-2" style="border-top:1px solid var(--border,#eef0f4)">
+                                        <div class="author-row">
+                                            @if ($article->author->avatar)
+                                                <img src="{{ $article->author->avatar }}"
+                                                     class="avatar avatar-sm"
+                                                     alt="{{ $article->author->name }}" />
+                                            @else
+                                                <span class="avatar avatar-sm av-1">
+                                                    {{ strtoupper(substr($article->author->name, 0, 2)) }}
+                                                </span>
+                                            @endif
+                                            <div class="meta">
+                                                <div class="name" style="font-size:.8rem">{{ $article->author->name }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex gap-2 align-items-center" style="font-size:.75rem; color:var(--muted)">
+                                            <span><i class="fa-regular fa-clock me-1"></i>{{ $readTime }} min</span>
+                                            @if ($article->views_count > 0)
+                                                <span><i class="fa-regular fa-eye me-1"></i>{{ number_format($article->views_count) }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                    @empty
+                        <div class="card-soft p-5 text-center">
+                            <i class="fa-regular fa-newspaper fa-2x mb-3 text-muted-2"></i>
+                            <p class="mb-3">Aucun article trouvé.</p>
+                            @auth
+                                <a href="{{ route('blog.create') }}" class="btn btn-brand">
+                                    <i class="fa-solid fa-circle-plus"></i> Rédiger le premier article
+                                </a>
+                            @endauth
+                        </div>
+                    @endforelse
+
+                    {{-- Pagination --}}
+                    <div class="mt-4 d-flex justify-content-center" style="clear:both">
+                        {{ $articles->links() }}
+                    </div>
+
+                    {{-- Ressources --}}
+                    <div class="mt-5 pt-4 text-center">
+                        <p class="text-muted-2">Vous cherchez des ressources téléchargeables ?</p>
+                        <a href="{{ route('resources.index') }}" class="btn btn-outline-brand">
+                            <i class="fa-solid fa-download me-1"></i> Voir toutes les ressources
                         </a>
-                    @endauth
-                </div>
-            @endforelse
-
-            {{-- Pagination --}}
-            <div class="mt-4 d-flex justify-content-center">
-                {{ $articles->links() }}
-            </div>
-
-            {{-- Lien vers les ressources --}}
-            <div class="mt-5 pt-4 text-center">
-                <p class="text-muted-2">Vous cherchez des ressources téléchargeables ?</p>
-                <a href="{{ route('resources.index') }}" class="btn btn-outline-brand">
-                    <i class="fa-solid fa-download me-1"></i> Voir toutes les ressources
-                </a>
-            </div>
+                    </div>
+                </div>{{-- /col-lg-9 --}}
+            </div>{{-- /row --}}
         </div>
     </section>
 </div>

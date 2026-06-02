@@ -153,13 +153,29 @@ Route::middleware(['auth', 'active'])->group(function () {
             ->group(function () {
                 Route::get('/', fn () => view('dashboard.member.overview'))->name('overview');
                 Route::get('/questions', function () {
-                    $questions = auth()->user()
-                        ->questions()
-                        ->with('tags')
-                        ->latest()
-                        ->paginate(15);
+                    $user   = auth()->user();
+                    $filter = request('filter'); // open | resolved | hidden
 
-                    return view('dashboard.member.questions', compact('questions'));
+                    $query = $user->questions()->with('tags')->latest();
+
+                    if ($filter === 'open') {
+                        $query->where('status', 'published')->whereNull('accepted_answer_id');
+                    } elseif ($filter === 'resolved') {
+                        $query->whereNotNull('accepted_answer_id');
+                    } elseif ($filter === 'hidden') {
+                        $query->where('status', 'hidden');
+                    }
+
+                    $questions = $query->paginate(15)->withQueryString();
+
+                    $counts = [
+                        'total'    => $user->questions()->count(),
+                        'open'     => $user->questions()->where('status', 'published')->whereNull('accepted_answer_id')->count(),
+                        'resolved' => $user->questions()->whereNotNull('accepted_answer_id')->count(),
+                        'hidden'   => $user->questions()->where('status', 'hidden')->count(),
+                    ];
+
+                    return view('dashboard.member.questions', compact('questions', 'counts'));
                 })->name('questions');
                 Route::get('/articles', function () {
                     $user   = auth()->user();
