@@ -17,6 +17,7 @@ use Illuminate\Support\Str;
     'title',
     'slug',
     'description',
+    'cover',
     'type_id',
     'location',
     'meeting_link',
@@ -73,6 +74,22 @@ class Event extends Model
     public function icsExports(): HasMany
     {
         return $this->hasMany(EventIcsExport::class);
+    }
+
+    /**
+     * URL absolue de la cover (chemin public ou URL externe).
+     */
+    public function coverUrl(): ?string
+    {
+        if (blank($this->cover)) {
+            return null;
+        }
+
+        if (str_starts_with($this->cover, 'http://') || str_starts_with($this->cover, 'https://')) {
+            return $this->cover;
+        }
+
+        return asset(ltrim($this->cover, '/'));
     }
 
     public function getRouteKeyName(): string
@@ -183,6 +200,7 @@ class Event extends Model
         return [
             'type'         => $typeSlug,
             'typeLabel'    => $this->type?->name ?? 'Événement',
+            'cover'        => $this->coverUrl(),
             'title'        => $this->title,
             'month'        => $this->start_date->translatedFormat('M'),
             'day'          => $this->start_date->format('d'),
@@ -211,7 +229,7 @@ class Event extends Model
             'location'    => $this->location ?? $this->meeting_link ?? 'En ligne',
             'time'        => $this->start_date->format('d/m/Y H:i') . ' — ' . $this->end_date->format('H:i'),
             'description' => Str::limit(strip_tags($this->description), 120),
-            'image'       => null,
+            'image'       => $this->coverUrl(),
             'seats_taken' => $taken,
             'seats_total' => max($total, 1),
             'date_day'    => $this->start_date->format('d'),

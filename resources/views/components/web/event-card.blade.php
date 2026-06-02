@@ -2,6 +2,7 @@
     'event'         => null,
     'type'          => 'meetup',
     'typeLabel'     => 'Meetup',
+    'cover'         => null,
     'title'         => '',
     'month'         => '',
     'day'           => '',
@@ -21,6 +22,7 @@
         $card = $event->toWebCardProps();
         $type = $card['type'];
         $typeLabel = $card['typeLabel'];
+        $cover = $card['cover'] ?? null;
         $title = $card['title'];
         $month = $card['month'];
         $day = $card['day'];
@@ -63,7 +65,14 @@
       <span class="past-badge badge-pill badge-soft"><i class="fa-solid fa-clock-rotate-left"></i> Événement passé</span>
     @endif
     <div class="{{ $past ? 'card-soft' : '' }}">
-      <div class="event-banner {{ $bannerClass }}"></div>
+      @if($cover)
+        <a href="{{ $href }}" class="event-cover event-cover--card">
+          <img src="{{ $cover }}" alt="" loading="lazy" width="640" height="360" />
+          <span class="event-cover-accent {{ $bannerClass }}" aria-hidden="true"></span>
+        </a>
+      @else
+        <div class="event-banner {{ $bannerClass }}"></div>
+      @endif
       <div class="card-pad">
         <div class="d-flex gap-3 mb-3">
           <div class="event-date-chip"><div class="m">{{ $month }}</div><div class="d">{{ $day }}</div></div>

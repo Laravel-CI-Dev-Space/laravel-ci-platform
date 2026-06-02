@@ -15,6 +15,22 @@ class EventFactory extends Factory
 {
     protected $model = Event::class;
 
+    public function configure(): static
+    {
+        return $this->afterCreating(function (Event $event): void {
+            if (filled($event->cover)) {
+                return;
+            }
+
+            $seed = Str::slug($event->slug ?: (string) $event->id);
+            $type = $event->type?->slug ?? 'meetup';
+
+            $event->forceFill([
+                'cover' => "https://picsum.photos/seed/lci-{$type}-{$seed}/1200/525",
+            ])->saveQuietly();
+        });
+    }
+
     public function definition(): array
     {
         $start = fake()->dateTimeBetween('+1 week', '+2 months');
@@ -26,6 +42,7 @@ class EventFactory extends Factory
             'title'        => $title,
             'slug'         => Str::slug($title) . '-' . fake()->unique()->numerify('####'),
             'description'  => fake()->paragraphs(3, true),
+            'cover'        => null,
             'type_id'      => EventType::factory(),
             'location'     => fake()->city() . ', Côte d\'Ivoire',
             'meeting_link' => null,

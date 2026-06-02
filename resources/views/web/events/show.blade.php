@@ -9,6 +9,9 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ route('events.show', $event) }}">
     <link rel="canonical" href="{{ route('events.show', $event) }}">
+    @if($event->coverUrl())
+        <meta property="og:image" content="{{ $event->coverUrl() }}">
+    @endif
 @endpush
 
 @section('content')
@@ -74,6 +77,12 @@
     <div class="container">
       <div class="row g-4">
         <div class="col-lg-8">
+          @if($event->coverUrl())
+            <div class="event-cover event-cover--detail mb-4">
+              <img src="{{ $event->coverUrl() }}" alt="{{ $event->title }}" width="1200" height="525" />
+            </div>
+          @endif
+
           <div class="prose mb-4">
             {!! nl2br(e($event->description)) !!}
           </div>
