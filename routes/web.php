@@ -73,6 +73,8 @@ Route::middleware(['auth', 'active', 'profile.complete', 'role:member'])->group(
         ->name('blog.articles.store');
     Route::post('/blog/{article}/submit', [ArticleController::class, 'submit'])
         ->name('blog.articles.submit');
+    Route::delete('/blog/{article}', [ArticleController::class, 'destroy'])
+        ->name('blog.articles.destroy');
     Route::post('/resources', [ResourceController::class, 'store'])
         ->name('resources.store');
 });
@@ -159,7 +161,15 @@ Route::middleware(['auth', 'active'])->group(function () {
 
                     return view('dashboard.member.questions', compact('questions'));
                 })->name('questions');
-                Route::get('/articles', fn () => view('dashboard.member.articles'))->name('articles');
+                Route::get('/articles', function () {
+                    $articles = auth()->user()
+                        ->articles()
+                        ->with('tags')
+                        ->latest()
+                        ->paginate(15);
+
+                    return view('dashboard.member.articles', compact('articles'));
+                })->name('articles');
                 Route::get('/events', fn () => view('dashboard.member.events'))->name('events');
                 Route::get('/applications', fn () => view('dashboard.member.applications'))->name('applications');
                 Route::get('/favorites', fn () => view('dashboard.member.favorites'))->name('favorites');

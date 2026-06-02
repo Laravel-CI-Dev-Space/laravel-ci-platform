@@ -75,4 +75,18 @@ class ArticleController extends Controller
             ->route('dashboard.member.articles')
             ->with('success', 'Votre article a été soumis pour validation.');
     }
+
+    /**
+     * Supprime (soft-delete) un article appartenant à l'utilisateur connecté.
+     */
+    public function destroy(Article $article): RedirectResponse
+    {
+        abort_unless($article->isOwnedBy(request()->user()), 403);
+
+        $article->delete();
+
+        return redirect()
+            ->route('dashboard.member.articles')
+            ->with('success', 'Article supprimé avec succès.');
+    }
 }

@@ -11,6 +11,10 @@ use App\Services\AssetService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use League\CommonMark\Environment\Environment;
+use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
+use League\CommonMark\Extension\GithubFlavoredMarkdownExtension;
+use League\CommonMark\MarkdownConverter;
 
 class ArticleService
 {
@@ -223,15 +227,13 @@ class ArticleService
 
     private function parseMarkdown(string $body): string
     {
-        $paragraphs = array_filter(array_map('trim', explode("\n\n", $body)));
+        $env = new Environment([
+            'html_input'         => 'strip',
+            'allow_unsafe_links' => false,
+        ]);
+        $env->addExtension(new CommonMarkCoreExtension);
+        $env->addExtension(new GithubFlavoredMarkdownExtension);
 
-        if (empty($paragraphs)) {
-            return '<p>' . nl2br(e($body)) . '</p>';
-        }
-
-        return implode('', array_map(
-            static fn (string $p): string => '<p>' . nl2br(e($p)) . '</p>',
-            $paragraphs,
-        ));
+        return (new MarkdownConverter($env))->convert($body)->getContent();
     }
 }
