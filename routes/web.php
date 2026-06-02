@@ -162,13 +162,24 @@ Route::middleware(['auth', 'active'])->group(function () {
                     return view('dashboard.member.questions', compact('questions'));
                 })->name('questions');
                 Route::get('/articles', function () {
-                    $articles = auth()->user()
-                        ->articles()
-                        ->with('tags')
-                        ->latest()
-                        ->paginate(15);
+                    $user   = auth()->user();
+                    $status = request('status');
+                    $valid  = ['draft', 'pending', 'published', 'rejected'];
 
-                    return view('dashboard.member.articles', compact('articles'));
+                    $query = $user->articles()->with('tags')->latest();
+                    if ($status && in_array($status, $valid)) {
+                        $query->where('status', $status);
+                    }
+
+                    $articles = $query->paginate(15)->withQueryString();
+
+                    $counts = $user->articles()
+                        ->selectRaw('status, count(*) as total')
+                        ->groupBy('status')
+                        ->pluck('total', 'status')
+                        ->toArray();
+
+                    return view('dashboard.member.articles', compact('articles', 'counts'));
                 })->name('articles');
                 Route::get('/events', fn () => view('dashboard.member.events'))->name('events');
                 Route::get('/applications', fn () => view('dashboard.member.applications'))->name('applications');

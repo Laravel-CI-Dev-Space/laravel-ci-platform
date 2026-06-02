@@ -83,16 +83,18 @@
                         @enderror
 
                         {{--
-                            wire:ignore : Livewire ne touche pas au DOM géré par EasyMDE.
-                            data-initial : valeur initiale passée proprement sans risque d'injection.
-                            x-data="easyMdeEditor" : composant Alpine défini dans submit.blade.php.
+                            Input hidden : wire:model.live.debounce.500ms sur l'input caché
+                            synchronise $body → Livewire quand JS dispatche un event 'input'.
+                            wire:ignore : Livewire ne touche jamais le DOM d'EasyMDE.
                         --}}
-                        <div
-                            x-data="easyMdeEditor"
-                            data-initial="{{ e($body) }}"
-                            wire:ignore
-                        >
-                            <textarea x-ref="mdeBody" id="article-mde"></textarea>
+                        {{--
+                            wire:model="body" sans .live = deferred :
+                            aucun re-render pendant la frappe.
+                            Livewire inclura la valeur dans la requête du bouton Save.
+                        --}}
+                        <input type="hidden" id="mde-body-sync" wire:model="body" />
+                        <div wire:ignore id="mde-wrapper" data-initial="{{ e($body) }}">
+                            <textarea id="article-mde"></textarea>
                         </div>
                     </div>
                 </div>
