@@ -19,7 +19,7 @@ class EventSpeakerFactory extends Factory
             'event_id' => Event::factory()->published()->upcoming(),
             'name'     => fake()->name(),
             'bio'      => fake()->paragraph(),
-            'avatar'   => fake()->imageUrl(200, 200, 'people'),
+            'photo'    => fake()->imageUrl(200, 200, 'people'),
             'linkedin' => 'https://linkedin.com/in/' . fake()->userName(),
             'github'   => 'https://github.com/' . fake()->userName(),
         ];

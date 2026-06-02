@@ -253,7 +253,7 @@
           <span class="section-eyebrow">Meet in person &amp; online</span>
           <h2 class="section-heading mb-0">Upcoming events</h2>
         </div>
-        <a href="{{ route('events.index') }}" class="view-all-link">All events <i class="fa-solid fa-arrow-right"></i></a>
+        <a href="#" class="view-all-link">All events <i class="fa-solid fa-arrow-right"></i></a>
       </div>
 
       <div class="row g-4">
@@ -269,7 +269,7 @@
               </div>
               <div class="spots-label"><span>32 / 50 spots</span><span>18 left</span></div>
               <div class="progress-spots mb-3"><div class="bar" style="width:64%"></div></div>
-              <a href="{{ route('events.index') }}" class="btn btn-brand w-100"><i class="fa-solid fa-ticket"></i> Register</a>
+              <a href="#" class="btn btn-brand w-100"><i class="fa-solid fa-ticket"></i> Register</a>
             </div>
           </article>
         </div>
@@ -285,7 +285,7 @@
               </div>
               <div class="spots-label"><span>87 / 200 spots</span><span>113 left</span></div>
               <div class="progress-spots mb-3"><div class="bar" style="width:43%"></div></div>
-              <a href="{{ route('events.index') }}" class="btn btn-brand w-100"><i class="fa-solid fa-ticket"></i> Register</a>
+              <a href="#" class="btn btn-brand w-100"><i class="fa-solid fa-ticket"></i> Register</a>
             </div>
           </article>
         </div>
@@ -301,7 +301,7 @@
               </div>
               <div class="spots-label"><span>64 / 80 spots</span><span>16 left</span></div>
               <div class="progress-spots mb-3"><div class="bar" style="width:80%"></div></div>
-              <a href="{{ route('events.index') }}" class="btn btn-brand w-100"><i class="fa-solid fa-ticket"></i> Register</a>
+              <a href="#" class="btn btn-brand w-100"><i class="fa-solid fa-ticket"></i> Register</a>
             </div>
           </article>
         </div>

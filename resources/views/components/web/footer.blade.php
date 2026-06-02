@@ -18,8 +18,8 @@
         <ul class="footer-links">
           <li><a href="{{ route('forum.index') }}">Forum</a></li>
           <li><a href="{{ route('blog.index') }}">Blog</a></li>
-          <li><a href="{{ route('events.index') }}">Events</a></li>
-          <li><a href="{{ route('jobs.index') }}">Jobs</a></li>
+          <li><a href="#">Events</a></li>
+          <li><a href="#">Jobs</a></li>
         </ul>
       </div>
       <div class="col-lg-3 col-md-6 col-6">

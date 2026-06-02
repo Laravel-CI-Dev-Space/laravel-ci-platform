@@ -178,7 +178,7 @@
                 </div>
               </div>
               <div class="flex-grow-1">
-                <a href="{{ route('events.show', $event->slug) }}" class="fw-semibold text-dark text-decoration-none d-block"
+                <a href="#" class="fw-semibold text-dark text-decoration-none d-block"
                    style="font-size:.9rem">{{ Str::limit($event->title, 55) }}</a>
                 <div class="text-secondary" style="font-size:.78rem">
                   {{ $event->location ?? 'Online' }} · {{ $event->starts_at->format('H:i') }}
@@ -189,7 +189,7 @@
             <li class="list-group-item px-4 py-5 text-center text-secondary">
               <i class="ti ti-calendar-event d-block mb-2" style="font-size:1.8rem"></i>
               No upcoming events.
-              <a href="{{ route('events.index') }}" class="text-primary text-decoration-none">Browse events!</a>
+              <a href="#" class="text-primary text-decoration-none">Browse events!</a>
             </li>
           @endforelse
         </ul>
@@ -207,7 +207,7 @@
           @forelse($recentApps as $application)
             <li class="list-group-item d-flex align-items-center gap-3 px-4 py-3">
               <div class="flex-grow-1">
-                <a href="{{ route('jobs.show', $application->jobOffer->slug) }}"
+                <a href="#"
                    class="fw-semibold text-dark text-decoration-none d-block mb-1"
                    style="font-size:.9rem">{{ Str::limit($application->jobOffer->title, 55) }}</a>
                 <div class="text-secondary" style="font-size:.78rem">
@@ -231,7 +231,7 @@
             <li class="list-group-item px-4 py-5 text-center text-secondary">
               <i class="ti ti-briefcase d-block mb-2" style="font-size:1.8rem"></i>
               No applications yet.
-              <a href="{{ route('jobs.index') }}" class="text-primary text-decoration-none">Browse jobs!</a>
+              <a href="#" class="text-primary text-decoration-none">Browse jobs!</a>
             </li>
           @endforelse
         </ul>

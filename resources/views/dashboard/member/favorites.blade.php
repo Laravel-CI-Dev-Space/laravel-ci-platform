@@ -13,7 +13,7 @@
           <h1 class="fs-3 mb-1">Saved Jobs</h1>
           <p class="mb-0 text-muted">Jobs you have bookmarked for later.</p>
         </div>
-        <a href="{{ route('jobs.index') }}" class="btn btn-primary"><i class="ti ti-briefcase me-1"></i> Browse Jobs</a>
+        <a href="#" class="btn btn-primary"><i class="ti ti-briefcase me-1"></i> Browse Jobs</a>
       </div>
     </div>
   </div>
@@ -29,14 +29,14 @@
                 <div class="d-flex justify-content-between gap-2">
                   <div>
                     <h3 class="mb-1" style="font-size:1.1rem">
-                      <a href="{{ route('jobs.show', $job) }}" class="text-navy">{{ $job->title }}</a>
+                      <a href="#" class="text-navy">{{ $job->title }}</a>
                     </h3>
                     <div class="text-secondary small">
                       <strong>{{ $job->company }}</strong> · {{ $job->location }}
                       @if($job->remote) · <span class="badge bg-primary-subtle text-primary">Remote</span> @endif
                     </div>
                   </div>
-                  <form method="POST" action="{{ route('jobs.unsave', $job) }}" class="d-inline">
+                  <form method="POST" action="#" class="d-inline">
                     @csrf @method('DELETE')
                     <button type="submit" class="btn btn-link link-danger p-0" aria-label="Remove from saved">
                       <i class="ti ti-heart-off"></i>
@@ -52,7 +52,7 @@
                 </div>
                 <div class="d-flex justify-content-between align-items-center mt-3">
                   <span class="salary">{{ $job->salary_range }}</span>
-                  <a href="{{ route('jobs.show', $job) }}" class="btn btn-primary btn-sm">Apply <i class="ti ti-arrow-right"></i></a>
+                  <a href="#" class="btn btn-primary btn-sm">Apply <i class="ti ti-arrow-right"></i></a>
                 </div>
               </div>
             </div>
@@ -66,7 +66,7 @@
             <i class="ti ti-heart fs-1 d-block mb-3"></i>
             <h3 class="h5">No saved jobs yet</h3>
             <p class="mb-3">Save jobs you're interested in by clicking the heart icon.</p>
-            <a href="{{ route('jobs.index') }}" class="btn btn-primary">Browse Jobs</a>
+            <a href="#" class="btn btn-primary">Browse Jobs</a>
           </div>
         </div>
       </div>

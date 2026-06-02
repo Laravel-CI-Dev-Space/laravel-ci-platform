@@ -14,12 +14,12 @@
             </a>
 
             <nav class="flex items-center gap-2 sm:gap-4 text-sm font-semibold">
-                <a href="{{ route('events.index') }}"
-                   class="px-3 py-2 rounded-lg {{ request()->routeIs('events.*') ? 'bg-primary/10 text-primary' : 'text-gray-600 hover:text-primary' }} transition-colors">
+                <a href="#"
+                   class="px-3 py-2 rounded-lg text-gray-600 hover:text-primary transition-colors">
                     Événements
                 </a>
-                <a href="{{ route('jobs.index') }}"
-                   class="px-3 py-2 rounded-lg {{ request()->routeIs('jobs.*') ? 'bg-primary/10 text-primary' : 'text-gray-600 hover:text-primary' }} transition-colors">
+                <a href="#"
+                   class="px-3 py-2 rounded-lg text-gray-600 hover:text-primary transition-colors">
                     Emplois
                 </a>
 

@@ -98,7 +98,7 @@
           </div>
           <div class="d-flex justify-content-between align-items-center small">
             <div class="text-muted"><span class="text-success">+3</span> upcoming</div>
-            <div><a href="{{ route('events.index') }}" class="link-primary text-decoration-underline">View</a></div>
+            <div><a href="#" class="link-primary text-decoration-underline">View</a></div>
           </div>
         </div>
       </div>
@@ -115,7 +115,7 @@
           </div>
           <div class="d-flex justify-content-between align-items-center small">
             <div class="text-muted"><span class="text-warning">5</span> pending approval</div>
-            <div><a href="{{ route('jobs.index') }}" class="link-primary text-decoration-underline">View</a></div>
+            <div><a href="#" class="link-primary text-decoration-underline">View</a></div>
           </div>
         </div>
       </div>

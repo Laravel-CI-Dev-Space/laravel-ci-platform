@@ -20,7 +20,6 @@
   <link rel="stylesheet" href="{{ asset('assets/web/css/style.css') }}" />
 
   @stack('styles')
-  @livewireStyles
 </head>
 <body>
 
@@ -56,6 +55,5 @@
   <script src="{{ asset('assets/web/js/main.js') }}"></script>
 
   @stack('scripts')
-  @livewireScripts
 </body>
 </html>

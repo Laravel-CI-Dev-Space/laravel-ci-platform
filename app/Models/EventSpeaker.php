@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'event_id',
     'name',
     'bio',
-    'avatar',
+    'photo',
     'linkedin',
     'github',
 ])]

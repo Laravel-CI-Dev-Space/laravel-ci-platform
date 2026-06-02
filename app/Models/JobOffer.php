@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Str;
 
 #[Fillable([
     'company_id',
@@ -51,82 +50,6 @@ class JobOffer extends Model
                 $q->whereNull('deadline')
                     ->orWhere('deadline', '>=', now()->toDateString());
             });
-    }
-
-    public function isPubliclyVisible(): bool
-    {
-        return $this->status === JobOfferStatus::ACTIVE && $this->isWithinDeadline();
-    }
-
-    public function isApplyable(): bool
-    {
-        return $this->isPubliclyVisible();
-    }
-
-    public function isWithinDeadline(): bool
-    {
-        return $this->deadline === null || ! $this->deadline->isPast();
-    }
-
-    public function applicationFor(?User $user): ?JobApplication
-    {
-        if ($user === null) {
-            return null;
-        }
-
-        if ($this->relationLoaded('applications')) {
-            return $this->applications->first();
-        }
-
-        return $this->applications()->where('user_id', $user->id)->first();
-    }
-
-    /**
-     * Props pour le composant <x-web.job-card>.
-     *
-     * @return array<string, mixed>
-     */
-    public function toWebCardProps(): array
-    {
-        $this->loadMissing(['company', 'skills']);
-
-        return [
-            'logoClass'    => 'cl-' . ((($this->id ?? 1) % 6) + 1),
-            'logoText'     => strtoupper(Str::substr($this->company->name, 0, 2)),
-            'title'        => $this->title,
-            'company'      => $this->company->name,
-            'location'     => $this->location,
-            'remote'       => $this->type === JobOfferType::REMOTE,
-            'description'  => Str::limit(strip_tags($this->description), 140),
-            'contractType' => $this->type->label(),
-            'tags'         => $this->skills->pluck('name')->all(),
-            'salary'       => $this->salary ?: '—',
-            'href'         => route('jobs.show', $this),
-            'badge'        => $this->created_at && $this->created_at->diffInDays(now()) <= 7 ? 'NEW' : null,
-        ];
-    }
-
-    /**
-     * Données pour le composant <x-card.job>.
-     *
-     * @return array<string, mixed>
-     */
-    public function toCardData(): array
-    {
-        $this->loadMissing(['company', 'skills']);
-
-        return [
-            'title'     => $this->title,
-            'company'   => $this->company->name,
-            'logo'      => $this->company->logo,
-            'contract'  => $this->type->label(),
-            'location'  => $this->location ?? '—',
-            'remote'    => $this->type === JobOfferType::REMOTE,
-            'stack'     => $this->skills->pluck('name')->all(),
-            'salary'    => $this->salary,
-            'posted_at' => $this->created_at?->diffForHumans() ?? '',
-            'url'       => route('jobs.show', $this),
-        ];
     }
 
     public function company(): BelongsTo

@@ -7,8 +7,6 @@ use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\CvController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DesignSystemController;
-use App\Http\Controllers\EventController;
-use App\Http\Controllers\JobOfferController;
 use App\Livewire\EditProfile;
 use Illuminate\Support\Facades\Route;
 
@@ -55,36 +53,6 @@ Route::prefix('blog')->name('blog.')->group(function () {
     // Public
     Route::get('/{slug}', fn (string $slug) => view('web.blog.show', compact('slug')))->name('show');
 });
-
-// ─── ÉVÉNEMENTS (Sprint Roger) ───────────────────────────
-Route::controller(EventController::class)
-    ->prefix('events')
-    ->name('events.')
-    ->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::get('/{event:slug}', 'show')->name('show');
-        Route::post('/{event:slug}/register', 'register')
-            ->name('register')
-            ->middleware(['auth', 'active', 'role:member']);
-    });
-
-// ─── JOB BOARD (Sprint Roger) ────────────────────────────
-Route::controller(JobOfferController::class)
-    ->prefix('jobs')
-    ->name('jobs.')
-    ->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::get('/create', 'create')
-            ->name('create')
-            ->middleware(['auth', 'active', 'role:member']);
-        Route::post('/', 'store')
-            ->name('store')
-            ->middleware(['auth', 'active', 'role:member']);
-        Route::get('/{jobOffer}', 'show')->name('show');
-        Route::post('/{jobOffer}/apply', 'apply')
-            ->name('apply')
-            ->middleware(['auth', 'active', 'role:member']);
-    });
 
 // ─── MEMBER PUBLIC PROFILE ─────────────────────────────────
 Route::get('/members/{username}', fn (string $username) => view('web.members.show', compact('username')))

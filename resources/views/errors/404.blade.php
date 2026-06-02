@@ -52,8 +52,8 @@
           <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-lg-start">
             <a href="{{ route('forum.index') }}" class="tag"><i class="fa-solid fa-comments"></i> Forum</a>
             <a href="{{ route('blog.index') }}"  class="tag"><i class="fa-solid fa-newspaper"></i> Blog</a>
-            <a href="{{ route('events.index') }}" class="tag"><i class="fa-solid fa-calendar-days"></i> Events</a>
-            <a href="{{ route('jobs.index') }}"  class="tag"><i class="fa-solid fa-briefcase"></i> Jobs</a>
+            <a href="#" class="tag"><i class="fa-solid fa-calendar-days"></i> Events</a>
+            <a href="#"  class="tag"><i class="fa-solid fa-briefcase"></i> Jobs</a>
             <a href="{{ route('about') }}"       class="tag"><i class="fa-solid fa-info-circle"></i> About</a>
           </div>
         </div>

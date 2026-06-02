@@ -27,8 +27,8 @@
         <div class="d-flex flex-wrap gap-2 justify-content-center">
           <a href="{{ route('forum.index') }}" class="tag">Forum</a>
           <a href="{{ route('blog.index') }}" class="tag">Blog</a>
-          <a href="{{ route('events.index') }}" class="tag">Events</a>
-          <a href="{{ route('jobs.index') }}" class="tag">Jobs</a>
+          <a href="#" class="tag">Events</a>
+          <a href="#" class="tag">Jobs</a>
           <a href="{{ route('about') }}" class="tag">About</a>
         </div>
       </div>
