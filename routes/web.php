@@ -71,6 +71,8 @@ Route::prefix('resources')->name('resources.')->group(function () {
 Route::middleware(['auth', 'active', 'profile.complete', 'role:member'])->group(function () {
     Route::post('/blog/articles', [ArticleController::class, 'store'])
         ->name('blog.articles.store');
+    Route::get('/blog/{article}/edit', [ArticleController::class, 'edit'])
+        ->name('blog.articles.edit');
     Route::post('/blog/{article}/submit', [ArticleController::class, 'submit'])
         ->name('blog.articles.submit');
     Route::delete('/blog/{article}', [ArticleController::class, 'destroy'])

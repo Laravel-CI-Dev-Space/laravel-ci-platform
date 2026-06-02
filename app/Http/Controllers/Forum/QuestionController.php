@@ -64,13 +64,13 @@ class QuestionController extends Controller
     }
 
     /**
-     * Redirige vers le formulaire de modification (réutilise AskQuestion).
+     * Formulaire de modification d'une question (48h max, sauf admin).
      */
-    public function edit(Question $question): RedirectResponse
+    public function edit(Question $question): View
     {
-        abort_unless($question->isOwnedBy(request()->user()), 403);
+        abort_unless($question->canEditBy(request()->user()), 403, 'Modification non autorisée ou délai de 48h dépassé.');
 
-        return redirect()->route('forum.show', $question->slug);
+        return view('web.forum.edit', compact('question'));
     }
 
     /**

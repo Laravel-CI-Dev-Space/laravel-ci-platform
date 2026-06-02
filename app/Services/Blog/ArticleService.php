@@ -117,6 +117,7 @@ class ArticleService
             'body_html'   => $this->parseMarkdown($data['body']),
             'level'       => $data['level'],
             'cover_image' => $coverFilename,
+            'edited_at'   => now(),
         ]);
 
         $article->tags()->sync($data['tags'] ?? []);

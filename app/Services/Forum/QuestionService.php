@@ -106,6 +106,23 @@ class QuestionService
         $question->update(['status' => $newStatus]);
     }
 
+    /**
+     * Met à jour le titre, le corps et les tags d'une question existante.
+     */
+    public function updateQuestion(Question $question, array $data): Question
+    {
+        $question->update([
+            'title'     => $data['title'],
+            'body'      => $data['body'],
+            'body_html' => $this->parseMarkdown($data['body']),
+            'edited_at' => now(),
+        ]);
+
+        $question->tags()->sync($data['tags'] ?? []);
+
+        return $question;
+    }
+
     private function generateUniqueSlug(string $title): string
     {
         $slug     = Str::slug($title);

@@ -143,6 +143,12 @@
                             <i class="fa-regular fa-comment me-1 text-orange"></i>
                             {{ $article->comments_count }} commentaire{{ $article->comments_count !== 1 ? 's' : '' }}
                         </span>
+                        @if ($article->wasEdited())
+                            <span class="text-muted-2" title="Modifié le {{ $article->edited_at->format('d M Y à H:i') }}">
+                                <i class="fa-solid fa-pen-to-square me-1 text-orange"></i>
+                                Modifié {{ $article->edited_at->diffForHumans() }}
+                            </span>
+                        @endif
                     </div>
                 </div>
                 <div class="col-lg-4 d-none d-lg-block">

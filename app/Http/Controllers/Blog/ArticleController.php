@@ -39,6 +39,16 @@ class ArticleController extends Controller
     }
 
     /**
+     * Formulaire de modification d'un article existant (48h max, sauf admin).
+     */
+    public function edit(Article $article): View
+    {
+        abort_unless($article->canEditBy(request()->user()), 403, 'Modification non autorisée ou délai de 48h dépassé.');
+
+        return view('web.blog.edit', compact('article'));
+    }
+
+    /**
      * Formulaire de soumission d'un nouvel article.
      */
     public function create(): View

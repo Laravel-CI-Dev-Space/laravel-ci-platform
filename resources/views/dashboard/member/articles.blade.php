@@ -174,11 +174,19 @@
                      style="border-left: 4px solid {{ $lColor }} !important; border-radius:.75rem;">
                     <div class="card-body pb-2">
 
-                        {{-- Statut + Niveau --}}
-                        <div class="d-flex align-items-center justify-content-between mb-2">
-                            <span class="badge {{ $sBadge }} d-inline-flex align-items-center gap-1" style="font-size:.72rem">
-                                <i class="ti {{ $sIcon }}"></i>{{ $sLabel }}
-                            </span>
+                        {{-- Statut + Niveau + Modifié --}}
+                        <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap gap-1">
+                            <div class="d-flex align-items-center gap-1">
+                                <span class="badge {{ $sBadge }} d-inline-flex align-items-center gap-1" style="font-size:.72rem">
+                                    <i class="ti {{ $sIcon }}"></i>{{ $sLabel }}
+                                </span>
+                                @if ($article->wasEdited())
+                                    <span class="badge bg-light border text-muted d-inline-flex align-items-center gap-1"
+                                          style="font-size:.68rem" title="Modifié le {{ $article->edited_at->format('d M Y à H:i') }}">
+                                        <i class="ti ti-pencil"></i>Modifié
+                                    </span>
+                                @endif
+                            </div>
                             <span class="d-inline-flex align-items-center gap-1" style="font-size:.75rem; color:{{ $lColor }}; font-weight:600">
                                 <i class="ti {{ $lIcon }}"></i>{{ $lLabel }}
                             </span>
@@ -248,6 +256,20 @@
                                     <i class="ti ti-external-link" style="font-size:1rem"></i>
                                 </a>
                             @endif
+
+                            {{-- Modifier (48h ou admin) --}}
+                            @if ($article->canEditBy(auth()->user()))
+                                <a href="{{ route('blog.articles.edit', $article) }}"
+                                   class="btn btn-light btn-sm px-2 text-primary" title="Modifier l'article">
+                                    <i class="ti ti-edit" style="font-size:1rem"></i>
+                                </a>
+                            @elseif ($article->isOwnedBy(auth()->user()))
+                                <span class="btn btn-light btn-sm px-2 disabled text-muted"
+                                      title="Modification verrouillée après 48h">
+                                    <i class="ti ti-lock" style="font-size:1rem"></i>
+                                </span>
+                            @endif
+
                             @if (in_array($article->status, ['draft', 'rejected']))
                                 <form method="POST" action="{{ route('blog.articles.submit', $article) }}" class="d-inline">
                                     @csrf
@@ -262,15 +284,15 @@
                                     <i class="ti ti-hourglass" style="font-size:1rem; color:#f39c12"></i>
                                 </span>
                             @endif
-                            @if ($article->status !== 'published')
-                                <form method="POST" action="{{ route('blog.articles.destroy', $article) }}" class="d-inline">
-                                    @csrf @method('DELETE')
-                                    <button class="btn btn-light btn-sm px-2 text-danger" title="Supprimer"
-                                            onclick="return confirm('Supprimer définitivement cet article ?')">
-                                        <i class="ti ti-trash" style="font-size:1rem"></i>
-                                    </button>
-                                </form>
-                            @endif
+
+                            {{-- Supprimer — toujours disponible, sans limite de temps --}}
+                            <form method="POST" action="{{ route('blog.articles.destroy', $article) }}" class="d-inline">
+                                @csrf @method('DELETE')
+                                <button class="btn btn-light btn-sm px-2 text-danger" title="Supprimer"
+                                        onclick="return confirm('Supprimer définitivement cet article ?')">
+                                    <i class="ti ti-trash" style="font-size:1rem"></i>
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>

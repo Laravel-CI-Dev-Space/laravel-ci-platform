@@ -169,13 +169,20 @@
                             </div>
                         @endif
 
-                        {{-- Titre --}}
+                        {{-- Titre + badge Modifié --}}
                         <h6 class="fw-bold mb-1 lh-sm" style="font-size:.95rem">
                             <a href="{{ route('forum.show', $question->slug) }}"
                                class="text-dark text-decoration-none">
                                 {{ Str::limit($question->title, 80) }}
                             </a>
                         </h6>
+                        @if ($question->wasEdited())
+                            <span class="badge bg-light border text-muted d-inline-flex align-items-center gap-1 mb-1"
+                                  style="font-size:.68rem"
+                                  title="Modifié le {{ $question->edited_at->format('d M Y à H:i') }}">
+                                <i class="ti ti-pencil"></i>Modifié
+                            </span>
+                        @endif
 
                         {{-- Tags --}}
                         @if ($question->tags->isNotEmpty())
@@ -201,6 +208,20 @@
                                class="btn btn-light btn-sm px-2" title="Voir la question">
                                 <i class="ti ti-external-link" style="font-size:1rem"></i>
                             </a>
+
+                            {{-- Modifier (48h ou admin) --}}
+                            @if ($question->canEditBy(auth()->user()))
+                                <a href="{{ route('forum.edit', $question) }}"
+                                   class="btn btn-light btn-sm px-2 text-primary" title="Modifier la question">
+                                    <i class="ti ti-edit" style="font-size:1rem"></i>
+                                </a>
+                            @elseif ($question->isOwnedBy(auth()->user()))
+                                <span class="btn btn-light btn-sm px-2 disabled text-muted"
+                                      title="Modification verrouillée après 48h">
+                                    <i class="ti ti-lock" style="font-size:1rem"></i>
+                                </span>
+                            @endif
+
                             <form method="POST" action="{{ route('forum.destroy', $question) }}" class="d-inline">
                                 @csrf @method('DELETE')
                                 <button type="submit"

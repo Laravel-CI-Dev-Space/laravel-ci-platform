@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 #[Fillable([
     'user_id', 'title', 'slug', 'body', 'body_html', 'status',
     'is_pinned', 'accepted_answer_id', 'views_count', 'votes_score',
-    'answers_count', 'comments_count', 'last_activity_at',
+    'answers_count', 'comments_count', 'last_activity_at', 'edited_at',
 ])]
 class Question extends Model
 {
@@ -25,11 +25,34 @@ class Question extends Model
         return [
             'is_pinned'        => 'boolean',
             'last_activity_at' => 'datetime',
+            'edited_at'        => 'datetime',
             'views_count'      => 'integer',
             'votes_score'      => 'integer',
             'answers_count'    => 'integer',
             'comments_count'   => 'integer',
         ];
+    }
+
+    /** La question peut encore être modifiée (moins de 48h depuis la création). */
+    public function canEdit(): bool
+    {
+        return $this->created_at->diffInHours(now()) < 48;
+    }
+
+    /** La question a été modifiée après sa publication initiale. */
+    public function wasEdited(): bool
+    {
+        return $this->edited_at !== null;
+    }
+
+    /** Vérifie si l'utilisateur a le droit d'éditer (propriétaire dans les 48h ou admin). */
+    public function canEditBy(User $user): bool
+    {
+        if ($user->hasAnyRole(['admin', 'moderator', 'super-admin'])) {
+            return true;
+        }
+
+        return $this->isOwnedBy($user) && $this->canEdit();
     }
 
     public function user(): BelongsTo
