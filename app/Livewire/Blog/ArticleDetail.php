@@ -24,12 +24,7 @@ class ArticleDetail extends Component
     {
         $article         = $articleService->getBySlug($this->articleSlug);
         $similarArticles = $articleService->getSimilarArticles($article);
-        $comments        = $article->comments()
-            ->with('user')
-            ->whereNull('parent_id')
-            ->latest()
-            ->get();
 
-        return view('livewire.blog.article-detail', compact('article', 'similarArticles', 'comments'));
+        return view('livewire.blog.article-detail', compact('article', 'similarArticles'));
     }
 }

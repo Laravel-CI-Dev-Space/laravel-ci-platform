@@ -251,48 +251,9 @@
                         </div>
                     </div>
 
-                    {{-- ===== COMMENTAIRES ===== --}}
+                    {{-- ===== COMMENTAIRES (composant Livewire) ===== --}}
                     <div class="mt-5">
-                        <h2 class="section-heading mb-4" style="font-size:var(--fs-h3)">
-                            Commentaires ({{ $article->comments_count }})
-                        </h2>
-
-                        @auth
-                            <div class="card-soft mb-4" style="padding:1.3rem">
-                                <p class="text-muted-2 mb-0">
-                                    <i class="fa-solid fa-clock me-1"></i>
-                                    Les commentaires interactifs arrivent prochainement.
-                                </p>
-                            </div>
-                        @else
-                            <div class="card-soft p-4 text-center mb-4">
-                                <p class="mb-3">Connectez-vous pour laisser un commentaire.</p>
-                                <a href="{{ route('login') }}" class="btn btn-brand">
-                                    <i class="fa-brands fa-github"></i> Se connecter
-                                </a>
-                            </div>
-                        @endauth
-
-                        @forelse ($comments as $comment)
-                            <div class="comment">
-                                @if ($comment->user->avatar)
-                                    <img src="{{ $comment->user->avatar }}" class="avatar avatar-sm" alt="{{ $comment->user->name }}" />
-                                @else
-                                    <span class="avatar av-3">{{ strtoupper(substr($comment->user->name, 0, 2)) }}</span>
-                                @endif
-                                <div class="c-body">
-                                    <div class="c-head">
-                                        <span class="name" style="font-weight:600">{{ $comment->user->name }}</span>
-                                        <span class="sub" style="font-size:.8rem;color:var(--muted)">
-                                            {{ $comment->created_at->diffForHumans() }}
-                                        </span>
-                                    </div>
-                                    <p class="mb-1">{{ $comment->body }}</p>
-                                </div>
-                            </div>
-                        @empty
-                            <p class="text-muted-2 mt-3">Aucun commentaire pour le moment.</p>
-                        @endforelse
+                        @livewire('blog.comment-section', ['article' => $article], key('comments-'.$article->id))
                     </div>
                 </div>
             </div>
