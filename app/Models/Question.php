@@ -1,34 +1,54 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
-#[Fillable([
-    'user_id', 'title', 'slug', 'body', 'body_html', 'status',
-    'is_pinned', 'accepted_answer_id', 'views_count', 'votes_score',
-    'answers_count', 'comments_count', 'last_activity_at',
-])]
+/**
+ * @property int            $id
+ * @property int            $user_id
+ * @property string         $title
+ * @property string         $slug
+ * @property string         $body
+ * @property string|null    $body_html
+ * @property QuestionStatus $status
+ * @property bool           $is_pinned
+ * @property int            $views_count
+ * @property int            $votes_score
+ * @property int            $answers_count
+ * @property int            $comments_count
+ * @property Carbon|null    $last_activity_at
+ * @property Carbon         $created_at
+ * @property Carbon         $updated_at
+ * @property Carbon|null    $deleted_at
+ * @property-read User      $author
+ * @property-read string    $excerpt
+ */
+#[Fillable(['user_id', 'title', 'slug', 'body', 'body_html', 'status', 'is_pinned'])]
 class Question extends Model
 {
+    /** @use HasFactory<QuestionFactory> */
     use HasFactory, SoftDeletes;
 
     protected function casts(): array
     {
         return [
+            'status'           => QuestionStatus::class,
             'is_pinned'        => 'boolean',
-            'last_activity_at' => 'datetime',
             'views_count'      => 'integer',
             'votes_score'      => 'integer',
             'answers_count'    => 'integer',
             'comments_count'   => 'integer',
+            'last_activity_at' => 'datetime',
         ];
     }
 

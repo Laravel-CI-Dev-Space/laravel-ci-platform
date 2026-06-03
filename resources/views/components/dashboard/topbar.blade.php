@@ -31,7 +31,8 @@
           <ul class="list-unstyled p-0 m-0">
             <li class="p-3 border-bottom">
               <div class="d-flex gap-3">
-                <img src="{{ asset('assets/dashboard/images/avatar/avatar-1.jpg') }}" alt="" class="avatar avatar-sm rounded-circle" />
+                <img src="{{ asset('assets/dashboard/images/avatar/avatar-1.jpg') }}" alt=""
+                  class="avatar avatar-sm rounded-circle" />
                 <div class="flex-grow-1 small">
                   <p class="mb-0">New community question</p>
                   <p class="mb-1">Someone asked about Livewire 3</p>
@@ -41,7 +42,8 @@
             </li>
             <li class="p-3 border-bottom">
               <div class="d-flex gap-3">
-                <img src="{{ asset('assets/dashboard/images/avatar/avatar-2.jpg') }}" alt="" class="avatar avatar-sm rounded-circle" />
+                <img src="{{ asset('assets/dashboard/images/avatar/avatar-2.jpg') }}" alt=""
+                  class="avatar avatar-sm rounded-circle" />
                 <div class="flex-grow-1 small">
                   <p class="mb-0">New answer on your question</p>
                   <p class="mb-1">Fatou Diallo replied</p>
@@ -60,8 +62,8 @@
       <li class="ms-3 dropdown">
         @php
           $topbarAvatar = auth()->check()
-              ? (auth()->user()->profile?->avatarUrl(auth()->user()->avatar) ?? auth()->user()->avatar ?? asset('assets/dashboard/images/avatar/avatar-1.jpg'))
-              : asset('assets/dashboard/images/avatar/avatar-1.jpg');
+            ? (auth()->user()->profile?->avatarUrl(auth()->user()->avatar) ?? auth()->user()->avatar ?? asset('assets/dashboard/images/avatar/avatar-1.jpg'))
+            : asset('assets/dashboard/images/avatar/avatar-1.jpg');
         @endphp
         <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
           <img src="{{ $topbarAvatar }}" alt="{{ auth()->user()?->name }}" class="avatar avatar-sm rounded-circle" />
@@ -80,7 +82,7 @@
             <div class="p-3 d-flex flex-column gap-1 small lh-lg">
               <a href="{{ route('dashboard') }}"><span>Dashboard</span></a>
               @auth
-              <a href="{{ route('dashboard.member.profile') }}"><span>Profile Settings</span></a>
+                <a href="{{ route('dashboard.member.profile') }}"><span>Profile Settings</span></a>
               @endauth
               <a href="{{ route('home') }}"><span>Back to Site</span></a>
             </div>

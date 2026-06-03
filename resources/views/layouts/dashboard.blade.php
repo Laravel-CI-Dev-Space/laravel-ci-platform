@@ -1,48 +1,47 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-  <meta charset="UTF-8" />
-  <title>@yield('title', 'Dashboard') — Laravel CI</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="csrf-token" content="{{ csrf_token() }}" />
+@extends('layouts.base')
 
-  <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/dashboard/images/favicon_io/apple-touch-icon.png') }}">
-  <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/dashboard/images/favicon_io/favicon-32x32.png') }}">
-  <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/dashboard/images/favicon_io/favicon-16x16.png') }}">
+@push('head')
+<link rel="apple-touch-icon" sizes="180x180"
+  href="{{ asset('assets/dashboard/images/favicon_io/apple-touch-icon.png') }}">
+<link rel="icon" type="image/png" sizes="32x32"
+  href="{{ asset('assets/dashboard/images/favicon_io/favicon-32x32.png') }}">
+<link rel="icon" type="image/png" sizes="16x16"
+  href="{{ asset('assets/dashboard/images/favicon_io/favicon-16x16.png') }}">
 
-  <!-- Bootstrap 5.3 -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <!-- Tabler Icons -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
-  <!-- Dashboard custom styles (compiled from SCSS) -->
-  <link rel="stylesheet" href="{{ asset('assets/dashboard/css/dashboard.css') }}" />
-  <link rel="stylesheet" href="{{ asset('assets/dashboard/css/dashboard-events.css') }}" />
+<!-- Bootstrap 5.3 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+<!-- Tabler Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+<!-- Dashboard custom styles (compiled from SCSS) -->
+<link rel="stylesheet" href="{{ asset('assets/dashboard/css/dashboard.css') }}" />
+<link rel="stylesheet" href="{{ asset('assets/dashboard/css/dashboard-events.css') }}" />
 
-  @livewireStyles
-  @stack('styles')
+@livewireStyles
+@stack('styles')
 </head>
+
 <body>
 
+  @section('body')
   <div id="overlay" class="overlay"></div>
 
   <x-dashboard.topbar />
 
   <x-dashboard.sidebar />
 
-  <main id="content" class="content py-4">
-    <div class="container-fluid px-4">
+  <main id="content" class="content pb-4 pt-20">
+    <div class="container-fluid min-h-screen px-4">
       @yield('content')
 
-      <footer class="text-center py-3 mt-4 text-secondary small border-top">
-        © {{ date('Y') }} Laravel Côte d'Ivoire
-      </footer>
+      @isset($slot)
+        {{ $slot }}
+      @endisset
     </div>
-  </main>
 
-  <!-- Bootstrap JS (includes Popper) -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Sidebar toggle — standalone, no module imports -->
-  <script src="{{ asset('assets/dashboard/js/sidebar.js') }}"></script>
+    <footer class="text-center py-3 mt-4 text-secondary small border-top">
+      © {{ date('Y') }} Laravel Côte d'Ivoire
+    </footer>
+  </main>
 
   <div id="dash-toast-container" class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index:1080"></div>
 
@@ -87,4 +86,5 @@
 
   @stack('scripts')
 </body>
+
 </html>
