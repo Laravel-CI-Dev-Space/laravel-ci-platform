@@ -1,6 +1,7 @@
 <?php
+
 namespace App\Models;
-use App\Models\User;
+
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,7 +14,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class AdminActivityLog extends Model
 {
     public $timestamps = false;
-    public $updatedAt  = false;
+
+    public $updatedAt = false;
 
     protected function casts(): array
     {
@@ -25,7 +27,10 @@ class AdminActivityLog extends Model
         ];
     }
 
-    public function user(): BelongsTo { return $this->belongsTo(User::class); }
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
     /**
      * Log an admin action easily from anywhere.
@@ -38,9 +43,9 @@ class AdminActivityLog extends Model
             'subject_type' => $subject ? get_class($subject) : null,
             'subject_id'   => $subject?->id,
             'description'  => $extra['description'] ?? null,
-            'old_values'   => $extra['old'] ?? null,
-            'new_values'   => $extra['new'] ?? null,
-            'metadata'     => $extra['meta'] ?? null,
+            'old_values'   => $extra['old']         ?? null,
+            'new_values'   => $extra['new']         ?? null,
+            'metadata'     => $extra['meta']        ?? null,
             'ip_address'   => request()->ip(),
             'user_agent'   => request()->userAgent(),
         ]);

@@ -45,11 +45,11 @@ class UsersTable
                     ->label('Rôle')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        'super-admin'  => 'danger',
-                        'admin'        => 'warning',
-                        'moderator'  => 'info',
-                        'member'     => 'success',
-                        default        => 'gray',
+                        'super-admin' => 'danger',
+                        'admin'       => 'warning',
+                        'moderator'   => 'info',
+                        'member'      => 'success',
+                        default       => 'gray',
                     }),
 
                 ToggleColumn::make('is_active')

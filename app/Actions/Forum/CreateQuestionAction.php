@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Gate;
 final class CreateQuestionAction
 {
     /**
-     * @param array{title: string, body: string} $data
+     * @param  array{title: string, body: string}  $data
      */
     public function execute(User $author, array $data): Question
     {

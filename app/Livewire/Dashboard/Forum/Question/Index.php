@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Livewire\Dashboard\Forum\Question;
 
 use App\Models\Question;
-use Illuminate\View\View;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Title;

@@ -32,16 +32,16 @@ class UserSeeder extends Seeder
         Profile::firstOrCreate(
             ['user_id' => $superAdmin->id],
             [
-                'country'        => "Côte d'Ivoire",
-                'city'           => 'Abidjan',
-                'district'       => 'Cocody',
-                'bio'            => 'Lead Developer — Laravel Côte d\'Ivoire. Passionné de PHP et Laravel.',
-                'laravel_level'  => 'expert',
+                'country'          => "Côte d'Ivoire",
+                'city'             => 'Abidjan',
+                'district'         => 'Cocody',
+                'bio'              => 'Lead Developer — Laravel Côte d\'Ivoire. Passionné de PHP et Laravel.',
+                'laravel_level'    => 'expert',
                 'years_experience' => '5_10_ans',
-                'tech_stack'     => ['Laravel', 'PHP', 'Livewire', 'Filament', 'Vue.js', 'MySQL', 'Docker'],
-                'academic_level' => 'master_ingenieur',
-                'job_status'     => 'en_fonction',
-                'portfolio_url'  => 'https://github.com/Ky-Wilson',
+                'tech_stack'       => ['Laravel', 'PHP', 'Livewire', 'Filament', 'Vue.js', 'MySQL', 'Docker'],
+                'academic_level'   => 'master_ingenieur',
+                'job_status'       => 'en_fonction',
+                'portfolio_url'    => 'https://github.com/Ky-Wilson',
             ]
         );
 

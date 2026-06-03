@@ -37,8 +37,8 @@ class CreateDrawer extends Component
     protected function rules(): array
     {
         return [
-            'title'   => ['required', 'string', 'min:10', 'max:255'],
-            'body' => ['required', 'string', 'min:30'],
+            'title' => ['required', 'string', 'min:10', 'max:255'],
+            'body'  => ['required', 'string', 'min:30'],
         ];
     }
 
@@ -48,11 +48,11 @@ class CreateDrawer extends Component
     protected function messages(): array
     {
         return [
-            'title.required'   => 'Le titre est obligatoire.',
-            'title.min'        => 'Le titre doit contenir au moins :min caractères.',
-            'title.max'        => 'Le titre ne peut pas dépasser :max caractères.',
-            'body.required' => 'Le contenu est obligatoire.',
-            'body.min'      => 'Le contenu doit contenir au moins :min caractères.',
+            'title.required' => 'Le titre est obligatoire.',
+            'title.min'      => 'Le titre doit contenir au moins :min caractères.',
+            'title.max'      => 'Le titre ne peut pas dépasser :max caractères.',
+            'body.required'  => 'Le contenu est obligatoire.',
+            'body.min'       => 'Le contenu doit contenir au moins :min caractères.',
         ];
     }
 
@@ -64,8 +64,8 @@ class CreateDrawer extends Component
         $user = auth()->user();
 
         $question = $action->execute($user, [
-            'title'   => $this->title,
-            'body' => $this->body,
+            'title' => $this->title,
+            'body'  => $this->body,
         ]);
 
         $this->closeDrawer();

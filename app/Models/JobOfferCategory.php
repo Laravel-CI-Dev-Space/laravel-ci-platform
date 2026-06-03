@@ -1,6 +1,9 @@
-<?php // JobOfferCategory
+<?php
+
+// JobOfferCategory
+
 namespace App\Models;
-use App\Models\JobOffer;
+
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
