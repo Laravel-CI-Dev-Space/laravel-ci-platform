@@ -24,12 +24,12 @@ class QuestionFactory extends Factory
         $title = $this->faker->sentence(random_int(6, 12));
 
         return [
-            'user_id'    => User::factory(),
-            'title'      => $title,
-            'slug'       => Question::generateSlug($title),
-            'body'       => $this->faker->paragraphs(3, true),
-            'status'     => QuestionStatus::Published,
-            'is_pinned'  => false,
+            'user_id'     => User::factory(),
+            'title'       => $title,
+            'slug'        => Question::generateSlug($title),
+            'body'        => $this->faker->paragraphs(3, true),
+            'status'      => QuestionStatus::Published,
+            'is_pinned'   => false,
             'views_count' => $this->faker->numberBetween(0, 300),
         ];
     }

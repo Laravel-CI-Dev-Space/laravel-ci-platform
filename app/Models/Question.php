@@ -14,22 +14,22 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 /**
- * @property int            $id
- * @property int            $user_id
- * @property string         $title
- * @property string         $slug
- * @property string         $body
- * @property string|null    $body_html
+ * @property int $id
+ * @property int $user_id
+ * @property string $title
+ * @property string $slug
+ * @property string $body
+ * @property string|null $body_html
  * @property QuestionStatus $status
- * @property bool           $is_pinned
- * @property int            $views_count
- * @property int            $votes_score
- * @property int            $answers_count
- * @property int            $comments_count
- * @property Carbon|null    $last_activity_at
- * @property Carbon         $created_at
- * @property Carbon         $updated_at
- * @property Carbon|null    $deleted_at
+ * @property bool $is_pinned
+ * @property int $views_count
+ * @property int $votes_score
+ * @property int $answers_count
+ * @property int $comments_count
+ * @property Carbon|null $last_activity_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property Carbon|null $deleted_at
  * @property-read User      $author
  * @property-read string    $excerpt
  */
