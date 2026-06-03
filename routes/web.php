@@ -103,7 +103,7 @@ Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth');
 
 // ─── AUTHENTICATED ROUTES ──────────────────────────────────
-Route::middleware(['auth', 'active'])->group(function () {
+Route::middleware([])->group(function () {
 
     // Profile completion — accessible before completing profile
     Route::get('/profil/completer', EditProfile::class)
@@ -159,6 +159,8 @@ Route::middleware(['auth', 'active'])->group(function () {
             Route::get('/', [DashboardController::class, 'adminPanel'])->name('dashboard.admin');
         });
     });
+
+    Route::get('/dashboard/forum', ForumIndex::class)->name('dashboard.forum');
 });
 
 // ─── DESIGN SYSTEM (admin only) ────────────────────────────

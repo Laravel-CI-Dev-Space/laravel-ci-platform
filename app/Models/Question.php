@@ -1,57 +1,127 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-use App\Models\Answer;
-use App\Models\Comment;
-use App\Models\Report;
-use App\Models\Tag;
-use App\Models\User;
-use App\Models\Vote;
+use App\Enums\Forum\QuestionStatus;
+use Carbon\Carbon;
+use Database\Factories\QuestionFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
-#[Fillable([
-    'user_id', 'title', 'slug', 'body', 'body_html', 'status',
-    'is_pinned', 'accepted_answer_id', 'views_count', 'votes_score',
-    'answers_count', 'comments_count', 'last_activity_at',
-])]
+/**
+ * @property int            $id
+ * @property int            $user_id
+ * @property string         $title
+ * @property string         $slug
+ * @property string         $body
+ * @property string|null    $body_html
+ * @property QuestionStatus $status
+ * @property bool           $is_pinned
+ * @property int            $views_count
+ * @property int            $votes_score
+ * @property int            $answers_count
+ * @property int            $comments_count
+ * @property Carbon|null    $last_activity_at
+ * @property Carbon         $created_at
+ * @property Carbon         $updated_at
+ * @property Carbon|null    $deleted_at
+ * @property-read User      $author
+ * @property-read string    $excerpt
+ */
+#[Fillable(['user_id', 'title', 'slug', 'body', 'body_html', 'status', 'is_pinned'])]
 class Question extends Model
 {
+    /** @use HasFactory<QuestionFactory> */
     use HasFactory, SoftDeletes;
 
     protected function casts(): array
     {
         return [
+            'status'           => QuestionStatus::class,
             'is_pinned'        => 'boolean',
-            'last_activity_at' => 'datetime',
             'views_count'      => 'integer',
             'votes_score'      => 'integer',
             'answers_count'    => 'integer',
             'comments_count'   => 'integer',
+            'last_activity_at' => 'datetime',
         ];
     }
 
-    public function user(): BelongsTo       { return $this->belongsTo(User::class); }
-    public function acceptedAnswer(): BelongsTo { return $this->belongsTo(Answer::class, 'accepted_answer_id'); }
-    public function answers(): HasMany      { return $this->hasMany(Answer::class); }
-    public function tags(): BelongsToMany  { return $this->belongsToMany(Tag::class); }
-    public function comments(): MorphMany  { return $this->morphMany(Comment::class, 'commentable'); }
-    public function votes(): MorphMany     { return $this->morphMany(Vote::class, 'votable'); }
-    public function reports(): MorphMany   { return $this->morphMany(Report::class, 'reportable'); }
+    public function author(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
-    public function scopePublished($query) { return $query->where('status', 'published'); }
-    public function scopePinned($query)    { return $query->where('is_pinned', true); }
-    public function scopeUnanswered($query){ return $query->where('answers_count', 0); }
-    public function scopePopular($query)   { return $query->orderByDesc('votes_score'); }
-    public function scopeRecent($query)    { return $query->orderByDesc('last_activity_at'); }
+    protected function excerpt(): Attribute
+    {
+        return Attribute::make(
+            get: fn (): string => Str::limit(strip_tags($this->body), 150),
+        );
+    }
 
-    public function hasAcceptedAnswer(): bool { return $this->accepted_answer_id !== null; }
-    public function isOwnedBy(User $user): bool { return $this->user_id === $user->id; }
+    /** @param Builder<Question> $query */
+    public function scopePinned(Builder $query): Builder
+    {
+        return $query->where('is_pinned', true);
+    }
+
+    /** @param Builder<Question> $query */
+    public function scopePublished(Builder $query): Builder
+    {
+        return $query->where('status', QuestionStatus::Published);
+    }
+
+    /** @param Builder<Question> $query */
+    public function scopeOpen(Builder $query): Builder
+    {
+        return $query->where('status', '!=', QuestionStatus::Closed);
+    }
+
+    /** @param Builder<Question> $query */
+    public function scopeClosed(Builder $query): Builder
+    {
+        return $query->where('status', QuestionStatus::Closed);
+    }
+
+    /** @param Builder<Question> $query */
+    public function scopeByRecent(Builder $query): Builder
+    {
+        $query->orderByDesc('is_pinned')
+              ->orderByRaw('COALESCE(last_activity_at, created_at) DESC');
+
+        return $query;
+    }
+
+    /** @param Builder<Question> $query */
+    public function scopeByPopular(Builder $query): Builder
+    {
+        return $query->orderByDesc('is_pinned')->orderByDesc('votes_score');
+    }
+
+    public function incrementViews(): void
+    {
+        $this->increment('views_count');
+    }
+
+    public static function generateSlug(string $title): string
+    {
+        $base = Str::slug($title);
+        $slug = $base;
+        $i    = 1;
+
+        while (static::withTrashed()->where('slug', $slug)->exists()) {
+            $slug = "{$base}-{$i}";
+            $i++;
+        }
+
+        return $slug;
+    }
 }
