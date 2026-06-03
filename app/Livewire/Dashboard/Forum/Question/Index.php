@@ -53,11 +53,11 @@ class Index extends Component
     private function getQuestions(): LengthAwarePaginator
     {
         return Question::query()
-            ->with('author')
+            ->with(['author', 'tags'])
             ->when(
                 $this->search !== '',
                 fn ($q) => $q->where('title', 'like', "%{$this->search}%")
-                    ->orWhere('content', 'like', "%{$this->search}%")
+                    ->orWhere('body', 'like', "%{$this->search}%")
             )
             ->when($this->sort === 'recent', fn ($q) => $q->byRecent())
             ->when($this->sort === 'popular', fn ($q) => $q->byPopular())
@@ -67,6 +67,7 @@ class Index extends Component
 
     public function render(): View
     {
+        // dd(Question::first());
         return view('livewire.dashboard.forum.question.index', [
             'questions' => $this->getQuestions(),
         ]);

@@ -72,5 +72,5 @@ class CreateDrawer extends Component
     Je débute avec Laravel Shopper, depuis plusieurs minutes
     je coince au niveau de l'installation, En effet je viens
     de fraichmenet installer Laravel 12.58.0 sur php 8.2,
-    J'ai bien lancer la commande d... 
+    J'ai bien lancer la commande d...
 */
