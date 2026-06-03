@@ -6,45 +6,33 @@
                 {{ __('Forum communautaire') }}
             </h1>
 
-            <div class="mt-4 flex max-w-xl gap-4">
-                {{-- Recherche --}}
-                <div class="flex-1">
-                    <span data-slot="control"
-                        class="relative isolate block sm:has-[[data-slot=icon]:first-child]:[&_input]:pl-8 *:data-[slot=icon]:pointer-events-none *:data-[slot=icon]:absolute *:data-[slot=icon]:z-10 *:data-[slot=icon]:size-4 sm:*:data-[slot=icon]:top-2.5 [&>[data-slot=icon]:first-child]:left-3 sm:[&>[data-slot=icon]:first-child]:left-2.5 *:data-[slot=icon]:text-zinc-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
-                            aria-hidden="true" data-slot="icon">
-                            <path fill-rule="evenodd"
-                                d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        <span data-slot="control"
-                            class="relative block w-full before:absolute before:inset-px before:rounded-[calc(var(--radius-lg)-1px)] before:bg-white before:shadow-sm after:pointer-events-none after:absolute after:inset-0 after:rounded-lg sm:focus-within:after:ring-2 sm:focus-within:after:ring-blue-500 has-data-disabled:opacity-50 has-data-disabled:before:bg-zinc-950/5">
-                            <input wire:model.live.debounce.300ms="search"
-                                placeholder="{{ __('Rechercher une question…') }}"
-                                class="relative block w-full appearance-none rounded-lg px-[calc(--spacing(3.5)-1px)] py-[calc(--spacing(2.5)-1px)] sm:px-[calc(--spacing(3)-1px)] sm:py-[calc(--spacing(1.5)-1px)] text-base/6 text-zinc-950 placeholder:text-zinc-500 sm:text-sm/6 border border-zinc-950/10 hover:border-zinc-950/20 bg-white focus:outline-hidden data-invalid:border-red-500 data-disabled:border-zinc-950/20">
-                        </span>
-                    </span>
+            <div class="mt-4 flex max-w-xl gap-2">
+                <div class="relative flex-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
+                        class="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-zinc-400"
+                        aria-hidden="true">
+                        <path fill-rule="evenodd"
+                            d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    <input wire:model.live.debounce.300ms="search" type="text"
+                        placeholder="{{ __('Rechercher une question…') }}"
+                        class="w-full sm:w-72 rounded-lg border border-zinc-200 bg-white py-2 pl-9 pr-3.5 text-sm text-zinc-900 placeholder:text-zinc-400 hover:border-zinc-300 focus:border-zinc-400 focus:outline-none focus:ring-2 focus:ring-black/10">
                 </div>
 
-                {{-- Tri --}}
-                <div>
-                    <span data-slot="control"
-                        class="group relative block w-full before:absolute before:inset-px before:rounded-[calc(var(--radius-lg)-1px)] before:bg-white before:shadow-sm after:pointer-events-none after:absolute after:inset-0 after:rounded-lg has-data-disabled:before:shadow-none">
-                        <select wire:model.live="sort"
-                            class="relative block w-full appearance-none rounded-lg py-1.5 sm:py-1.5 pr-8 pl-2.5 sm:pr-8 sm:pl-2 text-base/6 text-zinc-950 placeholder:text-zinc-500 sm:text-sm/6 border border-zinc-950/10 hover:border-zinc-950/20 bg-white focus:outline-hidden data-disabled:border-zinc-950/20 data-disabled:opacity-100">
-                            <option value="recent">{{ __('Plus récents') }}</option>
-                            <option value="popular">{{ __('Plus populaires') }}</option>
-                            <option value="unanswered">{{ __('Sans réponse') }}</option>
-                        </select>
-                        <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                            <svg class="size-5 stroke-zinc-500 group-has-data-disabled:stroke-zinc-600 sm:size-4 forced-colors:stroke-[CanvasText]"
-                                viewBox="0 0 16 16" aria-hidden="true" fill="none">
-                                <path d="M5.75 10.75L8 13L10.25 10.75" stroke-width="1.5" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                                <path d="M10.25 5.25L8 3L5.75 5.25" stroke-width="1.5" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                            </svg>
-                        </span>
+                <div class="relative">
+                    <select wire:model.live="sort"
+                        class="w-full sm:w-40 appearance-none rounded-lg border border-zinc-200 bg-white py-2 pl-3 pr-8 text-sm text-zinc-900 hover:border-zinc-300 focus:border-zinc-400 focus:outline-none focus:ring-2 focus:ring-black/10">
+                        <option value="recent">{{ __('Plus récents') }}</option>
+                        <option value="popular">{{ __('Plus populaires') }}</option>
+                        <option value="unanswered">{{ __('Sans réponse') }}</option>
+                    </select>
+                    <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                        <svg class="size-4 text-zinc-400" viewBox="0 0 16 16" aria-hidden="true" fill="none"
+                            stroke="currentColor" stroke-width="1.5">
+                            <path d="M5.75 10.75L8 13L10.25 10.75" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M10.25 5.25L8 3L5.75 5.25" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
                     </span>
                 </div>
             </div>
