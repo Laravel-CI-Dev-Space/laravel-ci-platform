@@ -13,16 +13,17 @@ use Illuminate\Support\Facades\Gate;
 final class CreateQuestionAction
 {
     /**
-     * @param  array{title: string, body: string}  $data
+     * @param User $user
+     * @param array $data
+     * @return Question
      */
-    public function handle(User $author, array $data): Question
+    public function handle(User $user, array $data): Question
     {
-        Gate::forUser($author)->authorize('create', Question::class);
+        Gate::forUser($user)->authorize('create', Question::class);
 
         return DB::transaction(fn (): Question => Question::create([
-            'user_id'   => $author->id,
+            'user_id'   => $user->id,
             'title'     => $data['title'],
-            'slug'      => Question::generateSlug($data['title']),
             'body'      => $data['body'],
             'status'    => QuestionStatus::Published->value,
             'is_pinned' => false,

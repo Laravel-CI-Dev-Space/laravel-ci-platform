@@ -6,6 +6,7 @@ namespace App\Livewire\Dashboard\Forum\Question;
 
 use App\Actions\Forum\CreateQuestionAction;
 use App\Http\Requests\Forum\StoreQuestionRequest;
+use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\On;
@@ -51,11 +52,9 @@ class CreateDrawer extends Component
     public function save(CreateQuestionAction $action): void
     {
         $validated = $this->validate();
-        dd($validated);
 
-        $user = Auth::user();
-
-        $question = $action->handle($user, $validated);
+        // Auth::user()
+        $question = $action->handle(User::first(), $validated);
 
         $this->closeDrawer();
         $this->dispatch('question-created', id: $question->id);
@@ -68,9 +67,10 @@ class CreateDrawer extends Component
 }
 
 /*
-Probleme d'installation laravel Shopper
+    Probleme d'installation laravel Shopper
 
-Je débute avec Laravel Shopper, depuis plusieurs minutes
-je coince au niveau de l'installation, En effet je viens
-de fraichmenet installer Laravel 12.58.0 sur php 8.2,
-J'ai bien lancer la commande d... */
+    Je débute avec Laravel Shopper, depuis plusieurs minutes
+    je coince au niveau de l'installation, En effet je viens
+    de fraichmenet installer Laravel 12.58.0 sur php 8.2,
+    J'ai bien lancer la commande d... 
+*/
