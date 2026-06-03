@@ -15,7 +15,7 @@ final class CreateQuestionAction
     /**
      * @param  array{title: string, body: string}  $data
      */
-    public function execute(User $author, array $data): Question
+    public function handle(User $author, array $data): Question
     {
         Gate::forUser($author)->authorize('create', Question::class);
 

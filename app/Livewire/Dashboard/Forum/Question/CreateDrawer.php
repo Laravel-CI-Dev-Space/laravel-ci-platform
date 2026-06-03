@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace App\Livewire\Dashboard\Forum\Question;
 
 use App\Actions\Forum\CreateQuestionAction;
-use App\Models\User;
+use App\Http\Requests\Forum\StoreQuestionRequest;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -36,10 +37,7 @@ class CreateDrawer extends Component
      */
     protected function rules(): array
     {
-        return [
-            'title' => ['required', 'string', 'min:10', 'max:255'],
-            'body'  => ['required', 'string', 'min:30'],
-        ];
+        return (new StoreQuestionRequest)->rules();
     }
 
     /**
@@ -47,26 +45,17 @@ class CreateDrawer extends Component
      */
     protected function messages(): array
     {
-        return [
-            'title.required' => 'Le titre est obligatoire.',
-            'title.min'      => 'Le titre doit contenir au moins :min caractères.',
-            'title.max'      => 'Le titre ne peut pas dépasser :max caractères.',
-            'body.required'  => 'Le contenu est obligatoire.',
-            'body.min'       => 'Le contenu doit contenir au moins :min caractères.',
-        ];
+        return (new StoreQuestionRequest)->messages();
     }
 
     public function save(CreateQuestionAction $action): void
     {
-        $this->validate();
+        $validated = $this->validate();
+        dd($validated);
 
-        /** @var User $user */
-        $user = auth()->user();
+        $user = Auth::user();
 
-        $question = $action->execute($user, [
-            'title' => $this->title,
-            'body'  => $this->body,
-        ]);
+        $question = $action->handle($user, $validated);
 
         $this->closeDrawer();
         $this->dispatch('question-created', id: $question->id);
@@ -77,3 +66,11 @@ class CreateDrawer extends Component
         return view('livewire.dashboard.forum.question.create-drawer');
     }
 }
+
+/*
+Probleme d'installation laravel Shopper
+
+Je débute avec Laravel Shopper, depuis plusieurs minutes
+je coince au niveau de l'installation, En effet je viens
+de fraichmenet installer Laravel 12.58.0 sur php 8.2,
+J'ai bien lancer la commande d... */
