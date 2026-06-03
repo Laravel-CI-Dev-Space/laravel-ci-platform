@@ -38,7 +38,6 @@
             </div>
         </div>
 
-        {{-- Bouton ouvre le drawer --}}
         <button type="button" wire:click="openCreateDrawer"
             class="inline-flex items-center gap-x-2 rounded-lg border text-white text-base/6 font-semibold px-4 py-1.5 sm:text-sm/6 border-transparent bg-black hover:bg-zinc-800 transition-colors cursor-pointer">
             <svg class="size-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
@@ -49,7 +48,6 @@
         </button>
     </div>
 
-    {{-- ── Liste ───────────────────────────────────────────────── --}}
     <div class="mt-8 space-y-3">
         @forelse($questions as $question)
             <x-card.forum-thread :thread="[
@@ -77,13 +75,11 @@
         @endforelse
     </div>
 
-    {{-- ── Pagination ──────────────────────────────────────────── --}}
     @if ($questions->hasPages())
         <div class="mt-6">
             {{ $questions->links() }}
         </div>
     @endif
 
-    {{-- ── Drawer ──────────────────────────────────────────────── --}}
     <livewire:dashboard.forum.question.create-drawer />
 </div>
