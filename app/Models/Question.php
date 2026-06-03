@@ -55,6 +55,19 @@ class Question extends Model
         ];
     }
 
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function (Question $question) {
+            $question->slug = Str::slug($question->title);
+        });
+
+        static::updating(function (Question $question) {
+            $question->slug = Str::slug($question->title);
+        });
+    }
+
     public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
