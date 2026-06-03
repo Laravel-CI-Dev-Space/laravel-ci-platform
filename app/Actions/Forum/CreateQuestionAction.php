@@ -12,11 +12,6 @@ use Illuminate\Support\Facades\Gate;
 
 final class CreateQuestionAction
 {
-    /**
-     * @param User $user
-     * @param array $data
-     * @return Question
-     */
     public function handle(User $user, array $data): Question
     {
         Gate::forUser($user)->authorize('create', Question::class);

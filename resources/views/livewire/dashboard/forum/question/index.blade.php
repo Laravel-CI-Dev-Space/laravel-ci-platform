@@ -7,6 +7,9 @@
             </h1>
 
             <div class="mt-4 flex max-w-xl gap-2">
+                <label for="search" class="sr-only">
+                    {{ __('Rechercher') }}
+                </label>
                 <div class="relative flex-1">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
                         class="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-zinc-400"
@@ -15,13 +18,16 @@
                             d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
                             clip-rule="evenodd" />
                     </svg>
-                    <input wire:model.live.debounce.300ms="search" type="text"
+                    <input wire:model.live.debounce.300ms="search" type="text" id="search"
                         placeholder="{{ __('Rechercher une question…') }}"
                         class="w-full sm:w-72 rounded-lg border border-zinc-200 bg-white py-2 pl-9 pr-3.5 text-sm text-zinc-900 placeholder:text-zinc-400 hover:border-zinc-300 focus:border-zinc-400 focus:outline-none focus:ring-2 focus:ring-black/10">
                 </div>
 
                 <div class="relative">
-                    <select wire:model.live="sort"
+                    <label for="sort" class="sr-only">
+                        {{ __('Trier par') }}
+                    </label>
+                    <select wire:model.live="sort" id="sort"
                         class="w-full sm:w-40 appearance-none rounded-lg border border-zinc-200 bg-white py-2 pl-3 pr-8 text-sm text-zinc-900 hover:border-zinc-300 focus:border-zinc-400 focus:outline-none focus:ring-2 focus:ring-black/10">
                         <option value="recent">{{ __('Plus récents') }}</option>
                         <option value="popular">{{ __('Plus populaires') }}</option>
@@ -50,18 +56,7 @@
 
     <div class="mt-8 space-y-3">
         @forelse($questions as $question)
-            <x-card.forum-thread :thread="[
-                'title' => $question->title,
-                'excerpt' => $question->excerpt,
-                'url' => '#',
-                'tags' => [],
-                'author' => [
-                    'name' => $question->author->name,
-                    'avatar' => $question->author->avatar ?? '',
-                ],
-                'votes' => $question->votes_score,
-                'replies' => $question->answers_count,
-            ]" />
+            <x-card.forum-thread :question="$question" />
         @empty
             <div class="py-16 text-center">
                 <svg class="mx-auto size-12 text-gray-300" fill="none" stroke="currentColor" stroke-width="1"
