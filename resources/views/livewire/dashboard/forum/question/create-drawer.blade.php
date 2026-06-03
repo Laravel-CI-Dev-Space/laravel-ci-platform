@@ -51,9 +51,8 @@
             <div class="flex-1 overflow-y-auto px-6 py-5">
                 <div class="space-y-5">
                     <div class="space-y-1.5">
-                        <label class="block text-sm font-medium text-gray-700">
-                            {{ __('Titre') }} <span class="text-red-400">*</span>
-                        </label>
+                        <x-form.label id="title" :label="__('Titre')" :required="true" />
+                        
                         <input wire:model.blur="title"
                             type="text"
                             placeholder="{{ __('Ex : Comment implémenter une API REST avec Laravel ?') }}"
