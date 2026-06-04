@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Blog;
 
+use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Blog\StoreResourceRequest;
 use App\Models\Resource;
@@ -48,7 +49,11 @@ class ResourceController extends Controller
     public function download(Resource $resource): BinaryFileResponse
     {
         abort_unless(
-            $resource->is_public || request()->user()?->hasAnyRole(['admin', 'moderator', 'super-admin']),
+            $resource->is_public || request()->user()?->hasAnyRole([
+                UserRole::Admin->value,
+                UserRole::Moderator->value,
+                UserRole::SuperAdmin->value,
+            ]),
             403,
         );
 

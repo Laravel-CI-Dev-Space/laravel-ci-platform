@@ -47,6 +47,19 @@ return [
             'report' => false,
         ],
 
+        /*
+         * Disk public/assets/ — utilisé par AssetService et Filament FileUpload.
+         * Tous les fichiers uploadés (images, CV, documents) vont dans public/assets/.
+         * Pas de storage:link requis : c'est directement dans public/.
+         */
+        'assets' => [
+            'driver'     => 'local',
+            'root'       => public_path('assets'),
+            'url'        => env('APP_URL', 'http://localhost') . '/assets',
+            'visibility' => 'public',
+            'throw'      => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire\Blog;
 
+use App\Enums\UserRole;
 use App\Models\Article;
 use App\Models\Comment;
 use App\Models\User;
@@ -125,7 +126,11 @@ class CommentSection extends Component
         $comment = Comment::findOrFail($commentId);
 
         abort_unless(
-            $comment->isOwnedBy($user) || $user->hasAnyRole(['admin', 'moderator', 'super-admin']),
+            $comment->isOwnedBy($user) || $user->hasAnyRole([
+                UserRole::Admin->value,
+                UserRole::Moderator->value,
+                UserRole::SuperAdmin->value,
+            ]),
             403,
         );
 

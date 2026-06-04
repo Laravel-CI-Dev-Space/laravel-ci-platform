@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 #[Fillable([
     'first_name', 'last_name', 'company_name', 'email', 'phone',
     'position', 'city', 'country', 'business_domain', 'website',
-    'motivation', 'status', 'reviewed_by', 'rejection_reason', 'reviewed_at',
+    'logo_path', 'motivation', 'status', 'reviewed_by', 'rejection_reason', 'reviewed_at',
 ])]
 class CompanyRegistrationRequest extends Model
 {

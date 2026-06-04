@@ -99,19 +99,23 @@ class JobOfferService
         mixed $attachment = null,
     ): JobOffer {
         // ── Image de couverture ──────────────────────────────────────────
-        // Deux cas :
-        //   1. Livewire : $coverImage = fichier brut → upload via AssetService
-        //   2. Filament FileUpload : le path est déjà dans $data['cover_image'] (disk public)
+        // $data['cover_image'] peut déjà contenir un filename (Filament normalise via
+        // mutateFormDataBeforeCreate). $coverImage est un fichier brut (Livewire/API).
         $finalCoverImage = $data['cover_image'] ?? null;
-        if ($coverImage !== null && ! is_string($coverImage)) {
-            $finalCoverImage = $this->assetService->upload($coverImage, 'job-covers', 'cover', $company?->id ?? 0);
+        if ($coverImage !== null) {
+            // Upload via AssetService → stocke dans public/assets/job-covers/
+            $finalCoverImage = $this->assetService->upload(
+                $coverImage, 'job-covers', 'cover', $company?->id ?? 0
+            );
         }
 
-        // ── Document joint ───────────────────────────────────────────────
+        // ── Document joint (PDF/DOC) ─────────────────────────────────────
         $finalAttachmentPath = $data['attachment_path'] ?? null;
         $finalAttachmentName = $data['attachment_name'] ?? null;
-        if ($attachment !== null && ! is_string($attachment)) {
-            $finalAttachmentPath = $this->assetService->upload($attachment, 'job-attachments', 'doc', $company?->id ?? 0);
+        if ($attachment !== null) {
+            $finalAttachmentPath = $this->assetService->upload(
+                $attachment, 'job-attachments', 'doc', $company?->id ?? 0
+            );
             $finalAttachmentName = method_exists($attachment, 'getClientOriginalName')
                 ? $attachment->getClientOriginalName()
                 : basename($finalAttachmentPath);

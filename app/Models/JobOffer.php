@@ -63,10 +63,33 @@ class JobOffer extends Model
 
     public function isExpired(): bool     { return $this->expires_at && $this->expires_at->isPast(); }
     public function isNew(): bool         { return $this->published_at && $this->published_at->diffInDays(now()) <= 7; }
+
     public function salaryRange(): ?string
     {
         if (! $this->salary_visible || ! $this->salary_min) return null;
         if ($this->salary_max) return number_format($this->salary_min) . ' - ' . number_format($this->salary_max) . ' ' . $this->currency;
         return 'À partir de ' . number_format($this->salary_min) . ' ' . $this->currency;
+    }
+
+    /**
+     * URL publique de l'image de couverture (stockée dans public/assets/job-covers/).
+     * Cohérent avec AssetService qui stocke juste le filename.
+     */
+    public function coverImageUrl(): ?string
+    {
+        return $this->cover_image
+            ? asset('assets/job-covers/' . $this->cover_image)
+            : null;
+    }
+
+    /**
+     * URL publique du document joint (fiche de poste PDF/Word).
+     * Stocké dans public/assets/job-attachments/.
+     */
+    public function attachmentUrl(): ?string
+    {
+        return $this->attachment_path
+            ? asset('assets/job-attachments/' . $this->attachment_path)
+            : null;
     }
 }

@@ -20,6 +20,23 @@ class CreateCompanyJobOffer extends CreateRecord
         return $this->getResource()::getUrl('index');
     }
 
+    /**
+     * Filament FileUpload retourne 'job-covers/filename.jpg' (path relatif au disk).
+     * On normalise en stockant uniquement 'filename.jpg' — cohérent avec AssetService.
+     */
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        if (! empty($data['cover_image'])) {
+            $data['cover_image'] = basename((string) $data['cover_image']);
+        }
+
+        if (! empty($data['attachment_path'])) {
+            $data['attachment_path'] = basename((string) $data['attachment_path']);
+        }
+
+        return $data;
+    }
+
     protected function handleRecordCreation(array $data): Model
     {
         $account = Auth::guard('company')->user();
@@ -28,8 +45,6 @@ class CreateCompanyJobOffer extends CreateRecord
             data:    $data,
             company: Company::find($account->company_id),
             user:    null,
-            // Filament FileUpload stocke déjà le fichier sur le disk 'public'
-            // et retourne le path relatif dans $data — pas de re-upload nécessaire.
         );
     }
 

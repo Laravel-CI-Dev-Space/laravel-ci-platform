@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Jobs;
 
+use App\Enums\UserRole;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
 
@@ -13,7 +14,14 @@ class StoreJobApplicationRequest extends FormRequest
     {
         $user = $this->user();
 
-        return $user !== null && $user->hasRole('member') && $user->isActive();
+        return $user !== null
+            && $user->isActive()
+            && $user->hasAnyRole([
+                UserRole::Member->value,
+                UserRole::Admin->value,
+                UserRole::SuperAdmin->value,
+                UserRole::Moderator->value,
+            ]);
     }
 
     public function rules(): array

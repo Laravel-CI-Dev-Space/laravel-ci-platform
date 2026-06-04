@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Blog;
 
+use App\Enums\UserRole;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -22,7 +23,11 @@ class UpdateArticleRequest extends FormRequest
         }
 
         return $article->isOwnedBy($user)
-            || $user->hasAnyRole(['admin', 'moderator', 'super-admin']);
+            || $user->hasAnyRole([
+                UserRole::Admin->value,
+                UserRole::Moderator->value,
+                UserRole::SuperAdmin->value,
+            ]);
     }
 
     public function rules(): array

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserRole;
 use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -20,7 +21,10 @@ class CvController extends Controller
         $viewer = auth()->user();
 
         abort_unless(
-            $viewer->id === $userId || $viewer->hasAnyRole(['admin', 'super-admin']),
+            $viewer->id === $userId || $viewer->hasAnyRole([
+                UserRole::Admin->value,
+                UserRole::SuperAdmin->value,
+            ]),
             403,
             'Accès non autorisé.'
         );

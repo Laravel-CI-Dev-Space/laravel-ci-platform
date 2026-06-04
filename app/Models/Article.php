@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\UserRole;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -46,7 +47,7 @@ class Article extends Model
     /** Vérifie si l'utilisateur a le droit d'éditer (propriétaire dans les 48h ou admin). */
     public function canEditBy(User $user): bool
     {
-        if ($user->hasAnyRole(['admin', 'moderator', 'super-admin'])) {
+        if ($user->hasAnyRole([UserRole::Admin->value, UserRole::Moderator->value, UserRole::SuperAdmin->value])) {
             return true;
         }
 

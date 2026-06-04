@@ -2,6 +2,7 @@
 
 namespace App\Services\Auth;
 
+use App\Enums\UserRole;
 use App\Exceptions\AccountBannedException;
 use App\Models\User;
 use App\Services\NotificationService;
@@ -58,7 +59,7 @@ class SocialiteService
             'last_login_at'     => now(),
         ]);
 
-        $user->assignRole('member');
+        $user->assignRole(UserRole::Member->value);
 
         Log::info("New member registered: {$user->github_username}");
 

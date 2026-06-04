@@ -102,8 +102,9 @@ class CompanyJobOfferResource extends Resource
                         ->label('Image de couverture')
                         ->image()
                         ->maxSize(2048)
+                        ->disk('assets')          // → public/assets/job-covers/
                         ->directory('job-covers')
-                        ->disk('public')
+                        ->visibility('public')
                         ->nullable()
                         ->helperText('JPG, PNG, WebP — max 2 Mo'),
 
@@ -115,8 +116,9 @@ class CompanyJobOfferResource extends Resource
                             'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                         ])
                         ->maxSize(10240)
+                        ->disk('assets')          // → public/assets/job-attachments/
                         ->directory('job-attachments')
-                        ->disk('public')
+                        ->visibility('public')
                         ->nullable()
                         ->storeFileNamesIn('attachment_name')
                         ->helperText('PDF, DOC, DOCX — max 10 Mo'),

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Users;
 
+use App\Enums\UserRole;
 use App\Filament\Resources\Users\Pages\CreateUser;
 use App\Filament\Resources\Users\Pages\EditUser;
 use App\Filament\Resources\Users\Pages\ListUsers;
@@ -79,8 +80,8 @@ class UserResource extends Resource
         /** @var User $authUser */
         $authUser = auth()->user();
 
-        if (! $authUser->hasRole('super-admin')) {
-            $query->whereDoesntHave('roles', fn ($q) => $q->where('name', 'super-admin'));
+        if (! $authUser->hasRole(UserRole::SuperAdmin->value)) {
+            $query->whereDoesntHave('roles', fn ($q) => $q->where('name', UserRole::SuperAdmin->value));
         }
 
         return $query;

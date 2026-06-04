@@ -30,23 +30,22 @@ Route::get('/about', fn () => view('web.about'))->name('about');
 Route::prefix('forum')->name('forum.')->group(function () {
     Route::get('/', [QuestionController::class, 'index'])->name('index');
 
-    // Protégé: créer une question
+    // Protégé: créer une question (membres + admins/modérateurs)
     Route::get('/ask', [QuestionController::class, 'create'])
         ->name('ask')
-        ->middleware(['auth', 'active', 'profile.complete', 'role:member']);
+        ->middleware(['auth', 'active', 'profile.complete', 'role:member|admin|super-admin|moderator']);
 
     // Public: doit venir en dernier
     Route::get('/{slug}', [QuestionController::class, 'show'])->name('show');
 });
 
-// ─── FORUM — Routes authentifiées ─────────────────────────
-Route::middleware(['auth', 'active', 'profile.complete', 'role:member'])->group(function () {
+// ─── FORUM — Routes authentifiées (membres + admins + modérateurs) ──
+Route::middleware(['auth', 'active', 'profile.complete', 'role:member|admin|super-admin|moderator'])->group(function () {
     Route::post('/forum/questions', [QuestionController::class, 'store'])
         ->name('forum.questions.store');
     Route::post('/forum/{question}/answers', [AnswerController::class, 'store'])
         ->name('forum.answers.store');
 
-    // Édition et suppression d'une question par son auteur
     Route::get('/forum/{question}/edit', [QuestionController::class, 'edit'])
         ->name('forum.edit');
     Route::delete('/forum/{question}', [QuestionController::class, 'destroy'])
@@ -57,10 +56,10 @@ Route::middleware(['auth', 'active', 'profile.complete', 'role:member'])->group(
 Route::prefix('blog')->name('blog.')->group(function () {
     Route::get('/', [ArticleController::class, 'index'])->name('index');
 
-    // Protégé : soumettre un article
+    // Protégé : soumettre un article (membres + admins + modérateurs)
     Route::get('/submit', [ArticleController::class, 'create'])
         ->name('create')
-        ->middleware(['auth', 'active', 'profile.complete', 'role:member']);
+        ->middleware(['auth', 'active', 'profile.complete', 'role:member|admin|super-admin|moderator']);
 
     // Public : doit venir en dernier
     Route::get('/{slug}', [ArticleController::class, 'show'])->name('show');
@@ -75,8 +74,8 @@ Route::prefix('resources')->name('resources.')->group(function () {
         ->middleware(['auth', 'active']);
 });
 
-// ─── BLOG & RESSOURCES — Routes authentifiées ─────────────
-Route::middleware(['auth', 'active', 'profile.complete', 'role:member'])->group(function () {
+// ─── BLOG & RESSOURCES — Routes authentifiées ─────────────────────
+Route::middleware(['auth', 'active', 'profile.complete', 'role:member|admin|super-admin|moderator'])->group(function () {
     Route::post('/blog/articles', [ArticleController::class, 'store'])
         ->name('blog.articles.store');
     Route::get('/blog/{article}/edit', [ArticleController::class, 'edit'])
@@ -101,8 +100,8 @@ Route::prefix('jobs')->name('jobs.')->group(function () {
     Route::get('/{slug}', [JobOfferController::class, 'show'])->name('show');
 });
 
-// ─── JOB BOARD — Routes authentifiées (membres) ──────────────
-Route::middleware(['auth', 'active', 'profile.complete', 'role:member'])->group(function () {
+// ─── JOB BOARD — Routes authentifiées ─────────────────────────────
+Route::middleware(['auth', 'active', 'profile.complete', 'role:member|admin|super-admin|moderator'])->group(function () {
     Route::post('/jobs/{offer}/apply', [JobApplicationController::class, 'store'])
         ->name('jobs.applications.store');
     Route::post('/jobs/{offer}/favorite', [JobOfferController::class, 'toggleFavorite'])
