@@ -8,14 +8,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+/**
+ * Compétence technique associable aux offres (Laravel, PHP…).
+ */
 #[Fillable(['name', 'slug'])]
 class JobSkill extends Model
 {
     /** @use HasFactory<JobSkillFactory> */
     use HasFactory;
 
-    public $timestamps = false;
-
+    /**
+     * Offres demandant cette compétence.
+     *
+     * @return BelongsToMany<JobOffer, $this>
+     */
     public function jobOffers(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -23,6 +29,6 @@ class JobSkill extends Model
             'job_skill_pivot',
             'job_skill_id',
             'job_offer_id',
-        );
+        )->withTimestamps();
     }
 }

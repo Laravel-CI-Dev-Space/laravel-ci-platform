@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('cv_path')->nullable();
             $table->text('cover_letter')->nullable();
             $table->string('status', 20)->default('pending');
-            $table->timestamp('created_at')->useCurrent();
+            $table->timestamps();
 
             $table->unique(['job_offer_id', 'user_id']);
             $table->index('status');

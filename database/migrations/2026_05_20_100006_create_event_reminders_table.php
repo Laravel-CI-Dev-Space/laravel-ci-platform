@@ -17,6 +17,7 @@ return new class extends Migration
 
             $table->index(['event_id', 'scheduled_at']);
             $table->unique(['event_id', 'type']);
+            $table->timestamps();
         });
     }
 

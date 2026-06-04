@@ -12,6 +12,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
+/**
+ * Événement de la communauté (meetup, webinar, hackathon).
+ */
 #[Fillable([
     'title',
     'slug',
@@ -30,6 +33,9 @@ class Event extends Model
     /** @use HasFactory<EventFactory> */
     use HasFactory;
 
+    /**
+     * @return array<string, string>
+     */
     protected function casts(): array
     {
         return [
@@ -40,65 +46,123 @@ class Event extends Model
         ];
     }
 
+    /**
+     * Catégorie de l'événement.
+     *
+     * @return BelongsTo<EventType, $this>
+     */
     public function type(): BelongsTo
     {
         return $this->belongsTo(EventType::class, 'type_id');
     }
 
+    /**
+     * Intervenants de l'événement.
+     *
+     * @return HasMany<EventSpeaker, $this>
+     */
     public function speakers(): HasMany
     {
         return $this->hasMany(EventSpeaker::class);
     }
 
+    /**
+     * Inscriptions confirmées ou en attente.
+     *
+     * @return HasMany<EventRegistration, $this>
+     */
     public function registrations(): HasMany
     {
         return $this->hasMany(EventRegistration::class);
     }
 
+    /**
+     * Membres en liste d'attente.
+     *
+     * @return HasMany<EventWaitlist, $this>
+     */
     public function waitlists(): HasMany
     {
         return $this->hasMany(EventWaitlist::class);
     }
 
+    /**
+     * Rappels planifiés (Sprint 2).
+     *
+     * @return HasMany<EventReminder, $this>
+     */
     public function reminders(): HasMany
     {
         return $this->hasMany(EventReminder::class);
     }
 
+    /**
+     * Médias attachés (Sprint 2).
+     *
+     * @return HasMany<EventMedia, $this>
+     */
     public function media(): HasMany
     {
         return $this->hasMany(EventMedia::class);
     }
 
+    /**
+     * Exports iCal générés (Sprint 2).
+     *
+     * @return HasMany<EventIcsExport, $this>
+     */
     public function icsExports(): HasMany
     {
         return $this->hasMany(EventIcsExport::class);
     }
 
-    /** @param Builder<self> $query */
+    /**
+     * Événements au statut publié.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
     public function scopePublished(Builder $query): Builder
     {
         return $query->where('status', EventStatus::PUBLISHED);
     }
 
-    /** @param Builder<self> $query */
+    /**
+     * Événements publiés dont la date de début est future.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
     public function scopeUpcoming(Builder $query): Builder
     {
         return $query->published()->where('start_date', '>=', now());
     }
 
-    /** @param Builder<self> $query */
+    /**
+     * Événements publiés déjà terminés.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
     public function scopePast(Builder $query): Builder
     {
         return $query->published()->where('end_date', '<', now());
     }
 
-    /** @param Builder<self> $query */
+    /**
+     * Filtre par slug du type d'événement.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
     public function scopeOfType(Builder $query, string $typeSlug): Builder
     {
         return $query->whereHas('type', fn (Builder $q) => $q->where('slug', $typeSlug));
     }
 
+    /**
+     * Génère un slug unique à la création si absent.
+     */
     protected static function booted(): void
     {
         static::creating(function (Event $event) {
@@ -108,6 +172,9 @@ class Event extends Model
         });
     }
 
+    /**
+     * Slug unique dérivé du titre.
+     */
     protected static function uniqueSlug(string $title): string
     {
         $slug     = Str::slug($title);

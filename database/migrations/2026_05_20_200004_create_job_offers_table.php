@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('salary')->nullable();
             $table->date('deadline')->nullable();
             $table->string('status', 20)->default('draft');
-            $table->timestamp('created_at')->useCurrent();
+            $table->timestamps();
 
             $table->index('status');
             $table->index('type');

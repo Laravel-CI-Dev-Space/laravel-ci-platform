@@ -13,6 +13,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * Offre d'emploi publiée par une entreprise.
+ */
 #[Fillable([
     'company_id',
     'category_id',
@@ -29,19 +32,24 @@ class JobOffer extends Model
     /** @use HasFactory<JobOfferFactory> */
     use HasFactory;
 
-    public const UPDATED_AT = null;
-
+    /**
+     * @return array<string, string>
+     */
     protected function casts(): array
     {
         return [
-            'type'       => JobOfferType::class,
-            'status'     => JobOfferStatus::class,
-            'deadline'   => 'date',
-            'created_at' => 'datetime',
+            'type'     => JobOfferType::class,
+            'status'   => JobOfferStatus::class,
+            'deadline' => 'date',
         ];
     }
 
-    /** @param Builder<self> $query */
+    /**
+     * Offres actives non expirées (deadline nulle ou future).
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
     public function scopeActive(Builder $query): Builder
     {
         return $query
@@ -52,26 +60,51 @@ class JobOffer extends Model
             });
     }
 
+    /**
+     * Entreprise qui publie l'offre.
+     *
+     * @return BelongsTo<Company, $this>
+     */
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
     }
 
+    /**
+     * Catégorie métier de l'offre.
+     *
+     * @return BelongsTo<JobCategory, $this>
+     */
     public function category(): BelongsTo
     {
         return $this->belongsTo(JobCategory::class, 'category_id');
     }
 
+    /**
+     * Candidatures reçues.
+     *
+     * @return HasMany<JobApplication, $this>
+     */
     public function applications(): HasMany
     {
         return $this->hasMany(JobApplication::class);
     }
 
+    /**
+     * Favoris enregistrés par les membres (Sprint 2).
+     *
+     * @return HasMany<JobFavorite, $this>
+     */
     public function favorites(): HasMany
     {
         return $this->hasMany(JobFavorite::class);
     }
 
+    /**
+     * Compétences requises (relation N–N).
+     *
+     * @return BelongsToMany<JobSkill, $this>
+     */
     public function skills(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -79,6 +112,6 @@ class JobOffer extends Model
             'job_skill_pivot',
             'job_offer_id',
             'job_skill_id',
-        );
+        )->withTimestamps();
     }
 }

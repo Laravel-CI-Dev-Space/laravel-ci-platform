@@ -13,7 +13,7 @@ return new class extends Migration
             $table->foreignId('event_id')->constrained('events')->cascadeOnDelete();
             $table->string('type', 20);
             $table->string('url');
-            $table->timestamp('created_at')->useCurrent();
+            $table->timestamps();
 
             $table->index(['event_id', 'type']);
         });

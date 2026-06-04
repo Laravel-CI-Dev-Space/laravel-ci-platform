@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * Média associé à un événement (image, vidéo, PDF).
+ */
 #[Fillable([
     'event_id',
     'type',
@@ -14,8 +17,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 ])]
 class EventMedia extends Model
 {
-    public const UPDATED_AT = null;
-
+    /**
+     * @return array<string, string>
+     */
     protected function casts(): array
     {
         return [
@@ -23,6 +27,11 @@ class EventMedia extends Model
         ];
     }
 
+    /**
+     * Événement propriétaire du média.
+     *
+     * @return BelongsTo<Event, $this>
+     */
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);

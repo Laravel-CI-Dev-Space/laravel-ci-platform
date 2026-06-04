@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * Intervenant rattaché à un événement.
+ */
 #[Fillable([
     'event_id',
     'name',
@@ -21,8 +24,11 @@ class EventSpeaker extends Model
     /** @use HasFactory<EventSpeakerFactory> */
     use HasFactory;
 
-    public $timestamps = false;
-
+    /**
+     * Événement auquel participe l'intervenant.
+     *
+     * @return BelongsTo<Event, $this>
+     */
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);

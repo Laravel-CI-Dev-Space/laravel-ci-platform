@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('website')->nullable();
 
             $table->index('name');
+            $table->timestamps();
         });
     }
 

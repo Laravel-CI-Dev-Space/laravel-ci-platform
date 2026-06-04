@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('job_offer_id')->constrained('job_offers')->cascadeOnDelete();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->timestamp('created_at')->useCurrent();
+            $table->timestamps();
 
             $table->unique(['job_offer_id', 'user_id']);
         });

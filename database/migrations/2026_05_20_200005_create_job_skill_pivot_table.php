@@ -13,6 +13,7 @@ return new class extends Migration
             $table->foreignId('job_skill_id')->constrained('job_skills')->cascadeOnDelete();
 
             $table->primary(['job_offer_id', 'job_skill_id']);
+            $table->timestamps();
         });
     }
 

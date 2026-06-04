@@ -17,6 +17,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
 
             $table->index(['user_id', 'is_active']);
+            $table->timestamps();
         });
     }
 

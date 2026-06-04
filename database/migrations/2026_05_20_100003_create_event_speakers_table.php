@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('github')->nullable();
 
             $table->index('event_id');
+            $table->timestamps();
         });
     }
 
