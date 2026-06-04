@@ -1,6 +1,10 @@
 <?php
 
 use App\Http\Middleware\CheckMemberActive;
+use App\Http\Middleware\CompanyActive;
+use App\Http\Middleware\CompanyAuthenticated;
+use App\Http\Middleware\CompanyGuest;
+use App\Http\Middleware\CompanyMustChangePassword;
 use App\Http\Middleware\EnsureProfileComplete;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -20,6 +24,10 @@ return Application::configure(basePath: dirname(__DIR__))
             // Middleware custom
             'active'           => CheckMemberActive::class,
             'profile.complete' => EnsureProfileComplete::class,
+            'company.auth'     => CompanyAuthenticated::class,
+            'company.active'   => CompanyActive::class,
+            'company.password' => CompanyMustChangePassword::class,
+            'company.guest'    => CompanyGuest::class,
 
             // Middlewares Spatie Permission
             'role'               => RoleMiddleware::class,

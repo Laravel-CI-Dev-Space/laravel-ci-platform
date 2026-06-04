@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
+use App\Enums\UserRole;
 use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -10,12 +13,18 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        // Super Admin
-        $superAdmin = User::firstOrCreate(
-            ['email' => 'wilson@laravelci.com'],
+        // ══════════════════════════════════════════════════════════
+        //  SUPER-ADMIN UNIQUE — yanne.kouassi@epitech.eu
+        //  syncRoles() garantit qu'il est le SEUL super-admin seedé
+        //  et qu'un re-seed ne duplique pas le rôle.
+        // ══════════════════════════════════════════════════════════
+        // Recherche par github_id car le compte existe déjà via OAuth
+        // (email peut être null ou différent dans la colonne selon la config GitHub)
+        $superAdmin = User::updateOrCreate(
+            ['github_id' => '167759591'],
             [
                 'name'              => 'Wilson Kouassi',
-                'github_id'         => '167759591',
+                'email'             => 'yanne.kouassi@epitech.eu',
                 'github_username'   => 'Ky-Wilson',
                 'avatar'            => 'https://avatars.githubusercontent.com/u/167759591',
                 'is_active'         => true,
@@ -23,7 +32,7 @@ class UserSeeder extends Seeder
                 'last_login_at'     => now(),
             ]
         );
-        $superAdmin->assignRole('super-admin');
+        $superAdmin->syncRoles([UserRole::SuperAdmin->value]);
 
         Profile::firstOrCreate(
             ['user_id' => $superAdmin->id],
@@ -31,7 +40,7 @@ class UserSeeder extends Seeder
                 'country'          => "Côte d'Ivoire",
                 'city'             => 'Abidjan',
                 'district'         => 'Cocody',
-                'bio'              => 'Lead Developer — Laravel Côte d\'Ivoire. Passionné de PHP et Laravel.',
+                'bio'              => "Lead Developer — Laravel Côte d'Ivoire. Passionné de PHP et Laravel.",
                 'laravel_level'    => 'expert',
                 'years_experience' => '5_10_ans',
                 'tech_stack'       => ['Laravel', 'PHP', 'Livewire', 'Filament', 'Vue.js', 'MySQL', 'Docker'],
@@ -41,7 +50,10 @@ class UserSeeder extends Seeder
             ]
         );
 
-        // Test Admin
+        // ──────────────────────────────────────────────────────────
+        //  COMPTES DE TEST (développement uniquement)
+        // ──────────────────────────────────────────────────────────
+
         $admin = User::firstOrCreate(
             ['email' => 'admin@laravelci.com'],
             [
@@ -54,9 +66,8 @@ class UserSeeder extends Seeder
                 'last_login_at'     => now(),
             ]
         );
-        $admin->assignRole('admin');
+        $admin->syncRoles([UserRole::Admin->value]);
 
-        // Test Moderator
         $moderator = User::firstOrCreate(
             ['email' => 'moderator@laravelci.com'],
             [
@@ -69,9 +80,8 @@ class UserSeeder extends Seeder
                 'last_login_at'     => now(),
             ]
         );
-        $moderator->assignRole('moderator');
+        $moderator->syncRoles([UserRole::Moderator->value]);
 
-        // Test Member
         $member = User::firstOrCreate(
             ['email' => 'member@laravelci.com'],
             [
@@ -84,9 +94,8 @@ class UserSeeder extends Seeder
                 'last_login_at'     => now(),
             ]
         );
-        $member->assignRole('member');
+        $member->syncRoles([UserRole::Member->value]);
 
-        // Suspended member (test)
         $suspended = User::firstOrCreate(
             ['email' => 'suspended@laravelci.com'],
             [
@@ -99,9 +108,8 @@ class UserSeeder extends Seeder
                 'email_verified_at' => now(),
             ]
         );
-        $suspended->assignRole('member');
+        $suspended->syncRoles([UserRole::Member->value]);
 
-        // Banned member (test)
         $banned = User::firstOrCreate(
             ['email' => 'banned@laravelci.com'],
             [
@@ -113,37 +121,9 @@ class UserSeeder extends Seeder
                 'email_verified_at' => now(),
             ]
         );
-        $banned->assignRole('member');
+        $banned->syncRoles([UserRole::Member->value]);
 
-        // Ibrahima DIARRA — Admin Filament + QA
-        $ibrahima = User::firstOrCreate(
-            ['email' => 'ibrahima@laravelci.com'],
-            [
-                'name'              => 'Ibrahima DIARRA',
-                'github_id'         => '157432707',
-                'github_username'   => 'DiarraIbra',
-                'avatar'            => 'https://avatars.githubusercontent.com/u/157432707',
-                'is_active'         => true,
-                'email_verified_at' => now(),
-                'last_login_at'     => now(),
-            ]
-        );
-        $ibrahima->assignRole('admin');
-
-        Profile::firstOrCreate(
-            ['user_id' => $ibrahima->id],
-            [
-                'country'          => "Côte d'Ivoire",
-                'city'             => 'Abidjan',
-                'bio'              => 'Admin Filament & QA cross-modules — Laravel Côte d\'Ivoire.',
-                'laravel_level'    => 'intermediaire',
-                'years_experience' => '1_3_ans',
-                'tech_stack'       => ['Laravel', 'PHP', 'Filament', 'MySQL'],
-                'job_status'       => 'en_recherche',
-                'portfolio_url'    => 'https://github.com/DiarraIbra',
-            ]
-        );
-
-        $this->command->info('✅ Users seeded (6 users : super-admin, admin, moderator, member, suspended, banned).');
+        $this->command->info('✅ Users seedés (1 super-admin + 5 comptes de test).');
+        $this->command->line('   Super-admin : yanne.kouassi@epitech.eu');
     }
 }

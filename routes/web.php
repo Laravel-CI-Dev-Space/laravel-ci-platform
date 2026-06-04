@@ -6,11 +6,19 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\Blog\ArticleController;
 use App\Http\Controllers\Blog\ResourceController;
+use App\Http\Controllers\Company\ApplicationController as CompanyApplicationController;
+use App\Http\Controllers\Company\Auth\CompanyLoginController;
+use App\Http\Controllers\Company\Auth\CompanyPasswordController;
+use App\Http\Controllers\Company\Auth\CompanyRegisterController;
+use App\Http\Controllers\Company\DashboardController as CompanyDashboardController;
+use App\Http\Controllers\Company\JobOfferController as CompanyJobOfferController;
 use App\Http\Controllers\CvController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DesignSystemController;
 use App\Http\Controllers\Forum\AnswerController;
 use App\Http\Controllers\Forum\QuestionController;
+use App\Http\Controllers\Jobs\JobApplicationController;
+use App\Http\Controllers\Jobs\JobOfferController;
 use App\Livewire\EditProfile;
 use Illuminate\Support\Facades\Route;
 
@@ -87,25 +95,18 @@ Route::prefix('events')->name('events.')->group(function () {
     Route::get('/{slug}', fn (string $slug) => view('web.events.show', compact('slug')))->name('show');
 });
 
-// ─── JOBS ──────────────────────────────────────────────────
+// ─── JOB BOARD — Routes publiques ────────────────────────────
 Route::prefix('jobs')->name('jobs.')->group(function () {
-    Route::get('/', fn () => view('web.jobs.index'))->name('index');
+    Route::get('/', [JobOfferController::class, 'index'])->name('index');
+    Route::get('/{slug}', [JobOfferController::class, 'show'])->name('show');
+});
 
-    // Protected
-    Route::get('/post', fn () => view('web.jobs.index'))
-        ->name('create')
-        ->middleware(['auth', 'active', 'profile.complete']);
-    Route::post('/{id}/apply', fn () => back())
-        ->name('apply')
-        ->middleware(['auth', 'active', 'profile.complete'])
-        ->whereNumber('id');
-    Route::delete('/{id}/unsave', fn () => back())
-        ->name('unsave')
-        ->middleware(['auth', 'active'])
-        ->whereNumber('id');
-
-    // Public
-    Route::get('/{slug}', fn (string $slug) => view('web.jobs.show', compact('slug')))->name('show');
+// ─── JOB BOARD — Routes authentifiées (membres) ──────────────
+Route::middleware(['auth', 'active', 'profile.complete', 'role:member'])->group(function () {
+    Route::post('/jobs/{offer}/apply', [JobApplicationController::class, 'store'])
+        ->name('jobs.applications.store');
+    Route::post('/jobs/{offer}/favorite', [JobOfferController::class, 'toggleFavorite'])
+        ->name('jobs.favorite');
 });
 
 // ─── MEMBER PUBLIC PROFILE ─────────────────────────────────
@@ -234,3 +235,47 @@ Route::middleware(['auth', 'active'])->group(function () {
 // ─── DESIGN SYSTEM (admin only) ────────────────────────────
 Route::get('/design-system', [DesignSystemController::class, 'index'])
     ->middleware(['auth', 'role:super-admin|admin']);
+
+// ═══════════════════════════════════════════════════════════
+// ESPACE ENTREPRISE — Guard : company
+// ═══════════════════════════════════════════════════════════
+Route::prefix('company')->name('company.')->group(function () {
+
+    // ─── Auth entreprise (invités uniquement) ───────────
+    // company.guest redirige vers company.dashboard (pas vers HOME web)
+    Route::middleware('company.guest')->group(function () {
+        Route::get('/login', [CompanyLoginController::class, 'showLoginForm'])->name('login');
+        Route::post('/login', [CompanyLoginController::class, 'login'])->name('login.submit');
+        Route::get('/register', [CompanyRegisterController::class, 'showRegistrationForm'])->name('register');
+        Route::post('/register', [CompanyRegisterController::class, 'store'])->name('register.submit');
+    });
+
+    // Déconnexion
+    Route::post('/logout', [CompanyLoginController::class, 'logout'])
+        ->name('logout')
+        ->middleware('company.auth');
+
+    // Changement de mot de passe obligatoire (auth + compte actif)
+    Route::middleware(['company.auth', 'company.active'])->group(function () {
+        Route::get('/password/change', [CompanyPasswordController::class, 'showChangeForm'])->name('password.change');
+        Route::post('/password/change', [CompanyPasswordController::class, 'update'])->name('password.update');
+    });
+
+    // ─── Dashboard entreprise (auth + actif + mdp changé) ─
+    Route::middleware(['company.auth', 'company.active', 'company.password'])->group(function () {
+        // Le dashboard est désormais le panel Filament company (/company/portal)
+        Route::get('/dashboard', fn () => redirect()->to('/company/portal'))->name('dashboard');
+
+        // Offres
+        Route::get('/offers', [CompanyJobOfferController::class, 'index'])->name('offers.index');
+        Route::get('/offers/create', [CompanyJobOfferController::class, 'create'])->name('offers.create');
+        Route::post('/offers', [CompanyJobOfferController::class, 'store'])->name('offers.store');
+        Route::get('/offers/{offer}', [CompanyJobOfferController::class, 'show'])->name('offers.show');
+
+        // Candidatures
+        Route::get('/offers/{offer}/applications', [CompanyApplicationController::class, 'index'])->name('applications.index');
+        Route::get('/applications/{application}', [CompanyApplicationController::class, 'show'])->name('applications.show');
+        Route::patch('/applications/{application}/status', [CompanyApplicationController::class, 'updateStatus'])->name('applications.status');
+        Route::get('/applications/{application}/cv', [CompanyApplicationController::class, 'downloadCv'])->name('applications.cv');
+    });
+});

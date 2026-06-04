@@ -22,7 +22,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
     'company_id', 'posted_by', 'title', 'slug', 'description',
     'contract_type', 'level', 'location', 'country', 'is_remote',
     'is_hybrid', 'salary_min', 'salary_max', 'currency', 'salary_visible',
-    'status', 'rejection_reason', 'is_urgent', 'views_count',
+    'status', 'rejection_reason', 'is_urgent', 'cover_image',
+    'attachment_path', 'attachment_name', 'views_count',
     'applications_count', 'expires_at', 'published_at',
 ])]
 class JobOffer extends Model
