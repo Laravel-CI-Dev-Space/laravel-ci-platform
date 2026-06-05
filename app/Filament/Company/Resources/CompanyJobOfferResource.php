@@ -83,14 +83,20 @@ class CompanyJobOfferResource extends Resource
             \Filament\Schemas\Components\Section::make('Catégories & Compétences')
                 ->columns(2)
                 ->schema([
-                    \Filament\Forms\Components\CheckboxList::make('categories')
+                    \Filament\Forms\Components\Select::make('categories')
                         ->label('Catégories')
-                        ->options(fn () => \App\Models\JobOfferCategory::pluck('name', 'id'))
+                        ->multiple()
+                        ->searchable()
+                        ->preload()
+                        ->options(\App\Models\JobOfferCategory::orderBy('name')->pluck('name', 'id'))
                         ->required(),
 
-                    \Filament\Forms\Components\CheckboxList::make('skills')
-                        ->label('Compétences (max 10)')
-                        ->options(fn () => \App\Models\JobSkill::pluck('name', 'id'))
+                    \Filament\Forms\Components\Select::make('skills')
+                        ->label('Compétences requises (max 10)')
+                        ->multiple()
+                        ->searchable()
+                        ->preload()
+                        ->options(\App\Models\JobSkill::orderBy('name')->pluck('name', 'id'))
                         ->required(),
                 ]),
 

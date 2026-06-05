@@ -2,6 +2,9 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Company\Widgets\CompanyOffersWidget;
+use App\Filament\Company\Widgets\CompanyRecentApplicationsWidget;
+use App\Filament\Company\Widgets\CompanyStatsOverview;
 use App\Http\Middleware\FilamentCompanyAccess;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -50,7 +53,12 @@ class CompanyPanelProvider extends PanelProvider
             )
 
             ->pages([Dashboard::class])
-            ->widgets([AccountWidget::class])
+            ->widgets([
+                CompanyStatsOverview::class,
+                CompanyRecentApplicationsWidget::class,
+                CompanyOffersWidget::class,
+                AccountWidget::class,
+            ])
 
             ->navigationGroups([
                 'Recrutement',

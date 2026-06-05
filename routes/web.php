@@ -200,7 +200,15 @@ Route::middleware(['auth', 'active'])->group(function () {
                     return view('dashboard.member.articles', compact('articles', 'counts'));
                 })->name('articles');
                 Route::get('/events', fn () => view('dashboard.member.events'))->name('events');
-                Route::get('/applications', fn () => view('dashboard.member.applications'))->name('applications');
+                Route::get('/applications', function () {
+                    $applications = auth()->user()
+                        ->jobApplications()
+                        ->with(['jobOffer.company', 'jobOffer.categories'])
+                        ->latest()
+                        ->paginate(15);
+
+                    return view('dashboard.member.applications', compact('applications'));
+                })->name('applications');
                 Route::get('/favorites', fn () => view('dashboard.member.favorites'))->name('favorites');
                 Route::get('/profile', fn () => view('dashboard.member.profile'))->name('profile');
                 Route::post('/profile', fn () => back())->name('profile.update');
