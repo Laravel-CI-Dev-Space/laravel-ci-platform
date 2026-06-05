@@ -1,6 +1,7 @@
 @extends('layouts.web')
 
 @section('title', 'About — Laravel CI')
+@section('description', 'Learn about Laravel Côte d\'Ivoire — our mission, founding team, and vision for the Ivorian PHP & Laravel developer community.')
 
 @section('content')
 
@@ -12,7 +13,7 @@
           <span class="badge-pill badge-navy"><i class="fa-brands fa-laravel text-orange"></i> Founded 2026 · Open source</span>
           <h1 class="my-3">We're building the home for Ivorian Laravel developers</h1>
           <p class="lead" style="max-width:42rem">Laravel Côte d'Ivoire is the first structured developer community dedicated to Laravel &amp; PHP in Côte d'Ivoire and the diaspora — built on knowledge sharing, inclusion, and collective growth.</p>
-          <a href="{{ route('login') }}" class="btn btn-brand btn-lg mt-2"><i class="fa-solid fa-user-plus"></i> Join us</a>
+          <a href="{{ route('join') }}" class="btn btn-brand btn-lg mt-2"><i class="fa-solid fa-user-plus"></i> Join us</a>
         </div>
         <div class="col-lg-5 d-none d-lg-block">
           <div class="mascot-art" style="width:clamp(200px,22vw,280px)">
@@ -113,7 +114,7 @@
       <div class="cta-banner reveal">
         <h2 class="mb-3">Your seat at the table is ready</h2>
         <p class="lead mb-4" style="color:rgba(255,255,255,.9);max-width:38rem;margin-inline:auto">Join 500+ Ivorian developers building the future of African tech, one commit at a time.</p>
-        <a href="{{ route('login') }}" class="btn btn-light btn-lg"><i class="fa-brands fa-github"></i> Join the Community</a>
+        <a href="{{ route('join') }}" class="btn btn-light btn-lg"><i class="fa-brands fa-github"></i> Join the Community</a>
       </div>
     </div>
   </section>

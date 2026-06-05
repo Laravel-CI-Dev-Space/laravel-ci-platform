@@ -16,6 +16,7 @@
           <li class="nav-item"><a class="nav-link {{ request()->routeIs('events.*') ? 'active' : '' }}" href="{{ route('events.index') }}">Events</a></li>
           <li class="nav-item"><a class="nav-link {{ request()->routeIs('jobs.*') ? 'active' : '' }}" href="{{ route('jobs.index') }}">Jobs</a></li>
           <li class="nav-item"><a class="nav-link {{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">About</a></li>
+          <li class="nav-item"><a class="nav-link {{ request()->routeIs('join') ? 'active' : '' }}" href="{{ route('join') }}">Join</a></li>
         </ul>
         @auth
           <a href="{{ route('dashboard') }}" class="btn btn-github">

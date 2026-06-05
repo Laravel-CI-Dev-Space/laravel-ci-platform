@@ -1,6 +1,7 @@
 @extends('layouts.web')
 
 @section('title', 'Laravel CI — The Laravel Community of Côte d\'Ivoire')
+@section('description', 'Join 500+ Ivorian Laravel & PHP developers. Share knowledge, find jobs, attend events, and grow together in Abidjan and across the diaspora.')
 
 @section('content')
 
@@ -13,7 +14,7 @@
           <h1>The Laravel Community of <span class="accent">Côte d'Ivoire</span></h1>
           <p class="lead">Join 500+ developers — share, learn, and grow together. The first structured home for Ivorian Laravel &amp; PHP builders, in Abidjan and across the diaspora.</p>
           <div class="d-flex flex-wrap gap-3 mt-4">
-            <a href="{{ route('login') }}" class="btn btn-brand btn-lg"><i class="fa-solid fa-user-plus"></i> Join the Community</a>
+            <a href="{{ route('join') }}" class="btn btn-brand btn-lg"><i class="fa-solid fa-user-plus"></i> Join the Community</a>
             <a href="{{ route('forum.index') }}" class="btn btn-outline-navy btn-lg"><i class="fa-solid fa-comments"></i> Explore the Forum</a>
           </div>
           <div class="trust-badges">
@@ -68,6 +69,7 @@
   <!-- ============ STATS STRIP ============ -->
   <section class="stats-strip">
     <div class="container">
+      {{-- Stats S1 — valeurs statiques validées product (en attente seeders pour compteurs dynamiques) --}}
       {{-- LIVEWIRE: @livewire('web.stats-counter') --}}
       <div class="row">
         <div class="col-6 col-md-3 reveal">
@@ -330,7 +332,7 @@
         <h2 class="mb-3">Ready to build the future of Ivorian tech?</h2>
         <p class="lead mb-4" style="color:rgba(255,255,255,.92);max-width:40rem;margin-inline:auto">Sign in with GitHub, ask your first question, and meet 500+ developers who have your back.</p>
         <div class="cta-cmd"><span class="cta-cmd-prompt">$</span> composer create-project laravel-ci/community <button class="cta-cmd-copy" type="button" aria-label="Copy"><i class="fa-regular fa-copy"></i></button></div>
-        <a href="{{ route('login') }}" class="btn btn-light btn-lg"><i class="fa-brands fa-github"></i> Join the Community</a>
+        <a href="{{ route('join') }}" class="btn btn-light btn-lg"><i class="fa-brands fa-github"></i> Join the Community</a>
       </div>
     </div>
   </section>

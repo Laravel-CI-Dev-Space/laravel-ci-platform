@@ -3,8 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>@yield('title', 'Laravel CI — The Laravel Community of Côte d\'Ivoire')</title>
-  <meta name="description" content="@yield('description', 'Join 500+ Ivorian Laravel & PHP developers. Share knowledge, find jobs, attend events, and grow together.')" />
+  @php
+    $seoTitle       = trim($__env->yieldContent('title')) ?: null;
+    $seoDescription = trim($__env->yieldContent('description')) ?: null;
+    $seoImage       = trim($__env->yieldContent('og_image')) ?: null;
+    $seoRobots      = trim($__env->yieldContent('robots')) ?: null;
+  @endphp
+  <x-web.seo
+    :title="$seoTitle"
+    :description="$seoDescription"
+    :image="$seoImage"
+    :robots="$seoRobots"
+  />
   <meta name="csrf-token" content="{{ csrf_token() }}" />
 
   <!-- Fonts -->
