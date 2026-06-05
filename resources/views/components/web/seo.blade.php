@@ -1,20 +1,3 @@
-@props([
-    'title'       => null,
-    'description' => null,
-    'image'       => null,
-    'canonical'   => null,
-    'type'        => 'website',
-    'robots'      => null,
-])
-
-@php
-    $title       = $title ?: config('vitrine.default_title');
-    $description = $description ?: config('vitrine.default_description');
-    $image       = $image ?: asset(config('vitrine.og_image'));
-    $canonical   = $canonical ?: url()->current();
-    $siteName    = config('app.name', 'Laravel CI');
-@endphp
-
 <title>{{ $title }}</title>
 <meta name="description" content="{{ $description }}" />
 @if($robots)

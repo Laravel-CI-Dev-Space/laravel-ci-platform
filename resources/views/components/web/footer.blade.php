@@ -3,7 +3,7 @@
     <div class="row g-4">
       <div class="col-lg-4 col-md-6">
         <a class="brand-logo mb-3" href="{{ route('home') }}">
-          <span class="brand-mark"><img src="{{ asset('assets/web/img/logo-mark.png') }}" alt="Laravel CI" /></span> Laravel CI
+          <span class="brand-mark"><img src="{{ asset('assets/web/img/logo-mark.png') }}" alt="{{ $siteName }}" /></span> {{ $siteName }}
         </a>
         <p style="max-width:22rem">The first structured developer community for Laravel &amp; PHP in Côte d'Ivoire and the Ivorian diaspora. African tech excellence, together.</p>
         <div class="social-row">
@@ -24,21 +24,23 @@
       <div class="col-lg-2 col-md-6 col-6">
         <h5>Quick Links</h5>
         <ul class="footer-links">
-          <li><a href="{{ route('forum.index') }}">Forum</a></li>
-          <li><a href="{{ route('blog.index') }}">Blog</a></li>
-          <li><a href="{{ route('events.index') }}">Events</a></li>
-          <li><a href="{{ route('jobs.index') }}">Jobs</a></li>
+          @foreach($quickLinks as $link)
+            <li><a href="{{ route($link['route']) }}">{{ $link['label'] }}</a></li>
+          @endforeach
         </ul>
       </div>
       <div class="col-lg-3 col-md-6 col-6">
         <h5>Community</h5>
         <ul class="footer-links">
-          <li><a href="{{ route('about') }}">About us</a></li>
-          <li><a href="{{ route('join') }}">Join us</a></li>
-          <li><a href="{{ route('forum.index') }}">Code of conduct</a></li>
-          @if($social['github'])
-            <li><a href="{{ $social['github'] }}" target="_blank" rel="noopener noreferrer">Contribute on GitHub</a></li>
-          @endif
+          @foreach($communityLinks as $link)
+            <li>
+              @if(!empty($link['external']))
+                <a href="{{ $link['url'] }}" target="_blank" rel="noopener noreferrer">{{ $link['label'] }}</a>
+              @else
+                <a href="{{ route($link['route']) }}">{{ $link['label'] }}</a>
+              @endif
+            </li>
+          @endforeach
         </ul>
       </div>
       <div class="col-lg-3 col-md-6">
