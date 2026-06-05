@@ -34,6 +34,7 @@ class CheckMemberActive
         // Suspension expired — lift it automatically and let the user through
         if ($user->suspended_until !== null && $user->suspended_until->isPast()) {
             $user->update(['suspended_until' => null]);
+
             return $next($request);
         }
 

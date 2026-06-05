@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Event;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,13 +21,35 @@ class EventRegistration extends Model
         ];
     }
 
-    public function event(): BelongsTo { return $this->belongsTo(Event::class); }
-    public function user(): BelongsTo  { return $this->belongsTo(User::class); }
+    public function event(): BelongsTo
+    {
+        return $this->belongsTo(Event::class);
+    }
 
-    public function isConfirmed(): bool  { return $this->status === 'confirmed'; }
-    public function isWaitlisted(): bool { return $this->status === 'waitlisted'; }
-    public function isCancelled(): bool  { return $this->status === 'cancelled'; }
-    public function isAttended(): bool   { return $this->status === 'attended'; }
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function isConfirmed(): bool
+    {
+        return $this->status === 'confirmed';
+    }
+
+    public function isWaitlisted(): bool
+    {
+        return $this->status === 'waitlisted';
+    }
+
+    public function isCancelled(): bool
+    {
+        return $this->status === 'cancelled';
+    }
+
+    public function isAttended(): bool
+    {
+        return $this->status === 'attended';
+    }
 
     public function canCancel(): bool
     {

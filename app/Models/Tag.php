@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Article;
-use App\Models\Question;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -26,6 +24,13 @@ class Tag extends Model
         return $this->belongsToMany(Article::class);
     }
 
-    public function scopeForum($query) { return $query->whereIn('scope', ['forum', 'both']); }
-    public function scopeBlog($query)  { return $query->whereIn('scope', ['blog', 'both']); }
+    public function scopeForum($query)
+    {
+        return $query->whereIn('scope', ['forum', 'both']);
+    }
+
+    public function scopeBlog($query)
+    {
+        return $query->whereIn('scope', ['blog', 'both']);
+    }
 }

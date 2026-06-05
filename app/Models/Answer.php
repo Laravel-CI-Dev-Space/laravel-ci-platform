@@ -2,11 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Comment;
-use App\Models\Question;
-use App\Models\Report;
-use App\Models\User;
-use App\Models\Vote;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -22,17 +17,39 @@ class Answer extends Model
     protected function casts(): array
     {
         return [
-            'is_accepted'   => 'boolean',
-            'votes_score'   => 'integer',
-            'comments_count'=> 'integer',
+            'is_accepted'    => 'boolean',
+            'votes_score'    => 'integer',
+            'comments_count' => 'integer',
         ];
     }
 
-    public function question(): BelongsTo { return $this->belongsTo(Question::class); }
-    public function user(): BelongsTo     { return $this->belongsTo(User::class); }
-    public function comments(): MorphMany { return $this->morphMany(Comment::class, 'commentable'); }
-    public function votes(): MorphMany    { return $this->morphMany(Vote::class, 'votable'); }
-    public function reports(): MorphMany  { return $this->morphMany(Report::class, 'reportable'); }
+    public function question(): BelongsTo
+    {
+        return $this->belongsTo(Question::class);
+    }
 
-    public function isOwnedBy(User $user): bool { return $this->user_id === $user->id; }
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function comments(): MorphMany
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
+
+    public function votes(): MorphMany
+    {
+        return $this->morphMany(Vote::class, 'votable');
+    }
+
+    public function reports(): MorphMany
+    {
+        return $this->morphMany(Report::class, 'reportable');
+    }
+
+    public function isOwnedBy(User $user): bool
+    {
+        return $this->user_id === $user->id;
+    }
 }
