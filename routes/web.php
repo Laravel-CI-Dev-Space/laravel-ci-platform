@@ -219,7 +219,26 @@ Route::middleware(['auth', 'active'])->group(function () {
             ->prefix('dashboard/moderator')
             ->name('dashboard.moderator.')
             ->group(function () {
-                Route::get('/', fn () => view('dashboard.moderator.overview'))->name('overview');
+                Route::get('/', function () {
+                    $pendingArticles  = \App\Models\Article::where('status', 'pending')->with('author')->latest()->take(8)->get();
+                    $pendingQuestions = \App\Models\Question::where('status', 'hidden')->with('user')->latest()->take(8)->get();
+                    $newMembers       = \App\Models\User::latest()->take(6)->get();
+
+                    $stats = [
+                        'pending_articles'  => \App\Models\Article::where('status', 'pending')->count(),
+                        'hidden_questions'  => \App\Models\Question::where('status', 'hidden')->count(),
+                        'total_members'     => \App\Models\User::count(),
+                        'new_members_week'  => \App\Models\User::where('created_at', '>=', now()->subDays(7))->count(),
+                        'total_questions'   => \App\Models\Question::where('status', 'published')->count(),
+                        'answered_pct'      => \App\Models\Question::count() > 0
+                            ? round((\App\Models\Question::whereNotNull('accepted_answer_id')->count() / \App\Models\Question::count()) * 100)
+                            : 0,
+                        'published_articles' => \App\Models\Article::where('status', 'published')->count(),
+                        'rejected_articles'  => \App\Models\Article::where('status', 'rejected')->count(),
+                    ];
+
+                    return view('dashboard.moderator.overview', compact('stats', 'pendingArticles', 'pendingQuestions', 'newMembers'));
+                })->name('overview');
                 Route::get('/reports', fn () => view('dashboard.moderator.reports'))->name('reports');
                 Route::patch('/reports/{id}/resolve', fn () => back())->name('reports.resolve')->whereNumber('id');
                 Route::patch('/reports/{id}/dismiss', fn () => back())->name('reports.dismiss')->whereNumber('id');

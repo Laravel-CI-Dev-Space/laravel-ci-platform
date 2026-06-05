@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\CompanyAccount;
 use App\Models\JobOffer;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -23,8 +24,9 @@ class Company extends Model
         return ['is_verified' => 'boolean'];
     }
 
-    public function submittedBy(): BelongsTo { return $this->belongsTo(User::class, 'submitted_by'); }
-    public function jobOffers(): HasMany      { return $this->hasMany(JobOffer::class); }
+    public function submittedBy(): BelongsTo  { return $this->belongsTo(User::class, 'submitted_by'); }
+    public function jobOffers(): HasMany       { return $this->hasMany(JobOffer::class); }
+    public function accounts(): HasMany        { return $this->hasMany(CompanyAccount::class); }
     public function activeJobOffers(): HasMany
     {
         return $this->hasMany(JobOffer::class)->where('status', 'active');

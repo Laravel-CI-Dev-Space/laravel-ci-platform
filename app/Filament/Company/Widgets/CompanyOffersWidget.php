@@ -88,10 +88,10 @@ class CompanyOffersWidget extends BaseWidget
             ])
             ->actions([
                 \Filament\Actions\Action::make('applications')
-                    ->label('Candidatures')
+                    ->label(fn (JobOffer $r) => $r->applications_count . ' candidature' . ($r->applications_count !== 1 ? 's' : ''))
                     ->icon('heroicon-o-users')
-                    ->url(fn (JobOffer $r) => \App\Filament\Company\Resources\CompanyApplicationResource::getUrl('index') . '?tableFilters[job_offer_id][value]=' . $r->id)
-                    ->color('primary'),
+                    ->color(fn (JobOffer $r) => $r->applications_count > 0 ? 'primary' : 'gray')
+                    ->url(\App\Filament\Company\Resources\CompanyApplicationResource::getUrl('index')),
             ])
             ->paginated(false);
     }

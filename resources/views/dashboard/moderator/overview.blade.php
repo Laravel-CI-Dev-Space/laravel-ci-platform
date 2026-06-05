@@ -1,180 +1,255 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Moderator Dashboard')
+@section('title', 'Dashboard Modérateur — Laravel CI')
 
 @section('content')
 
-  <x-dashboard.breadcrumb :items="[['label' => 'Moderator Dashboard', 'href' => route('dashboard.moderator.overview')], ['label' => 'Overview']]" />
+<x-dashboard.breadcrumb :items="[
+    ['label' => 'Dashboard', 'href' => route('dashboard.moderator.overview')],
+    ['label' => 'Vue d\'ensemble'],
+]" />
 
-  <div class="row">
+{{-- En-tête --}}
+<div class="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-3">
+    <div>
+        <h1 class="fs-3 fw-bold mb-1">Dashboard Modérateur</h1>
+        <p class="text-muted mb-0">Vue d'ensemble de la santé de la communauté Laravel CI.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{{ route('dashboard.moderator.articles') }}" class="btn btn-warning btn-sm">
+            <i class="ti ti-file-text me-1"></i>Articles ({{ $stats['pending_articles'] }})
+        </a>
+        <a href="{{ route('dashboard.moderator.questions') }}" class="btn btn-outline-secondary btn-sm">
+            <i class="ti ti-help-circle me-1"></i>Questions
+        </a>
+    </div>
+</div>
+
+{{-- ─── KPIs principaux ─────────────────────────────────── --}}
+<div class="row g-3 mb-4">
+
+    {{-- Articles en attente --}}
+    <div class="col-6 col-lg-3">
+        <a href="{{ route('dashboard.moderator.articles') }}" class="text-decoration-none">
+            <div class="card border-0 shadow-sm h-100 {{ $stats['pending_articles'] > 0 ? 'border-start border-4 border-warning' : '' }}"
+                 style="{{ $stats['pending_articles'] > 0 ? 'border-left:4px solid #f39c12!important' : '' }}">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <div class="rounded-3 d-flex align-items-center justify-content-center"
+                             style="width:44px;height:44px;background:#fff5e0">
+                            <i class="ti ti-file-check" style="font-size:1.3rem;color:#f39c12"></i>
+                        </div>
+                        @if ($stats['pending_articles'] > 0)
+                            <span class="badge bg-warning text-dark" style="font-size:.7rem">Action requise</span>
+                        @endif
+                    </div>
+                    <div class="fw-bold" style="font-size:2rem;line-height:1;color:#f39c12">{{ $stats['pending_articles'] }}</div>
+                    <div class="text-muted small mt-1">Articles à valider</div>
+                    <div style="font-size:.75rem;color:#adb5bd">{{ $stats['published_articles'] }} publiés · {{ $stats['rejected_articles'] }} refusés</div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    {{-- Questions cachées --}}
+    <div class="col-6 col-lg-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <div class="rounded-3 d-flex align-items-center justify-content-center mb-2"
+                     style="width:44px;height:44px;background:#fff0ef">
+                    <i class="ti ti-eye-off" style="font-size:1.3rem;color:#e74c3c"></i>
+                </div>
+                <div class="fw-bold" style="font-size:2rem;line-height:1;color:#e74c3c">{{ $stats['hidden_questions'] }}</div>
+                <div class="text-muted small mt-1">Questions masquées</div>
+                <div style="font-size:.75rem;color:#adb5bd">{{ $stats['total_questions'] }} publiées au total</div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Membres --}}
+    <div class="col-6 col-lg-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <div class="rounded-3 d-flex align-items-center justify-content-center mb-2"
+                     style="width:44px;height:44px;background:#edfaf3">
+                    <i class="ti ti-users" style="font-size:1.3rem;color:#2ecc71"></i>
+                </div>
+                <div class="fw-bold" style="font-size:2rem;line-height:1;color:#2ecc71">{{ number_format($stats['total_members']) }}</div>
+                <div class="text-muted small mt-1">Membres actifs</div>
+                <div style="font-size:.75rem;color:#adb5bd">+{{ $stats['new_members_week'] }} cette semaine</div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Taux de résolution --}}
+    <div class="col-6 col-lg-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <div class="rounded-3 d-flex align-items-center justify-content-center mb-2"
+                     style="width:44px;height:44px;background:#e3f2fd">
+                    <i class="ti ti-chart-bar" style="font-size:1.3rem;color:#3498db"></i>
+                </div>
+                <div class="fw-bold" style="font-size:2rem;line-height:1;color:#3498db">{{ $stats['answered_pct'] }}%</div>
+                <div class="text-muted small mt-1">Questions résolues</div>
+                <div style="font-size:.75rem;color:#adb5bd">Taux de résolution forum</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- ─── Contenu principal ────────────────────────────────── --}}
+<div class="row g-3">
+
+    {{-- Articles en attente de validation --}}
+    <div class="col-12 col-xl-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white border-bottom px-4 py-3 d-flex align-items-center justify-content-between">
+                <h5 class="mb-0 fw-bold">
+                    <i class="ti ti-file-text me-1 text-warning"></i>
+                    Articles à valider
+                    @if ($stats['pending_articles'] > 0)
+                        <span class="badge bg-warning text-dark ms-1" style="font-size:.68rem">{{ $stats['pending_articles'] }}</span>
+                    @endif
+                </h5>
+                <a href="{{ route('dashboard.moderator.articles') }}" class="btn btn-warning btn-sm px-3">
+                    Gérer <i class="ti ti-arrow-right ms-1"></i>
+                </a>
+            </div>
+            <div class="card-body p-0">
+                @forelse ($pendingArticles as $article)
+                    <div class="d-flex align-items-start gap-3 px-4 py-3 border-bottom">
+                        @if ($article->author->avatar)
+                            <img src="{{ $article->author->avatar }}" class="rounded-circle flex-shrink-0"
+                                 style="width:36px;height:36px;object-fit:cover" alt="" />
+                        @else
+                            <div class="rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center"
+                                 style="width:36px;height:36px;background:#fff5e0;color:#f39c12;font-weight:700;font-size:.8rem">
+                                {{ strtoupper(substr($article->author->name, 0, 2)) }}
+                            </div>
+                        @endif
+                        <div class="flex-grow-1 min-width-0">
+                            <div class="fw-semibold" style="font-size:.88rem">
+                                {{ Str::limit($article->title, 55) }}
+                            </div>
+                            <div style="font-size:.75rem;color:#adb5bd">
+                                par {{ $article->author->name }}
+                                · {{ $article->created_at->diffForHumans() }}
+                                · <span class="badge px-2" style="background:{{ $article->level === 'beginner' ? '#edfaf3' : ($article->level === 'intermediate' ? '#fff5f0' : '#fdeaec') }};color:{{ $article->level === 'beginner' ? '#2ecc71' : ($article->level === 'intermediate' ? '#e8590c' : '#e74c3c') }};font-size:.65rem;">{{ ['beginner'=>'Débutant','intermediate'=>'Intermédiaire','advanced'=>'Avancé'][$article->level] ?? $article->level }}</span>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="text-center py-5 text-muted">
+                        <i class="ti ti-circle-check d-block mb-2 text-success" style="font-size:2.5rem;opacity:.5"></i>
+                        Aucun article en attente. File vide !
+                    </div>
+                @endforelse
+            </div>
+        </div>
+    </div>
+
+    {{-- Questions masquées + Nouveaux membres --}}
+    <div class="col-12 col-xl-6">
+        <div class="row g-3 h-100">
+
+            {{-- Questions masquées --}}
+            <div class="col-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white border-bottom px-4 py-3 d-flex align-items-center justify-content-between">
+                        <h5 class="mb-0 fw-bold">
+                            <i class="ti ti-eye-off me-1 text-danger"></i>
+                            Questions masquées
+                        </h5>
+                        <a href="{{ route('dashboard.moderator.questions') }}" class="text-primary" style="font-size:.82rem">
+                            Voir tout <i class="ti ti-arrow-right"></i>
+                        </a>
+                    </div>
+                    <div class="card-body p-0">
+                        @forelse ($pendingQuestions->take(4) as $question)
+                            <div class="d-flex align-items-center gap-3 px-4 py-2 border-bottom">
+                                <div class="flex-grow-1">
+                                    <div style="font-size:.85rem;font-weight:600">
+                                        {{ Str::limit($question->title, 60) }}
+                                    </div>
+                                    <div style="font-size:.75rem;color:#adb5bd">
+                                        {{ $question->user->name }} · {{ $question->created_at->diffForHumans() }}
+                                    </div>
+                                </div>
+                                <span class="badge bg-danger-subtle text-danger" style="font-size:.65rem">Caché</span>
+                            </div>
+                        @empty
+                            <div class="text-center py-4 text-muted" style="font-size:.85rem">
+                                <i class="ti ti-circle-check text-success me-1"></i>Aucune question masquée.
+                            </div>
+                        @endforelse
+                    </div>
+                </div>
+            </div>
+
+            {{-- Nouveaux membres --}}
+            <div class="col-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white border-bottom px-4 py-3">
+                        <h5 class="mb-0 fw-bold">
+                            <i class="ti ti-user-plus me-1 text-success"></i>
+                            Nouveaux membres
+                        </h5>
+                    </div>
+                    <div class="card-body p-0">
+                        @foreach ($newMembers as $member)
+                            <div class="d-flex align-items-center gap-3 px-4 py-2 border-bottom">
+                                @if ($member->avatar)
+                                    <img src="{{ $member->avatar }}" class="rounded-circle flex-shrink-0"
+                                         style="width:32px;height:32px;object-fit:cover" alt="" />
+                                @else
+                                    <div class="rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center"
+                                         style="width:32px;height:32px;background:#edfaf3;color:#2ecc71;font-weight:700;font-size:.75rem">
+                                        {{ strtoupper(substr($member->name, 0, 2)) }}
+                                    </div>
+                                @endif
+                                <div class="flex-grow-1">
+                                    <div style="font-size:.85rem;font-weight:600">{{ $member->name }}</div>
+                                    <div style="font-size:.73rem;color:#adb5bd">
+                                        {{ $member->github_username ? '@' . $member->github_username . ' · ' : '' }}{{ $member->created_at->diffForHumans() }}
+                                    </div>
+                                </div>
+                                <span class="badge bg-success-subtle text-success" style="font-size:.65rem">
+                                    {{ $member->is_active ? 'Actif' : 'Inactif' }}
+                                </span>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+{{-- ─── Actions rapides ──────────────────────────────────── --}}
+<div class="row g-3 mt-1">
     <div class="col-12">
-      <div class="mb-6">
-        <h1 class="fs-3 mb-1">Moderator Dashboard</h1>
-        <p class="text-muted">Community health overview and moderation queue.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Stats -->
-  <div class="row g-3 mb-3">
-    <div class="col-lg-3 col-12">
-      <div class="card p-4 bg-primary bg-opacity-10 border border-primary border-opacity-25 rounded-2">
-        <div class="d-flex gap-3">
-          <div class="icon-shape icon-md bg-primary text-white rounded-2"><i class="ti ti-users fs-4"></i></div>
-          <div>
-            <h2 class="mb-3 fs-6">Total Members</h2>
-            <h3 class="fw-bold mb-0">{{ number_format($stats['members'] ?? 500) }}</h3>
-            <p class="text-primary mb-0 small">+5% this month</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-3 col-12">
-      <div class="card p-4 bg-success bg-opacity-10 border border-success border-opacity-25 rounded-2">
-        <div class="d-flex gap-3">
-          <div class="icon-shape icon-md bg-success text-white rounded-2"><i class="ti ti-message-circle-question fs-4"></i></div>
-          <div>
-            <h2 class="mb-3 fs-6">Total Questions</h2>
-            <h3 class="fw-bold mb-0">{{ number_format($stats['questions'] ?? 1204) }}</h3>
-            <p class="text-success mb-0 small">+22 this week</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-3 col-12">
-      <div class="card p-4 bg-warning bg-opacity-10 border border-warning border-opacity-25 rounded-2">
-        <div class="d-flex gap-3">
-          <div class="icon-shape icon-md bg-warning text-white rounded-2"><i class="ti ti-alert-triangle fs-4"></i></div>
-          <div>
-            <h2 class="mb-3 fs-6">Pending Reports</h2>
-            <h3 class="fw-bold mb-0">{{ $stats['pending_reports'] ?? 0 }}</h3>
-            <p class="text-warning mb-0 small">Needs review</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-3 col-12">
-      <div class="card p-4 bg-danger bg-opacity-10 border border-danger border-opacity-25 rounded-2">
-        <div class="d-flex gap-3">
-          <div class="icon-shape icon-md bg-danger text-white rounded-2"><i class="ti ti-user-off fs-4"></i></div>
-          <div>
-            <h2 class="mb-3 fs-6">Banned Members</h2>
-            <h3 class="fw-bold mb-0">{{ $stats['banned_members'] ?? 0 }}</h3>
-            <p class="text-danger mb-0 small">Active bans</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Summary cards -->
-  <div class="row g-3 mb-3">
-    <div class="col-lg-4 col-12">
-      <div class="card">
-        <div class="card-body p-4">
-          <div class="d-flex justify-content-between border-bottom pb-5 mb-3">
-            <div>
-              <h3 class="fw-bold h4">{{ number_format($stats['articles'] ?? 80) }}</h3>
-              <span>Total Articles</span>
+        <div class="card border-0 shadow-sm">
+            <div class="card-body py-3">
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                    <span class="fw-semibold text-muted" style="font-size:.82rem">Actions rapides :</span>
+                    <a href="{{ route('dashboard.moderator.articles') }}" class="btn btn-warning btn-sm">
+                        <i class="ti ti-file-check me-1"></i>Valider les articles
+                    </a>
+                    <a href="{{ route('dashboard.moderator.questions') }}" class="btn btn-outline-secondary btn-sm">
+                        <i class="ti ti-help-circle me-1"></i>Modérer le forum
+                    </a>
+                    <a href="{{ route('forum.index') }}" class="btn btn-outline-primary btn-sm" target="_blank">
+                        <i class="ti ti-external-link me-1"></i>Voir le forum
+                    </a>
+                    <a href="{{ route('blog.index') }}" class="btn btn-outline-primary btn-sm" target="_blank">
+                        <i class="ti ti-external-link me-1"></i>Voir le blog
+                    </a>
+                </div>
             </div>
-            <div><i class="ti ti-file-text fs-1 text-primary"></i></div>
-          </div>
-          <div class="d-flex justify-content-between align-items-center small">
-            <div class="text-muted"><span class="text-success">+8</span> this month</div>
-            <div><a href="{{ route('dashboard.moderator.articles') }}" class="link-primary text-decoration-underline">View</a></div>
-          </div>
         </div>
-      </div>
     </div>
-    <div class="col-lg-4 col-12">
-      <div class="card">
-        <div class="card-body p-4">
-          <div class="d-flex justify-content-between border-bottom pb-5 mb-3">
-            <div>
-              <h3 class="fw-bold h4">{{ number_format($stats['events'] ?? 24) }}</h3>
-              <span>Events Organised</span>
-            </div>
-            <div><i class="ti ti-calendar-event fs-1 text-success"></i></div>
-          </div>
-          <div class="d-flex justify-content-between align-items-center small">
-            <div class="text-muted"><span class="text-success">+3</span> upcoming</div>
-            <div><a href="{{ route('events.index') }}" class="link-primary text-decoration-underline">View</a></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-4 col-12">
-      <div class="card">
-        <div class="card-body p-4">
-          <div class="d-flex justify-content-between border-bottom pb-5 mb-3">
-            <div>
-              <h3 class="fw-bold h4">{{ number_format($stats['jobs'] ?? 39) }}</h3>
-              <span>Active Job Listings</span>
-            </div>
-            <div><i class="ti ti-briefcase fs-1 text-warning"></i></div>
-          </div>
-          <div class="d-flex justify-content-between align-items-center small">
-            <div class="text-muted"><span class="text-warning">5</span> pending approval</div>
-            <div><a href="{{ route('jobs.index') }}" class="link-primary text-decoration-underline">View</a></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Recent reports -->
-  <div class="row g-3">
-    <div class="col-lg-6">
-      <div class="card h-100">
-        <div class="card-header bg-white d-flex justify-content-between align-items-center px-4 py-3">
-          <h4 class="mb-0 h5">Recent Reports</h4>
-          <a href="{{ route('dashboard.moderator.reports') }}" class="small text-primary text-decoration-underline">View all</a>
-        </div>
-        <ul class="list-group list-group-flush">
-          @forelse($recentReports ?? [] as $report)
-            <li class="list-group-item d-flex align-items-center gap-3 px-4 py-3">
-              <div class="flex-grow-1">
-                <p class="mb-1 fw-semibold">{{ $report->reason }}</p>
-                <div class="text-secondary small">{{ $report->reportable_type }} · {{ $report->created_at->diffForHumans() }}</div>
-              </div>
-              <a href="{{ route('dashboard.moderator.reports') }}" class="btn btn-sm btn-warning">Review</a>
-            </li>
-          @empty
-            <li class="list-group-item px-4 py-4 text-center text-secondary">
-              <i class="ti ti-circle-check fs-3 d-block mb-2 text-success"></i>
-              No pending reports. Community is healthy!
-            </li>
-          @endforelse
-        </ul>
-      </div>
-    </div>
-
-    <div class="col-lg-6">
-      <div class="card h-100">
-        <div class="card-header bg-white d-flex justify-content-between align-items-center px-4 py-3">
-          <h4 class="mb-0 h5">Newest Members</h4>
-        </div>
-        <ul class="list-group list-group-flush">
-          @forelse($newMembers ?? [] as $member)
-            <li class="list-group-item d-flex align-items-center gap-3 px-4 py-3">
-              @if($member->avatar)
-                <img src="{{ $member->avatar }}" alt="" class="avatar avatar-sm rounded-circle">
-              @else
-                <span class="avatar avatar-sm av-1">{{ substr($member->name, 0, 2) }}</span>
-              @endif
-              <div class="flex-grow-1">
-                <p class="mb-0 fw-semibold">{{ $member->name }}</p>
-                <div class="text-secondary small">@{{ $member->github_username ?? 'member' }} · joined {{ $member->created_at->diffForHumans() }}</div>
-              </div>
-            </li>
-          @empty
-            <li class="list-group-item px-4 py-4 text-center text-secondary">
-              No recent members.
-            </li>
-          @endforelse
-        </ul>
-      </div>
-    </div>
-  </div>
+</div>
 
 @endsection
