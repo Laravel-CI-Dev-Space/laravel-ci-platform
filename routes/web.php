@@ -10,7 +10,6 @@ use App\Http\Controllers\Company\ApplicationController as CompanyApplicationCont
 use App\Http\Controllers\Company\Auth\CompanyLoginController;
 use App\Http\Controllers\Company\Auth\CompanyPasswordController;
 use App\Http\Controllers\Company\Auth\CompanyRegisterController;
-use App\Http\Controllers\Company\DashboardController as CompanyDashboardController;
 use App\Http\Controllers\Company\JobOfferController as CompanyJobOfferController;
 use App\Http\Controllers\CvController;
 use App\Http\Controllers\DashboardController;
@@ -19,12 +18,17 @@ use App\Http\Controllers\Forum\AnswerController;
 use App\Http\Controllers\Forum\QuestionController;
 use App\Http\Controllers\Jobs\JobApplicationController;
 use App\Http\Controllers\Jobs\JobOfferController;
+use App\Http\Controllers\Web\AboutController;
+use App\Http\Controllers\Web\HomeController;
 use App\Livewire\EditProfile;
+use App\Models\Article;
+use App\Models\Question;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 // ─── PUBLIC WEB PAGES ──────────────────────────────────────
-Route::get('/', fn () => view('web.home'))->name('home');
-Route::get('/about', fn () => view('web.about'))->name('about');
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/about', [AboutController::class, 'index'])->name('about');
 
 // ─── FORUM — Routes publiques ──────────────────────────────
 Route::prefix('forum')->name('forum.')->group(function () {
@@ -220,21 +224,21 @@ Route::middleware(['auth', 'active'])->group(function () {
             ->name('dashboard.moderator.')
             ->group(function () {
                 Route::get('/', function () {
-                    $pendingArticles  = \App\Models\Article::where('status', 'pending')->with('author')->latest()->take(8)->get();
-                    $pendingQuestions = \App\Models\Question::where('status', 'hidden')->with('user')->latest()->take(8)->get();
-                    $newMembers       = \App\Models\User::latest()->take(6)->get();
+                    $pendingArticles  = Article::where('status', 'pending')->with('author')->latest()->take(8)->get();
+                    $pendingQuestions = Question::where('status', 'hidden')->with('user')->latest()->take(8)->get();
+                    $newMembers       = User::latest()->take(6)->get();
 
                     $stats = [
-                        'pending_articles'  => \App\Models\Article::where('status', 'pending')->count(),
-                        'hidden_questions'  => \App\Models\Question::where('status', 'hidden')->count(),
-                        'total_members'     => \App\Models\User::count(),
-                        'new_members_week'  => \App\Models\User::where('created_at', '>=', now()->subDays(7))->count(),
-                        'total_questions'   => \App\Models\Question::where('status', 'published')->count(),
-                        'answered_pct'      => \App\Models\Question::count() > 0
-                            ? round((\App\Models\Question::whereNotNull('accepted_answer_id')->count() / \App\Models\Question::count()) * 100)
+                        'pending_articles' => Article::where('status', 'pending')->count(),
+                        'hidden_questions' => Question::where('status', 'hidden')->count(),
+                        'total_members'    => User::count(),
+                        'new_members_week' => User::where('created_at', '>=', now()->subDays(7))->count(),
+                        'total_questions'  => Question::where('status', 'published')->count(),
+                        'answered_pct'     => Question::count() > 0
+                            ? round((Question::whereNotNull('accepted_answer_id')->count() / Question::count()) * 100)
                             : 0,
-                        'published_articles' => \App\Models\Article::where('status', 'published')->count(),
-                        'rejected_articles'  => \App\Models\Article::where('status', 'rejected')->count(),
+                        'published_articles' => Article::where('status', 'published')->count(),
+                        'rejected_articles'  => Article::where('status', 'rejected')->count(),
                     ];
 
                     return view('dashboard.moderator.overview', compact('stats', 'pendingArticles', 'pendingQuestions', 'newMembers'));

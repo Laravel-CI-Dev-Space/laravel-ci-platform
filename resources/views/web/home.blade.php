@@ -1,6 +1,6 @@
 @extends('layouts.web')
 
-@section('title', 'Laravel CI — The Laravel Community of Côte d\'Ivoire')
+@section('title', $settings->firstWhere('key', 'home_hero_title')?->value ?? "Laravel CI — The Laravel Community of Côte d'Ivoire")
 
 @section('content')
 
@@ -9,12 +9,21 @@
     <div class="container">
       <div class="row align-items-center g-5">
         <div class="col-lg-6">
-          <span class="hero-badge"><i class="fa-brands fa-laravel"></i> Laravel 11 · PHP 8.3 · Open source</span>
-          <h1>The Laravel Community of <span class="accent">Côte d'Ivoire</span></h1>
-          <p class="lead">Join 500+ developers — share, learn, and grow together. The first structured home for Ivorian Laravel &amp; PHP builders, in Abidjan and across the diaspora.</p>
+          <span class="hero-badge">
+            <i class="fa-brands fa-laravel"></i>
+            {{ $settings->firstWhere('key', 'home_hero_badge')?->value ?? 'Laravel 13 · PHP 8.3 · Open source' }}
+          </span>
+          <h1>{!! $settings->firstWhere('key', 'home_hero_title')?->value ?? "The Laravel Community of <span class=\"accent\">Côte d'Ivoire</span>" !!}</h1>
+          <p class="lead">{{ $settings->firstWhere('key', 'home_hero_subtitle')?->value ?? 'Join 500+ developers — share, learn, and grow together.' }}</p>
           <div class="d-flex flex-wrap gap-3 mt-4">
-            <a href="{{ route('login') }}" class="btn btn-brand btn-lg"><i class="fa-solid fa-user-plus"></i> Join the Community</a>
-            <a href="{{ route('forum.index') }}" class="btn btn-outline-navy btn-lg"><i class="fa-solid fa-comments"></i> Explore the Forum</a>
+            <a href="{{ route('login') }}" class="btn btn-brand btn-lg">
+              <i class="fa-solid fa-user-plus"></i>
+              {{ $settings->firstWhere('key', 'home_cta_primary_label')?->value ?? 'Join the Community' }}
+            </a>
+            <a href="{{ route('forum.index') }}" class="btn btn-outline-navy btn-lg">
+              <i class="fa-solid fa-comments"></i>
+              {{ $settings->firstWhere('key', 'home_cta_secondary_label')?->value ?? 'Explore the Forum' }}
+            </a>
           </div>
           <div class="trust-badges">
             <div class="trust-badge"><i class="fa-solid fa-people-group"></i> <span><strong>500+</strong> members</span></div>
@@ -68,36 +77,19 @@
   <!-- ============ STATS STRIP ============ -->
   <section class="stats-strip">
     <div class="container">
-      {{-- LIVEWIRE: @livewire('web.stats-counter') --}}
       <div class="row">
+        @foreach($stats as $stat)
         <div class="col-6 col-md-3 reveal">
           <div class="stat-item">
-            <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
-            <div class="stat-num"><span data-count="500">500</span><span class="plus">+</span></div>
-            <div class="stat-label">Members</div>
+            <div class="stat-icon"><i class="{{ $stat->icon }}"></i></div>
+            <div class="stat-num">
+              <span data-count="{{ $stat->resolvedValue() }}">{{ number_format($stat->resolvedValue()) }}</span>
+              <span class="plus">{{ $stat->suffix }}</span>
+            </div>
+            <div class="stat-label">{{ $stat->label }}</div>
           </div>
         </div>
-        <div class="col-6 col-md-3 reveal" data-delay="0.1">
-          <div class="stat-item">
-            <div class="stat-icon"><i class="fa-solid fa-circle-question"></i></div>
-            <div class="stat-num"><span data-count="1200">1200</span><span class="plus">+</span></div>
-            <div class="stat-label">Questions</div>
-          </div>
-        </div>
-        <div class="col-6 col-md-3 reveal" data-delay="0.2">
-          <div class="stat-item">
-            <div class="stat-icon"><i class="fa-solid fa-calendar-check"></i></div>
-            <div class="stat-num"><span data-count="24">24</span><span class="plus">+</span></div>
-            <div class="stat-label">Events</div>
-          </div>
-        </div>
-        <div class="col-6 col-md-3 reveal" data-delay="0.3">
-          <div class="stat-item">
-            <div class="stat-icon"><i class="fa-solid fa-book-open"></i></div>
-            <div class="stat-num"><span data-count="80">80</span><span class="plus">+</span></div>
-            <div class="stat-label">Articles</div>
-          </div>
-        </div>
+        @endforeach
       </div>
     </div>
   </section>
@@ -113,68 +105,42 @@
         <a href="{{ route('forum.index') }}" class="view-all-link">View all questions <i class="fa-solid fa-arrow-right"></i></a>
       </div>
 
+      @forelse($questions as $question)
       <div class="q-card reveal">
         <div class="q-stats">
-          <div class="q-vote"><span>42</span><small>votes</small></div>
-          <div class="q-answers accepted"><strong>5</strong>answers</div>
+          <div class="q-vote"><span>{{ $question->votes_score ?? 0 }}</span><small>votes</small></div>
+          <div class="q-answers {{ $question->accepted_answer_id ? 'accepted' : '' }}">
+            <strong>{{ $question->answers_count }}</strong>answers
+          </div>
         </div>
         <div class="q-body">
-          <h3 class="q-title"><a href="{{ route('forum.show', 1) }}">How to structure a multi-tenant Laravel app for a fintech in Abidjan?</a></h3>
-          <p class="q-excerpt">We're building a mobile money aggregator and need to isolate tenant data cleanly. Single database with scopes or separate databases per tenant?</p>
+          <h3 class="q-title">
+            <a href="{{ route('forum.show', $question->slug) }}">{{ $question->title }}</a>
+          </h3>
+          <p class="q-excerpt">{{ Str::limit(strip_tags($question->body), 120) }}</p>
           <div class="q-tags">
-            <span class="tag">laravel-11</span><span class="tag">multi-tenancy</span><span class="tag">architecture</span>
+            @foreach($question->tags as $tag)
+              <span class="tag" style="background: {{ $tag->color }}20; color: {{ $tag->color }}">
+                {{ $tag->name }}
+              </span>
+            @endforeach
           </div>
           <div class="q-foot">
             <div class="author-row">
-              <span class="avatar avatar-sm av-1">KA</span>
-              <div class="meta"><div class="name">Kouamé Aristide</div></div>
+              <span class="avatar avatar-sm {{ $question->user->profile?->avatar_color ?? 'av-1' }}">
+                {{ strtoupper(substr($question->user->name, 0, 2)) }}
+              </span>
+              <div class="meta"><div class="name">{{ $question->user->name }}</div></div>
             </div>
-            <span class="read-time"><i class="fa-regular fa-clock"></i> 2 hours ago</span>
+            <span class="read-time">
+              <i class="fa-regular fa-clock"></i> {{ $question->created_at->diffForHumans() }}
+            </span>
           </div>
         </div>
       </div>
-
-      <div class="q-card reveal" data-delay="0.08">
-        <div class="q-stats">
-          <div class="q-vote"><span>28</span><small>votes</small></div>
-          <div class="q-answers"><strong>3</strong>answers</div>
-        </div>
-        <div class="q-body">
-          <h3 class="q-title"><a href="{{ route('forum.show', 2) }}">Best practice for integrating Wave &amp; Orange Money APIs with Laravel?</a></h3>
-          <p class="q-excerpt">Looking for a clean abstraction layer to handle multiple mobile money providers. Should I use a Payment contract with driver implementations?</p>
-          <div class="q-tags">
-            <span class="tag">payments</span><span class="tag">api</span><span class="tag">mobile-money</span>
-          </div>
-          <div class="q-foot">
-            <div class="author-row">
-              <span class="avatar avatar-sm av-3">FD</span>
-              <div class="meta"><div class="name">Fatou Diallo</div></div>
-            </div>
-            <span class="read-time"><i class="fa-regular fa-clock"></i> 6 hours ago</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="q-card reveal" data-delay="0.16">
-        <div class="q-stats">
-          <div class="q-vote"><span>17</span><small>votes</small></div>
-          <div class="q-answers"><strong>2</strong>answers</div>
-        </div>
-        <div class="q-body">
-          <h3 class="q-title"><a href="{{ route('forum.show', 3) }}">Queue workers keep dying on a low-memory VPS — how to keep them alive?</a></h3>
-          <p class="q-excerpt">My Horizon workers crash overnight on a 1GB DigitalOcean droplet. Supervisor restarts them but jobs pile up. What's the right setup?</p>
-          <div class="q-tags">
-            <span class="tag">queues</span><span class="tag">horizon</span><span class="tag">devops</span>
-          </div>
-          <div class="q-foot">
-            <div class="author-row">
-              <span class="avatar avatar-sm av-4">YT</span>
-              <div class="meta"><div class="name">Yao Térence</div></div>
-            </div>
-            <span class="read-time"><i class="fa-regular fa-clock"></i> Yesterday</span>
-          </div>
-        </div>
-      </div>
+      @empty
+        <p class="text-muted-2 text-center py-4">Aucune question pour l'instant.</p>
+      @endforelse
     </div>
   </section>
 
@@ -190,57 +156,43 @@
       </div>
 
       <div class="row g-4">
+        @forelse($articles as $article)
+        @php
+          $levelCssMap = [
+            'beginner'     => ['class' => 'lv-beginner',     'badge' => 'badge-green',  'dot' => 'var(--green)',            'label' => 'Beginner'],
+            'intermediate' => ['class' => 'lv-intermediate', 'badge' => 'badge-orange', 'dot' => 'var(--level-intermediate)', 'label' => 'Intermediate'],
+            'advanced'     => ['class' => 'lv-advanced',     'badge' => '',             'dot' => 'var(--level-advanced)',    'label' => 'Advanced'],
+          ];
+          $lv       = $levelCssMap[$article->level] ?? $levelCssMap['beginner'];
+          $wordCount = str_word_count(strip_tags($article->body ?? ''));
+          $readTime  = max(1, (int) round($wordCount / 200));
+        @endphp
         <div class="col-md-6 col-lg-4 reveal">
           <article class="card-soft article-card">
-            <div class="level-banner lv-beginner"></div>
+            <div class="level-banner {{ $lv['class'] }}"></div>
             <div class="card-pad">
-              <span class="badge-pill badge-green"><span class="lv-dot" style="background:var(--green)"></span> Beginner</span>
-              <h3 class="art-title"><a href="{{ route('blog.show', 1) }}">Getting started with Laravel 11 in Abidjan: your first deploy</a></h3>
-              <p class="art-excerpt">A no-nonsense guide to shipping your first Laravel app to a local VPS, from <code class="mono">.env</code> to production in an afternoon.</p>
+              <span class="badge-pill {{ $lv['badge'] }}" @if(!$lv['badge']) style="background:#fdeaec;color:var(--level-advanced)" @endif>
+                <span class="lv-dot" style="background:{{ $lv['dot'] }}"></span> {{ $lv['label'] }}
+              </span>
+              <h3 class="art-title">
+                <a href="{{ route('blog.show', $article->slug) }}">{{ $article->title }}</a>
+              </h3>
+              <p class="art-excerpt">{{ Str::limit($article->excerpt ?? strip_tags($article->body ?? ''), 100) }}</p>
               <div class="art-foot">
                 <div class="author-row">
-                  <span class="avatar avatar-sm av-2">MK</span>
-                  <div class="meta"><div class="name">Mariam Koné</div></div>
+                  <span class="avatar avatar-sm av-1">{{ strtoupper(substr($article->author->name, 0, 2)) }}</span>
+                  <div class="meta"><div class="name">{{ $article->author->name }}</div></div>
                 </div>
-                <span class="read-time"><i class="fa-regular fa-clock"></i> 6 min</span>
+                <span class="read-time"><i class="fa-regular fa-clock"></i> {{ $readTime }} min</span>
               </div>
             </div>
           </article>
         </div>
-        <div class="col-md-6 col-lg-4 reveal" data-delay="0.1">
-          <article class="card-soft article-card">
-            <div class="level-banner lv-intermediate"></div>
-            <div class="card-pad">
-              <span class="badge-pill badge-orange"><span class="lv-dot" style="background:var(--level-intermediate)"></span> Intermediate</span>
-              <h3 class="art-title"><a href="{{ route('blog.show', 2) }}">Building a Wave payment integration the clean way</a></h3>
-              <p class="art-excerpt">Wrap mobile money providers behind a single contract, test webhooks locally, and handle idempotency like a pro.</p>
-              <div class="art-foot">
-                <div class="author-row">
-                  <span class="avatar avatar-sm av-1">SB</span>
-                  <div class="meta"><div class="name">Serge Brou</div></div>
-                </div>
-                <span class="read-time"><i class="fa-regular fa-clock"></i> 11 min</span>
-              </div>
-            </div>
-          </article>
-        </div>
-        <div class="col-md-6 col-lg-4 reveal" data-delay="0.2">
-          <article class="card-soft article-card">
-            <div class="level-banner lv-advanced"></div>
-            <div class="card-pad">
-              <span class="badge-pill" style="background:#fdeaec;color:var(--level-advanced)"><span class="lv-dot" style="background:var(--level-advanced)"></span> Advanced</span>
-              <h3 class="art-title"><a href="{{ route('blog.show', 3) }}">Scaling Laravel queues with Horizon on a budget</a></h3>
-              <p class="art-excerpt">Tune Redis, supervisor and worker memory so your jobs survive the night — even on a 1GB droplet.</p>
-              <div class="art-foot">
-                <div class="author-row">
-                  <span class="avatar avatar-sm av-5">AD</span>
-                  <div class="meta"><div class="name">Aïcha Doumbia</div></div>
-                </div>
-                <span class="read-time"><i class="fa-regular fa-clock"></i> 9 min</span>
-              </div>
-            </div>
-          </article>
-        </div>
+        @empty
+          <div class="col-12">
+            <p class="text-muted-2 text-center py-4">Aucun article pour l'instant.</p>
+          </div>
+        @endforelse
       </div>
     </div>
   </section>
@@ -257,54 +209,54 @@
       </div>
 
       <div class="row g-4">
+        @forelse($events as $event)
+        @php
+          $typeMap = [
+            'meetup'    => ['class' => 'ev-meetup',    'badge' => 'badge-orange',                             'icon' => 'fa-solid fa-people-roof',   'label' => 'Meetup'],
+            'webinar'   => ['class' => 'ev-webinar',   'badge' => '',                                         'icon' => 'fa-solid fa-video',         'label' => 'Webinar'],
+            'hackathon' => ['class' => 'ev-hackathon', 'badge' => '',                                         'icon' => 'fa-solid fa-laptop-code',   'label' => 'Hackathon'],
+          ];
+          $ev          = $typeMap[$event->type] ?? $typeMap['meetup'];
+          $spotsUsed   = $event->registrations_count ?? 0;
+          $capacity    = $event->capacity;
+          $progress    = $capacity ? min(100, round($spotsUsed / $capacity * 100)) : 0;
+          $spotsLeft   = $capacity ? max(0, $capacity - $spotsUsed) : null;
+        @endphp
         <div class="col-md-6 col-lg-4 reveal">
           <article class="card-soft event-card">
-            <div class="event-banner ev-meetup"></div>
+            <div class="event-banner {{ $ev['class'] }}"></div>
             <div class="card-pad">
-              <span class="badge-pill badge-orange"><i class="fa-solid fa-people-roof"></i> Meetup</span>
-              <h3 class="art-title">Laravel CI Meetup #04 — Eloquent Deep Dive</h3>
+              <span class="badge-pill {{ $ev['badge'] }}"
+                @if($event->type === 'webinar') style="background:#e7ebff;color:#4361ee"
+                @elseif($event->type === 'hackathon') style="background:#f1e7ff;color:#7209b7"
+                @endif>
+                <i class="{{ $ev['icon'] }}"></i> {{ $ev['label'] }}
+              </span>
+              <h3 class="art-title">{{ $event->title }}</h3>
               <div class="d-flex flex-column gap-2 my-3" style="font-size:.88rem;color:var(--muted)">
-                <span><i class="fa-regular fa-calendar text-orange me-2"></i> Sat, June 14 · 2:00 PM</span>
-                <span><i class="fa-solid fa-location-dot text-orange me-2"></i> Jokkolabs, Cocody, Abidjan</span>
+                <span><i class="fa-regular fa-calendar text-orange me-2"></i> {{ $event->starts_at->format('D, M j · g:i A') }}</span>
+                @if($event->isOnline())
+                  <span><i class="fa-solid fa-globe text-orange me-2"></i> Online · {{ $event->online_url }}</span>
+                @else
+                  <span><i class="fa-solid fa-location-dot text-orange me-2"></i> {{ $event->location }}</span>
+                @endif
               </div>
-              <div class="spots-label"><span>32 / 50 spots</span><span>18 left</span></div>
-              <div class="progress-spots mb-3"><div class="bar" style="width:64%"></div></div>
+              @if($capacity)
+              <div class="spots-label">
+                <span>{{ $spotsUsed }} / {{ $capacity }} spots</span>
+                <span>{{ $spotsLeft }} left</span>
+              </div>
+              <div class="progress-spots mb-3"><div class="bar" style="width:{{ $progress }}%"></div></div>
+              @endif
               <a href="{{ route('events.index') }}" class="btn btn-brand w-100"><i class="fa-solid fa-ticket"></i> Register</a>
             </div>
           </article>
         </div>
-        <div class="col-md-6 col-lg-4 reveal" data-delay="0.1">
-          <article class="card-soft event-card">
-            <div class="event-banner ev-webinar"></div>
-            <div class="card-pad">
-              <span class="badge-pill" style="background:#e7ebff;color:#4361ee"><i class="fa-solid fa-video"></i> Webinar</span>
-              <h3 class="art-title">Testing Laravel APIs with Pest — live coding</h3>
-              <div class="d-flex flex-column gap-2 my-3" style="font-size:.88rem;color:var(--muted)">
-                <span><i class="fa-regular fa-calendar text-orange me-2"></i> Wed, June 18 · 7:00 PM</span>
-                <span><i class="fa-solid fa-globe text-orange me-2"></i> Online · Google Meet</span>
-              </div>
-              <div class="spots-label"><span>87 / 200 spots</span><span>113 left</span></div>
-              <div class="progress-spots mb-3"><div class="bar" style="width:43%"></div></div>
-              <a href="{{ route('events.index') }}" class="btn btn-brand w-100"><i class="fa-solid fa-ticket"></i> Register</a>
-            </div>
-          </article>
-        </div>
-        <div class="col-md-6 col-lg-4 reveal" data-delay="0.2">
-          <article class="card-soft event-card">
-            <div class="event-banner ev-hackathon"></div>
-            <div class="card-pad">
-              <span class="badge-pill" style="background:#f1e7ff;color:#7209b7"><i class="fa-solid fa-laptop-code"></i> Hackathon</span>
-              <h3 class="art-title">CivTech Hack — 48h building for local impact</h3>
-              <div class="d-flex flex-column gap-2 my-3" style="font-size:.88rem;color:var(--muted)">
-                <span><i class="fa-regular fa-calendar text-orange me-2"></i> Jul 5–6 · All weekend</span>
-                <span><i class="fa-solid fa-location-dot text-orange me-2"></i> Orange Digital Center</span>
-              </div>
-              <div class="spots-label"><span>64 / 80 spots</span><span>16 left</span></div>
-              <div class="progress-spots mb-3"><div class="bar" style="width:80%"></div></div>
-              <a href="{{ route('events.index') }}" class="btn btn-brand w-100"><i class="fa-solid fa-ticket"></i> Register</a>
-            </div>
-          </article>
-        </div>
+        @empty
+          <div class="col-12">
+            <p class="text-muted-2 text-center py-4">Aucun événement à venir pour l'instant.</p>
+          </div>
+        @endforelse
       </div>
     </div>
   </section>
@@ -314,10 +266,18 @@
     <div class="container">
       <p class="text-center text-muted-2 mb-4" style="font-weight:500;letter-spacing:.05em">Part of the global Laravel community</p>
       <div class="row g-3 justify-content-center">
-        <div class="col-6 col-md-3 reveal"><div class="partner-logo"><i class="fa-solid fa-hippo"></i> Laravel France</div></div>
-        <div class="col-6 col-md-3 reveal" data-delay="0.08"><div class="partner-logo"><i class="fa-solid fa-hippo"></i> Laravel Cameroun</div></div>
-        <div class="col-6 col-md-3 reveal" data-delay="0.16"><div class="partner-logo"><i class="fa-solid fa-hippo"></i> Laravel Sénégal</div></div>
-        <div class="col-6 col-md-3 reveal" data-delay="0.24"><div class="partner-logo"><i class="fa-solid fa-hippo"></i> Laravel Nigeria</div></div>
+        @foreach($partners as $partner)
+        <div class="col-6 col-md-3 reveal">
+          <div class="partner-logo">
+            @if($partner->logo)
+              <img src="{{ $partner->logoUrl() }}" alt="{{ $partner->name }}" style="height:32px">
+            @else
+              <i class="{{ $partner->icon ?? 'fa-solid fa-hippo' }}"></i>
+            @endif
+            {{ $partner->name }}
+          </div>
+        </div>
+        @endforeach
       </div>
     </div>
   </section>
@@ -327,8 +287,10 @@
     <div class="container">
       <div class="cta-banner reveal">
         <img src="{{ asset('assets/web/img/mascot.png') }}" class="cta-mascot d-none d-xl-block" alt="" aria-hidden="true" />
-        <h2 class="mb-3">Ready to build the future of Ivorian tech?</h2>
-        <p class="lead mb-4" style="color:rgba(255,255,255,.92);max-width:40rem;margin-inline:auto">Sign in with GitHub, ask your first question, and meet 500+ developers who have your back.</p>
+        <h2 class="mb-3">{{ $settings->firstWhere('key', 'home_cta_banner_title')?->value ?? 'Ready to build the future of Ivorian tech?' }}</h2>
+        <p class="lead mb-4" style="color:rgba(255,255,255,.92);max-width:40rem;margin-inline:auto">
+          {{ $settings->firstWhere('key', 'home_cta_banner_text')?->value ?? 'Sign in with GitHub, ask your first question, and meet 500+ developers who have your back.' }}
+        </p>
         <div class="cta-cmd"><span class="cta-cmd-prompt">$</span> composer create-project laravel-ci/community <button class="cta-cmd-copy" type="button" aria-label="Copy"><i class="fa-regular fa-copy"></i></button></div>
         <a href="{{ route('login') }}" class="btn btn-light btn-lg"><i class="fa-brands fa-github"></i> Join the Community</a>
       </div>

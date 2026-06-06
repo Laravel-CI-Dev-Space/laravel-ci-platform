@@ -1,0 +1,78 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\SiteSetting;
+use Illuminate\Database\Seeder;
+
+class SiteSettingSeeder extends Seeder
+{
+    public function run(): void
+    {
+        $settings = [
+            // ── GENERAL ──────────────────────────────────────────────
+            ['key' => 'site_name',        'group' => 'general', 'type' => 'text',     'label' => 'Nom du site',               'value' => "Laravel Côte d'Ivoire",                                                                                         'order' => 1],
+            ['key' => 'site_tagline',     'group' => 'general', 'type' => 'text',     'label' => 'Tagline',                   'value' => "The Laravel Community of Côte d'Ivoire",                                                                         'order' => 2],
+            ['key' => 'site_description', 'group' => 'general', 'type' => 'textarea', 'label' => 'Description',               'value' => "La première communauté structurée dédiée aux développeurs Laravel en Côte d'Ivoire.",                            'order' => 3],
+            ['key' => 'site_email',       'group' => 'general', 'type' => 'text',     'label' => 'Email de contact',          'value' => 'contact@laravelci.com',                                                                                          'order' => 4],
+
+            // ── SOCIAL ───────────────────────────────────────────────
+            ['key' => 'social_github',   'group' => 'social', 'type' => 'url', 'label' => 'GitHub',                'value' => 'https://github.com/Laravel-CI-Dev-Space', 'order' => 1],
+            ['key' => 'social_linkedin', 'group' => 'social', 'type' => 'url', 'label' => 'LinkedIn',              'value' => '',                                         'order' => 2],
+            ['key' => 'social_twitter',  'group' => 'social', 'type' => 'url', 'label' => 'Twitter / X',           'value' => '',                                         'order' => 3],
+            ['key' => 'social_whatsapp', 'group' => 'social', 'type' => 'url', 'label' => 'WhatsApp (lien groupe)', 'value' => '',                                         'order' => 4],
+
+            // ── HOME ─────────────────────────────────────────────────
+            ['key' => 'home_hero_badge',          'group' => 'home', 'type' => 'text',     'label' => 'Hero badge text',           'value' => 'Laravel 13 · PHP 8.3 · Open source',                                                                                'order' => 1],
+            ['key' => 'home_hero_title',          'group' => 'home', 'type' => 'text',     'label' => 'Hero titre principal',      'value' => "The Laravel Community of Côte d'Ivoire",                                                                            'order' => 2],
+            ['key' => 'home_hero_subtitle',       'group' => 'home', 'type' => 'textarea', 'label' => 'Hero sous-titre',           'value' => 'Join 500+ developers — share, learn, and grow together.',                                                          'order' => 3],
+            ['key' => 'home_cta_primary_label',   'group' => 'home', 'type' => 'text',     'label' => 'CTA principal label',       'value' => 'Join the Community',                                                                                                'order' => 4],
+            ['key' => 'home_cta_secondary_label', 'group' => 'home', 'type' => 'text',     'label' => 'CTA secondaire label',      'value' => 'Explore the Forum',                                                                                                 'order' => 5],
+            ['key' => 'home_questions_preview',   'group' => 'home', 'type' => 'number',   'label' => "Nb questions page d'accueil", 'value' => '3',                                                                                                               'order' => 6],
+            ['key' => 'home_articles_preview',    'group' => 'home', 'type' => 'number',   'label' => "Nb articles page d'accueil",  'value' => '3',                                                                                                               'order' => 7],
+            ['key' => 'home_events_preview',      'group' => 'home', 'type' => 'number',   'label' => "Nb events page d'accueil",    'value' => '3',                                                                                                               'order' => 8],
+            ['key' => 'home_cta_banner_title',    'group' => 'home', 'type' => 'text',     'label' => 'Bannière CTA titre',        'value' => 'Ready to build the future of Ivorian tech?',                                                                       'order' => 9],
+            ['key' => 'home_cta_banner_text',     'group' => 'home', 'type' => 'textarea', 'label' => 'Bannière CTA texte',        'value' => 'Sign in with GitHub, ask your first question, and meet 500+ developers who have your back.',                       'order' => 10],
+
+            // ── ABOUT ────────────────────────────────────────────────
+            ['key' => 'about_hero_title',    'group' => 'about', 'type' => 'text',     'label' => 'About hero titre',      'value' => "We're building the home for Ivorian Laravel developers",                              'order' => 1],
+            ['key' => 'about_hero_subtitle', 'group' => 'about', 'type' => 'textarea', 'label' => 'About hero sous-titre', 'value' => "Laravel Côte d'Ivoire is the first structured developer community dedicated to Laravel & PHP in Côte d'Ivoire.", 'order' => 2],
+            ['key' => 'about_mission',       'group' => 'about', 'type' => 'textarea', 'label' => 'Mission',               'value' => 'Give every Ivorian developer a structured place to learn Laravel properly.',           'order' => 3],
+            ['key' => 'about_vision',        'group' => 'about', 'type' => 'textarea', 'label' => 'Vision',                'value' => 'A West Africa where world-class software is built by local talent.',                   'order' => 4],
+            ['key' => 'about_cta_title',     'group' => 'about', 'type' => 'text',     'label' => 'About CTA titre',       'value' => 'Your seat at the table is ready',                                                    'order' => 5],
+            ['key' => 'about_cta_text',      'group' => 'about', 'type' => 'textarea', 'label' => 'About CTA texte',       'value' => 'Join 500+ Ivorian developers building the future of African tech.',                   'order' => 6],
+
+            // ── SEO ──────────────────────────────────────────────────
+            ['key' => 'seo_home_title',       'group' => 'seo', 'type' => 'text',     'label' => "SEO titre d'accueil",       'value' => "Laravel CI — The Laravel Community of Côte d'Ivoire", 'order' => 1],
+            ['key' => 'seo_home_description', 'group' => 'seo', 'type' => 'textarea', 'label' => "SEO description d'accueil", 'value' => "La première communauté structurée de développeurs Laravel en Côte d'Ivoire.", 'order' => 2],
+            ['key' => 'seo_og_image',         'group' => 'seo', 'type' => 'image',    'label' => 'OG Image (1200x630)',       'value' => '', 'order' => 3],
+
+            // ── IDENTITY (logos, brand) ───────────────────────────────
+            ['key' => 'identity_brand_name',    'group' => 'identity', 'type' => 'text',  'label' => 'Nom du brand (header)',        'value' => 'Laravel CI',                          'order' => 1],
+            ['key' => 'identity_logo_mark',     'group' => 'identity', 'type' => 'image', 'label' => 'Logo mark (icône)',            'value' => 'web/img/logo-mark.png',               'order' => 2],
+            ['key' => 'identity_logo_full',     'group' => 'identity', 'type' => 'image', 'label' => 'Logo complet (optionnel)',     'value' => '',                                    'order' => 3],
+            ['key' => 'identity_favicon',       'group' => 'identity', 'type' => 'image', 'label' => 'Favicon',                     'value' => 'web/img/favicon.png',                 'order' => 4],
+            ['key' => 'identity_header_cta',    'group' => 'identity', 'type' => 'text',  'label' => 'Bouton header (non connecté)', 'value' => 'Sign in with GitHub',                 'order' => 5],
+
+            // ── FOOTER ───────────────────────────────────────────────
+            ['key' => 'footer_tagline',              'group' => 'footer', 'type' => 'textarea', 'label' => 'Description / tagline',        'value' => "The first structured developer community for Laravel & PHP in Côte d'Ivoire and the Ivorian diaspora. African tech excellence, together.", 'order' => 1],
+            ['key' => 'footer_col1_title',           'group' => 'footer', 'type' => 'text',     'label' => 'Colonne 2 — titre',            'value' => 'Quick Links',                      'order' => 2],
+            ['key' => 'footer_col2_title',           'group' => 'footer', 'type' => 'text',     'label' => 'Colonne 3 — titre',            'value' => 'Community',                        'order' => 3],
+            ['key' => 'footer_col3_title',           'group' => 'footer', 'type' => 'text',     'label' => 'Colonne 4 — titre',            'value' => 'Contact',                          'order' => 4],
+            ['key' => 'footer_contact_location',     'group' => 'footer', 'type' => 'text',     'label' => 'Localisation',                 'value' => "Abidjan, Côte d'Ivoire",            'order' => 5],
+            ['key' => 'footer_contact_email',        'group' => 'footer', 'type' => 'text',     'label' => 'Email de contact',             'value' => 'hello@laravel.ci',                 'order' => 6],
+            ['key' => 'footer_whatsapp_label',       'group' => 'footer', 'type' => 'text',     'label' => 'Label lien WhatsApp',          'value' => 'Join WhatsApp group',              'order' => 7],
+            ['key' => 'footer_github_label',         'group' => 'footer', 'type' => 'text',     'label' => 'Label lien GitHub',            'value' => 'Contribute on GitHub',             'order' => 8],
+            ['key' => 'footer_code_of_conduct_url',  'group' => 'footer', 'type' => 'url',      'label' => 'URL Code de conduite',         'value' => '',                                 'order' => 9],
+            ['key' => 'footer_copyright',            'group' => 'footer', 'type' => 'text',     'label' => 'Texte copyright',              'value' => "Laravel Côte d'Ivoire · MIT License", 'order' => 10],
+            ['key' => 'footer_built_with',           'group' => 'footer', 'type' => 'text',     'label' => 'Texte "Built with"',           'value' => "Built with ♥ in Côte d'Ivoire",    'order' => 11],
+        ];
+
+        foreach ($settings as $setting) {
+            SiteSetting::updateOrCreate(
+                ['key' => $setting['key']],
+                array_merge($setting, ['description' => null])
+            );
+        }
+    }
+}

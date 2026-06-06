@@ -1,9 +1,16 @@
+@php
+  $brandName  = $globalSettings->get('identity_brand_name')?->value ?? 'Laravel CI';
+  $logoMark   = $globalSettings->get('identity_logo_mark')?->value;
+  $headerCta  = $globalSettings->get('identity_header_cta')?->value ?? 'Sign in with GitHub';
+  $logoMarkUrl = $logoMark ? asset('assets/' . $logoMark) : asset('assets/web/img/logo-mark.png');
+@endphp
+
 <header class="site-header">
   <nav class="navbar navbar-expand-lg">
     <div class="container">
       <a class="brand-logo" href="{{ route('home') }}">
-        <span class="brand-mark"><img src="{{ asset('assets/web/img/logo-mark.png') }}" alt="Laravel CI" /></span>
-        Laravel CI
+        <span class="brand-mark"><img src="{{ $logoMarkUrl }}" alt="{{ $brandName }}" /></span>
+        {{ $brandName }}
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
         <i class="fa-solid fa-bars"></i>
@@ -23,7 +30,7 @@
           </a>
         @else
           <a href="{{ route('login') }}" class="btn btn-github">
-            <i class="fa-brands fa-github"></i> Sign in with GitHub
+            <i class="fa-brands fa-github"></i> {{ $headerCta }}
           </a>
         @endauth
       </div>

@@ -3,9 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>@yield('title', 'Laravel CI — The Laravel Community of Côte d\'Ivoire')</title>
-  <meta name="description" content="@yield('description', 'Join 500+ Ivorian Laravel & PHP developers. Share knowledge, find jobs, attend events, and grow together.')" />
+  <title>@yield('title', $globalSettings->get('seo_home_title')?->value ?? "Laravel CI — The Laravel Community of Côte d'Ivoire")</title>
+  <meta name="description" content="@yield('description', $globalSettings->get('seo_home_description')?->value ?? 'Join 500+ Ivorian Laravel & PHP developers. Share knowledge, find jobs, attend events, and grow together.')" />
   <meta name="csrf-token" content="{{ csrf_token() }}" />
+
+  @php
+    $favicon    = $globalSettings->get('identity_favicon')?->value;
+    $faviconUrl = $favicon ? asset('assets/' . $favicon) : asset('assets/web/img/favicon.png');
+    $ogImage    = $globalSettings->get('seo_og_image')?->value;
+    $ogImageUrl = $ogImage ? asset('assets/' . $ogImage) : null;
+    $siteName   = $globalSettings->get('identity_brand_name')?->value ?? 'Laravel CI';
+  @endphp
+  <link rel="icon" href="{{ $faviconUrl }}" />
+  @if($ogImageUrl)
+    <meta property="og:image" content="{{ $ogImageUrl }}" />
+  @endif
+  <meta property="og:site_name" content="{{ $siteName }}" />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />

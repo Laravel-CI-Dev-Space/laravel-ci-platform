@@ -9,11 +9,18 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            RoleSeeder::class,           // 1. Roles + permissions
-            TagSeeder::class,            // 2. Tags forum/blog
-            JobOfferCategorySeeder::class, // 3. Job categories
-            JobSkillSeeder::class,       // 4. Job skills
-            UserSeeder::class,           // 5. Users (après roles)
+            RoleSeeder::class,              // 1. Roles + permissions
+            TagSeeder::class,               // 2. Tags forum/blog
+            JobOfferCategorySeeder::class,  // 3. Job categories
+            JobSkillSeeder::class,          // 4. Job skills
+            UserSeeder::class,              // 5. Users (après roles)
+            SiteSettingSeeder::class,       // 6. Paramètres du site
+            HomeStatSeeder::class,          // 7. Statistiques page accueil
+            PartnerSeeder::class,           // 8. Partenaires
+            TeamMemberSeeder::class,        // 9. Membres fondateurs
+            CommunityValueSeeder::class,    // 10. Valeurs communautaires
+            TimelineEventSeeder::class,     // 11. Timeline Notre histoire
+            AboutOriginSectionSeeder::class, // 12. Section Notre naissance
         ]);
 
         $this->command->info('');
