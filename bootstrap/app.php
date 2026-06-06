@@ -6,6 +6,7 @@ use App\Http\Middleware\CompanyAuthenticated;
 use App\Http\Middleware\CompanyGuest;
 use App\Http\Middleware\CompanyMustChangePassword;
 use App\Http\Middleware\EnsureProfileComplete;
+use App\Http\Middleware\TrackPageView;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -20,6 +21,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->web(append: [
+            TrackPageView::class,
+        ]);
+
         $middleware->alias([
             // Middleware custom
             'active'           => CheckMemberActive::class,

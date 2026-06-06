@@ -8,6 +8,7 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationGroup;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
@@ -16,6 +17,7 @@ use Filament\Widgets\AccountWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
+use Illuminate\Foundation\Vite;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
@@ -52,16 +54,18 @@ class AdminPanelProvider extends PanelProvider
 
             ->renderHook(
                 PanelsRenderHook::HEAD_END,
-                fn (): string => '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />'
+                fn (): string => '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />' .
+                    app(Vite::class)(['resources/css/app.css'])->toHtml()
             )
 
-            // Uncomment to enable navigation groups once modules are implemented:
-            // ->navigationGroups([
-            //     NavigationGroup::make('Members')->icon('heroicon-o-users'),
-            //     NavigationGroup::make('Content')->icon('heroicon-o-document-text'),
-            //     NavigationGroup::make('Community')->icon('heroicon-o-calendar'),
-            //     NavigationGroup::make('Settings')->icon('heroicon-o-cog-6-tooth')->collapsed(),
-            // ])
+            ->navigationGroups([
+                NavigationGroup::make('Entreprises'),
+                NavigationGroup::make('Job Board'),
+                NavigationGroup::make('Membres'),
+                NavigationGroup::make('Communauté'),
+                NavigationGroup::make('Contenu'),
+                NavigationGroup::make('Configuration')->collapsed(),
+            ])
 
             ->middleware([
                 EncryptCookies::class,

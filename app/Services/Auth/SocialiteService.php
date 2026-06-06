@@ -5,6 +5,7 @@ namespace App\Services\Auth;
 use App\Enums\UserRole;
 use App\Exceptions\AccountBannedException;
 use App\Models\User;
+use App\Services\Analytics\AnalyticsService;
 use App\Services\NotificationService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -41,6 +42,16 @@ class SocialiteService
 
         if ($created) {
             $this->notificationService->sendWelcome($user);
+            app(AnalyticsService::class)->trackEvent(
+                type: 'auth_register',
+                userId: $user->id,
+                metadata: ['name' => $user->name],
+            );
+        } else {
+            app(AnalyticsService::class)->trackEvent(
+                type: 'auth_login',
+                userId: $user->id,
+            );
         }
 
         return $user;

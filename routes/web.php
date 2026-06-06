@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Admin\MemberExportController;
+use App\Http\Controllers\Admin\RegistrationExportController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\Blog\ArticleController;
@@ -14,6 +16,9 @@ use App\Http\Controllers\Company\JobOfferController as CompanyJobOfferController
 use App\Http\Controllers\CvController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DesignSystemController;
+use App\Http\Controllers\Events\EventController;
+use App\Http\Controllers\Events\EventRegistrationController;
+use App\Http\Controllers\Events\GuestRegistrationController;
 use App\Http\Controllers\Forum\AnswerController;
 use App\Http\Controllers\Forum\QuestionController;
 use App\Http\Controllers\Jobs\JobApplicationController;
@@ -92,10 +97,30 @@ Route::middleware(['auth', 'active', 'profile.complete', 'role:member|admin|supe
         ->name('resources.store');
 });
 
-// ─── EVENTS ────────────────────────────────────────────────
+// ─── EVENTS — Routes publiques ────────────────────────────
 Route::prefix('events')->name('events.')->group(function () {
-    Route::get('/', fn () => view('web.events.index'))->name('index');
-    Route::get('/{slug}', fn (string $slug) => view('web.events.show', compact('slug')))->name('show');
+    Route::get('/', [EventController::class, 'index'])->name('index');
+    Route::get('/{slug}', [EventController::class, 'show'])->name('show');
+    // Inscription invité (public, pas besoin d'être connecté)
+    Route::post('/{event}/guest-register', [GuestRegistrationController::class, 'store'])->name('guest.register');
+    // Vérification de ticket (public)
+    Route::get('/ticket/{token}', fn (string $token) => view('web.events.ticket-verify', compact('token')))
+        ->name('ticket.verify');
+});
+
+// ─── EVENTS — Routes authentifiées ────────────────────────
+Route::middleware(['auth', 'active', 'profile.complete'])->group(function () {
+    Route::post('/events/{event}/register',
+        [EventRegistrationController::class, 'store']
+    )->name('events.register');
+
+    Route::delete('/events/registrations/{registration}',
+        [EventRegistrationController::class, 'destroy']
+    )->name('events.cancel');
+
+    Route::get('/events/registrations/{registration}/ical',
+        [EventRegistrationController::class, 'downloadIcal']
+    )->name('events.ical');
 });
 
 // ─── JOB BOARD — Routes publiques ────────────────────────────
@@ -265,6 +290,23 @@ Route::middleware(['auth', 'active'])->group(function () {
 // ─── DESIGN SYSTEM (admin only) ────────────────────────────
 Route::get('/design-system', [DesignSystemController::class, 'index'])
     ->middleware(['auth', 'role:super-admin|admin']);
+
+// ─── ADMIN — Exports inscriptions ──────────────────────────
+Route::middleware(['auth', 'active', 'role:super-admin|admin'])
+    ->prefix('admin-exports')
+    ->group(function (): void {
+        Route::name('admin.registrations.')
+            ->group(function (): void {
+                Route::get('/inscriptions/excel', [RegistrationExportController::class, 'excel'])->name('excel');
+                Route::get('/inscriptions/pdf', [RegistrationExportController::class, 'pdf'])->name('pdf');
+            });
+
+        Route::name('admin.members.')
+            ->group(function (): void {
+                Route::get('/membres/excel', [MemberExportController::class, 'excel'])->name('excel');
+                Route::get('/membres/pdf', [MemberExportController::class, 'pdf'])->name('pdf');
+            });
+    });
 
 // ═══════════════════════════════════════════════════════════
 // ESPACE ENTREPRISE — Guard : company

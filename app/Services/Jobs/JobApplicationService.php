@@ -7,6 +7,7 @@ namespace App\Services\Jobs;
 use App\Models\JobApplication;
 use App\Models\JobOffer;
 use App\Models\User;
+use App\Services\Analytics\AnalyticsService;
 use App\Services\AssetService;
 use App\Services\NotificationService;
 use Illuminate\Support\Collection;
@@ -17,6 +18,7 @@ class JobApplicationService
     public function __construct(
         private readonly AssetService $assetService,
         private readonly NotificationService $notificationService,
+        private readonly AnalyticsService $analytics,
     ) {}
 
     /**
@@ -50,6 +52,17 @@ class JobApplicationService
         ]);
 
         $offer->increment('applications_count');
+
+        $this->analytics->trackEvent(
+            type: 'job_application',
+            userId: $user->id,
+            entityType: 'job_offer',
+            entityId: $offer->id,
+            metadata: [
+                'offer_title' => $offer->title,
+                'company'     => $offer->company?->name,
+            ],
+        );
 
         // Notifie le compte entreprise si l'offre est liée à une entreprise
         if ($offer->company?->accounts()->first()) {

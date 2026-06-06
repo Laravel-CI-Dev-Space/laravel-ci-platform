@@ -8,6 +8,7 @@ use App\Models\Article;
 use Filament\Actions\Action as TableAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Textarea;
 use Filament\Notifications\Notification;
 use Filament\Tables\Columns\ImageColumn;
@@ -117,6 +118,22 @@ class ArticlesTable
                 Filter::make('pending')
                     ->label('En attente uniquement')
                     ->query(fn (Builder $q) => $q->where('status', 'pending')),
+
+                Filter::make('published_period')
+                    ->label('Période de publication')
+                    ->form([
+                        DatePicker::make('from')->label('Du'),
+                        DatePicker::make('until')->label('Au'),
+                    ])
+                    ->query(function (Builder $q, array $data): Builder {
+                        return $q
+                            ->when($data['from'] ?? null, fn ($q, $v) => $q->whereDate('published_at', '>=', $v))
+                            ->when($data['until'] ?? null, fn ($q, $v) => $q->whereDate('published_at', '<=', $v));
+                    }),
+
+                Filter::make('high_traffic')
+                    ->label('Populaires (> 100 vues)')
+                    ->query(fn (Builder $q) => $q->where('views_count', '>', 100)),
             ])
 
             ->actions([

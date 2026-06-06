@@ -6,6 +6,7 @@ use App\Mail\WelcomeMail;
 use App\Models\Article;
 use App\Models\CompanyAccount;
 use App\Models\CompanyRegistrationRequest;
+use App\Models\EventRegistration;
 use App\Models\JobApplication;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
@@ -30,9 +31,20 @@ class NotificationService
         // TODO: Mail::to($_user->email)->queue(new NewAnswerMail($_user, $_question));
     }
 
-    public function sendEventReminder(User $_user, mixed $_event): void
+    /**
+     * Envoie le rappel J-7 ou J-1 avant un événement.
+     *
+     * @param  string  $type  '7d' ou '1d'
+     */
+    public function sendEventReminder(User $user, EventRegistration $registration, string $type): void
     {
-        // TODO: Mail::to($_user->email)->queue(new EventReminderMail($_user, $_event));
+        try {
+            // Mail::to($user->email)->send(new EventReminderMail($user, $registration, $type));
+            // TODO: créer EventReminderMail en Sprint 2
+            Log::info("Rappel {$type} envoyé à {$user->email} : {$registration->event->title}");
+        } catch (\Exception $e) {
+            Log::error("Notification event reminder échouée : {$e->getMessage()}");
+        }
     }
 
     public function sendJobAlert(User $_user, mixed $_offer): void
@@ -54,9 +66,18 @@ class NotificationService
         }
     }
 
-    public function sendEventConfirmation(User $_user, mixed $_event): void
+    /**
+     * Envoie l'email de confirmation d'inscription à un événement.
+     */
+    public function sendEventConfirmation(User $user, EventRegistration $registration): void
     {
-        // TODO: Mail::to($_user->email)->queue(new EventConfirmationMail($_user, $_event));
+        try {
+            // Mail::to($user->email)->send(new EventConfirmationMail($user, $registration));
+            // TODO: créer EventConfirmationMail en Sprint 2
+            Log::info("Confirmation event envoyée à {$user->email} : {$registration->event->title}");
+        } catch (\Exception $e) {
+            Log::error("Notification event confirmation échouée : {$e->getMessage()}");
+        }
     }
 
     /**

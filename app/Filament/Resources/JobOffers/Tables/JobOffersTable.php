@@ -41,7 +41,7 @@ class JobOffersTable
                     ->badge()
                     ->color('gray')
                     ->formatStateUsing(fn ($state) => match ($state) {
-                        'cdi' => 'CDI', 'cdd' => 'CDD', 'freelance' => 'Freelance',
+                        'cdi'        => 'CDI', 'cdd' => 'CDD', 'freelance' => 'Freelance',
                         'internship' => 'Stage', 'apprenticeship' => 'Alternance', default => $state,
                     }),
 
@@ -130,6 +130,22 @@ class JobOffersTable
                 Filter::make('pending')
                     ->label('En attente uniquement')
                     ->query(fn (Builder $q) => $q->where('status', 'pending')),
+
+                Filter::make('remote')
+                    ->label('Télétravail uniquement')
+                    ->query(fn (Builder $q) => $q->where('is_remote', true)),
+
+                Filter::make('urgent')
+                    ->label('Offres urgentes')
+                    ->query(fn (Builder $q) => $q->where('is_urgent', true)),
+
+                Filter::make('expiring_soon')
+                    ->label('Expirent dans 7 jours')
+                    ->query(fn (Builder $q) => $q
+                        ->where('status', 'active')
+                        ->whereNotNull('expires_at')
+                        ->where('expires_at', '<=', now()->addDays(7))
+                        ->where('expires_at', '>', now())),
             ])
 
             ->actions([

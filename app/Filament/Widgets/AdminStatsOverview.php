@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Filament\Widgets;
 
 use App\Enums\UserRole;
+use App\Models\AllEventRegistration;
 use App\Models\Article;
 use App\Models\CompanyRegistrationRequest;
+use App\Models\Event;
 use App\Models\JobOffer;
 use App\Models\Question;
 use App\Models\User;
@@ -28,14 +30,14 @@ class AdminStatsOverview extends BaseWidget
 
     protected function getStats(): array
     {
-        $user = auth()->user();
+        $user        = auth()->user();
         $isModerator = $user?->hasRole(UserRole::Moderator->value) && ! $user?->hasAnyRole([UserRole::Admin->value, UserRole::SuperAdmin->value]);
 
         // Membres
-        $totalMembers   = User::count();
-        $newThisMonth   = User::whereMonth('created_at', now()->month)->whereYear('created_at', now()->year)->count();
-        $newLastMonth   = User::whereMonth('created_at', now()->subMonth()->month)->count();
-        $memberTrend    = $newLastMonth > 0 ? round((($newThisMonth - $newLastMonth) / $newLastMonth) * 100) : 0;
+        $totalMembers = User::count();
+        $newThisMonth = User::whereMonth('created_at', now()->month)->whereYear('created_at', now()->year)->count();
+        $newLastMonth = User::whereMonth('created_at', now()->subMonth()->month)->count();
+        $memberTrend  = $newLastMonth > 0 ? round((($newThisMonth - $newLastMonth) / $newLastMonth) * 100) : 0;
 
         // Contenu
         $pendingArticles   = Article::where('status', 'pending')->count();
@@ -63,14 +65,26 @@ class AdminStatsOverview extends BaseWidget
 
         // Stats supplémentaires pour admin/super-admin uniquement
         if (! $isModerator) {
-            $activeOffers   = JobOffer::where('status', 'active')->count();
-            $pendingOffers  = JobOffer::where('status', 'pending')->count();
+            $activeOffers     = JobOffer::where('status', 'active')->count();
+            $pendingOffers    = JobOffer::where('status', 'pending')->count();
             $pendingCompanies = CompanyRegistrationRequest::where('status', 'pending')->count();
 
             $stats[] = Stat::make("Offres d'emploi actives", number_format($activeOffers))
                 ->description("{$pendingOffers} en attente · {$pendingCompanies} demandes entreprise")
                 ->descriptionIcon('heroicon-m-briefcase')
                 ->color($pendingOffers > 0 ? 'warning' : 'success');
+
+            $upcomingEvents     = Event::where('status', 'published')->where('starts_at', '>', now())->count();
+            $registrationsMonth = AllEventRegistration::query()
+                ->where('status', 'confirmed')
+                ->whereMonth('registered_at', now()->month)
+                ->whereYear('registered_at', now()->year)
+                ->count();
+
+            $stats[] = Stat::make('Événements à venir', $upcomingEvents)
+                ->description("{$registrationsMonth} inscrits confirmés ce mois")
+                ->descriptionIcon('heroicon-m-calendar')
+                ->color($upcomingEvents > 0 ? 'success' : 'gray');
         }
 
         return $stats;

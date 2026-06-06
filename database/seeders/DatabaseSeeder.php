@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             CommunityValueSeeder::class,    // 10. Valeurs communautaires
             TimelineEventSeeder::class,     // 11. Timeline Notre histoire
             AboutOriginSectionSeeder::class, // 12. Section Notre naissance
+            EventSeeder::class,              // 13. Événements (meetup gratuit + workshop payant)
         ]);
 
         $this->command->info('');
