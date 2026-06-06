@@ -175,17 +175,12 @@
 // SCROLL-TRIGGERED REVEAL ANIMATIONS
 // ================================
 (function () {
-  const reveals = document.querySelectorAll('.reveal');
-  if (!reveals.length) return;
-
-  // Arm the hidden state ONLY now that JS is confirmed running.
-  // (CSS keeps .reveal visible unless <html> has .reveal-ready, so a failed
-  //  script load on a host can never leave content invisible.)
   document.documentElement.classList.add('reveal-ready');
 
-  const showAll = () => reveals.forEach((r) => r.classList.add('in'));
-
-  if (!('IntersectionObserver' in window)) { showAll(); return; }
+  if (!('IntersectionObserver' in window)) {
+    document.querySelectorAll('.reveal').forEach((r) => r.classList.add('in'));
+    return;
+  }
 
   const obs = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
@@ -196,10 +191,16 @@
       }
     });
   }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-  reveals.forEach((r) => obs.observe(r));
 
-  // Failsafe: never let anything stay hidden (slow paint, observer quirks, etc.)
-  window.addEventListener('load', () => setTimeout(showAll, 2500));
+  const observeAll = () => document.querySelectorAll('.reveal:not(.in)').forEach((r) => obs.observe(r));
+
+  observeAll();
+
+  // Re-observe after every Livewire DOM update (filter changes, pagination, etc.)
+  document.addEventListener('livewire:updated', observeAll);
+
+  // Failsafe: show everything that is still hidden after 2.5s
+  window.addEventListener('load', () => setTimeout(() => document.querySelectorAll('.reveal').forEach((r) => r.classList.add('in')), 2500));
 })();
 
 // ================================
