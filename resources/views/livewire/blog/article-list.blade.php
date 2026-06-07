@@ -141,6 +141,7 @@
                         </span>
                     </div>
 
+                    <div class="row g-4">
                     @forelse ($articles as $article)
                         @php
                             $levelLabels = ['beginner' => 'Débutant', 'intermediate' => 'Intermédiaire', 'advanced' => 'Avancé'];
@@ -148,8 +149,8 @@
                             $levelBg     = ['beginner' => '#edfaf3', 'intermediate' => '#fff5f0', 'advanced' => '#fdeaec'];
                             $readTime    = max(1, (int) round(str_word_count(strip_tags($article->body ?? '')) / 200));
                         @endphp
-                        <div class="col-12 col-sm-6 col-xl-4 d-inline-flex" style="vertical-align:top; margin-bottom:1.25rem; padding:0 .4rem; width:33.333%;">
-                            <article class="card-soft article-card w-100 d-flex flex-column overflow-hidden"
+                        <div class="col-12 col-sm-6 col-xl-4">
+                            <article class="card-soft article-card h-100 d-flex flex-column overflow-hidden"
                                      style="border-top:3px solid {{ $levelColors[$article->level] ?? 'var(--orange)' }}; border-radius:.85rem;">
 
                                 {{-- Cover image --}}
@@ -221,16 +222,19 @@
                             </article>
                         </div>
                     @empty
-                        <div class="card-soft p-5 text-center">
-                            <i class="fa-regular fa-newspaper fa-2x mb-3 text-muted-2"></i>
-                            <p class="mb-3">Aucun article trouvé.</p>
-                            @auth
-                                <a href="{{ route('blog.create') }}" class="btn btn-brand">
-                                    <i class="fa-solid fa-circle-plus"></i> Rédiger le premier article
-                                </a>
-                            @endauth
+                        <div class="col-12">
+                            <div class="card-soft h-auto p-5 text-center">
+                                <i class="fa-regular fa-newspaper fa-2x mb-3 text-muted-2"></i>
+                                <p class="mb-3">Aucun article trouvé.</p>
+                                @auth
+                                    <a href="{{ route('blog.create') }}" class="btn btn-brand">
+                                        <i class="fa-solid fa-circle-plus"></i> Rédiger le premier article
+                                    </a>
+                                @endauth
+                            </div>
                         </div>
                     @endforelse
+                    </div>
 
                     {{-- Pagination --}}
                     <div class="mt-4 d-flex justify-content-center" style="clear:both">

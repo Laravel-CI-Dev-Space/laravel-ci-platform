@@ -204,7 +204,7 @@
                             </div>
                         </div>
                     @empty
-                        <div class="card-soft p-5 text-center">
+                        <div class="card-soft h-auto p-5 text-center">
                             <i class="fa-regular fa-comment-dots fa-2x mb-3 text-muted-2"></i>
                             <p class="mb-3">Aucune question trouvée.</p>
                             @auth

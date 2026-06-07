@@ -1584,6 +1584,13 @@ html.reveal-ready .reveal.in { opacity: 1; transform: none; }
 .article-body :not(pre) > code { overflow-wrap: anywhere; }
 .breadcrumb-bar { flex-wrap: wrap; }
 
+/* Job filters offcanvas — only stick as a sidebar at lg+; below that
+   Bootstrap's offcanvas needs its own `position: fixed` to slide off-screen,
+   so sticky must not be set inline (it would break the hide/show transform). */
+@media (min-width: 992px) {
+  .job-filters-canvas { position: sticky; top: 1.5rem; }
+}
+
 /* ================================
    RESPONSIVE — TABLET
 ================================ */

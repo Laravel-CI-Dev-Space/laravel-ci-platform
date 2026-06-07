@@ -45,8 +45,7 @@
 
                 {{-- ═══ SIDEBAR FILTRES ═══ --}}
                 <div class="col-lg-3" style="align-self:flex-start">
-                    <div class="offcanvas-lg offcanvas-start d-lg-block" id="jobFilters"
-                         style="position:sticky; top:1.5rem;">
+                    <div class="offcanvas-lg offcanvas-start d-lg-block job-filters-canvas" id="jobFilters">
                         <div class="offcanvas-header d-lg-none">
                             <h5 class="offcanvas-title">Filtres</h5>
                             <button class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#jobFilters"></button>
@@ -239,7 +238,7 @@
                             </div>
                         </div>
                     @empty
-                        <div class="card-soft p-5 text-center">
+                        <div class="card-soft h-auto p-5 text-center">
                             <i class="fa-solid fa-briefcase fa-2x mb-3 text-muted-2"></i>
                             <p class="mb-3">Aucune offre ne correspond à vos critères.</p>
                             <button wire:click="$set('search', '')" class="btn btn-ghost btn-sm">

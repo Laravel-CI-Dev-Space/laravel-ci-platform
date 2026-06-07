@@ -177,10 +177,9 @@
 (function () {
   document.documentElement.classList.add('reveal-ready');
 
-  if (!('IntersectionObserver' in window)) {
-    document.querySelectorAll('.reveal').forEach((r) => r.classList.add('in'));
-    return;
-  }
+  const showAll = () => document.querySelectorAll('.reveal').forEach((r) => r.classList.add('in'));
+
+  if (!('IntersectionObserver' in window)) { showAll(); return; }
 
   const obs = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
@@ -190,17 +189,34 @@
         obs.unobserve(e.target);
       }
     });
-  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  }, { threshold: 0.01 });
 
-  const observeAll = () => document.querySelectorAll('.reveal:not(.in)').forEach((r) => obs.observe(r));
+  const revealVisible = () => {
+    document.querySelectorAll('.reveal:not(.in)').forEach((r) => {
+      const rect = r.getBoundingClientRect();
+      if (rect.top < window.innerHeight + 80 && rect.bottom > -80) {
+        // Element is in (or just outside) the viewport — show immediately
+        r.classList.add('in');
+      } else {
+        // Below fold — let IntersectionObserver handle it on scroll
+        obs.observe(r);
+      }
+    });
+  };
 
-  observeAll();
+  revealVisible();
 
-  // Re-observe after every Livewire DOM update (filter changes, pagination, etc.)
-  document.addEventListener('livewire:updated', observeAll);
+  // Re-run after any DOM change (Livewire morphdom, Alpine, etc.)
+  if ('MutationObserver' in window) {
+    let timer;
+    new MutationObserver(() => {
+      clearTimeout(timer);
+      timer = setTimeout(revealVisible, 80);
+    }).observe(document.body, { childList: true, subtree: true });
+  }
 
-  // Failsafe: show everything that is still hidden after 2.5s
-  window.addEventListener('load', () => setTimeout(() => document.querySelectorAll('.reveal').forEach((r) => r.classList.add('in')), 2500));
+  window.addEventListener('scroll', revealVisible, { passive: true });
+  window.addEventListener('load', () => setTimeout(showAll, 3000));
 })();
 
 // ================================

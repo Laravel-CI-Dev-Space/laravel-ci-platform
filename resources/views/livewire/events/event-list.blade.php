@@ -47,9 +47,9 @@
         <div class="container">
 
             {{-- Tri --}}
-            <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
                 <span class="text-muted-2" style="font-size:.9rem">{{ $events->total() }} événement(s)</span>
-                <div class="d-flex gap-2">
+                <div class="d-flex flex-wrap gap-2">
                     @foreach (['soonest' => 'Date la plus proche', 'recent' => 'Récemment ajoutés'] as $value => $label)
                         <button wire:click="$set('sort', '{{ $value }}')"
                                 class="filter-pill {{ $sort === $value ? 'active' : '' }}"
