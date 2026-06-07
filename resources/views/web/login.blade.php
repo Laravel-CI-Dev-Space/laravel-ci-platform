@@ -72,8 +72,64 @@
     .testi-name { color: #fff; font-weight: 600; font-size: .88rem; }
     .testi-role { color: rgba(255,255,255,.7); font-size: .78rem; }
 
+    /* ── Bandeau mascotte (mobile uniquement, occupe le haut de l'écran) ── */
+    .mobile-mascot-banner {
+      background: linear-gradient(145deg, rgba(232,89,12,.78) 0%, rgba(196,69,8,.78) 60%, rgba(163,58,6,.78) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44vh;
+      padding: 2rem;
+      overflow: hidden;
+    }
+    .mascot-stage { position: relative; width: 290px; height: 240px; display: flex; align-items: center; justify-content: center; margin: 0 auto; }
+    .mascot-stage img {
+      width: 200px; height: 200px;
+      object-fit: contain;
+      filter: drop-shadow(0 18px 36px rgba(0,0,0,.3));
+      animation: mascot-float 3.5s ease-in-out infinite;
+      position: relative;
+      z-index: 1;
+    }
+    .code-chip {
+      position: absolute;
+      background: rgba(255,255,255,.16);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border: 1px solid rgba(255,255,255,.3);
+      color: #fff;
+      font-family: 'Courier New', monospace;
+      font-size: .66rem;
+      font-weight: 600;
+      letter-spacing: .01em;
+      padding: .35rem .6rem;
+      border-radius: .5rem;
+      white-space: nowrap;
+      box-shadow: 0 8px 20px rgba(0,0,0,.15);
+      animation: chip-float 4s ease-in-out infinite;
+    }
+    .code-chip i { margin-right: .3rem; opacity: .8; }
+    .chip-1 { top: 0;    left: 0;    animation-delay: 0s; }
+    .chip-2 { top: 42%;  right: -6px; animation-delay: 1.3s; }
+    .chip-3 { bottom: 4px; left: 6px; animation-delay: 2.6s; }
+    @keyframes mascot-float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+    @keyframes chip-float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-9px); }
+    }
+
     @media (max-width: 991.98px) {
-      .auth-panel-left { min-height: unset; padding: 2rem 1.25rem; }
+      .auth-panel-left {
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-start;
+        min-height: 100vh;
+        padding: 0;
+      }
+      .auth-form-box { padding: 2rem 1.25rem; margin: 0 auto; }
       body { background: #fff; }
     }
   </style>
@@ -85,6 +141,16 @@
 
     {{-- ─── Panneau gauche : formulaire ─── --}}
     <div class="col-12 col-lg-5 auth-panel-left">
+      {{-- Bandeau mascotte (mobile uniquement) --}}
+      <div class="mobile-mascot-banner d-lg-none">
+        <div class="mascot-stage">
+          <span class="code-chip chip-1"><i class="fa-solid fa-terminal"></i>artisan serve</span>
+          <span class="code-chip chip-2"><i class="fa-brands fa-github"></i>git push</span>
+          <span class="code-chip chip-3"><i class="fa-solid fa-box"></i>composer require</span>
+          <img src="{{ asset('assets/web/img/mascot.png') }}" alt="Mascotte Laravel CI" />
+        </div>
+      </div>
+
       <div class="auth-form-box">
 
         {{-- Logo --}}
