@@ -16,7 +16,7 @@ class VitrineSettingSeeder extends Seeder
             ['code' => 'home_hero_title',        'type' => 'text',     'group' => 'home', 'section' => 'hero', 'value' => "The Laravel Community of Côte d'Ivoire"],
             ['code' => 'home_hero_lead',         'type' => 'textarea', 'group' => 'home', 'section' => 'hero', 'value' => 'Join 500+ developers — share, learn, and grow together. The first structured home for Ivorian Laravel & PHP builders, in Abidjan and across the diaspora.'],
             ['code' => 'home_hero_cta_primary',  'type' => 'text',     'group' => 'home', 'section' => 'hero', 'value' => 'Join the Community'],
-            ['code' => 'home_hero_cta_secondary','type' => 'text',     'group' => 'home', 'section' => 'hero', 'value' => 'Explore the Forum'],
+            ['code' => 'home_hero_cta_secondary', 'type' => 'text',     'group' => 'home', 'section' => 'hero', 'value' => 'Explore the Forum'],
 
             // ─── HOME › STATS ─────────────────────────────────────────────
             ['code' => 'home_stats_members',   'type' => 'number', 'group' => 'home', 'section' => 'stats', 'value' => '500'],

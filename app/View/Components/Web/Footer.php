@@ -36,11 +36,11 @@ class Footer extends Component
     public function __construct()
     {
         $globalSettings = VitrineSetting::getGroup('global');
-        $links        = $globalSettings['global_social_links'] ?? [];
-        $this->social = is_array($links) ? $links : (json_decode($links, true) ?: []);
+        $links          = $globalSettings['global_social_links'] ?? [];
+        $this->social   = is_array($links) ? $links : (json_decode($links, true) ?: []);
         $this->siteName = config('app.name', 'Laravel CI');
 
-        $githubUrl        = $this->findUrl('github');
+        $githubUrl         = $this->findUrl('github');
         $this->whatsappUrl = $this->findUrl('whatsapp');
 
         $this->quickLinks = [

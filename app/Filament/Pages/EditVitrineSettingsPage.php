@@ -22,8 +22,8 @@ use Filament\Support\Icons\Heroicon;
 
 class EditVitrineSettingsPage extends Page implements HasForms
 {
-    use InteractsWithForms;
     use HasAutoSave;
+    use InteractsWithForms;
 
     protected string $view = 'filament.pages.vitrine-page';
 
@@ -44,8 +44,8 @@ class EditVitrineSettingsPage extends Page implements HasForms
 
     public function mount(): void
     {
-        $data = VitrineSetting::getGroup('global');
-        $links = $data['global_social_links'] ?? [];
+        $data                        = VitrineSetting::getGroup('global');
+        $links                       = $data['global_social_links'] ?? [];
         $data['global_social_links'] = is_array($links) ? $links : (json_decode($links, true) ?: []);
         $this->form->fill($data);
     }
@@ -57,7 +57,7 @@ class EditVitrineSettingsPage extends Page implements HasForms
                 Section::make('SEO par défaut')
                     ->description('Valeurs utilisées sur les pages qui ne définissent pas leur propre titre/description.')
                     ->collapsible()
-                        ->collapsed()
+                    ->collapsed()
                     ->schema([
                         TextInput::make('global_default_title')
                             ->label('Titre par défaut')
@@ -75,7 +75,7 @@ class EditVitrineSettingsPage extends Page implements HasForms
 
                 Section::make('Liens sociaux')
                     ->collapsible()
-                        ->collapsed()
+                    ->collapsed()
                     ->schema([
                         Repeater::make('global_social_links')
                             ->label('')

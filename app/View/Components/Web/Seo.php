@@ -9,11 +9,17 @@ use Illuminate\View\Component;
 class Seo extends Component
 {
     public string $title;
+
     public string $description;
+
     public string $image;
+
     public string $canonical;
+
     public string $type;
+
     public string $siteName;
+
     public ?string $robots;
 
     public function __construct(
@@ -24,10 +30,10 @@ class Seo extends Component
         string $type = 'website',
         ?string $robots = null,
     ) {
-        $this->title       = $title       ?: VitrineSetting::get('global_default_title',       config('vitrine.default_title'));
+        $this->title       = $title ?: VitrineSetting::get('global_default_title', config('vitrine.default_title'));
         $this->description = $description ?: VitrineSetting::get('global_default_description', config('vitrine.default_description'));
-        $this->image       = $image       ?: asset(VitrineSetting::get('global_og_image',      config('vitrine.og_image')));
-        $this->canonical   = $canonical   ?: url()->current();
+        $this->image       = $image ?: asset(VitrineSetting::get('global_og_image', config('vitrine.og_image')));
+        $this->canonical   = $canonical ?: url()->current();
         $this->type        = $type;
         $this->siteName    = config('app.name', 'Laravel CI');
         $this->robots      = $robots;

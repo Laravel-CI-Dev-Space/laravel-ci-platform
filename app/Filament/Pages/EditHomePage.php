@@ -5,6 +5,7 @@ namespace App\Filament\Pages;
 use App\Filament\Concerns\HasAutoSave;
 use App\Models\VitrineSetting;
 use BackedEnum;
+use Filament\Actions\Action;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -17,8 +18,8 @@ use Filament\Support\Icons\Heroicon;
 
 class EditHomePage extends Page implements HasForms
 {
-    use InteractsWithForms;
     use HasAutoSave;
+    use InteractsWithForms;
 
     protected string $view = 'filament.pages.vitrine-page';
 
@@ -86,7 +87,7 @@ class EditHomePage extends Page implements HasForms
         return [
             $this->clearCacheAction(),
             $this->autoSaveAction(),
-            \Filament\Actions\Action::make('save')
+            Action::make('save')
                 ->label('Enregistrer')
                 ->icon('heroicon-o-check')
                 ->action(fn () => $this->save()),
