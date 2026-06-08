@@ -7,18 +7,13 @@
         </a>
         <p style="max-width:22rem">The first structured developer community for Laravel &amp; PHP in Côte d'Ivoire and the Ivorian diaspora. African tech excellence, together.</p>
         <div class="social-row">
-          @if($social['github'])
-            <a href="{{ $social['github'] }}" class="social-icon" aria-label="GitHub" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-github"></i></a>
-          @endif
-          @if($social['linkedin'])
-            <a href="{{ $social['linkedin'] }}" class="social-icon" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-linkedin-in"></i></a>
-          @endif
-          @if($social['whatsapp'])
-            <a href="{{ $social['whatsapp'] }}" class="social-icon" aria-label="WhatsApp" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp"></i></a>
-          @endif
-          @if($social['twitter'])
-            <a href="{{ $social['twitter'] }}" class="social-icon" aria-label="X" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-x-twitter"></i></a>
-          @endif
+          @foreach($social as $link)
+            @if(!empty($link['url']))
+              <a href="{{ $link['url'] }}" class="social-icon" aria-label="{{ ucfirst($link['platform']) }}" target="_blank" rel="noopener noreferrer">
+                <i class="{{ $socialIconClasses[$link['platform']] ?? 'fa-solid fa-link' }}"></i>
+              </a>
+            @endif
+          @endforeach
         </div>
       </div>
       <div class="col-lg-2 col-md-6 col-6">
@@ -48,8 +43,8 @@
         <ul class="footer-links">
           <li><span><i class="fa-solid fa-location-dot me-2"></i>Abidjan, Côte d'Ivoire</span></li>
           <li><a href="mailto:hello@laravel.ci"><i class="fa-solid fa-envelope me-2"></i>hello@laravel.ci</a></li>
-          @if($social['whatsapp'])
-            <li><a href="{{ $social['whatsapp'] }}" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp me-2"></i>Join WhatsApp group</a></li>
+          @if($whatsappUrl)
+            <li><a href="{{ $whatsappUrl }}" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp me-2"></i>Join WhatsApp group</a></li>
           @endif
         </ul>
       </div>

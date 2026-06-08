@@ -10,10 +10,10 @@
     <div class="container">
       <div class="row align-items-center g-4">
         <div class="col-lg-7">
-          <span class="badge-pill badge-navy"><i class="fa-brands fa-laravel text-orange"></i> Founded 2026 · Open source</span>
-          <h1 class="my-3">We're building the home for Ivorian Laravel developers</h1>
-          <p class="lead" style="max-width:42rem">Laravel Côte d'Ivoire is the first structured developer community dedicated to Laravel &amp; PHP in Côte d'Ivoire and the diaspora — built on knowledge sharing, inclusion, and collective growth.</p>
-          <a href="{{ route('join') }}" class="btn btn-brand btn-lg mt-2"><i class="fa-solid fa-user-plus"></i> Join us</a>
+          <span class="badge-pill badge-navy"><i class="fa-brands fa-laravel text-orange"></i> {{ $s['about_hero_badge'] }}</span>
+          <h1 class="my-3">{{ $s['about_hero_title'] }}</h1>
+          <p class="lead" style="max-width:42rem">{{ $s['about_hero_lead'] }}</p>
+          <a href="{{ route('join') }}" class="btn btn-brand btn-lg mt-2"><i class="fa-solid fa-user-plus"></i> {{ $s['about_hero_cta'] }}</a>
         </div>
         <div class="col-lg-5 d-none d-lg-block">
           <div class="mascot-art" style="width:clamp(200px,22vw,280px)">
@@ -32,15 +32,15 @@
         <div class="col-md-6 reveal">
           <div class="card-soft" style="padding:2rem;height:100%">
             <div class="value-icon" style="margin:0 0 1.2rem"><i class="fa-solid fa-bullseye"></i></div>
-            <h2 style="font-size:var(--fs-h3)">Our mission</h2>
-            <p class="text-muted-2 mb-0">Give every Ivorian developer a structured place to learn Laravel properly, ask questions without fear, find meaningful work, and grow alongside peers who understand their context.</p>
+            <h2 style="font-size:var(--fs-h3)">{{ $s['about_mission_title'] }}</h2>
+            <p class="text-muted-2 mb-0">{{ $s['about_mission_body'] }}</p>
           </div>
         </div>
         <div class="col-md-6 reveal" data-delay="0.08">
           <div class="card-soft" style="padding:2rem;height:100%">
             <div class="value-icon" style="margin:0 0 1.2rem"><i class="fa-solid fa-eye"></i></div>
-            <h2 style="font-size:var(--fs-h3)">Our vision</h2>
-            <p class="text-muted-2 mb-0">A West Africa where world-class software is built by local talent — and where Côte d'Ivoire is recognized as a hub of Laravel and PHP excellence on the global stage.</p>
+            <h2 style="font-size:var(--fs-h3)">{{ $s['about_vision_title'] }}</h2>
+            <p class="text-muted-2 mb-0">{{ $s['about_vision_body'] }}</p>
           </div>
         </div>
       </div>
@@ -71,10 +71,15 @@
         <h2>Community values</h2>
       </div>
       <div class="row g-4">
-        <div class="col-6 col-lg-3 reveal"><div class="card-soft value-card"><div class="value-icon"><i class="fa-solid fa-award"></i></div><h3 style="font-size:1.1rem">Excellence</h3><p class="text-muted-2 mb-0" style="font-size:.9rem">We hold each other to a high bar — clean code, real craft.</p></div></div>
-        <div class="col-6 col-lg-3 reveal" data-delay="0.06"><div class="card-soft value-card"><div class="value-icon"><i class="fa-solid fa-hands-holding-circle"></i></div><h3 style="font-size:1.1rem">Sharing</h3><p class="text-muted-2 mb-0" style="font-size:.9rem">Knowledge grows when given away. No gatekeeping here.</p></div></div>
-        <div class="col-6 col-lg-3 reveal" data-delay="0.12"><div class="card-soft value-card"><div class="value-icon"><i class="fa-solid fa-people-group"></i></div><h3 style="font-size:1.1rem">Inclusion</h3><p class="text-muted-2 mb-0" style="font-size:.9rem">Every level, every background, every question is welcome.</p></div></div>
-        <div class="col-6 col-lg-3 reveal" data-delay="0.18"><div class="card-soft value-card"><div class="value-icon"><i class="fa-solid fa-seedling"></i></div><h3 style="font-size:1.1rem">Impact</h3><p class="text-muted-2 mb-0" style="font-size:.9rem">We build tech that improves life in Côte d'Ivoire.</p></div></div>
+        @foreach($s['about_values_items'] as $value)
+          <div class="col-6 col-lg-3 reveal">
+            <div class="card-soft value-card">
+              <div class="value-icon"><i class="{{ $value['icon'] }}"></i></div>
+              <h3 style="font-size:1.1rem">{{ $value['title'] }}</h3>
+              <p class="text-muted-2 mb-0" style="font-size:.9rem">{{ $value['body'] }}</p>
+            </div>
+          </div>
+        @endforeach
       </div>
     </div>
   </section>
@@ -87,10 +92,23 @@
         <h2>Founding team</h2>
       </div>
       <div class="row g-4 justify-content-center">
-        <div class="col-6 col-md-4 col-lg-3 reveal"><div class="card-soft team-card"><span class="avatar avatar-xl av-1 mx-auto mb-3">SB</span><h3 style="font-size:1.05rem;margin-bottom:.1rem">Serge Brou</h3><div class="role mb-2">Founder &amp; Architect</div><a href="#" class="social-icon mx-auto" style="background:var(--light);color:var(--navy)" aria-label="GitHub"><i class="fa-brands fa-github"></i></a></div></div>
-        <div class="col-6 col-md-4 col-lg-3 reveal" data-delay="0.06"><div class="card-soft team-card"><span class="avatar avatar-xl av-3 mx-auto mb-3">FD</span><h3 style="font-size:1.05rem;margin-bottom:.1rem">Fatou Diallo</h3><div class="role mb-2">Community Lead</div><a href="#" class="social-icon mx-auto" style="background:var(--light);color:var(--navy)" aria-label="GitHub"><i class="fa-brands fa-github"></i></a></div></div>
-        <div class="col-6 col-md-4 col-lg-3 reveal" data-delay="0.12"><div class="card-soft team-card"><span class="avatar avatar-xl av-5 mx-auto mb-3">AD</span><h3 style="font-size:1.05rem;margin-bottom:.1rem">Aïcha Doumbia</h3><div class="role mb-2">Content &amp; Events</div><a href="#" class="social-icon mx-auto" style="background:var(--light);color:var(--navy)" aria-label="GitHub"><i class="fa-brands fa-github"></i></a></div></div>
-        <div class="col-6 col-md-4 col-lg-3 reveal" data-delay="0.18"><div class="card-soft team-card"><span class="avatar avatar-xl av-4 mx-auto mb-3">YT</span><h3 style="font-size:1.05rem;margin-bottom:.1rem">Yao Térence</h3><div class="role mb-2">Open Source Maintainer</div><a href="#" class="social-icon mx-auto" style="background:var(--light);color:var(--navy)" aria-label="GitHub"><i class="fa-brands fa-github"></i></a></div></div>
+        @foreach($s['about_team_members'] as $member)
+          <div class="col-6 col-md-4 col-lg-3 reveal">
+            <div class="card-soft team-card">
+              @php $avatarType = $member['avatar_type'] ?? 'initials'; @endphp
+              @if($avatarType === 'upload' && !empty($member['avatar_photo']))
+                <img src="{{ asset('storage/' . $member['avatar_photo']) }}" alt="{{ $member['name'] }}" class="avatar avatar-xl mx-auto mb-3" style="object-fit:cover;border-radius:50%">
+              @elseif($avatarType === 'url' && !empty($member['avatar_url']))
+                <img src="{{ $member['avatar_url'] }}" alt="{{ $member['name'] }}" class="avatar avatar-xl mx-auto mb-3" style="object-fit:cover;border-radius:50%">
+              @else
+                <span class="avatar avatar-xl {{ $member['avatar_class'] ?? '' }} mx-auto mb-3">{{ $member['initials'] ?? '' }}</span>
+              @endif
+              <h3 style="font-size:1.05rem;margin-bottom:.1rem">{{ $member['name'] }}</h3>
+              <div class="role mb-2">{{ $member['role'] }}</div>
+              <a href="{{ $member['github'] }}" class="social-icon mx-auto" style="background:var(--light);color:var(--navy)" aria-label="GitHub" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-github"></i></a>
+            </div>
+          </div>
+        @endforeach
       </div>
     </div>
   </section>
@@ -112,9 +130,9 @@
   <section class="section pt-0">
     <div class="container">
       <div class="cta-banner reveal">
-        <h2 class="mb-3">Your seat at the table is ready</h2>
-        <p class="lead mb-4" style="color:rgba(255,255,255,.9);max-width:38rem;margin-inline:auto">Join 500+ Ivorian developers building the future of African tech, one commit at a time.</p>
-        <a href="{{ route('join') }}" class="btn btn-light btn-lg"><i class="fa-brands fa-github"></i> Join the Community</a>
+        <h2 class="mb-3">{{ $s['about_cta_title'] }}</h2>
+        <p class="lead mb-4" style="color:rgba(255,255,255,.9);max-width:38rem;margin-inline:auto">{{ $s['about_cta_lead'] }}</p>
+        <a href="{{ route('join') }}" class="btn btn-light btn-lg"><i class="fa-brands fa-github"></i> {{ $s['about_cta_button'] }}</a>
       </div>
     </div>
   </section>

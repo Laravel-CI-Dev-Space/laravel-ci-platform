@@ -19,6 +19,12 @@ return [
 
     'og_image' => 'assets/web/img/logo.png',
 
+    /*
+    | Durée du cache en secondes (3600 = 1 heure).
+    | Mettre à 0 pour désactiver le cache (utile en développement).
+    */
+    'cache_ttl' => (int) env('VITRINE_CACHE_TTL', 3600),
+
     'social' => [
         'github' => env('VITRINE_GITHUB_URL', 'https://github.com/Laravel-CI-Dev-Space/laravel-ci'),
         'linkedin' => env('VITRINE_LINKEDIN_URL'),

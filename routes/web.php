@@ -7,12 +7,13 @@ use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\CvController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DesignSystemController;
+use App\Http\Controllers\VitrineController;
 use App\Livewire\EditProfile;
 use Illuminate\Support\Facades\Route;
 
 // ─── PUBLIC WEB PAGES ──────────────────────────────────────
-Route::get('/', fn () => view('web.home'))->name('home');
-Route::get('/about', fn () => view('web.about'))->name('about');
+Route::get('/', [VitrineController::class, 'home'])->name('home');
+Route::get('/about', [VitrineController::class, 'about'])->name('about');
 Route::get('/join', fn () => view('web.join'))->name('join');
 
 Route::get('/robots.txt', function () {

@@ -10,15 +10,15 @@
     <div class="container">
       <div class="row align-items-center g-5">
         <div class="col-lg-6">
-          <span class="hero-badge"><i class="fa-brands fa-laravel"></i> Laravel 11 · PHP 8.3 · Open source</span>
-          <h1>The Laravel Community of <span class="accent">Côte d'Ivoire</span></h1>
-          <p class="lead">Join 500+ developers — share, learn, and grow together. The first structured home for Ivorian Laravel &amp; PHP builders, in Abidjan and across the diaspora.</p>
+          <span class="hero-badge"><i class="fa-brands fa-laravel"></i> {{ $s['home_hero_badge'] }}</span>
+          <h1>{{ $s['home_hero_title'] }}</h1>
+          <p class="lead">{{ $s['home_hero_lead'] }}</p>
           <div class="d-flex flex-wrap gap-3 mt-4">
-            <a href="{{ route('join') }}" class="btn btn-brand btn-lg"><i class="fa-solid fa-user-plus"></i> Join the Community</a>
-            <a href="{{ route('forum.index') }}" class="btn btn-outline-navy btn-lg"><i class="fa-solid fa-comments"></i> Explore the Forum</a>
+            <a href="{{ route('join') }}" class="btn btn-brand btn-lg"><i class="fa-solid fa-user-plus"></i> {{ $s['home_hero_cta_primary'] }}</a>
+            <a href="{{ route('forum.index') }}" class="btn btn-outline-navy btn-lg"><i class="fa-solid fa-comments"></i> {{ $s['home_hero_cta_secondary'] }}</a>
           </div>
           <div class="trust-badges">
-            <div class="trust-badge"><i class="fa-solid fa-people-group"></i> <span><strong>500+</strong> members</span></div>
+            <div class="trust-badge"><i class="fa-solid fa-people-group"></i> <span><strong>{{ $s['home_stats_members'] }}+</strong> members</span></div>
             <div class="trust-badge"><i class="fa-solid fa-location-dot"></i> <span>Abidjan, <strong>Côte d'Ivoire</strong></span></div>
             <div class="trust-badge"><i class="fa-brands fa-github"></i> <span>Built on <strong>Laravel</strong></span></div>
           </div>
@@ -69,34 +69,32 @@
   <!-- ============ STATS STRIP ============ -->
   <section class="stats-strip">
     <div class="container">
-      {{-- Stats S1 — valeurs statiques validées product (en attente seeders pour compteurs dynamiques) --}}
-      {{-- LIVEWIRE: @livewire('web.stats-counter') --}}
       <div class="row">
         <div class="col-6 col-md-3 reveal">
           <div class="stat-item">
             <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
-            <div class="stat-num"><span data-count="500">500</span><span class="plus">+</span></div>
+            <div class="stat-num"><span data-count="{{ $s['home_stats_members'] }}">{{ $s['home_stats_members'] }}</span><span class="plus">+</span></div>
             <div class="stat-label">Members</div>
           </div>
         </div>
         <div class="col-6 col-md-3 reveal" data-delay="0.1">
           <div class="stat-item">
             <div class="stat-icon"><i class="fa-solid fa-circle-question"></i></div>
-            <div class="stat-num"><span data-count="1200">1200</span><span class="plus">+</span></div>
+            <div class="stat-num"><span data-count="{{ $s['home_stats_questions'] }}">{{ $s['home_stats_questions'] }}</span><span class="plus">+</span></div>
             <div class="stat-label">Questions</div>
           </div>
         </div>
         <div class="col-6 col-md-3 reveal" data-delay="0.2">
           <div class="stat-item">
             <div class="stat-icon"><i class="fa-solid fa-calendar-check"></i></div>
-            <div class="stat-num"><span data-count="24">24</span><span class="plus">+</span></div>
+            <div class="stat-num"><span data-count="{{ $s['home_stats_events'] }}">{{ $s['home_stats_events'] }}</span><span class="plus">+</span></div>
             <div class="stat-label">Events</div>
           </div>
         </div>
         <div class="col-6 col-md-3 reveal" data-delay="0.3">
           <div class="stat-item">
             <div class="stat-icon"><i class="fa-solid fa-book-open"></i></div>
-            <div class="stat-num"><span data-count="80">80</span><span class="plus">+</span></div>
+            <div class="stat-num"><span data-count="{{ $s['home_stats_articles'] }}">{{ $s['home_stats_articles'] }}</span><span class="plus">+</span></div>
             <div class="stat-label">Articles</div>
           </div>
         </div>
@@ -329,10 +327,10 @@
     <div class="container">
       <div class="cta-banner reveal">
         <img src="{{ asset('assets/web/img/mascot.png') }}" class="cta-mascot d-none d-xl-block" alt="" aria-hidden="true" />
-        <h2 class="mb-3">Ready to build the future of Ivorian tech?</h2>
-        <p class="lead mb-4" style="color:rgba(255,255,255,.92);max-width:40rem;margin-inline:auto">Sign in with GitHub, ask your first question, and meet 500+ developers who have your back.</p>
+        <h2 class="mb-3">{{ $s['home_cta_title'] }}</h2>
+        <p class="lead mb-4" style="color:rgba(255,255,255,.92);max-width:40rem;margin-inline:auto">{{ $s['home_cta_lead'] }}</p>
         <div class="cta-cmd"><span class="cta-cmd-prompt">$</span> composer create-project laravel-ci/community <button class="cta-cmd-copy" type="button" aria-label="Copy"><i class="fa-regular fa-copy"></i></button></div>
-        <a href="{{ route('join') }}" class="btn btn-light btn-lg"><i class="fa-brands fa-github"></i> Join the Community</a>
+        <a href="{{ route('join') }}" class="btn btn-light btn-lg"><i class="fa-brands fa-github"></i> {{ $s['home_cta_button'] }}</a>
       </div>
     </div>
   </section>
