@@ -6,6 +6,10 @@ namespace App\Livewire\Concerns;
 
 use App\Enums\Events\EventReminderType;
 
+/**
+ * Shared Livewire state for the reminder preference modal (J-7, J-1, H-1).
+ * Used on the event detail page and dashboard event cards.
+ */
 trait ManagesEventReminderPreferences
 {
     /** @var list<string> */
@@ -35,9 +39,10 @@ trait ManagesEventReminderPreferences
         $this->selectedReminders = [];
     }
 
-    /** @return list<string> */
+    /** @return list<string> EventReminderType values currently saved for this registration. */
     abstract protected function currentReminderTypes(): array;
 
+    /** French flash message after saving reminder preferences (UI layer). */
     protected function reminderSaveSuccessMessage(): string
     {
         if ($this->selectedReminders === []) {

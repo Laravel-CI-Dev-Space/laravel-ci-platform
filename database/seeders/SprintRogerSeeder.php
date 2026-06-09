@@ -9,7 +9,8 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 
 /**
- * Sprint Roger — Événements & Job Board (données de démo + membre test).
+ * Sprint Roger demo data: events, jobs, and a test member with registrations.
+ * Run after RoleSeeder (member role required for event routes).
  */
 class SprintRogerSeeder extends Seeder
 {
@@ -37,6 +38,7 @@ class SprintRogerSeeder extends Seeder
             $member->assignRole('member');
         }
 
+        // Seed two upcoming registrations for the test member (dashboard preview).
         Event::query()
             ->where('start_date', '>', now())
             ->orderBy('start_date')

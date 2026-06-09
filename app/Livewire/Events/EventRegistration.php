@@ -78,6 +78,7 @@ class EventRegistration extends Component
         $this->selectedReminders = EventRegistration::sanitizeReminderTypes($this->selectedReminders);
 
         if ($this->registration === null) {
+            // Pre-registration flow: user picks reminders before clicking "Register".
             $this->showReminderModal = false;
 
             return;

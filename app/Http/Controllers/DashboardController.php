@@ -53,7 +53,8 @@ class DashboardController extends Controller
             'votesScore'      => $user->questions()->sum('votes_score'),
             'recentQuestions' => $user->questions()->latest()->take(5)->get(),
             'recentArticles'  => $user->articles()->latest()->take(5)->get(),
-            'upcomingRegs'    => $user->eventRegistrations()
+            // Event schema uses start_date (not Wilson's legacy starts_at).
+            'upcomingRegs' => $user->eventRegistrations()
                 ->with('event')
                 ->whereNot('status', EventRegistrationStatus::CANCELLED)
                 ->whereHas('event', fn ($q) => $q->where('start_date', '>', now()))
@@ -69,6 +70,7 @@ class DashboardController extends Controller
         ]);
     }
 
+    /** Member event dashboard — passes registrations (not events) for Livewire cards. */
     public function memberEvents(): View
     {
         /** @var User $user */

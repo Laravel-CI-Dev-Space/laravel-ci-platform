@@ -82,7 +82,7 @@ class JobOffer extends Model
     }
 
     /**
-     * Props pour le composant <x-web.job-card>.
+     * Build props for the public <x-web.job-card> component.
      *
      * @return array<string, mixed>
      */

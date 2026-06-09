@@ -9,7 +9,7 @@ class SendEventRemindersCommand extends Command
 {
     protected $signature = 'events:send-reminders';
 
-    protected $description = 'Envoie les relances J-7, J-1 et H-1 aux inscrits confirmés';
+    protected $description = 'Send due event reminder emails to opted-in registrants (J-7, J-1, H-1)';
 
     public function handle(EventReminderService $reminderService): int
     {

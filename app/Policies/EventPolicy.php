@@ -7,6 +7,7 @@ use App\Enums\Events\EventStatus;
 use App\Models\Event;
 use App\Models\User;
 
+/** Authorization rules for the Events module (Sprint Roger — M4). */
 class EventPolicy
 {
     public function viewAny(?User $user): bool
@@ -58,6 +59,7 @@ class EventPolicy
             && $event->waitlistEntryFor($user) !== null;
     }
 
+    /** Member must be confirmed (not waitlisted) to download .ics or manage reminders. */
     public function downloadIcs(User $user, Event $event): bool
     {
         return $user->hasRole('member')

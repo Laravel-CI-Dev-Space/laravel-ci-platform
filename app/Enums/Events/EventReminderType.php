@@ -5,6 +5,10 @@ namespace App\Enums\Events;
 use App\Contracts\HasLabel;
 use App\Enums\Concerns\HasOptions;
 
+/**
+ * Reminder slot identifiers stored in event_registrations.reminder_types (JSON).
+ * J-7 = 7 days before, J-1 = 1 day before, H-1 = 1 hour before event start.
+ */
 enum EventReminderType: string implements HasLabel
 {
     use HasOptions;

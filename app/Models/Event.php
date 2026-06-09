@@ -168,6 +168,7 @@ class Event extends Model
         return $this->start_date->isFuture();
     }
 
+    /** Past events use end_date; upcoming checks start_date only. */
     public function isPast(): bool
     {
         return $this->end_date->isPast();
@@ -179,6 +180,11 @@ class Event extends Model
             && $this->isUpcoming();
     }
 
+    /**
+     * Active registration for a user (excludes cancelled rows).
+     *
+     * Cancelled registrations stay in DB because of unique (event_id, user_id).
+     */
     public function registrationFor(?User $user): ?EventRegistration
     {
         if ($user === null) {
@@ -211,7 +217,7 @@ class Event extends Model
     }
 
     /**
-     * Props pour le composant <x-web.event-card>.
+     * Build props for the public <x-web.event-card> component.
      *
      * @return array<string, mixed>
      */

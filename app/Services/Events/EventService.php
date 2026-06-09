@@ -13,6 +13,16 @@ use App\Services\NotificationService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
+/**
+ * Event registration business logic (Sprint Roger — M4).
+ *
+ * Reminder emails use a two-layer model:
+ * - event_reminders: event-level schedule slots (J-7, J-1, H-1), shared by all registrants
+ * - event_registrations.reminder_types: per-user opt-in (which slots they want)
+ *
+ * Registrations are soft-cancelled (status = cancelled) because of the unique
+ * (event_id, user_id) constraint — re-registering reactivates the same row.
+ */
 class EventService
 {
     public function __construct(
@@ -54,6 +64,8 @@ class EventService
                 return ['status' => 'waitlist', 'position' => $position];
             }
 
+            // Re-register after cancellation: update existing row instead of inserting
+            // (unique constraint on event_id + user_id).
             $cancelled = $event->registrations()
                 ->where('user_id', $user->id)
                 ->where('status', EventRegistrationStatus::CANCELLED)
@@ -73,6 +85,7 @@ class EventService
                 ]);
             }
 
+            // Ensure event-level reminder slots exist before the scheduler runs.
             if ($reminderTypes !== []) {
                 $this->scheduleRemindersForTypes($event, $reminderTypes);
             }
@@ -101,6 +114,7 @@ class EventService
 
         DB::transaction(function () use ($event, $registration) {
             $registration->update(['status' => EventRegistrationStatus::CANCELLED]);
+            // Free a seat and auto-promote the first waitlisted member.
             $this->promoteNextFromWaitlist($event);
         });
 
@@ -158,7 +172,7 @@ class EventService
         return $reminderTypes;
     }
 
-    /** Planifie tous les créneaux de relance pour l'événement (idempotent). */
+    /** Schedule all reminder slots for an event (idempotent). */
     public function scheduleReminders(Event $event): void
     {
         $this->scheduleRemindersForTypes(
@@ -168,7 +182,10 @@ class EventService
     }
 
     /**
-     * @param  list<string>  $types
+     * Create or update event-level reminder rows for the given types only.
+     * Skips slots whose scheduled_at is already in the past.
+     *
+     * @param  list<string>  $types  EventReminderType values, e.g. ['J-7', 'H-1']
      */
     public function scheduleRemindersForTypes(Event $event, array $types): void
     {
@@ -209,9 +226,10 @@ class EventService
         }
 
         EventRegistration::create([
-            'event_id'       => $event->id,
-            'user_id'        => $next->user_id,
-            'status'         => EventRegistrationStatus::CONFIRMED,
+            'event_id' => $event->id,
+            'user_id'  => $next->user_id,
+            'status'   => EventRegistrationStatus::CONFIRMED,
+            // Promoted members must opt in to reminders themselves.
             'reminder_types' => [],
         ]);
 

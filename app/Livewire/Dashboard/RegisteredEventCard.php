@@ -14,6 +14,11 @@ use Illuminate\View\View;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 
+/**
+ * Dashboard event card with cover image, icon actions, and reminder modal.
+ *
+ * @property 'card'|'row' $variant Full card on /events page, compact row on overview.
+ */
 class RegisteredEventCard extends Component
 {
     use AuthorizesRequests;

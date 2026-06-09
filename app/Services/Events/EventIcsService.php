@@ -8,6 +8,10 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
+/**
+ * Generates RFC 5545 .ics calendar files for registered members.
+ * Each download is logged in event_ics_exports for analytics.
+ */
 class EventIcsService
 {
     public function downloadResponse(Event $event, User $user): StreamedResponse

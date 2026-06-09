@@ -11,6 +11,10 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
+/**
+ * Job board business logic (Sprint Roger — M5).
+ * Member-submitted offers start as draft pending moderation.
+ */
 class JobOfferService
 {
     /**

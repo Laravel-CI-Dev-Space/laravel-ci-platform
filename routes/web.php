@@ -56,7 +56,7 @@ Route::prefix('blog')->name('blog.')->group(function () {
     Route::get('/{slug}', fn (string $slug) => view('web.blog.show', compact('slug')))->name('show');
 });
 
-// ─── ÉVÉNEMENTS (Sprint Roger) ───────────────────────────
+// ─── EVENTS (Sprint Roger — M4) ───────────────────────────
 Route::controller(EventController::class)
     ->prefix('events')
     ->name('events.')
@@ -74,7 +74,7 @@ Route::controller(EventController::class)
             ->middleware(['auth', 'active', 'role:member']);
     });
 
-// ─── JOB BOARD (Sprint Roger) ────────────────────────────
+// ─── JOB BOARD (Sprint Roger — M5) ─────────────────────────
 Route::controller(JobOfferController::class)
     ->prefix('jobs')
     ->name('jobs.')

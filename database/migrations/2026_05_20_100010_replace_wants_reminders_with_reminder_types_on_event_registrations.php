@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Replace boolean wants_reminders with per-slot opt-in (JSON array).
+     * Values match EventReminderType: 'J-7', 'J-1', 'H-1'.
+     */
     public function up(): void
     {
         Schema::table('event_registrations', function (Blueprint $table) {

@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
+/** HTTP layer for public event pages (Sprint Roger — M4). Delegates to EventService. */
 class EventController extends Controller
 {
     public function __construct(
@@ -61,6 +62,7 @@ class EventController extends Controller
 
         $this->eventService->cancelRegistration($event, auth()->user());
 
+        // Supports cancel from dashboard (modal) or event detail page.
         return redirect()
             ->back(fallback: route('events.show', $event))
             ->with('success', 'Votre inscription a été annulée.');

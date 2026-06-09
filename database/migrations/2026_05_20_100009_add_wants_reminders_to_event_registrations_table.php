@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /** Superseded by 2026_05_20_100010 (reminder_types JSON replaces this boolean). */
     public function up(): void
     {
         Schema::table('event_registrations', function (Blueprint $table) {

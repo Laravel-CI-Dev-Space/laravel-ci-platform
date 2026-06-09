@@ -18,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withSchedule(function (Schedule $schedule) {
         $schedule->command('job-offers:expire')->daily();
+        // Requires `php artisan schedule:work` or a cron hitting schedule:run.
         $schedule->command('events:send-reminders')->everyFifteenMinutes();
     })
     ->withMiddleware(function (Middleware $middleware) {
