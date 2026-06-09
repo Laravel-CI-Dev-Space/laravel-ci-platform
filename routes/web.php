@@ -66,6 +66,12 @@ Route::controller(EventController::class)
         Route::post('/{event:slug}/register', 'register')
             ->name('register')
             ->middleware(['auth', 'active', 'role:member']);
+        Route::post('/{event:slug}/cancel', 'cancel')
+            ->name('cancel')
+            ->middleware(['auth', 'active', 'role:member']);
+        Route::get('/{event:slug}/calendar.ics', 'calendar')
+            ->name('calendar')
+            ->middleware(['auth', 'active', 'role:member']);
     });
 
 // ─── JOB BOARD (Sprint Roger) ────────────────────────────
@@ -131,12 +137,12 @@ Route::middleware(['auth', 'active'])->group(function () {
             ->prefix('dashboard/member')
             ->name('dashboard.member.')
             ->group(function () {
-                Route::get('/', fn () => view('dashboard.member.overview'))->name('overview');
+                Route::get('/', [DashboardController::class, 'memberOverview'])->name('overview');
                 Route::get('/questions', fn () => view('dashboard.member.questions'))->name('questions');
                 Route::get('/articles', fn () => view('dashboard.member.articles'))->name('articles');
-                Route::get('/events', fn () => view('dashboard.member.events'))->name('events');
-                Route::get('/applications', fn () => view('dashboard.member.applications'))->name('applications');
-                Route::get('/favorites', fn () => view('dashboard.member.favorites'))->name('favorites');
+                Route::get('/events', [DashboardController::class, 'memberEvents'])->name('events');
+                Route::get('/applications', [DashboardController::class, 'memberApplications'])->name('applications');
+                Route::get('/favorites', [DashboardController::class, 'memberFavorites'])->name('favorites');
                 Route::get('/profile', fn () => view('dashboard.member.profile'))->name('profile');
                 Route::post('/profile', fn () => back())->name('profile.update');
             });

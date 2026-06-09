@@ -179,7 +179,7 @@
           <select wire:model="country"
                   class="form-select @error('country') is-invalid @enderror">
             <option value="">— Select your country —</option>
-            @foreach($countries as $key => $label)
+            @foreach($this->countries as $key => $label)
               <option value="{{ $key }}">{{ $label }}</option>
             @endforeach
           </select>

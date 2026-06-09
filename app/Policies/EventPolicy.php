@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\Events\EventRegistrationStatus;
 use App\Enums\Events\EventStatus;
 use App\Models\Event;
 use App\Models\User;
@@ -37,5 +38,41 @@ class EventPolicy
         }
 
         return true;
+    }
+
+    public function cancelRegistration(User $user, Event $event): bool
+    {
+        if (! $user->hasRole('member') || ! $event->isUpcoming()) {
+            return false;
+        }
+
+        $registration = $event->registrationFor($user);
+
+        return $registration !== null
+            && $registration->status === EventRegistrationStatus::CONFIRMED;
+    }
+
+    public function leaveWaitlist(User $user, Event $event): bool
+    {
+        return $user->hasRole('member')
+            && $event->waitlistEntryFor($user) !== null;
+    }
+
+    public function downloadIcs(User $user, Event $event): bool
+    {
+        return $user->hasRole('member')
+            && $event->registrationFor($user) !== null;
+    }
+
+    public function manageReminders(User $user, Event $event): bool
+    {
+        if (! $user->hasRole('member') || ! $event->isUpcoming()) {
+            return false;
+        }
+
+        $registration = $event->registrationFor($user);
+
+        return $registration !== null
+            && $registration->status === EventRegistrationStatus::CONFIRMED;
     }
 }

@@ -168,6 +168,11 @@ class Event extends Model
         return $this->start_date->isFuture();
     }
 
+    public function isPast(): bool
+    {
+        return $this->end_date->isPast();
+    }
+
     public function isRegisterable(): bool
     {
         return $this->status === EventStatus::PUBLISHED
@@ -181,10 +186,15 @@ class Event extends Model
         }
 
         if ($this->relationLoaded('registrations')) {
-            return $this->registrations->first();
+            return $this->registrations
+                ->first(fn (EventRegistration $registration) => $registration->user_id === $user->id
+                    && $registration->status !== EventRegistrationStatus::CANCELLED);
         }
 
-        return $this->registrations()->where('user_id', $user->id)->first();
+        return $this->registrations()
+            ->where('user_id', $user->id)
+            ->whereNot('status', EventRegistrationStatus::CANCELLED)
+            ->first();
     }
 
     public function waitlistEntryFor(?User $user): ?EventWaitlist
