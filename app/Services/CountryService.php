@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Http;
 class CountryService
 {
     private const CACHE_KEY = 'countries_list';
+
     private const CACHE_TTL = 24 * 60 * 60; // 24 hours in seconds
 
     /**
@@ -66,10 +67,10 @@ class CountryService
     private function fallback(): array
     {
         $countries = [
-            "Bénin", "Burkina Faso", "Cameroun", "Côte d'Ivoire",
-            "France", "Gabon", "Ghana", "Guinée", "Mali", "Maroc",
-            "Mauritanie", "Niger", "Nigeria", "RD Congo",
-            "Sénégal", "Togo", "Tunisie",
+            'Bénin', 'Burkina Faso', 'Cameroun', "Côte d'Ivoire",
+            'France', 'Gabon', 'Ghana', 'Guinée', 'Mali', 'Maroc',
+            'Mauritanie', 'Niger', 'Nigeria', 'RD Congo',
+            'Sénégal', 'Togo', 'Tunisie',
         ];
 
         return array_combine($countries, $countries);

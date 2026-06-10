@@ -24,7 +24,7 @@ class EventPolicy
 
     public function register(User $user, Event $event): bool
     {
-        if (! $user->hasRole('membre-actif')) {
+        if (! $user->hasRole('member')) {
             return false;
         }
 

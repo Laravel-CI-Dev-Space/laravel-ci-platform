@@ -30,8 +30,8 @@ class SprintRogerSeeder extends Seeder
             ],
         );
 
-        if (! $member->hasRole('membre-actif')) {
-            $member->assignRole('membre-actif');
+        if (! $member->hasRole('member')) {
+            $member->assignRole('member');
         }
 
         $this->command?->info('✅ Sprint Roger : events, jobs et membre test prêts.');

@@ -25,3 +25,8 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+/public/assets/cv/
+/public/assets/avatars/
+
+# Generated artifact — regenerated via `php artisan sitemap:generate`
+/public/sitemap.xml

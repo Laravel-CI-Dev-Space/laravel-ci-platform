@@ -2,22 +2,22 @@
 
 namespace App\Providers;
 
+use BladeUI\Icons\Factory;
 use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
-        //
+        $this->callAfterResolving(Factory::class, function (Factory $factory): void {
+            $factory->add('social', [
+                'path'   => resource_path('svg/social'),
+                'prefix' => 'social',
+            ]);
+        });
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
         Carbon::setLocale(config('app.locale'));

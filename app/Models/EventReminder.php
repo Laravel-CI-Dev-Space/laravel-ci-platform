@@ -20,9 +20,9 @@ class EventReminder extends Model
     protected function casts(): array
     {
         return [
-            'type' => EventReminderType::class,
+            'type'         => EventReminderType::class,
             'scheduled_at' => 'datetime',
-            'sent_at' => 'datetime',
+            'sent_at'      => 'datetime',
         ];
     }
 

@@ -10,7 +10,7 @@ enum EventMediaType: string implements HasLabel
     use HasOptions;
     case IMAGE = 'image';
     case VIDEO = 'video';
-    case PDF = 'pdf';
+    case PDF   = 'pdf';
 
     /**
      * Return the label of the media type.
@@ -20,7 +20,7 @@ enum EventMediaType: string implements HasLabel
         return match ($this) {
             self::IMAGE => 'Image',
             self::VIDEO => 'Vidéo',
-            self::PDF => 'PDF',
+            self::PDF   => 'PDF',
         };
     }
 }

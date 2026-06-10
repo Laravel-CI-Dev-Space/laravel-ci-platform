@@ -23,12 +23,12 @@ class JobOfferPolicy
 
     public function create(User $user): bool
     {
-        return $user->hasRole('membre-actif');
+        return $user->hasRole('member');
     }
 
     public function apply(User $user, JobOffer $jobOffer): bool
     {
-        if (! $user->hasRole('membre-actif')) {
+        if (! $user->hasRole('member')) {
             return false;
         }
 

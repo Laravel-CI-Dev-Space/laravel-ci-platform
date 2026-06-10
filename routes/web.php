@@ -9,12 +9,27 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DesignSystemController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\JobOfferController;
+use App\Http\Controllers\VitrineController;
 use App\Livewire\EditProfile;
 use Illuminate\Support\Facades\Route;
 
 // ─── PUBLIC WEB PAGES ──────────────────────────────────────
-Route::get('/', fn () => view('web.home'))->name('home');
-Route::get('/about', fn () => view('web.about'))->name('about');
+Route::get('/', [VitrineController::class, 'home'])->name('home');
+Route::get('/about', [VitrineController::class, 'about'])->name('about');
+Route::get('/join', fn () => view('web.join'))->name('join');
+
+Route::get('/robots.txt', function () {
+    $lines = [
+        'User-agent: *',
+        'Disallow: /dashboard',
+        'Disallow: /admin',
+        'Disallow: /profil',
+        '',
+        'Sitemap: ' . url('/sitemap.xml'),
+    ];
+
+    return response(implode("\n", $lines), 200, ['Content-Type' => 'text/plain']);
+});
 
 // ─── FORUM ─────────────────────────────────────────────────
 Route::prefix('forum')->name('forum.')->group(function () {
@@ -65,7 +80,7 @@ Route::controller(EventController::class)
         Route::get('/{event:slug}', 'show')->name('show');
         Route::post('/{event:slug}/register', 'register')
             ->name('register')
-            ->middleware(['auth', 'active', 'role:membre-actif']);
+            ->middleware(['auth', 'active', 'role:member']);
     });
 
 // ─── JOB BOARD (Sprint Roger) ────────────────────────────
@@ -76,14 +91,14 @@ Route::controller(JobOfferController::class)
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')
             ->name('create')
-            ->middleware(['auth', 'active', 'role:membre-actif']);
+            ->middleware(['auth', 'active', 'role:member']);
         Route::post('/', 'store')
             ->name('store')
-            ->middleware(['auth', 'active', 'role:membre-actif']);
+            ->middleware(['auth', 'active', 'role:member']);
         Route::get('/{jobOffer}', 'show')->name('show');
         Route::post('/{jobOffer}/apply', 'apply')
             ->name('apply')
-            ->middleware(['auth', 'active', 'role:membre-actif']);
+            ->middleware(['auth', 'active', 'role:member']);
     });
 
 // ─── MEMBER PUBLIC PROFILE ─────────────────────────────────

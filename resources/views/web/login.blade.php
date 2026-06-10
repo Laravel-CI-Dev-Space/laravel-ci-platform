@@ -1,6 +1,8 @@
 @extends('layouts.web')
 
 @section('title', 'Sign in — Laravel CI')
+@section('description', 'Sign in to Laravel Côte d\'Ivoire with your GitHub account to access the forum, events, jobs, and your developer profile.')
+@section('robots', 'noindex, nofollow')
 
 @section('content')
 

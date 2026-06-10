@@ -17,7 +17,8 @@ class DatabaseSeeder extends Seeder
             TagSeeder::class,            // 2. Tags forum/blog
             JobOfferCategorySeeder::class, // 3. Job categories
             JobSkillSeeder::class,       // 4. Job skills
-            // UserSeeder::class,           // 5. Users (après roles)
+            UserSeeder::class,           // 5. Users (après roles)
+            VitrineSettingSeeder::class, // 6. Contenu dynamique des pages vitrine
         ]);
 
         $this->command->info('');

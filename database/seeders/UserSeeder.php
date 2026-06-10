@@ -32,16 +32,16 @@ class UserSeeder extends Seeder
         Profile::firstOrCreate(
             ['user_id' => $superAdmin->id],
             [
-                'country'        => "Côte d'Ivoire",
-                'city'           => 'Abidjan',
-                'district'       => 'Cocody',
-                'bio'            => 'Lead Developer — Laravel Côte d\'Ivoire. Passionné de PHP et Laravel.',
-                'laravel_level'  => 'expert',
+                'country'          => "Côte d'Ivoire",
+                'city'             => 'Abidjan',
+                'district'         => 'Cocody',
+                'bio'              => 'Lead Developer — Laravel Côte d\'Ivoire. Passionné de PHP et Laravel.',
+                'laravel_level'    => 'expert',
                 'years_experience' => '5_10_ans',
-                'tech_stack'     => ['Laravel', 'PHP', 'Livewire', 'Filament', 'Vue.js', 'MySQL', 'Docker'],
-                'academic_level' => 'master_ingenieur',
-                'job_status'     => 'en_fonction',
-                'portfolio_url'  => 'https://github.com/Ky-Wilson',
+                'tech_stack'       => ['Laravel', 'PHP', 'Livewire', 'Filament', 'Vue.js', 'MySQL', 'Docker'],
+                'academic_level'   => 'master_ingenieur',
+                'job_status'       => 'en_fonction',
+                'portfolio_url'    => 'https://github.com/Ky-Wilson',
             ]
         );
 
@@ -119,6 +119,35 @@ class UserSeeder extends Seeder
         );
         $banned->assignRole('member');
 
-        $this->command->info('✅ Users seeded (5 users : super-admin, admin, moderator, member, suspended, banned).');
+        // Ibrahima DIARRA — Admin Filament + QA
+        $ibrahima = User::firstOrCreate(
+            ['email' => 'ibrahima@laravelci.com'],
+            [
+                'name'              => 'Ibrahima DIARRA',
+                'github_id'         => '157432707',
+                'github_username'   => 'DiarraIbra',
+                'avatar'            => 'https://avatars.githubusercontent.com/u/157432707',
+                'is_active'         => true,
+                'email_verified_at' => now(),
+                'last_login_at'     => now(),
+            ]
+        );
+        $ibrahima->assignRole('admin');
+
+        Profile::firstOrCreate(
+            ['user_id' => $ibrahima->id],
+            [
+                'country'          => "Côte d'Ivoire",
+                'city'             => 'Abidjan',
+                'bio'              => 'Admin Filament & QA cross-modules — Laravel Côte d\'Ivoire.',
+                'laravel_level'    => 'intermediaire',
+                'years_experience' => '1_3_ans',
+                'tech_stack'       => ['Laravel', 'PHP', 'Filament', 'MySQL'],
+                'job_status'       => 'recherche_emploi',
+                'portfolio_url'    => 'https://github.com/DiarraIbra',
+            ]
+        );
+
+        $this->command->info('✅ Users seeded (6 users : super-admin, admin, moderator, member, suspended, banned).');
     }
 }

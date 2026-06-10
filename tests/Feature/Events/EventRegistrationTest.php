@@ -38,7 +38,7 @@ test('active member can register for an event', function () {
         'status'   => EventRegistrationStatus::CONFIRMED->value,
     ]);
 
-    Mail::assertSent(EventConfirmationMail::class, function (EventConfirmationMail $mail) use ($user, $event) {
+    Mail::assertQueued(EventConfirmationMail::class, function (EventConfirmationMail $mail) use ($user, $event) {
         return $mail->hasTo($user->email)
             && $mail->user->is($user)
             && $mail->event->is($event);

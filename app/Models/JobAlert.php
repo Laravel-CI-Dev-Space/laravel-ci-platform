@@ -21,7 +21,7 @@ class JobAlert extends Model
     protected function casts(): array
     {
         return [
-            'type' => JobOfferType::class,
+            'type'      => JobOfferType::class,
             'is_active' => 'boolean',
         ];
     }

@@ -37,7 +37,7 @@ class TagSeeder extends Seeder
             ['name' => 'Tutorial',     'scope' => 'blog',  'color' => '#FF6600'],
             ['name' => 'Tips',         'scope' => 'blog',  'color' => '#2ECC71'],
             ['name' => 'Architecture', 'scope' => 'blog',  'color' => '#1C1C2E'],
-            ['name' => 'Best Practices','scope' => 'blog', 'color' => '#9B59B6'],
+            ['name' => 'Best Practices', 'scope' => 'blog', 'color' => '#9B59B6'],
             ['name' => 'News',         'scope' => 'blog',  'color' => '#E74C3C'],
             ['name' => 'Career',       'scope' => 'blog',  'color' => '#2980B9'],
             ['name' => 'Open Source',  'scope' => 'blog',  'color' => '#27AE60'],
