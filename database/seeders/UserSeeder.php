@@ -143,7 +143,7 @@ class UserSeeder extends Seeder
                 'laravel_level'    => 'intermediaire',
                 'years_experience' => '1_3_ans',
                 'tech_stack'       => ['Laravel', 'PHP', 'Filament', 'MySQL'],
-                'job_status'       => 'en_recherche',
+                'job_status'       => 'recherche_emploi',
                 'portfolio_url'    => 'https://github.com/DiarraIbra',
             ]
         );

@@ -58,19 +58,19 @@
       <li>
         <a class="nav-link {{ request()->routeIs('dashboard.member.events') ? 'active' : '' }}"
            href="{{ route('dashboard.member.events') }}">
-          <i class="ti ti-calendar-event"></i><span class="nav-text">My Events</span>
+          <i class="ti ti-calendar-event"></i><span class="nav-text">Mes événements</span>
         </a>
       </li>
       <li>
         <a class="nav-link {{ request()->routeIs('dashboard.member.applications') ? 'active' : '' }}"
            href="{{ route('dashboard.member.applications') }}">
-          <i class="ti ti-briefcase"></i><span class="nav-text">Applications</span>
+          <i class="ti ti-briefcase"></i><span class="nav-text">Candidatures</span>
         </a>
       </li>
       <li>
         <a class="nav-link {{ request()->routeIs('dashboard.member.favorites') ? 'active' : '' }}"
            href="{{ route('dashboard.member.favorites') }}">
-          <i class="ti ti-heart"></i><span class="nav-text">Saved Jobs</span>
+          <i class="ti ti-heart"></i><span class="nav-text">Offres sauvegardées</span>
         </a>
       </li>
       <li>

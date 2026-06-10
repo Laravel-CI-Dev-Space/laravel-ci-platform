@@ -30,10 +30,28 @@
   <link rel="stylesheet" href="{{ asset('assets/web/css/style.css') }}" />
 
   @stack('styles')
+  @livewireStyles
 </head>
 <body>
 
   <x-web.header />
+
+  @if(session('success') || session('error'))
+    <div class="container pt-3">
+      @if(session('success'))
+        <div class="alert alert-success d-flex align-items-start gap-2 mb-0" role="alert">
+          <i class="fa-solid fa-circle-check mt-1"></i>
+          <span>{{ session('success') }}</span>
+        </div>
+      @endif
+      @if(session('error'))
+        <div class="alert alert-danger d-flex align-items-start gap-2 mb-0" role="alert">
+          <i class="fa-solid fa-triangle-exclamation mt-1"></i>
+          <span>{{ session('error') }}</span>
+        </div>
+      @endif
+    </div>
+  @endif
 
   <main>
     @yield('content')
@@ -48,5 +66,6 @@
   <script src="{{ asset('assets/web/js/main.js') }}"></script>
 
   @stack('scripts')
+  @livewireScripts
 </body>
 </html>

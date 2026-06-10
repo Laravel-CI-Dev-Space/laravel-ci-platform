@@ -1,22 +1,33 @@
 <?php
 
-// JobApplication
-
 namespace App\Models;
 
+use App\Enums\Jobs\JobApplicationStatus;
+use Database\Factories\JobApplicationFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 #[Fillable([
-    'job_offer_id', 'user_id', 'cv_path', 'cover_letter',
-    'portfolio_url', 'linkedin_url', 'status', 'employer_note', 'viewed_at',
+    'job_offer_id',
+    'user_id',
+    'cv_path',
+    'cover_letter',
+    'status',
 ])]
 class JobApplication extends Model
 {
+    /** @use HasFactory<JobApplicationFactory> */
+    use HasFactory;
+
+    public const UPDATED_AT = null;
+
     protected function casts(): array
     {
-        return ['viewed_at' => 'datetime'];
+        return [
+            'status' => JobApplicationStatus::class,
+        ];
     }
 
     public function jobOffer(): BelongsTo
@@ -27,20 +38,5 @@ class JobApplication extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function isPending(): bool
-    {
-        return $this->status === 'pending';
-    }
-
-    public function isAccepted(): bool
-    {
-        return $this->status === 'accepted';
-    }
-
-    public function isRejected(): bool
-    {
-        return $this->status === 'rejected';
     }
 }

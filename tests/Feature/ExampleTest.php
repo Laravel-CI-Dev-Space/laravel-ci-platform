@@ -10,10 +10,10 @@ class ExampleTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected string $seeder = VitrineSettingSeeder::class;
-
     public function test_the_application_returns_a_successful_response(): void
     {
+        $this->seed(VitrineSettingSeeder::class);
+
         $response = $this->get('/');
 
         $response->assertStatus(200);

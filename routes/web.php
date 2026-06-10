@@ -7,6 +7,8 @@ use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\CvController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DesignSystemController;
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\JobOfferController;
 use App\Http\Controllers\VitrineController;
 use App\Livewire\EditProfile;
 use Illuminate\Support\Facades\Route;
@@ -69,32 +71,41 @@ Route::prefix('blog')->name('blog.')->group(function () {
     Route::get('/{slug}', fn (string $slug) => view('web.blog.show', compact('slug')))->name('show');
 });
 
-// ─── EVENTS ────────────────────────────────────────────────
-Route::prefix('events')->name('events.')->group(function () {
-    Route::get('/', fn () => view('web.events.index'))->name('index');
-    Route::get('/{slug}', fn (string $slug) => view('web.events.show', compact('slug')))->name('show');
-});
+// ─── EVENTS (Sprint Roger — M4) ───────────────────────────
+Route::controller(EventController::class)
+    ->prefix('events')
+    ->name('events.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/{event:slug}', 'show')->name('show');
+        Route::post('/{event:slug}/register', 'register')
+            ->name('register')
+            ->middleware(['auth', 'active', 'role:member']);
+        Route::post('/{event:slug}/cancel', 'cancel')
+            ->name('cancel')
+            ->middleware(['auth', 'active', 'role:member']);
+        Route::get('/{event:slug}/calendar.ics', 'calendar')
+            ->name('calendar')
+            ->middleware(['auth', 'active', 'role:member']);
+    });
 
-// ─── JOBS ──────────────────────────────────────────────────
-Route::prefix('jobs')->name('jobs.')->group(function () {
-    Route::get('/', fn () => view('web.jobs.index'))->name('index');
-
-    // Protected
-    Route::get('/post', fn () => view('web.jobs.index'))
-        ->name('create')
-        ->middleware(['auth', 'active', 'profile.complete']);
-    Route::post('/{id}/apply', fn () => back())
-        ->name('apply')
-        ->middleware(['auth', 'active', 'profile.complete'])
-        ->whereNumber('id');
-    Route::delete('/{id}/unsave', fn () => back())
-        ->name('unsave')
-        ->middleware(['auth', 'active'])
-        ->whereNumber('id');
-
-    // Public
-    Route::get('/{slug}', fn (string $slug) => view('web.jobs.show', compact('slug')))->name('show');
-});
+// ─── JOB BOARD (Sprint Roger — M5) ─────────────────────────
+Route::controller(JobOfferController::class)
+    ->prefix('jobs')
+    ->name('jobs.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')
+            ->name('create')
+            ->middleware(['auth', 'active', 'role:member']);
+        Route::post('/', 'store')
+            ->name('store')
+            ->middleware(['auth', 'active', 'role:member']);
+        Route::get('/{jobOffer}', 'show')->name('show');
+        Route::post('/{jobOffer}/apply', 'apply')
+            ->name('apply')
+            ->middleware(['auth', 'active', 'role:member']);
+    });
 
 // ─── MEMBER PUBLIC PROFILE ─────────────────────────────────
 Route::get('/members/{username}', fn (string $username) => view('web.members.show', compact('username')))
@@ -141,12 +152,12 @@ Route::middleware(['auth', 'active'])->group(function () {
             ->prefix('dashboard/member')
             ->name('dashboard.member.')
             ->group(function () {
-                Route::get('/', fn () => view('dashboard.member.overview'))->name('overview');
+                Route::get('/', [DashboardController::class, 'memberOverview'])->name('overview');
                 Route::get('/questions', fn () => view('dashboard.member.questions'))->name('questions');
                 Route::get('/articles', fn () => view('dashboard.member.articles'))->name('articles');
-                Route::get('/events', fn () => view('dashboard.member.events'))->name('events');
-                Route::get('/applications', fn () => view('dashboard.member.applications'))->name('applications');
-                Route::get('/favorites', fn () => view('dashboard.member.favorites'))->name('favorites');
+                Route::get('/events', [DashboardController::class, 'memberEvents'])->name('events');
+                Route::get('/applications', [DashboardController::class, 'memberApplications'])->name('applications');
+                Route::get('/favorites', [DashboardController::class, 'memberFavorites'])->name('favorites');
                 Route::get('/profile', fn () => view('dashboard.member.profile'))->name('profile');
                 Route::post('/profile', fn () => back())->name('profile.update');
             });

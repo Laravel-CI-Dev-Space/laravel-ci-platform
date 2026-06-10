@@ -1,63 +1,45 @@
 @extends('layouts.dashboard')
 
-@section('title', 'My Dashboard')
+@section('title', 'Mon tableau de bord')
 
 @section('content')
 
 @php
   /** @var \App\Models\User $me */
   $me = auth()->user();
-
-  $questionCount   = $me->questions()->count();
-  $answerCount     = $me->answers()->count();
-  $articleCount    = $me->articles()->where('status', 'published')->count();
-  $votesScore      = $me->questions()->sum('votes_score');
-
-  $recentQuestions = $me->questions()->latest()->take(5)->get();
-
-  $recentArticles  = $me->articles()->latest()->take(5)->get();
-
-  $upcomingRegs    = $me->eventRegistrations()
-                        ->with('event')
-                        ->whereHas('event', fn($q) => $q->where('starts_at', '>', now()))
-                        ->latest()
-                        ->take(3)
-                        ->get();
-
-  $recentApps      = $me->jobApplications()
-                        ->with(['jobOffer', 'jobOffer.company'])
-                        ->latest()
-                        ->take(5)
-                        ->get();
 @endphp
 
-  <x-dashboard.breadcrumb :items="[['label' => 'Dashboard', 'href' => route('dashboard.member.overview')], ['label' => 'Overview']]" />
+  <x-dashboard.breadcrumb :items="[['label' => 'Tableau de bord', 'href' => route('dashboard.member.overview')], ['label' => 'Vue d\'ensemble']]" />
 
   <div class="row mb-4">
     <div class="col-12">
-      <h1 class="fs-4 fw-bold mb-1">Welcome back, {{ $me->name }} 👋</h1>
-      <p class="text-secondary mb-0">Here's your activity on Laravel CI.</p>
+      <h1 class="fs-4 fw-bold mb-1">Bon retour, {{ $me->name }} 👋</h1>
+      <p class="text-secondary mb-0">Voici votre activité sur Laravel CI.</p>
     </div>
   </div>
 
-  {{-- LIVEWIRE: @livewire('dashboard.member-overview') --}}
+  @if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+      <i class="ti ti-circle-check me-1"></i> {{ session('success') }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+    </div>
+  @endif
 
-  {{-- ── Stat cards ────────────────────────────────────── --}}
   <div class="row g-3 mb-4">
     <div class="col-lg-3 col-sm-6 col-12">
       <x-dashboard.stat-card
         title="Questions"
         :value="$questionCount"
-        change="asked"
+        change="posées"
         icon="ti ti-message-circle-question"
         color="primary"
       />
     </div>
     <div class="col-lg-3 col-sm-6 col-12">
       <x-dashboard.stat-card
-        title="Answers"
+        title="Réponses"
         :value="$answerCount"
-        change="given"
+        change="données"
         icon="ti ti-message-check"
         color="success"
       />
@@ -66,31 +48,29 @@
       <x-dashboard.stat-card
         title="Articles"
         :value="$articleCount"
-        change="published"
+        change="publiés"
         icon="ti ti-file-text"
         color="info"
       />
     </div>
     <div class="col-lg-3 col-sm-6 col-12">
       <x-dashboard.stat-card
-        title="Votes received"
+        title="Votes reçus"
         :value="$votesScore"
-        change="on questions"
+        change="sur vos questions"
         icon="ti ti-star"
         color="warning"
       />
     </div>
   </div>
 
-  {{-- ── Recent activity ───────────────────────────────── --}}
   <div class="row g-3">
 
-    {{-- Questions --}}
     <div class="col-lg-6">
       <div class="card h-100">
         <div class="card-header bg-white d-flex justify-content-between align-items-center px-4 py-3">
-          <h5 class="mb-0">My Recent Questions</h5>
-          <a href="{{ route('dashboard.member.questions') }}" class="small text-primary">View all</a>
+          <h5 class="mb-0">Mes questions récentes</h5>
+          <a href="{{ route('dashboard.member.questions') }}" class="small text-primary">Tout voir</a>
         </div>
         <ul class="list-group list-group-flush">
           @forelse($recentQuestions as $question)
@@ -100,7 +80,7 @@
               <div class="d-flex align-items-center gap-2 text-secondary" style="font-size:.78rem">
                 <span class="{{ $question->hasAcceptedAnswer() ? 'text-success' : 'text-muted' }}">
                   <i class="ti ti-{{ $question->hasAcceptedAnswer() ? 'circle-check-filled' : 'circle' }}"></i>
-                  {{ $question->hasAcceptedAnswer() ? 'Answered' : 'Open' }}
+                  {{ $question->hasAcceptedAnswer() ? 'Résolue' : 'Ouverte' }}
                 </span>
                 <span>·</span>
                 <span><i class="ti ti-messages"></i> {{ $question->answers()->count() }}</span>
@@ -111,20 +91,19 @@
           @empty
             <li class="list-group-item px-4 py-5 text-center text-secondary">
               <i class="ti ti-message-circle-question d-block mb-2" style="font-size:1.8rem"></i>
-              No questions yet.
-              <a href="{{ route('forum.index') }}" class="text-primary text-decoration-none">Ask your first one!</a>
+              Aucune question pour l'instant.
+              <a href="{{ route('forum.index') }}" class="text-primary text-decoration-none">Posez la première !</a>
             </li>
           @endforelse
         </ul>
       </div>
     </div>
 
-    {{-- Articles --}}
     <div class="col-lg-6">
       <div class="card h-100">
         <div class="card-header bg-white d-flex justify-content-between align-items-center px-4 py-3">
-          <h5 class="mb-0">My Articles</h5>
-          <a href="{{ route('dashboard.member.articles') }}" class="small text-primary">View all</a>
+          <h5 class="mb-0">Mes articles</h5>
+          <a href="{{ route('dashboard.member.articles') }}" class="small text-primary">Tout voir</a>
         </div>
         <ul class="list-group list-group-flush">
           @forelse($recentArticles as $article)
@@ -133,16 +112,16 @@
                 <a href="{{ route('blog.show', $article->slug) }}" class="fw-semibold text-dark text-decoration-none d-block mb-1"
                    style="font-size:.9rem">{{ Str::limit($article->title, 55) }}</a>
                 <div class="text-secondary" style="font-size:.78rem">
-                  {{ ucfirst($article->level ?? 'beginner') }}
+                  {{ ucfirst($article->level ?? 'débutant') }}
                   · {{ $article->created_at->diffForHumans() }}
                 </div>
               </div>
               @php
                 $badge = match($article->status) {
-                  'published' => ['bg-success-subtle text-success', 'Published'],
-                  'pending'   => ['bg-warning-subtle text-warning', 'Pending'],
-                  'rejected'  => ['bg-danger-subtle text-danger', 'Rejected'],
-                  default     => ['bg-secondary-subtle text-secondary', 'Draft'],
+                  'published' => ['bg-success-subtle text-success', 'Publié'],
+                  'pending'   => ['bg-warning-subtle text-warning', 'En attente'],
+                  'rejected'  => ['bg-danger-subtle text-danger', 'Refusé'],
+                  default     => ['bg-secondary-subtle text-secondary', 'Brouillon'],
                 };
               @endphp
               <span class="badge {{ $badge[0] }} small">{{ $badge[1] }}</span>
@@ -150,79 +129,73 @@
           @empty
             <li class="list-group-item px-4 py-5 text-center text-secondary">
               <i class="ti ti-file-text d-block mb-2" style="font-size:1.8rem"></i>
-              No articles yet.
-              <a href="{{ route('dashboard.member.articles') }}" class="text-primary text-decoration-none">Write your first!</a>
+              Aucun article pour l'instant.
+              <a href="{{ route('dashboard.member.articles') }}" class="text-primary text-decoration-none">Rédigez le premier !</a>
             </li>
           @endforelse
         </ul>
       </div>
     </div>
 
-    {{-- Upcoming events --}}
     <div class="col-lg-6">
       <div class="card h-100">
         <div class="card-header bg-white d-flex justify-content-between align-items-center px-4 py-3">
-          <h5 class="mb-0">My Upcoming Events</h5>
-          <a href="{{ route('dashboard.member.events') }}" class="small text-primary">View all</a>
+          <h5 class="mb-0">Mes prochains événements</h5>
+          <a href="{{ route('dashboard.member.events') }}" class="small text-primary">Tout voir</a>
         </div>
-        <ul class="list-group list-group-flush">
+        <ul class="list-group list-group-flush p-0">
           @forelse($upcomingRegs as $reg)
-            @php $event = $reg->event; @endphp
-            <li class="list-group-item d-flex align-items-center gap-3 px-4 py-3">
-              <div class="text-center bg-primary-subtle rounded p-2" style="min-width:48px">
-                <div class="fw-bold text-primary" style="font-size:.7rem;text-transform:uppercase">
-                  {{ $event->starts_at->format('M') }}
-                </div>
-                <div class="fw-bold text-primary" style="font-size:1.1rem;line-height:1">
-                  {{ $event->starts_at->format('d') }}
-                </div>
-              </div>
-              <div class="flex-grow-1">
-                <a href="{{ route('events.show', $event->slug) }}" class="fw-semibold text-dark text-decoration-none d-block"
-                   style="font-size:.9rem">{{ Str::limit($event->title, 55) }}</a>
-                <div class="text-secondary" style="font-size:.78rem">
-                  {{ $event->location ?? 'Online' }} · {{ $event->starts_at->format('H:i') }}
-                </div>
-              </div>
+            <li class="list-group-item p-0 border-0">
+              <livewire:dashboard.registered-event-card
+                :registration-id="$reg->id"
+                variant="row"
+                :key="'member-event-row-'.$reg->id"
+              />
             </li>
           @empty
             <li class="list-group-item px-4 py-5 text-center text-secondary">
               <i class="ti ti-calendar-event d-block mb-2" style="font-size:1.8rem"></i>
-              No upcoming events.
-              <a href="{{ route('events.index') }}" class="text-primary text-decoration-none">Browse events!</a>
+              Aucun événement à venir.
+              <a href="{{ route('events.index') }}" class="text-primary text-decoration-none">Parcourir les événements</a>
             </li>
           @endforelse
         </ul>
       </div>
     </div>
 
-    {{-- Job applications --}}
     <div class="col-lg-6">
       <div class="card h-100">
         <div class="card-header bg-white d-flex justify-content-between align-items-center px-4 py-3">
-          <h5 class="mb-0">My Applications</h5>
-          <a href="{{ route('dashboard.member.applications') }}" class="small text-primary">View all</a>
+          <h5 class="mb-0">Mes candidatures</h5>
+          <a href="{{ route('dashboard.member.applications') }}" class="small text-primary">Tout voir</a>
         </div>
         <ul class="list-group list-group-flush">
           @forelse($recentApps as $application)
+            @php $job = $application->jobOffer; @endphp
             <li class="list-group-item d-flex align-items-center gap-3 px-4 py-3">
               <div class="flex-grow-1">
-                <a href="{{ route('jobs.show', $application->jobOffer->slug) }}"
-                   class="fw-semibold text-dark text-decoration-none d-block mb-1"
-                   style="font-size:.9rem">{{ Str::limit($application->jobOffer->title, 55) }}</a>
-                <div class="text-secondary" style="font-size:.78rem">
-                  {{ $application->jobOffer->company->name ?? '—' }}
-                  · {{ $application->created_at->diffForHumans() }}
-                </div>
+                @if($job)
+                  <a href="{{ route('jobs.show', $job) }}"
+                     class="fw-semibold text-dark text-decoration-none d-block mb-1"
+                     style="font-size:.9rem">{{ Str::limit($job->title, 55) }}</a>
+                  <div class="text-secondary" style="font-size:.78rem">
+                    {{ $job->company?->name ?? '—' }}
+                    · {{ $application->created_at->diffForHumans() }}
+                  </div>
+                @else
+                  <span class="fw-semibold d-block mb-1" style="font-size:.9rem">Offre supprimée</span>
+                  <div class="text-secondary" style="font-size:.78rem">
+                    {{ $application->created_at->diffForHumans() }}
+                  </div>
+                @endif
               </div>
               @php
-                $appBadge = match($application->status) {
-                  'pending'     => ['bg-warning-subtle text-warning', 'Pending'],
-                  'viewed'      => ['bg-info-subtle text-info', 'Viewed'],
-                  'shortlisted' => ['bg-primary-subtle text-primary', 'Shortlisted'],
-                  'accepted'    => ['bg-success-subtle text-success', 'Accepted'],
-                  'rejected'    => ['bg-danger-subtle text-danger', 'Rejected'],
-                  default       => ['bg-secondary-subtle text-secondary', ucfirst($application->status)],
+                $statusValue = $application->status->value;
+                $appBadge = match ($statusValue) {
+                  'pending'  => ['bg-warning-subtle text-warning', 'En attente'],
+                  'accepted' => ['bg-success-subtle text-success', 'Acceptée'],
+                  'rejected' => ['bg-danger-subtle text-danger', 'Refusée'],
+                  default    => ['bg-secondary-subtle text-secondary', ucfirst($statusValue)],
                 };
               @endphp
               <span class="badge {{ $appBadge[0] }}">{{ $appBadge[1] }}</span>
@@ -230,14 +203,14 @@
           @empty
             <li class="list-group-item px-4 py-5 text-center text-secondary">
               <i class="ti ti-briefcase d-block mb-2" style="font-size:1.8rem"></i>
-              No applications yet.
-              <a href="{{ route('jobs.index') }}" class="text-primary text-decoration-none">Browse jobs!</a>
+              Aucune candidature pour l'instant.
+              <a href="{{ route('jobs.index') }}" class="text-primary text-decoration-none">Parcourir les offres</a>
             </li>
           @endforelse
         </ul>
       </div>
     </div>
 
-  </div>{{-- /row activity --}}
+  </div>
 
 @endsection
