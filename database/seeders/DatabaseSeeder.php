@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class,           // 1. Roles + permissions
             TagSeeder::class,            // 2. Tags forum/blog
-            JobOfferCategorySeeder::class, // 3. Job categories
+            JobCategorySeeder::class,      // 3. Job categories (table job_categories)
             JobSkillSeeder::class,       // 4. Job skills
             UserSeeder::class,           // 5. Users (après roles)
             VitrineSettingSeeder::class, // 6. Contenu dynamique des pages vitrine

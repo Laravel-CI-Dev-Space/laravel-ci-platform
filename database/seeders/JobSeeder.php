@@ -8,29 +8,73 @@ use App\Models\Company;
 use App\Models\JobCategory;
 use App\Models\JobOffer;
 use App\Models\JobSkill;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class JobSeeder extends Seeder
 {
+    /** @var Collection<int, JobSkill> */
+    private Collection $skills;
+
     public function run(): void
     {
-        $categories = collect([
+        $categories   = $this->seedCategories();
+        $this->skills = $this->resolveSkills();
+        $companies    = Company::factory()->count(12)->create();
+
+        $this->seedCuratedOffers($companies, $categories);
+        $this->seedBulkOffers($companies, $categories);
+
+        $total = JobOffer::count();
+        $this->command?->info("✅ Job board de démo créé ({$total} offres au total).");
+    }
+
+    /** @return Collection<int, JobCategory> */
+    private function seedCategories(): Collection
+    {
+        $names = [
             ['name' => 'Développement backend', 'slug' => 'backend'],
             ['name' => 'Développement frontend', 'slug' => 'frontend'],
+            ['name' => 'Full stack', 'slug' => 'full-stack'],
             ['name' => 'DevOps', 'slug' => 'devops'],
-        ])->map(fn (array $data) => JobCategory::firstOrCreate(['slug' => $data['slug']], $data));
+            ['name' => 'Mobile', 'slug' => 'mobile'],
+            ['name' => 'QA & tests', 'slug' => 'qa'],
+        ];
 
-        $skills = collect([
+        return collect($names)->map(
+            fn (array $data) => JobCategory::firstOrCreate(['slug' => $data['slug']], $data),
+        );
+    }
+
+    /** @return Collection<int, JobSkill> */
+    private function resolveSkills(): Collection
+    {
+        if (JobSkill::query()->exists()) {
+            return JobSkill::all();
+        }
+
+        $names = [
             'Laravel', 'PHP', 'Filament', 'Livewire', 'Vue.js',
             'Tailwind CSS', 'MySQL', 'Docker', 'Git', 'Pest',
-        ])->map(fn (string $name) => JobSkill::firstOrCreate(
-            ['slug' => Str::slug($name)],
-            ['name' => $name],
-        ));
+            'React', 'TypeScript', 'Redis', 'AWS',
+        ];
 
-        $companies = Company::factory()->count(3)->create();
+        return collect($names)->map(
+            fn (string $name) => JobSkill::firstOrCreate(
+                ['slug' => Str::slug($name)],
+                ['name' => $name],
+            ),
+        );
+    }
 
+    /**
+     * @param  Collection<int, Company>  $companies
+     * @param  Collection<int, JobCategory>  $categories
+     */
+    private function seedCuratedOffers(Collection $companies, Collection $categories): void
+    {
         $offers = [
             [
                 'title'    => 'Développeur Laravel Senior',
@@ -84,21 +128,53 @@ class JobSeeder extends Seeder
                 default                 => $factory->draft()->create($data),
             };
 
-            $offer->skills()->attach(
-                $skills->random(min(4, $skills->count()))->pluck('id'),
-            );
+            $this->attachRandomSkills($offer);
+        }
+    }
+
+    /**
+     * @param  Collection<int, Company>  $companies
+     * @param  Collection<int, JobCategory>  $categories
+     */
+    private function seedBulkOffers(Collection $companies, Collection $categories): void
+    {
+        $this->createOffersWithRotation($companies, $categories, 24, fn () => JobOffer::factory()->active());
+        $this->createOffersWithRotation($companies, $categories, 6, fn () => JobOffer::factory()->remote()->active());
+        $this->createOffersWithRotation($companies, $categories, 8, fn () => JobOffer::factory()->expired());
+        $this->createOffersWithRotation($companies, $categories, 6, fn () => JobOffer::factory()->draft());
+    }
+
+    /**
+     * @param  Collection<int, Company>  $companies
+     * @param  Collection<int, JobCategory>  $categories
+     * @param  callable(): Factory<JobOffer>  $factory
+     */
+    private function createOffersWithRotation(
+        Collection $companies,
+        Collection $categories,
+        int $count,
+        callable $factory,
+    ): void {
+        $factory()
+            ->count($count)
+            ->sequence(fn ($sequence) => [
+                'company_id'  => $companies[$sequence->index % $companies->count()]->id,
+                'category_id' => $categories[$sequence->index % $categories->count()]->id,
+            ])
+            ->create()
+            ->each(fn (JobOffer $offer) => $this->attachRandomSkills($offer));
+    }
+
+    private function attachRandomSkills(JobOffer $offer): void
+    {
+        if ($this->skills->isEmpty()) {
+            return;
         }
 
-        JobOffer::factory()
-            ->count(4)
-            ->active()
-            ->create()
-            ->each(function (JobOffer $offer) use ($skills) {
-                $offer->skills()->attach(
-                    $skills->random(min(4, $skills->count()))->pluck('id'),
-                );
-            });
+        $count = min(fake()->numberBetween(2, 6), $this->skills->count());
 
-        $this->command?->info('✅ Job board de démo créé.');
+        $offer->skills()->syncWithoutDetaching(
+            $this->skills->random($count)->pluck('id'),
+        );
     }
 }

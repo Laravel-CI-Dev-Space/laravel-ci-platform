@@ -1031,6 +1031,36 @@ h1, h2, h3, h4, h5, h6 {
 .ev-webinar { background: #4361ee; }
 .ev-hackathon { background: #9b5de5; }
 
+.event-cover {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background: var(--light);
+}
+.event-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.event-cover--card {
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+.event-cover--detail {
+  aspect-ratio: 16 / 7;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+.event-cover-accent {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 6px;
+  pointer-events: none;
+}
+
 .event-card .card-pad { padding: 1.4rem; }
 .event-date-chip {
   width: 58px;
@@ -1504,6 +1534,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .pagination .page-link:hover { background: var(--orange-50); border-color: var(--orange); color: var(--orange); }
 .pagination .page-item.active .page-link { background: var(--orange); border-color: var(--orange); color: #fff; }
+.pagination .page-item.disabled .page-link { opacity: .45; cursor: not-allowed; background: transparent; }
 
 /* ================================
    SCROLL TOP + UTILITIES

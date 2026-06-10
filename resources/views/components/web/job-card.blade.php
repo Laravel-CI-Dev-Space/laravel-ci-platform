@@ -1,4 +1,5 @@
 @props([
+    'jobOffer'     => null,
     'logoClass'    => 'cl-1',
     'logoText'     => '',
     'title'        => '',
@@ -14,6 +15,26 @@
     'badge'        => null,
     'badgeStyle'   => '',
 ])
+
+@if($jobOffer)
+    @php
+        $p = $jobOffer->toWebCardProps();
+        $logoClass = $p['logoClass'];
+        $logoText = $p['logoText'];
+        $title = $p['title'];
+        $company = $p['company'];
+        $location = $p['location'];
+        $remote = $p['remote'];
+        $description = $p['description'];
+        $contractType = $p['contractType'];
+        $level = $p['level'] ?? '';
+        $tags = $p['tags'];
+        $salary = $p['salary'];
+        $href = $p['href'];
+        $badge = $p['badge'];
+        $badgeStyle = $p['badgeStyle'] ?? '';
+    @endphp
+@endif
 
 <div class="job-card">
   <div class="d-flex gap-3">
@@ -35,11 +56,11 @@
               · <i class="fa-solid fa-location-dot"></i> {{ $location }}
             @endif
             @if($remote)
-              <span class="badge-pill badge-navy ms-1">Remote OK</span>
+              <span class="badge-pill badge-navy ms-1">Télétravail</span>
             @endif
           </div>
         </div>
-        <button class="save-heart" aria-label="Save job"><i class="fa-regular fa-heart"></i></button>
+        <button class="save-heart" aria-label="Enregistrer l'offre" type="button"><i class="fa-regular fa-heart"></i></button>
       </div>
       @if($description)
         <p class="my-2" style="font-size:.92rem;color:var(--muted)">{{ $description }}</p>
@@ -57,7 +78,7 @@
       </div>
       <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
         <span class="salary">{{ $salary }}</span>
-        <a href="{{ $href }}" class="btn btn-brand">Apply <i class="fa-solid fa-arrow-right"></i></a>
+        <a href="{{ $href }}" class="btn btn-brand">Postuler <i class="fa-solid fa-arrow-right"></i></a>
       </div>
     </div>
   </div>

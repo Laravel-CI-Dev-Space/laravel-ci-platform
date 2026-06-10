@@ -22,7 +22,7 @@ class UserFactory extends Factory
             'name'              => fake()->name(),
             'email'             => fake()->unique()->safeEmail(),
             'avatar'            => null,
-            'github_id'         => (string) fake()->unique()->numberBetween(1000000, 99999999),
+            'github_id'         => (string) fake()->unique()->numerify('##########'),
             'github_username'   => fake()->unique()->userName(),
             'is_active'         => true,
             'email_verified_at' => now(),
@@ -41,15 +41,14 @@ class UserFactory extends Factory
     }
 
     /**
-     * Active member with the "member" role assigned.
+     * Membre actif (rôle Spatie `member`) pour les tests Sprint events/jobs.
      */
     public function membreActif(): static
     {
-        return $this->state(fn (array $attributes) => [
-            'is_active'         => true,
-            'email_verified_at' => now(),
-        ])->afterCreating(function (User $user) {
-            $user->assignRole('member');
+        return $this->afterCreating(function (User $user) {
+            if (! $user->hasRole('member')) {
+                $user->assignRole('member');
+            }
         });
     }
 }

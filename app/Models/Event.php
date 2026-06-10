@@ -17,6 +17,7 @@ use Illuminate\Support\Str;
     'title',
     'slug',
     'description',
+    'cover',
     'type_id',
     'location',
     'meeting_link',
@@ -73,6 +74,22 @@ class Event extends Model
     public function icsExports(): HasMany
     {
         return $this->hasMany(EventIcsExport::class);
+    }
+
+    /**
+     * URL absolue de la cover (chemin public ou URL externe).
+     */
+    public function coverUrl(): ?string
+    {
+        if (blank($this->cover)) {
+            return null;
+        }
+
+        if (str_starts_with($this->cover, 'http://') || str_starts_with($this->cover, 'https://')) {
+            return $this->cover;
+        }
+
+        return asset(ltrim($this->cover, '/'));
     }
 
     public function getRouteKeyName(): string
@@ -137,6 +154,12 @@ class Event extends Model
             return false;
         }
 
+        $count = $this->confirmed_registrations_count ?? null;
+
+        if ($count !== null) {
+            return (int) $count >= $this->capacity;
+        }
+
         return $this->confirmedRegistrationsCount() >= $this->capacity;
     }
 
@@ -145,19 +168,39 @@ class Event extends Model
         return $this->start_date->isFuture();
     }
 
+    /** Past events use end_date; upcoming checks start_date only. */
+    public function isPast(): bool
+    {
+        return $this->end_date->isPast();
+    }
+
     public function isRegisterable(): bool
     {
         return $this->status === EventStatus::PUBLISHED
             && $this->isUpcoming();
     }
 
+    /**
+     * Active registration for a user (excludes cancelled rows).
+     *
+     * Cancelled registrations stay in DB because of unique (event_id, user_id).
+     */
     public function registrationFor(?User $user): ?EventRegistration
     {
         if ($user === null) {
             return null;
         }
 
-        return $this->registrations()->where('user_id', $user->id)->first();
+        if ($this->relationLoaded('registrations')) {
+            return $this->registrations
+                ->first(fn (EventRegistration $registration) => $registration->user_id === $user->id
+                    && $registration->status !== EventRegistrationStatus::CANCELLED);
+        }
+
+        return $this->registrations()
+            ->where('user_id', $user->id)
+            ->whereNot('status', EventRegistrationStatus::CANCELLED)
+            ->first();
     }
 
     public function waitlistEntryFor(?User $user): ?EventWaitlist
@@ -166,7 +209,39 @@ class Event extends Model
             return null;
         }
 
+        if ($this->relationLoaded('waitlists')) {
+            return $this->waitlists->first();
+        }
+
         return $this->waitlists()->where('user_id', $user->id)->first();
+    }
+
+    /**
+     * Build props for the public <x-web.event-card> component.
+     *
+     * @return array<string, mixed>
+     */
+    public function toWebCardProps(): array
+    {
+        $taken    = (int) ($this->confirmed_registrations_count ?? $this->confirmedRegistrationsCount());
+        $total    = (int) ($this->capacity ?? 0);
+        $typeSlug = $this->type?->slug ?? 'meetup';
+
+        return [
+            'type'         => $typeSlug,
+            'typeLabel'    => $this->type?->name ?? 'Événement',
+            'cover'        => $this->coverUrl(),
+            'title'        => $this->title,
+            'month'        => $this->start_date->translatedFormat('M'),
+            'day'          => $this->start_date->format('d'),
+            'time'         => $this->start_date->format('D H:i'),
+            'location'     => $this->location ?? $this->meeting_link ?? 'En ligne',
+            'spotsUsed'    => $taken,
+            'spotsTotal'   => $total,
+            'href'         => route('events.show', $this),
+            'registerHref' => route('events.show', $this),
+            'past'         => $this->end_date->isPast(),
+        ];
     }
 
     /**
@@ -184,7 +259,7 @@ class Event extends Model
             'location'    => $this->location ?? $this->meeting_link ?? 'En ligne',
             'time'        => $this->start_date->format('d/m/Y H:i') . ' — ' . $this->end_date->format('H:i'),
             'description' => Str::limit(strip_tags($this->description), 120),
-            'image'       => null,
+            'image'       => $this->coverUrl(),
             'seats_taken' => $taken,
             'seats_total' => max($total, 1),
             'date_day'    => $this->start_date->format('d'),

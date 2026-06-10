@@ -2,10 +2,12 @@
 
 namespace App\Policies;
 
+use App\Enums\Events\EventRegistrationStatus;
 use App\Enums\Events\EventStatus;
 use App\Models\Event;
 use App\Models\User;
 
+/** Authorization rules for the Events module (Sprint Roger — M4). */
 class EventPolicy
 {
     public function viewAny(?User $user): bool
@@ -19,7 +21,7 @@ class EventPolicy
             return true;
         }
 
-        return $user !== null && $user->hasAnyRole(['super-admin', 'admin', 'moderateur']);
+        return $user !== null && $user->hasAnyRole(['super-admin', 'admin', 'moderator']);
     }
 
     public function register(User $user, Event $event): bool
@@ -37,5 +39,42 @@ class EventPolicy
         }
 
         return true;
+    }
+
+    public function cancelRegistration(User $user, Event $event): bool
+    {
+        if (! $user->hasRole('member') || ! $event->isUpcoming()) {
+            return false;
+        }
+
+        $registration = $event->registrationFor($user);
+
+        return $registration !== null
+            && $registration->status === EventRegistrationStatus::CONFIRMED;
+    }
+
+    public function leaveWaitlist(User $user, Event $event): bool
+    {
+        return $user->hasRole('member')
+            && $event->waitlistEntryFor($user) !== null;
+    }
+
+    /** Member must be confirmed (not waitlisted) to download .ics or manage reminders. */
+    public function downloadIcs(User $user, Event $event): bool
+    {
+        return $user->hasRole('member')
+            && $event->registrationFor($user) !== null;
+    }
+
+    public function manageReminders(User $user, Event $event): bool
+    {
+        if (! $user->hasRole('member') || ! $event->isUpcoming()) {
+            return false;
+        }
+
+        $registration = $event->registrationFor($user);
+
+        return $registration !== null
+            && $registration->status === EventRegistrationStatus::CONFIRMED;
     }
 }

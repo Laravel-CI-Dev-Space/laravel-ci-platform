@@ -18,9 +18,10 @@ class EventRegistrationFactory extends Factory
     public function definition(): array
     {
         return [
-            'event_id' => Event::factory()->published()->upcoming(),
-            'user_id'  => User::factory(),
-            'status'   => EventRegistrationStatus::CONFIRMED,
+            'event_id'       => Event::factory()->published()->upcoming(),
+            'user_id'        => User::factory(),
+            'status'         => EventRegistrationStatus::CONFIRMED,
+            'reminder_types' => [],
         ];
     }
 
@@ -32,5 +33,16 @@ class EventRegistrationFactory extends Factory
     public function confirmed(): static
     {
         return $this->state(fn () => ['status' => EventRegistrationStatus::CONFIRMED]);
+    }
+
+    public function withReminders(): static
+    {
+        return $this->state(fn () => ['reminder_types' => ['J-7', 'J-1', 'H-1']]);
+    }
+
+    /** @param list<string> $types */
+    public function withReminderTypes(array $types): static
+    {
+        return $this->state(fn () => ['reminder_types' => $types]);
     }
 }

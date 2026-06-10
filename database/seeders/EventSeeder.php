@@ -66,6 +66,80 @@ class EventSeeder extends Seeder
             'type_id' => $webinar?->id,
         ]);
 
-        $this->command?->info('✅ Événements de démo créés.');
+        $this->seedBulkEvents($meetup, $webinar, $hackathon);
+
+        $total = Event::count();
+        $this->command?->info("✅ Événements de démo créés ({$total} au total).");
+    }
+
+    private function seedBulkEvents(?EventType $meetup, ?EventType $webinar, ?EventType $hackathon): void
+    {
+        if ($meetup) {
+            Event::factory()
+                ->published()
+                ->upcoming()
+                ->count(10)
+                ->create(['type_id' => $meetup->id])
+                ->each(fn (Event $event) => $this->maybeSeedSpeakers($event));
+        }
+
+        if ($webinar) {
+            Event::factory()
+                ->published()
+                ->upcoming()
+                ->webinar()
+                ->count(8)
+                ->create(['type_id' => $webinar->id])
+                ->each(fn (Event $event) => $this->maybeSeedSpeakers($event, 80));
+        }
+
+        if ($hackathon) {
+            Event::factory()
+                ->published()
+                ->upcoming()
+                ->count(6)
+                ->create([
+                    'type_id'  => $hackathon->id,
+                    'location' => fake()->randomElement(['Abidjan, Plateau', 'Abidjan, Cocody', 'Bouaké']),
+                    'capacity' => fake()->numberBetween(60, 200),
+                ])
+                ->each(fn (Event $event) => $this->maybeSeedSpeakers($event, 90));
+        }
+
+        $pastTypes = collect([$meetup, $webinar, $hackathon])->filter();
+
+        foreach ($pastTypes as $type) {
+            $factory = Event::factory()->published()->past()->count(5);
+
+            if ($type->slug === 'webinar') {
+                $factory = $factory->webinar();
+            }
+
+            $factory->create(['type_id' => $type->id])
+                ->each(fn (Event $event) => $this->maybeSeedSpeakers($event, 50));
+        }
+
+        Event::factory()
+            ->draft()
+            ->count(6)
+            ->create(['type_id' => $meetup?->id])
+            ->each(fn (Event $event) => $this->maybeSeedSpeakers($event, 30));
+
+        Event::factory()
+            ->cancelled()
+            ->upcoming()
+            ->count(4)
+            ->create(['type_id' => $webinar?->id ?? $meetup?->id]);
+    }
+
+    private function maybeSeedSpeakers(Event $event, int $chancePercent = 70): void
+    {
+        if (! fake()->boolean($chancePercent)) {
+            return;
+        }
+
+        EventSpeaker::factory()
+            ->count(fake()->numberBetween(1, 3))
+            ->create(['event_id' => $event->id]);
     }
 }
