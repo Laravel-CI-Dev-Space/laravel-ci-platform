@@ -7,6 +7,7 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationGroup;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -49,13 +50,9 @@ class AdminPanelProvider extends PanelProvider
             ->pages([Dashboard::class])
             ->widgets([AccountWidget::class])
 
-            // Uncomment to enable navigation groups once modules are implemented:
-            // ->navigationGroups([
-            //     NavigationGroup::make('Members')->icon('heroicon-o-users'),
-            //     NavigationGroup::make('Content')->icon('heroicon-o-document-text'),
-            //     NavigationGroup::make('Community')->icon('heroicon-o-calendar'),
-            //     NavigationGroup::make('Settings')->icon('heroicon-o-cog-6-tooth')->collapsed(),
-            // ])
+            ->navigationGroups([
+                NavigationGroup::make('Vitrine'),
+            ])
 
             ->middleware([
                 EncryptCookies::class,

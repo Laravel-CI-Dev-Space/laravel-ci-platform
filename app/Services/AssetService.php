@@ -12,11 +12,11 @@ class AssetService
      * Uses file_get_contents + File::put instead of $file->move() to avoid
      * rename() failures with Livewire TemporaryUploadedFile across storage paths.
      *
-     * @param  mixed       $file   UploadedFile or Livewire TemporaryUploadedFile
-     * @param  string      $folder Sub-directory under public/assets (e.g. avatars, cv)
-     * @param  string      $prefix Filename prefix (e.g. avatar, cv)
-     * @param  int         $userId Owner's user ID
-     * @param  string|null $old    Previous filename to delete
+     * @param  mixed  $file  UploadedFile or Livewire TemporaryUploadedFile
+     * @param  string  $folder  Sub-directory under public/assets (e.g. avatars, cv)
+     * @param  string  $prefix  Filename prefix (e.g. avatar, cv)
+     * @param  int  $userId  Owner's user ID
+     * @param  string|null  $old  Previous filename to delete
      * @return string Saved filename
      */
     public function upload(
