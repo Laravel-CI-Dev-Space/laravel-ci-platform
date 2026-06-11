@@ -15,7 +15,7 @@ enum JobOfferStatus: string implements HasLabel
     public function label(): string
     {
         return match ($this) {
-            self::ACTIVE  => 'Active',
+            self::ACTIVE  => 'Publiée',
             self::EXPIRED => 'Expirée',
             self::DRAFT   => 'Brouillon',
         };

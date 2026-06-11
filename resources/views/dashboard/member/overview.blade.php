@@ -190,12 +190,10 @@
                 @endif
               </div>
               @php
-                $statusValue = $application->status->value;
-                $appBadge = match ($statusValue) {
-                  'pending'  => ['bg-warning-subtle text-warning', 'En attente'],
-                  'accepted' => ['bg-success-subtle text-success', 'Acceptée'],
-                  'rejected' => ['bg-danger-subtle text-danger', 'Refusée'],
-                  default    => ['bg-secondary-subtle text-secondary', ucfirst($statusValue)],
+                $appBadge = match ($application->status) {
+                  \App\Enums\Jobs\JobApplicationStatus::PENDING  => ['bg-warning-subtle text-warning', $application->status->label()],
+                  \App\Enums\Jobs\JobApplicationStatus::ACCEPTED => ['bg-success-subtle text-success', $application->status->label()],
+                  \App\Enums\Jobs\JobApplicationStatus::REJECTED => ['bg-danger-subtle text-danger', $application->status->label()],
                 };
               @endphp
               <span class="badge {{ $appBadge[0] }}">{{ $appBadge[1] }}</span>

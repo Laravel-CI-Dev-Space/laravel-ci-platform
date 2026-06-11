@@ -71,6 +71,7 @@ class VitrineSettingSeeder extends Seeder
             ['code' => 'global_social_links', 'type' => 'json', 'group' => 'global', 'section' => 'social', 'value' => json_encode([
                 ['platform' => 'github', 'url' => 'https://github.com/Laravel-CI-Dev-Space/laravel-ci'],
             ])],
+
         ];
 
         foreach ($settings as $setting) {

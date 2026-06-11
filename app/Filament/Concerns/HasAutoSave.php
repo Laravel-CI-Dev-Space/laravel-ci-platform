@@ -18,7 +18,7 @@ trait HasAutoSave
     protected function autoSaveAction(): Action
     {
         return Action::make('toggleAutoSave')
-            ->label('Auto save')
+            ->label('Sauvegarde auto')
             ->icon(fn () => $this->autoSave ? 'heroicon-o-bolt' : 'heroicon-o-bolt-slash')
             ->color(fn () => $this->autoSave ? 'success' : 'gray')
             ->action(fn () => $this->toggleAutoSave());

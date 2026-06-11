@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\CvController;
+use App\Http\Controllers\Dashboard\MemberJobApplicationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DesignSystemController;
 use App\Http\Controllers\EventController;
@@ -157,6 +158,7 @@ Route::middleware(['auth', 'active'])->group(function () {
                 Route::get('/articles', fn () => view('dashboard.member.articles'))->name('articles');
                 Route::get('/events', [DashboardController::class, 'memberEvents'])->name('events');
                 Route::get('/applications', [DashboardController::class, 'memberApplications'])->name('applications');
+                Route::get('/applications/{jobApplication}', [MemberJobApplicationController::class, 'show'])->name('applications.show');
                 Route::get('/favorites', [DashboardController::class, 'memberFavorites'])->name('favorites');
                 Route::get('/profile', fn () => view('dashboard.member.profile'))->name('profile');
                 Route::post('/profile', fn () => back())->name('profile.update');
