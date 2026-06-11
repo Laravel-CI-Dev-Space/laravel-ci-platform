@@ -74,7 +74,9 @@
       @else
         <div class="d-flex flex-column gap-4" wire:loading.remove.delay>
           @foreach($this->offers as $offer)
-            <x-web.job-card :job-offer="$offer" wire:key="job-{{ $offer->id }}" />
+            <div wire:key="job-row-{{ $offer->id }}">
+              <x-web.job-card :job-offer="$offer" />
+            </div>
           @endforeach
         </div>
         <div class="mt-4">

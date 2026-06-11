@@ -94,6 +94,9 @@
 
         <div class="col-lg-4">
           <div class="apply-card">
+            <div class="d-flex justify-content-end mb-3">
+              <livewire:job-board.job-favorite-toggle :job-offer-id="$jobOffer->id" />
+            </div>
             <livewire:job-board.job-application :job-offer-id="$jobOffer->id" />
           </div>
         </div>

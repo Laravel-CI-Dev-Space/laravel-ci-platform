@@ -103,16 +103,6 @@ class DashboardController extends Controller
 
     public function memberFavorites(): View
     {
-        /** @var User $user */
-        $user = Auth::user();
-
-        $favorites = $user->jobFavorites()
-            ->with(['jobOffer.company', 'jobOffer.skills'])
-            ->latest()
-            ->get()
-            ->map(fn ($favorite) => $favorite->jobOffer)
-            ->filter();
-
-        return view('dashboard.member.favorites', compact('favorites'));
+        return view('dashboard.member.favorites');
     }
 }

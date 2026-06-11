@@ -86,20 +86,8 @@
 
 // ================================
 // JOBS — filter sidebar / off-canvas toggle
-// (Bootstrap offcanvas handles most; just sync the save hearts)
+// (save-heart is handled by Livewire JobFavoriteToggle)
 // ================================
-(function () {
-  document.querySelectorAll('.save-heart').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      btn.classList.toggle('saved');
-      const icon = btn.querySelector('i');
-      if (icon) {
-        icon.classList.toggle('fa-regular');
-        icon.classList.toggle('fa-solid');
-      }
-    });
-  });
-})();
 
 // ================================
 // VOTE BUTTONS (forum detail)

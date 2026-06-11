@@ -61,11 +61,42 @@
 
   <button class="scroll-top" id="scrollTop" aria-label="Scroll to top"><i class="fa-solid fa-arrow-up"></i></button>
 
+  <div id="app-toast-container" class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index:1080"></div>
+
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="{{ asset('assets/web/js/main.js') }}"></script>
 
   @stack('scripts')
   @livewireScripts
+  <script>
+    function showAppToast(message, type = 'success') {
+      const container = document.getElementById('app-toast-container');
+      if (!container) return;
+
+      const id = 'toast-' + Date.now();
+      const bg = type === 'error'
+        ? 'text-bg-danger'
+        : type === 'info'
+          ? 'text-bg-secondary'
+          : 'text-bg-success';
+
+      container.insertAdjacentHTML('beforeend', `
+        <div id="${id}" class="toast align-items-center ${bg} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="d-flex">
+            <div class="toast-body">${message}</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Fermer"></button>
+          </div>
+        </div>`);
+
+      const toastEl = document.getElementById(id);
+      bootstrap.Toast.getOrCreateInstance(toastEl, { delay: 3000 }).show();
+      toastEl.addEventListener('hidden.bs.toast', () => toastEl.remove());
+    }
+
+    document.addEventListener('livewire:init', () => {
+      Livewire.on('app-toast', ({ message, type = 'success' }) => showAppToast(message, type));
+    });
+  </script>
 </body>
 </html>
