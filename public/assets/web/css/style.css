@@ -1232,6 +1232,120 @@ h1, h2, h3, h4, h5, h6 {
   padding: 1rem 1.2rem;
 }
 
+/* Event detail — media / replays */
+.event-media-section {
+  margin-bottom: 1rem;
+}
+
+.event-media-label {
+  margin: 0 0 .65rem;
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.event-media-featured {
+  max-width: 560px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--navy);
+}
+
+.event-media-featured iframe,
+.event-media-card__embed iframe {
+  border: 0;
+}
+
+.event-media-card {
+  display: block;
+  height: 100%;
+  background: var(--light);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: border-color .2s var(--ease), box-shadow .2s var(--ease);
+}
+
+.event-media-card--action {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .85rem 1rem;
+  color: var(--navy);
+  text-decoration: none;
+}
+
+.event-media-card--action:hover {
+  border-color: var(--orange-200);
+  box-shadow: var(--shadow-sm);
+  color: var(--navy);
+}
+
+.event-media-card--photo:hover {
+  border-color: var(--orange-200);
+  box-shadow: var(--shadow-sm);
+}
+
+.event-media-card__icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  font-size: .9rem;
+}
+
+.event-media-card__icon--video {
+  background: var(--orange-100);
+  color: var(--orange);
+}
+
+.event-media-card__icon--pdf {
+  background: #fdecec;
+  color: #c0392b;
+}
+
+.event-media-card__text {
+  flex: 1;
+  min-width: 0;
+  font-size: .88rem;
+  font-weight: 600;
+}
+
+.event-media-card__cta {
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--orange);
+  flex-shrink: 0;
+}
+
+.event-media-card--photo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  padding: .35rem;
+  background: var(--light);
+}
+
+.event-media-card--photo img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.event-media-photos .col-md-4 {
+  display: flex;
+}
+
 .agenda-item {
   display: flex; gap: 1.2rem;
   padding: 1rem 0;

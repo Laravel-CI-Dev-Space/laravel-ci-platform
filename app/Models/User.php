@@ -140,6 +140,11 @@ class User extends Authenticatable
         return $this->hasMany(JobFavorite::class);
     }
 
+    public function jobAlerts(): HasMany
+    {
+        return $this->hasMany(JobAlert::class);
+    }
+
     /** Reports filed by this user. */
     public function reports(): HasMany
     {

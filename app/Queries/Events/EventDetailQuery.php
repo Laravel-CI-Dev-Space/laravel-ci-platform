@@ -16,7 +16,7 @@ final class EventDetailQuery
     public static function make(?int $userId = null): Builder
     {
         $query = Event::query()
-            ->with(['type', 'speakers'])
+            ->with(['type', 'speakers', 'media'])
             ->withCount([
                 'registrations as confirmed_registrations_count' => fn ($q) => $q->where(
                     'status',

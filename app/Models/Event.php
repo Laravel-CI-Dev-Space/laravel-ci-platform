@@ -69,7 +69,7 @@ class Event extends Model
 
     public function media(): HasMany
     {
-        return $this->hasMany(EventMedia::class);
+        return $this->hasMany(EventMedia::class)->orderBy('created_at');
     }
 
     public function icsExports(): HasMany

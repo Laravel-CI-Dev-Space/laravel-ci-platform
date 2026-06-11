@@ -105,4 +105,9 @@ class DashboardController extends Controller
     {
         return view('dashboard.member.favorites');
     }
+
+    public function memberAlerts(): View
+    {
+        return view('dashboard.member.alerts');
+    }
 }
