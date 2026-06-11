@@ -64,6 +64,7 @@
           <a href="#sec-tech"       class="nav-link"><i class="ti ti-code"></i> Tech profile</a>
           <a href="#sec-academic"   class="nav-link"><i class="ti ti-school"></i> Academic & career</a>
           <a href="#sec-links"      class="nav-link"><i class="ti ti-link"></i> Links & docs</a>
+          <a href="#sec-notifications" class="nav-link"><i class="ti ti-bell"></i> Notifications</a>
         </nav>
       </div>
     </div>
@@ -377,6 +378,55 @@
             </a>
           @endif
           @error('cvFile') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
+        </div>
+      </div>
+    </div>
+
+    {{-- ── SECTION: Notification preferences ───────── --}}
+    <div id="sec-notifications" class="card mb-4">
+      <div class="card-header d-flex align-items-center">
+        <span class="section-icon"><i class="ti ti-bell"></i></span>
+        <h5>Préférences de notifications</h5>
+      </div>
+      <div class="card-body p-4">
+        <p class="text-secondary small mb-3">
+          Choisissez les emails que vous souhaitez recevoir de la part de Laravel CI.
+        </p>
+
+        <div class="form-check form-switch mb-3">
+          <input class="form-check-input" type="checkbox" role="switch" id="pref-new-answer"
+                 wire:click="toggleNotificationPreference('new_answer')"
+                 @checked($notificationPreferences['new_answer'])>
+          <label class="form-check-label" for="pref-new-answer">
+            Nouvelle réponse à l'une de mes questions
+          </label>
+        </div>
+
+        <div class="form-check form-switch mb-3">
+          <input class="form-check-input" type="checkbox" role="switch" id="pref-article-published"
+                 wire:click="toggleNotificationPreference('article_published')"
+                 @checked($notificationPreferences['article_published'])>
+          <label class="form-check-label" for="pref-article-published">
+            Publication de l'un de mes articles
+          </label>
+        </div>
+
+        <div class="form-check form-switch mb-3">
+          <input class="form-check-input" type="checkbox" role="switch" id="pref-event-reminder"
+                 wire:click="toggleNotificationPreference('event_reminder')"
+                 @checked($notificationPreferences['event_reminder'])>
+          <label class="form-check-label" for="pref-event-reminder">
+            Rappels avant les événements auxquels je suis inscrit(e)
+          </label>
+        </div>
+
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" role="switch" id="pref-job-alert"
+                 wire:click="toggleNotificationPreference('job_alert')"
+                 @checked($notificationPreferences['job_alert'])>
+          <label class="form-check-label" for="pref-job-alert">
+            Alertes emploi correspondant à mon profil
+          </label>
         </div>
       </div>
     </div>

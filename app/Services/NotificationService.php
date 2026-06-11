@@ -2,33 +2,86 @@
 
 namespace App\Services;
 
+use App\Enums\UserRole;
+use App\Mail\ArticlePublishedMail;
+use App\Mail\CompanyAccessMail;
+use App\Mail\CompanyRegistrationRejectedMail;
+use App\Mail\EventConfirmationMail;
+use App\Mail\EventReminderMail;
+use App\Mail\JobAlertMail;
+use App\Mail\NewAnswerMail;
+use App\Mail\NewJobApplicationMail;
 use App\Mail\WelcomeMail;
+use App\Models\Answer;
 use App\Models\Article;
 use App\Models\CompanyAccount;
 use App\Models\CompanyRegistrationRequest;
 use App\Models\EventRegistration;
 use App\Models\JobApplication;
 use App\Models\User;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class NotificationService
 {
-    /** Queues the welcome email after registration. */
+    /**
+     * Envoie l'email de bienvenue après inscription GitHub.
+     */
     public function sendWelcome(User $user): void
     {
-        try {
-            Mail::to($user->email)->queue(new WelcomeMail($user));
-        } catch (\Exception $e) {
-            Log::error("Welcome email failed for {$user->email}: {$e->getMessage()}");
-        }
+        $this->sendMail($user->email, new WelcomeMail($user));
     }
 
-    // Stub methods below — parameters prefixed with _ are intentionally unused until implemented.
-
-    public function sendNewAnswer(User $_user, mixed $_question): void
+    /**
+     * Notifie l'auteur d'une question qu'une réponse a été postée.
+     */
+    public function sendNewAnswer(User $user, Answer $answer): void
     {
-        // TODO: Mail::to($_user->email)->queue(new NewAnswerMail($_user, $_question));
+        if (! $this->userWantsNotification($user, 'new_answer')) {
+            return;
+        }
+
+        $this->sendMail($user->email, new NewAnswerMail($user, $answer));
+
+        $this->createInAppNotification($user, 'new_answer', [
+            'message' => "Nouvelle réponse à votre question : {$answer->question->title}",
+            'url'     => route('forum.show', $answer->question->slug),
+            'icon'    => 'fa-solid fa-comment',
+        ]);
+    }
+
+    /**
+     * Notifie l'auteur que son article a été publié.
+     */
+    public function sendArticlePublished(User $user, Article $article): void
+    {
+        if (! $this->userWantsNotification($user, 'article_published')) {
+            return;
+        }
+
+        $this->sendMail($user->email, new ArticlePublishedMail($user, $article));
+
+        $this->createInAppNotification($user, 'article_published', [
+            'message' => "Votre article \"{$article->title}\" a été publié !",
+            'url'     => route('blog.show', $article->slug),
+            'icon'    => 'fa-solid fa-book-open',
+        ]);
+    }
+
+    /**
+     * Envoie la confirmation d'inscription à un événement.
+     */
+    public function sendEventConfirmation(User $user, EventRegistration $registration): void
+    {
+        $this->sendMail($user->email, new EventConfirmationMail($user, $registration));
+
+        $this->createInAppNotification($user, 'event_confirmation', [
+            'message' => "Inscription confirmée : {$registration->event->title}",
+            'url'     => route('events.show', $registration->event->slug),
+            'icon'    => 'fa-solid fa-calendar-check',
+        ]);
     }
 
     /**
@@ -38,72 +91,30 @@ class NotificationService
      */
     public function sendEventReminder(User $user, EventRegistration $registration, string $type): void
     {
-        try {
-            // Mail::to($user->email)->send(new EventReminderMail($user, $registration, $type));
-            // TODO: créer EventReminderMail en Sprint 2
-            Log::info("Rappel {$type} envoyé à {$user->email} : {$registration->event->title}");
-        } catch (\Exception $e) {
-            Log::error("Notification event reminder échouée : {$e->getMessage()}");
+        if (! $this->userWantsNotification($user, 'event_reminder')) {
+            return;
         }
-    }
 
-    public function sendJobAlert(User $_user, mixed $_offer): void
-    {
-        // TODO: Mail::to($_user->email)->queue(new JobAlertMail($_user, $_offer));
-    }
-
-    /**
-     * Notifie l'auteur que son article a été publié.
-     */
-    public function sendArticlePublished(User $user, Article $article): void
-    {
-        try {
-            // Mail::to($user->email)->send(new ArticlePublishedMail($user, $article));
-            // TODO: create ArticlePublishedMail in Sprint 2
-            Log::info("Article publié notifié à {$user->email} : {$article->title}");
-        } catch (\Exception $e) {
-            Log::error("Notification article publié échouée : {$e->getMessage()}");
-        }
-    }
-
-    /**
-     * Envoie l'email de confirmation d'inscription à un événement.
-     */
-    public function sendEventConfirmation(User $user, EventRegistration $registration): void
-    {
-        try {
-            // Mail::to($user->email)->send(new EventConfirmationMail($user, $registration));
-            // TODO: créer EventConfirmationMail en Sprint 2
-            Log::info("Confirmation event envoyée à {$user->email} : {$registration->event->title}");
-        } catch (\Exception $e) {
-            Log::error("Notification event confirmation échouée : {$e->getMessage()}");
-        }
-    }
-
-    /**
-     * Notifie les admins d'une nouvelle demande d'inscription entreprise.
-     */
-    public function sendCompanyRegistrationRequest(CompanyRegistrationRequest $request): void
-    {
-        try {
-            // TODO: Mail::to(config('mail.admin_address'))->queue(new CompanyRegistrationRequestMail($request));
-            Log::info("Demande entreprise reçue de {$request->email} — {$request->company_name}");
-        } catch (\Exception $e) {
-            Log::error("Notification demande entreprise échouée : {$e->getMessage()}");
-        }
+        $this->sendMail($user->email, new EventReminderMail($user, $registration, $type));
     }
 
     /**
      * Envoie les accès à l'entreprise après validation admin.
+     *
+     * Les identifiants sont systématiquement consignés dans le journal
+     * "company_access" (audit/secours), en plus de l'email envoyé.
      */
     public function sendCompanyAccessCredentials(CompanyAccount $account, string $temporaryPassword): void
     {
-        try {
-            // TODO: Mail::to($account->email)->queue(new CompanyAccessCredentialsMail($account, $temporaryPassword));
-            Log::info("Accès entreprise envoyés à {$account->email} — mot de passe temporaire : {$temporaryPassword}");
-        } catch (\Exception $e) {
-            Log::error("Notification accès entreprise échouée : {$e->getMessage()}");
-        }
+        $this->sendMail($account->email, new CompanyAccessMail($account, $temporaryPassword));
+
+        Log::channel('company_access')->info('Accès entreprise généré', [
+            'account_id'         => $account->id,
+            'company_name'       => $account->company?->name,
+            'contact_name'       => $account->fullName(),
+            'email'              => $account->email,
+            'temporary_password' => $temporaryPassword,
+        ]);
     }
 
     /**
@@ -111,12 +122,7 @@ class NotificationService
      */
     public function sendCompanyRegistrationRejected(CompanyRegistrationRequest $request, string $reason): void
     {
-        try {
-            // TODO: Mail::to($request->email)->queue(new CompanyRegistrationRejectedMail($request, $reason));
-            Log::info("Refus demande entreprise notifié à {$request->email} : {$reason}");
-        } catch (\Exception $e) {
-            Log::error("Notification refus entreprise échouée : {$e->getMessage()}");
-        }
+        $this->sendMail($request->email, new CompanyRegistrationRejectedMail($request, $reason));
     }
 
     /**
@@ -124,11 +130,92 @@ class NotificationService
      */
     public function sendNewApplication(CompanyAccount $account, JobApplication $application): void
     {
+        $this->sendMail($account->email, new NewJobApplicationMail($account, $application));
+    }
+
+    /**
+     * Envoie une alerte emploi à un membre.
+     */
+    public function sendJobAlert(User $user, Collection $offers): void
+    {
+        if (! $this->userWantsNotification($user, 'job_alert')) {
+            return;
+        }
+
+        if ($offers->isEmpty()) {
+            return;
+        }
+
+        $this->sendMail($user->email, new JobAlertMail($user, $offers));
+    }
+
+    /**
+     * Notifie les admins d'une nouvelle demande entreprise.
+     */
+    public function sendCompanyRegistrationRequest(CompanyRegistrationRequest $request): void
+    {
+        $this->notifyAdmins('company_registration', [
+            'message' => "Nouvelle demande entreprise : {$request->company_name}",
+            'url'     => '/admin/company-registrations',
+            'icon'    => 'fa-solid fa-building',
+        ]);
+    }
+
+    /**
+     * Crée une notification in-app pour tous les admins et super-admins.
+     */
+    public function notifyAdmins(string $type, array $data): void
+    {
+        $admins = User::role([UserRole::Admin->value, UserRole::SuperAdmin->value])->get();
+
+        foreach ($admins as $admin) {
+            $this->createInAppNotification($admin, $type, $data);
+        }
+    }
+
+    /**
+     * Crée une notification in-app (table notifications Laravel).
+     */
+    private function createInAppNotification(User $user, string $type, array $data): void
+    {
         try {
-            // TODO: Mail::to($account->email)->queue(new NewApplicationMail($account, $application));
-            Log::info("Nouvelle candidature notifiée à {$account->email} pour l'offre #{$application->job_offer_id}");
+            $user->notifications()->create([
+                'id'              => Str::uuid(),
+                'type'            => 'App\\Notifications\\' . str($type)->studly(),
+                'notifiable_type' => User::class,
+                'notifiable_id'   => $user->id,
+                'data'            => $data,
+                'created_at'      => now(),
+                'updated_at'      => now(),
+            ]);
         } catch (\Exception $e) {
-            Log::error("Notification candidature échouée : {$e->getMessage()}");
+            Log::error("Notification in-app échouée : {$e->getMessage()}");
+        }
+    }
+
+    /**
+     * Vérifie si l'utilisateur souhaite recevoir ce type de notification.
+     */
+    private function userWantsNotification(User $user, string $type): bool
+    {
+        $prefs = $user->profile?->notification_preferences ?? [];
+
+        if (empty($prefs)) {
+            return true; // par défaut tout activé
+        }
+
+        return $prefs[$type] ?? true;
+    }
+
+    /**
+     * Envoie un email avec gestion des erreurs.
+     */
+    private function sendMail(string $to, $mailable): void
+    {
+        try {
+            Mail::to($to)->send($mailable);
+        } catch (\Exception $e) {
+            Log::error("Envoi email échoué vers {$to} : {$e->getMessage()}");
         }
     }
 }

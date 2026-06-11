@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 #[Fillable([
     'created_by', 'title', 'slug', 'description', 'program', 'type',
@@ -24,7 +26,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 ])]
 class Event extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, LogsActivity, SoftDeletes;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['title', 'status', 'cancellation_reason'])
+            ->logOnlyDirty()
+            ->dontLogEmptyChanges()
+            ->useLogName('event');
+    }
 
     protected function casts(): array
     {

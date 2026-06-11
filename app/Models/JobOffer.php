@@ -2,13 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Company;
-use App\Models\JobApplication;
-use App\Models\JobFavorite;
-use App\Models\JobOfferCategory;
-use App\Models\JobSkill;
-use App\Models\Report;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -17,6 +10,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 #[Fillable([
     'company_id', 'posted_by', 'title', 'slug', 'description',
@@ -28,7 +23,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 ])]
 class JobOffer extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, LogsActivity, SoftDeletes;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['title', 'status', 'rejection_reason'])
+            ->logOnlyDirty()
+            ->dontLogEmptyChanges()
+            ->useLogName('job_offer');
+    }
 
     protected function casts(): array
     {
@@ -46,28 +50,82 @@ class JobOffer extends Model
         ];
     }
 
-    public function company(): BelongsTo        { return $this->belongsTo(Company::class); }
-    public function poster(): BelongsTo         { return $this->belongsTo(User::class, 'posted_by'); }
-    public function categories(): BelongsToMany { return $this->belongsToMany(JobOfferCategory::class, 'job_offer_category'); }
-    public function skills(): BelongsToMany     { return $this->belongsToMany(JobSkill::class, 'job_offer_skill'); }
-    public function applications(): HasMany      { return $this->hasMany(JobApplication::class); }
-    public function favorites(): HasMany         { return $this->hasMany(JobFavorite::class); }
-    public function reports(): MorphMany         { return $this->morphMany(Report::class, 'reportable'); }
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class);
+    }
 
-    public function scopeActive($query)   { return $query->where('status', 'active'); }
-    public function scopeRemote($query)   { return $query->where('is_remote', true); }
-    public function scopeUrgent($query)   { return $query->where('is_urgent', true); }
-    public function scopeNotExpired($query) { return $query->where(function ($q) {
-        $q->whereNull('expires_at')->orWhere('expires_at', '>', now());
-    }); }
+    public function poster(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'posted_by');
+    }
 
-    public function isExpired(): bool     { return $this->expires_at && $this->expires_at->isPast(); }
-    public function isNew(): bool         { return $this->published_at && $this->published_at->diffInDays(now()) <= 7; }
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(JobOfferCategory::class, 'job_offer_category');
+    }
+
+    public function skills(): BelongsToMany
+    {
+        return $this->belongsToMany(JobSkill::class, 'job_offer_skill');
+    }
+
+    public function applications(): HasMany
+    {
+        return $this->hasMany(JobApplication::class);
+    }
+
+    public function favorites(): HasMany
+    {
+        return $this->hasMany(JobFavorite::class);
+    }
+
+    public function reports(): MorphMany
+    {
+        return $this->morphMany(Report::class, 'reportable');
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('status', 'active');
+    }
+
+    public function scopeRemote($query)
+    {
+        return $query->where('is_remote', true);
+    }
+
+    public function scopeUrgent($query)
+    {
+        return $query->where('is_urgent', true);
+    }
+
+    public function scopeNotExpired($query)
+    {
+        return $query->where(function ($q) {
+            $q->whereNull('expires_at')->orWhere('expires_at', '>', now());
+        });
+    }
+
+    public function isExpired(): bool
+    {
+        return $this->expires_at && $this->expires_at->isPast();
+    }
+
+    public function isNew(): bool
+    {
+        return $this->published_at && $this->published_at->diffInDays(now()) <= 7;
+    }
 
     public function salaryRange(): ?string
     {
-        if (! $this->salary_visible || ! $this->salary_min) return null;
-        if ($this->salary_max) return number_format($this->salary_min) . ' - ' . number_format($this->salary_max) . ' ' . $this->currency;
+        if (! $this->salary_visible || ! $this->salary_min) {
+            return null;
+        }
+        if ($this->salary_max) {
+            return number_format($this->salary_min) . ' - ' . number_format($this->salary_max) . ' ' . $this->currency;
+        }
+
         return 'À partir de ' . number_format($this->salary_min) . ' ' . $this->currency;
     }
 

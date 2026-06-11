@@ -6,6 +6,7 @@ use App\Http\Middleware\CompanyAuthenticated;
 use App\Http\Middleware\CompanyGuest;
 use App\Http\Middleware\CompanyMustChangePassword;
 use App\Http\Middleware\EnsureProfileComplete;
+use App\Http\Middleware\RunScheduler;
 use App\Http\Middleware\TrackPageView;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -23,6 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->web(append: [
             TrackPageView::class,
+            RunScheduler::class,
         ]);
 
         $middleware->alias([

@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             TimelineEventSeeder::class,     // 11. Timeline Notre histoire
             AboutOriginSectionSeeder::class, // 12. Section Notre naissance
             EventSeeder::class,              // 13. Événements (meetup gratuit + workshop payant)
+            GradeSeeder::class,               // 14. Grades de réputation
         ]);
 
         $this->command->info('');

@@ -3,7 +3,9 @@
 use App\Actions\Jobs\ExpireOldOffers;
 use App\Jobs\Events\MarkCompletedEvents;
 use App\Jobs\Events\SendEventReminder;
+use App\Jobs\Notifications\SendJobAlerts;
 use App\Models\Event;
+use App\Models\SiteSetting;
 use App\Services\Jobs\JobOfferService;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
@@ -49,3 +51,21 @@ Schedule::call(function (): void {
 
 /* ── Marque les événements passés comme terminés ── */
 Schedule::job(new MarkCompletedEvents)->daily()->name('mark-completed-events')->withoutOverlapping();
+
+/* ── Alertes emploi (fréquence configurable par les admins) ── */
+Schedule::job(new SendJobAlerts)->daily()->name('send-job-alerts')->withoutOverlapping();
+
+/* ── Recalcul des points et grades de réputation (fréquence configurable) ── */
+$reputationSchedule = Schedule::command('reputation:recalculate')->name('recalculate-reputations')->withoutOverlapping();
+
+try {
+    $reputationFrequency = SiteSetting::get('reputation_recalculate_frequency', 'monthly');
+} catch (\Throwable) {
+    $reputationFrequency = 'monthly';
+}
+
+match ($reputationFrequency) {
+    'daily'  => $reputationSchedule->daily(),
+    'weekly' => $reputationSchedule->weekly(),
+    default  => $reputationSchedule->monthly(),
+};

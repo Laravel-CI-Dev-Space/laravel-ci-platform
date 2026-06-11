@@ -75,7 +75,7 @@ class UserResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         $query = parent::getEloquentQuery()
-            ->with(['roles', 'profile']);
+            ->with(['roles', 'profile.grade']);
 
         /** @var User $authUser */
         $authUser = auth()->user();

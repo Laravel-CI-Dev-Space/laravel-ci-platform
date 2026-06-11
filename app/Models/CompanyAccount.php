@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 #[Fillable([
     'company_id', 'first_name', 'last_name', 'email', 'password',
@@ -20,7 +22,7 @@ use Illuminate\Notifications\Notifiable;
 #[Hidden(['password', 'remember_token'])]
 class CompanyAccount extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, LogsActivity, Notifiable;
 
     protected function casts(): array
     {
@@ -29,6 +31,15 @@ class CompanyAccount extends Authenticatable
             'password_changed_at' => 'datetime',
             'last_login_at'       => 'datetime',
         ];
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['status', 'rejection_reason'])
+            ->logOnlyDirty()
+            ->dontLogEmptyChanges()
+            ->useLogName('company_account');
     }
 
     public function company(): BelongsTo

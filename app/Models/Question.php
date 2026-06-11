@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Support\LogOptions;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
 
 #[Fillable([
     'user_id', 'title', 'slug', 'body', 'body_html', 'status',
@@ -19,7 +21,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 ])]
 class Question extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, LogsActivity, SoftDeletes;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['title', 'slug', 'status', 'is_pinned'])
+            ->logOnlyDirty()
+            ->dontLogEmptyChanges()
+            ->useLogName('question');
+    }
 
     protected function casts(): array
     {

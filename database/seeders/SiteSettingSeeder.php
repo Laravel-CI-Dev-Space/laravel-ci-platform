@@ -66,6 +66,21 @@ class SiteSettingSeeder extends Seeder
             ['key' => 'footer_code_of_conduct_url',  'group' => 'footer', 'type' => 'url',      'label' => 'URL Code de conduite',         'value' => '',                                 'order' => 9],
             ['key' => 'footer_copyright',            'group' => 'footer', 'type' => 'text',     'label' => 'Texte copyright',              'value' => "Laravel Côte d'Ivoire · MIT License", 'order' => 10],
             ['key' => 'footer_built_with',           'group' => 'footer', 'type' => 'text',     'label' => 'Texte "Built with"',           'value' => "Built with ♥ in Côte d'Ivoire",    'order' => 11],
+
+            // ── NOTIFICATIONS ────────────────────────────────────────
+            ['key' => 'job_alert_frequency', 'group' => 'notifications', 'type' => 'frequency', 'label' => 'Fréquence des alertes emploi', 'value' => 'weekly', 'order' => 1],
+
+            // ── RÉPUTATION & GRADES ──────────────────────────────────
+            ['key' => 'reputation_points_question',         'group' => 'reputation', 'type' => 'number',    'label' => 'Points par question publiée',          'value' => '5',  'order' => 1],
+            ['key' => 'reputation_points_answer',            'group' => 'reputation', 'type' => 'number',    'label' => 'Points par réponse postée',            'value' => '10', 'order' => 2],
+            ['key' => 'reputation_points_accepted_answer',   'group' => 'reputation', 'type' => 'number',    'label' => 'Bonus réponse acceptée',               'value' => '20', 'order' => 3],
+            ['key' => 'reputation_points_article',           'group' => 'reputation', 'type' => 'number',    'label' => 'Points par article publié',            'value' => '25', 'order' => 4],
+            ['key' => 'reputation_points_vote',              'group' => 'reputation', 'type' => 'number',    'label' => 'Points par vote reçu',                 'value' => '2',  'order' => 5],
+            ['key' => 'reputation_points_comment',           'group' => 'reputation', 'type' => 'number',    'label' => 'Points par commentaire',               'value' => '1',  'order' => 6],
+            ['key' => 'reputation_points_event',             'group' => 'reputation', 'type' => 'number',    'label' => 'Points par participation à un événement', 'value' => '5',  'order' => 7],
+            ['key' => 'reputation_points_seniority_month',   'group' => 'reputation', 'type' => 'number',    'label' => 'Points par mois d\'ancienneté',        'value' => '2',  'order' => 8],
+            ['key' => 'reputation_max_seniority_months',     'group' => 'reputation', 'type' => 'number',    'label' => 'Plafond ancienneté (mois)',            'value' => '25', 'order' => 9],
+            ['key' => 'reputation_recalculate_frequency',    'group' => 'reputation', 'type' => 'frequency', 'label' => 'Fréquence de recalcul des grades',     'value' => 'monthly', 'order' => 10],
         ];
 
         foreach ($settings as $setting) {

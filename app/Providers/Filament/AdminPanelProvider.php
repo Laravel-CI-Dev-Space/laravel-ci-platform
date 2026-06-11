@@ -58,12 +58,18 @@ class AdminPanelProvider extends PanelProvider
                     app(Vite::class)(['resources/css/app.css'])->toHtml()
             )
 
+            ->renderHook(
+                PanelsRenderHook::TOPBAR_END,
+                fn (): string => view('filament.notification-bell-hook')->render(),
+            )
+
             ->navigationGroups([
                 NavigationGroup::make('Entreprises'),
                 NavigationGroup::make('Job Board'),
                 NavigationGroup::make('Membres'),
                 NavigationGroup::make('Communauté'),
                 NavigationGroup::make('Contenu'),
+                NavigationGroup::make('Monitoring'),
                 NavigationGroup::make('Configuration')->collapsed(),
             ])
 

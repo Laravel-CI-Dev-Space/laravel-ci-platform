@@ -31,13 +31,15 @@ class SiteSettingForm
                     Select::make('group')
                         ->label('Groupe')
                         ->options([
-                            'general'  => 'Général',
-                            'identity' => 'Identité & Logos',
-                            'home'     => 'Accueil',
-                            'about'    => 'À propos',
-                            'footer'   => 'Footer',
-                            'social'   => 'Réseaux sociaux',
-                            'seo'      => 'SEO',
+                            'general'       => 'Général',
+                            'identity'      => 'Identité & Logos',
+                            'home'          => 'Accueil',
+                            'about'         => 'À propos',
+                            'footer'        => 'Footer',
+                            'social'        => 'Réseaux sociaux',
+                            'seo'           => 'SEO',
+                            'notifications' => 'Notifications',
+                            'reputation'    => 'Réputation & Grades',
                         ])
                         ->required()
                         ->default('general'),
@@ -51,14 +53,15 @@ class SiteSettingForm
                     Select::make('type')
                         ->label('Type')
                         ->options([
-                            'text'     => 'Texte court',
-                            'textarea' => 'Texte long',
-                            'image'    => 'Image',
-                            'boolean'  => 'Oui / Non',
-                            'number'   => 'Nombre',
-                            'color'    => 'Couleur',
-                            'url'      => 'URL',
-                            'video'    => 'Vidéo',
+                            'text'      => 'Texte court',
+                            'textarea'  => 'Texte long',
+                            'image'     => 'Image',
+                            'boolean'   => 'Oui / Non',
+                            'number'    => 'Nombre',
+                            'color'     => 'Couleur',
+                            'url'       => 'URL',
+                            'video'     => 'Vidéo',
+                            'frequency' => 'Fréquence (quotidien/hebdo/mensuel)',
                         ])
                         ->required()
                         ->default('text')
@@ -97,6 +100,16 @@ class SiteSettingForm
                         ->directory('web/img')
                         ->columnSpanFull()
                         ->visible(fn ($get) => $get('type') === 'image'),
+
+                    Select::make('value')
+                        ->label('Valeur')
+                        ->options([
+                            'daily'   => 'Quotidienne',
+                            'weekly'  => 'Hebdomadaire',
+                            'monthly' => 'Mensuelle',
+                        ])
+                        ->columnSpanFull()
+                        ->visible(fn ($get) => $get('type') === 'frequency'),
                 ]),
         ]);
     }

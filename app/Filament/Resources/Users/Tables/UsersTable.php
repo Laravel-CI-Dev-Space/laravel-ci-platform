@@ -45,12 +45,24 @@ class UsersTable
                     ->label('Rôle')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        'super-admin'  => 'danger',
-                        'admin'        => 'warning',
-                        'moderator'  => 'info',
-                        'member'     => 'success',
-                        default        => 'gray',
+                        'super-admin' => 'danger',
+                        'admin'       => 'warning',
+                        'moderator'   => 'info',
+                        'member'      => 'success',
+                        default       => 'gray',
                     }),
+
+                TextColumn::make('profile.grade.name')
+                    ->label('Grade')
+                    ->badge()
+                    ->color('warning')
+                    ->placeholder('—'),
+
+                TextColumn::make('profile.points')
+                    ->label('Points')
+                    ->numeric()
+                    ->sortable()
+                    ->placeholder('0'),
 
                 ToggleColumn::make('is_active')
                     ->label('Actif')

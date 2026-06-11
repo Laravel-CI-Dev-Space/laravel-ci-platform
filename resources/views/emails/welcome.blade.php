@@ -17,7 +17,7 @@
         .wrapper { max-width: 600px; margin: 0 auto; }
 
         .header {
-            background: #1C1C2E;
+            background: #0F8A4F;
             border-radius: 12px 12px 0 0;
             padding: 2rem;
             text-align: center;
@@ -82,7 +82,7 @@
         }
 
         .profile-block {
-            background: linear-gradient(135deg, #1C1C2E 0%, #2d2d45 100%);
+            background: linear-gradient(135deg, #0F8A4F 0%, #0B6B3D 100%);
             border-radius: 10px;
             padding: 1.5rem;
             margin: 1.5rem 0;
@@ -113,7 +113,7 @@
         .divider { border: none; border-top: 1px solid #eee; margin: 1.5rem 0; }
 
         .footer {
-            background: #1C1C2E;
+            background: #0F8A4F;
             border-radius: 0 0 12px 12px;
             padding: 1.5rem 2rem;
             text-align: center;
@@ -127,7 +127,7 @@
 
     {{-- HEADER --}}
     <div class="header">
-        <img src="{{ asset('assets/logo.jpeg') }}" alt="Laravel CI">
+        <img src="{{ $message->embed(public_path('assets/logo.jpeg')) }}" alt="Laravel CI">
         <h1>Laravel Côte d'Ivoire</h1>
         <p>Hub communautaire des développeurs Laravel ivoiriens</p>
     </div>
@@ -145,7 +145,7 @@
         </p>
 
         <p class="text">
-            Votre compte GitHub <strong>@{{ $user->github_username }}</strong> a été connecté avec succès.
+            Votre compte GitHub <strong>{{ '@' . $user->github_username }}</strong> a été connecté avec succès.
             Vous faites désormais partie d'une communauté de plus de 500 développeurs passionnés.
         </p>
 

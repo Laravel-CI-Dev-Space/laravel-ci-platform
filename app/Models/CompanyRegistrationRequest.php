@@ -7,6 +7,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 #[Fillable([
     'first_name', 'last_name', 'company_name', 'email', 'phone',
@@ -15,11 +17,22 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 ])]
 class CompanyRegistrationRequest extends Model
 {
+    use LogsActivity;
+
     protected function casts(): array
     {
         return [
             'reviewed_at' => 'datetime',
         ];
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['status', 'rejection_reason'])
+            ->logOnlyDirty()
+            ->dontLogEmptyChanges()
+            ->useLogName('company_registration');
     }
 
     public function reviewer(): BelongsTo

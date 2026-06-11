@@ -24,6 +24,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'academic_level',
     'job_status',
     'portfolio_url',
+    'notification_preferences',
+    'points',
+    'grade_id',
     'cv',
 ])]
 class Profile extends Model
@@ -33,7 +36,8 @@ class Profile extends Model
     protected function casts(): array
     {
         return [
-            'tech_stack' => 'array',
+            'tech_stack'               => 'array',
+            'notification_preferences' => 'array',
         ];
     }
 
@@ -112,6 +116,11 @@ class Profile extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function grade(): BelongsTo
+    {
+        return $this->belongsTo(Grade::class);
     }
 
     // ─── HELPERS ─────────────────────────────────────────

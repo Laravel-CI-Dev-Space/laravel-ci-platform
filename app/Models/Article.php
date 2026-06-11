@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Support\LogOptions;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
 
 #[Fillable([
     'user_id', 'reviewed_by', 'title', 'slug', 'excerpt', 'body', 'body_html',
@@ -18,7 +20,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 ])]
 class Article extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, LogsActivity, SoftDeletes;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['title', 'slug', 'status', 'level'])
+            ->logOnlyDirty()
+            ->dontLogEmptyChanges()
+            ->useLogName('article');
+    }
 
     protected function casts(): array
     {
@@ -30,6 +41,11 @@ class Article extends Model
             'views_count'     => 'integer',
             'comments_count'  => 'integer',
         ];
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
     }
 
     /** L'article peut encore être modifié (moins de 48h depuis la création). */

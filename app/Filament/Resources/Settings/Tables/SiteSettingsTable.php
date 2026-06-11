@@ -27,24 +27,26 @@ class SiteSettingsTable
                     ->label('Groupe')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        'general'  => 'gray',
-                        'identity' => 'primary',
-                        'home'     => 'info',
-                        'about'    => 'success',
-                        'footer'   => 'warning',
-                        'social'   => 'danger',
-                        'seo'      => 'warning',
-                        default    => 'gray',
+                        'general'       => 'gray',
+                        'identity'      => 'primary',
+                        'home'          => 'info',
+                        'about'         => 'success',
+                        'footer'        => 'warning',
+                        'social'        => 'danger',
+                        'seo'           => 'warning',
+                        'notifications' => 'success',
+                        default         => 'gray',
                     })
                     ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'general'  => 'Général',
-                        'identity' => 'Identité & Logos',
-                        'home'     => 'Accueil',
-                        'about'    => 'À propos',
-                        'footer'   => 'Footer',
-                        'social'   => 'Réseaux sociaux',
-                        'seo'      => 'SEO',
-                        default    => $state,
+                        'general'       => 'Général',
+                        'identity'      => 'Identité & Logos',
+                        'home'          => 'Accueil',
+                        'about'         => 'À propos',
+                        'footer'        => 'Footer',
+                        'social'        => 'Réseaux sociaux',
+                        'seo'           => 'SEO',
+                        'notifications' => 'Notifications',
+                        default         => $state,
                     }),
 
                 TextColumn::make('label')
@@ -71,13 +73,14 @@ class SiteSettingsTable
                 SelectFilter::make('group')
                     ->label('Groupe')
                     ->options([
-                        'general'  => 'Général',
-                        'identity' => 'Identité & Logos',
-                        'home'     => 'Accueil',
-                        'about'    => 'À propos',
-                        'footer'   => 'Footer',
-                        'social'   => 'Réseaux sociaux',
-                        'seo'      => 'SEO',
+                        'general'       => 'Général',
+                        'identity'      => 'Identité & Logos',
+                        'home'          => 'Accueil',
+                        'about'         => 'À propos',
+                        'footer'        => 'Footer',
+                        'social'        => 'Réseaux sociaux',
+                        'seo'           => 'SEO',
+                        'notifications' => 'Notifications',
                     ]),
             ])
 

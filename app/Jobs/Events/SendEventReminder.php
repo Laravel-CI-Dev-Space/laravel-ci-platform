@@ -42,7 +42,14 @@ class SendEventReminder implements ShouldQueue
             $registration->update(['reminder_sent' => true]);
         }
 
-        $flag = $this->reminderType === '7d' ? 'reminder_7d_sent' : 'reminder_1d_sent';
-        $this->event->update([$flag => true]);
+        $flag = match ($this->reminderType) {
+            '7d'    => 'reminder_7d_sent',
+            '1d'    => 'reminder_1d_sent',
+            default => null,
+        };
+
+        if ($flag !== null) {
+            $this->event->update([$flag => true]);
+        }
     }
 }

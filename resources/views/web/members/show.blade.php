@@ -28,7 +28,12 @@
                 @if($member->location ?? null)
                   <span><i class="fa-solid fa-location-dot me-1 text-orange"></i> {{ $member->location }}</span>
                 @endif
-                <span><i class="fa-solid fa-star me-1 text-orange"></i> {{ number_format($member->reputation ?? 12400) }} rep</span>
+                <span><i class="fa-solid fa-star me-1 text-orange"></i> {{ number_format($member->reputation ?? 0) }} pts</span>
+                @if($member->grade ?? null)
+                  <span class="badge rounded-pill" style="background-color: {{ $member->grade->color }}1a; color: {{ $member->grade->color }}; border: 1px solid {{ $member->grade->color }}">
+                    <i class="{{ $member->grade->icon }} me-1"></i> {{ $member->grade->name }}
+                  </span>
+                @endif
                 <span><i class="fa-solid fa-calendar me-1 text-orange"></i> Member since {{ $member->created_at?->format('M Y') ?? 'Jan 2026' }}</span>
               </div>
             </div>
@@ -39,7 +44,7 @@
           @if($member->github_username ?? null)
             <div class="d-flex gap-2 mt-3">
               <a href="https://github.com/{{ $member->github_username }}" target="_blank" class="btn btn-github btn-sm">
-                <i class="fa-brands fa-github"></i> @{{ $member->github_username }}
+                <i class="fa-brands fa-github"></i> {{ '@' . $member->github_username }}
               </a>
             </div>
           @endif

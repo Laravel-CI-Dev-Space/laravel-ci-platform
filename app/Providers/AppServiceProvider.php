@@ -2,6 +2,14 @@
 
 namespace App\Providers;
 
+use App\Models\Answer;
+use App\Models\Article;
+use App\Models\Comment;
+use App\Models\Question;
+use App\Observers\AnswerObserver;
+use App\Observers\ArticleObserver;
+use App\Observers\CommentObserver;
+use App\Observers\QuestionObserver;
 use App\View\Composers\GlobalSettingsComposer;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -17,5 +25,11 @@ class AppServiceProvider extends ServiceProvider
             ['layouts.web', 'components.web.header', 'components.web.footer'],
             GlobalSettingsComposer::class
         );
+
+        // Notifie les admins/super-admins de toute nouvelle activité du site.
+        Article::observe(ArticleObserver::class);
+        Question::observe(QuestionObserver::class);
+        Answer::observe(AnswerObserver::class);
+        Comment::observe(CommentObserver::class);
     }
 }
