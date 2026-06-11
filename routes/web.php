@@ -101,8 +101,8 @@ Route::controller(JobOfferController::class)
         Route::post('/', 'store')
             ->name('store')
             ->middleware(['auth', 'active', 'role:member']);
-        Route::get('/{jobOffer}', 'show')->name('show');
-        Route::post('/{jobOffer}/apply', 'apply')
+        Route::get('/{jobOffer:slug}', 'show')->name('show');
+        Route::post('/{jobOffer:slug}/apply', 'apply')
             ->name('apply')
             ->middleware(['auth', 'active', 'role:member']);
     });

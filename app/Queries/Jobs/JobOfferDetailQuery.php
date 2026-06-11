@@ -30,4 +30,9 @@ final class JobOfferDetailQuery
     {
         return self::make($userId)->whereKey($id)->firstOrFail();
     }
+
+    public static function findBySlug(string $slug, ?int $userId = null): JobOffer
+    {
+        return self::make($userId)->where('slug', $slug)->firstOrFail();
+    }
 }

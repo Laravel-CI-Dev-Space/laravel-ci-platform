@@ -18,6 +18,7 @@ use Illuminate\Support\Str;
     'company_id',
     'category_id',
     'title',
+    'slug',
     'description',
     'location',
     'type',
@@ -66,6 +67,31 @@ class JobOffer extends Model
     public function isWithinDeadline(): bool
     {
         return $this->deadline === null || ! $this->deadline->isPast();
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
+    public function getRouteKey(): mixed
+    {
+        return $this->resolveSlug();
+    }
+
+    /**
+     * Garantit un slug utilisable pour les routes (génère et persiste si absent).
+     */
+    public function resolveSlug(): string
+    {
+        if (! empty($this->slug)) {
+            return $this->slug;
+        }
+
+        $slug = static::uniqueSlug($this->title, $this->id);
+        $this->forceFill(['slug' => $slug])->saveQuietly();
+
+        return $slug;
     }
 
     public function applicationFor(?User $user): ?JobApplication
@@ -157,5 +183,31 @@ class JobOffer extends Model
             'job_offer_id',
             'job_skill_id',
         );
+    }
+
+    protected static function booted(): void
+    {
+        static::creating(function (JobOffer $offer) {
+            if (empty($offer->slug)) {
+                $offer->slug = static::uniqueSlug($offer->title);
+            }
+        });
+    }
+
+    public static function uniqueSlug(string $title, ?int $ignoreId = null): string
+    {
+        $slug     = Str::slug($title);
+        $original = $slug;
+        $count    = 1;
+
+        while (static::query()
+            ->when($ignoreId !== null, fn (Builder $q) => $q->whereKeyNot($ignoreId))
+            ->where('slug', $slug)
+            ->exists()) {
+            $slug = $original . '-' . $count;
+            $count++;
+        }
+
+        return $slug;
     }
 }

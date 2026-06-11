@@ -1,5 +1,6 @@
 @props([
     'event'         => null,
+    'reveal'        => true,
     'type'          => 'meetup',
     'typeLabel'     => 'Meetup',
     'cover'         => null,
@@ -59,8 +60,11 @@
   $spotsLeft = $spotsTotal - $spotsUsed;
 @endphp
 
-<div class="col-md-6 col-lg-4 event-col reveal" data-category="{{ $type }} {{ $past ? 'past' : 'upcoming' }}" @if($delay) data-delay="{{ $delay }}" @endif>
-  <article class="card-soft event-card {{ $past ? 'past' : '' }}">
+<article @class([
+    'card-soft event-card',
+    'past' => $past,
+    'reveal' => $reveal,
+]) @if($reveal && $delay) data-delay="{{ $delay }}" @endif>
     @if($past)
       <span class="past-badge badge-pill badge-soft"><i class="fa-solid fa-clock-rotate-left"></i> Événement passé</span>
     @endif
@@ -115,5 +119,4 @@
         @endif
       </div>
     </div>
-  </article>
-</div>
+</article>
