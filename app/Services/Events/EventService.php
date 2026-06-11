@@ -213,6 +213,86 @@ class EventService
         }
     }
 
+    public function cancelRegistrationAsAdmin(EventRegistration $registration): void
+    {
+        if ($registration->status === EventRegistrationStatus::CANCELLED) {
+            throw ValidationException::withMessages([
+                'registration' => 'Cette inscription est déjà annulée.',
+            ]);
+        }
+
+        $event = $registration->event;
+        $user  = $registration->user;
+
+        DB::transaction(function () use ($event, $registration) {
+            $registration->update(['status' => EventRegistrationStatus::CANCELLED]);
+            $this->promoteNextFromWaitlist($event);
+        });
+
+        $this->notifications->sendEventCancellation($user, $event);
+    }
+
+    public function promoteWaitlistEntry(EventWaitlist $entry): void
+    {
+        $event = $entry->event;
+        $user  = $entry->user;
+
+        if ($event->isFull()) {
+            throw ValidationException::withMessages([
+                'event' => 'L\'événement est complet.',
+            ]);
+        }
+
+        if ($event->registrationFor($user) !== null) {
+            throw ValidationException::withMessages([
+                'event' => 'Ce membre est déjà inscrit à cet événement.',
+            ]);
+        }
+
+        DB::transaction(function () use ($event, $entry, $user) {
+            $cancelled = $event->registrations()
+                ->where('user_id', $user->id)
+                ->where('status', EventRegistrationStatus::CANCELLED)
+                ->first();
+
+            if ($cancelled !== null) {
+                $cancelled->update([
+                    'status'         => EventRegistrationStatus::CONFIRMED,
+                    'reminder_types' => [],
+                ]);
+            } else {
+                EventRegistration::create([
+                    'event_id'       => $event->id,
+                    'user_id'        => $user->id,
+                    'status'         => EventRegistrationStatus::CONFIRMED,
+                    'reminder_types' => [],
+                ]);
+            }
+
+            $removedPosition = $entry->position;
+            $entry->delete();
+
+            $event->waitlists()
+                ->where('position', '>', $removedPosition)
+                ->decrement('position');
+        });
+
+        $this->notifications->sendEventConfirmation($user, $event);
+    }
+
+    public function removeFromWaitlist(EventWaitlist $entry): void
+    {
+        DB::transaction(function () use ($entry) {
+            $event           = $entry->event;
+            $removedPosition = $entry->position;
+            $entry->delete();
+
+            $event->waitlists()
+                ->where('position', '>', $removedPosition)
+                ->decrement('position');
+        });
+    }
+
     private function promoteNextFromWaitlist(Event $event): void
     {
         if ($event->isFull()) {

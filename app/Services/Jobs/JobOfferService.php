@@ -8,6 +8,7 @@ use App\Models\Company;
 use App\Models\JobApplication;
 use App\Models\JobOffer;
 use App\Models\User;
+use App\Services\NotificationService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -17,6 +18,10 @@ use Illuminate\Validation\ValidationException;
  */
 class JobOfferService
 {
+    public function __construct(
+        private readonly NotificationService $notifications,
+    ) {}
+
     /**
      * Enregistre une candidature membre sur une offre active.
      */
@@ -28,12 +33,16 @@ class JobOfferService
             ]);
         }
 
-        return JobApplication::create([
+        $application = JobApplication::create([
             'job_offer_id' => $offer->id,
             'user_id'      => $user->id,
             'cover_letter' => $coverLetter,
             'status'       => JobApplicationStatus::PENDING,
         ]);
+
+        $this->notifications->sendJobApplicationReceived($application);
+
+        return $application;
     }
 
     /**

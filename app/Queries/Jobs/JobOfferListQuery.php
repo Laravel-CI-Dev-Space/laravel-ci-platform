@@ -19,10 +19,17 @@ final class JobOfferListQuery
         ?string $skillSlug,
         ?string $categorySlug,
         string $sort,
+        ?int $userId = null,
     ): Builder {
         $query = JobOffer::query()
             ->with(['company', 'category', 'skills'])
             ->active();
+
+        if ($userId !== null) {
+            $query->withExists([
+                'favorites as is_favorited' => fn (Builder $q) => $q->where('user_id', $userId),
+            ]);
+        }
 
         if ($type !== null && $type !== '' && JobOfferType::tryFrom($type)) {
             $query->where('type', $type);

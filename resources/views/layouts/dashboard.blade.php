@@ -59,7 +59,11 @@
     function showDashToast(message, type = 'success') {
       const container = document.getElementById('dash-toast-container');
       const id = 'toast-' + Date.now();
-      const bg = type === 'error' ? 'text-bg-danger' : 'text-bg-success';
+      const bg = type === 'error'
+        ? 'text-bg-danger'
+        : type === 'info'
+          ? 'text-bg-secondary'
+          : 'text-bg-success';
       container.insertAdjacentHTML('beforeend', `
         <div id="${id}" class="toast align-items-center ${bg} border-0" role="alert" aria-live="assertive" aria-atomic="true">
           <div class="d-flex">
@@ -77,6 +81,7 @@
     document.addEventListener('livewire:init', () => {
       Livewire.hook('morph.updated', () => initDashTooltips());
       Livewire.on('dash-toast', ({ message, type = 'success' }) => showDashToast(message, type));
+      Livewire.on('app-toast', ({ message, type = 'success' }) => showDashToast(message, type));
     });
   </script>
 

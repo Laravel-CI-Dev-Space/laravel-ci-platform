@@ -6,8 +6,10 @@ use App\Enums\Events\EventReminderType;
 use App\Mail\EventCancellationMail;
 use App\Mail\EventConfirmationMail;
 use App\Mail\EventReminderMail;
+use App\Mail\JobApplicationReceivedMail;
 use App\Mail\WelcomeMail;
 use App\Models\Event;
+use App\Models\JobApplication;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -34,6 +36,29 @@ class NotificationService
     public function sendJobAlert(User $_user, mixed $_offer): void
     {
         // TODO: Mail::to($_user->email)->queue(new JobAlertMail($_user, $_offer));
+    }
+
+    public function sendJobApplicationReceived(JobApplication $application): void
+    {
+        $application->loadMissing(['jobOffer.company', 'user']);
+
+        $company = $application->jobOffer->company;
+
+        if (! $company->isActive()) {
+            return;
+        }
+
+        $email = $company->email;
+
+        if (! is_string($email) || $email === '') {
+            return;
+        }
+
+        try {
+            Mail::to($email)->send(new JobApplicationReceivedMail($application));
+        } catch (\Exception $e) {
+            Log::error("Job application notification failed for {$email}: {$e->getMessage()}");
+        }
     }
 
     public function sendArticlePublished(User $_user, mixed $_article): void

@@ -51,7 +51,11 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([AccountWidget::class])
 
             ->navigationGroups([
+                NavigationGroup::make('Emploi'),
+                NavigationGroup::make('Événements'),
                 NavigationGroup::make('Vitrine'),
+                NavigationGroup::make('Membres'),
+                NavigationGroup::make('Contenu'),
             ])
 
             ->middleware([

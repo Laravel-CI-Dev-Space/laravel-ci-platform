@@ -36,12 +36,10 @@
             @forelse($applications as $application)
               @php
                 $job = $application->jobOffer;
-                $statusValue = $application->status->value;
-                $status = match ($statusValue) {
-                  'pending'  => ['class' => 'warning', 'label' => 'En attente'],
-                  'accepted' => ['class' => 'success', 'label' => 'Acceptée'],
-                  'rejected' => ['class' => 'danger', 'label' => 'Refusée'],
-                  default    => ['class' => 'secondary', 'label' => ucfirst($statusValue)],
+                $status = match ($application->status) {
+                  \App\Enums\Jobs\JobApplicationStatus::PENDING  => ['class' => 'warning', 'label' => $application->status->label()],
+                  \App\Enums\Jobs\JobApplicationStatus::ACCEPTED => ['class' => 'success', 'label' => $application->status->label()],
+                  \App\Enums\Jobs\JobApplicationStatus::REJECTED => ['class' => 'danger', 'label' => $application->status->label()],
                 };
               @endphp
               <tr class="align-middle">
@@ -55,8 +53,8 @@
                   <span class="badge bg-{{ $status['class'] }}-subtle text-{{ $status['class'] }}">{{ $status['label'] }}</span>
                 </td>
                 <td>
-                  <a href="{{ route('jobs.show', $job) }}" class="btn btn-sm btn-outline-secondary">
-                    <i class="ti ti-eye"></i> Voir l'offre
+                  <a href="{{ route('dashboard.member.applications.show', $application) }}" class="btn btn-sm btn-outline-primary">
+                    <i class="ti ti-eye"></i> Détails
                   </a>
                 </td>
               </tr>

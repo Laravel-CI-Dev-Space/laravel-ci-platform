@@ -86,20 +86,8 @@
 
 // ================================
 // JOBS — filter sidebar / off-canvas toggle
-// (Bootstrap offcanvas handles most; just sync the save hearts)
+// (save-heart is handled by Livewire JobFavoriteToggle)
 // ================================
-(function () {
-  document.querySelectorAll('.save-heart').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      btn.classList.toggle('saved');
-      const icon = btn.querySelector('i');
-      if (icon) {
-        icon.classList.toggle('fa-regular');
-        icon.classList.toggle('fa-solid');
-      }
-    });
-  });
-})();
 
 // ================================
 // VOTE BUTTONS (forum detail)
@@ -175,31 +163,63 @@
 // SCROLL-TRIGGERED REVEAL ANIMATIONS
 // ================================
 (function () {
-  const reveals = document.querySelectorAll('.reveal');
-  if (!reveals.length) return;
+  let observer = null;
+  const tracked = new WeakSet();
 
-  // Arm the hidden state ONLY now that JS is confirmed running.
-  // (CSS keeps .reveal visible unless <html> has .reveal-ready, so a failed
-  //  script load on a host can never leave content invisible.)
-  document.documentElement.classList.add('reveal-ready');
+  function armRevealReady() {
+    document.documentElement.classList.add('reveal-ready');
+  }
 
-  const showAll = () => reveals.forEach((r) => r.classList.add('in'));
+  function showReveals(root) {
+    const scope = root && root.querySelectorAll ? root : document;
+    scope.querySelectorAll('.reveal').forEach((el) => el.classList.add('in'));
+  }
 
-  if (!('IntersectionObserver' in window)) { showAll(); return; }
+  function observeReveals(root) {
+    const scope = root && root.querySelectorAll ? root : document;
+    const reveals = scope.querySelectorAll('.reveal:not(.in)');
+    if (!reveals.length) return;
 
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (e.isIntersecting) {
-        const delay = parseFloat(e.target.getAttribute('data-delay') || '0');
-        setTimeout(() => e.target.classList.add('in'), delay * 1000);
-        obs.unobserve(e.target);
-      }
+    if (!('IntersectionObserver' in window)) {
+      showReveals(scope);
+      return;
+    }
+
+    if (!observer) {
+      observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+
+          const delay = parseFloat(entry.target.getAttribute('data-delay') || '0');
+          setTimeout(() => entry.target.classList.add('in'), delay * 1000);
+          observer.unobserve(entry.target);
+          tracked.delete(entry.target);
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    }
+
+    reveals.forEach((el) => {
+      if (tracked.has(el)) return;
+      tracked.add(el);
+      observer.observe(el);
     });
-  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-  reveals.forEach((r) => obs.observe(r));
+  }
 
-  // Failsafe: never let anything stay hidden (slow paint, observer quirks, etc.)
-  window.addEventListener('load', () => setTimeout(showAll, 2500));
+  function initReveals(root) {
+    armRevealReady();
+    observeReveals(root);
+  }
+
+  initReveals();
+
+  window.addEventListener('load', () => setTimeout(() => showReveals(), 2500));
+
+  document.addEventListener('livewire:init', () => {
+    Livewire.hook('morph.updated', () => {
+      showReveals();
+      observeReveals();
+    });
+  });
 })();
 
 // ================================

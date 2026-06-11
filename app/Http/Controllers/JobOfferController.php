@@ -29,7 +29,7 @@ class JobOfferController extends Controller
     {
         $this->authorize('view', $jobOffer);
 
-        $jobOffer = JobOfferDetailQuery::findById($jobOffer->id, auth()->id());
+        $jobOffer = JobOfferDetailQuery::findBySlug($jobOffer->slug, auth()->id());
 
         return view('web.jobs.show', compact('jobOffer'));
     }

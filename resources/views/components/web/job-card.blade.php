@@ -60,7 +60,9 @@
             @endif
           </div>
         </div>
-        <button class="save-heart" aria-label="Enregistrer l'offre" type="button"><i class="fa-regular fa-heart"></i></button>
+        @if($jobOffer)
+          <livewire:job-board.job-favorite-toggle :job-offer-id="$jobOffer->id" :key="'job-fav-'.$jobOffer->id" />
+        @endif
       </div>
       @if($description)
         <p class="my-2" style="font-size:.92rem;color:var(--muted)">{{ $description }}</p>

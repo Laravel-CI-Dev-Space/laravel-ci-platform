@@ -1150,6 +1150,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 .save-heart:hover { border-color: var(--orange); color: var(--orange); }
 .save-heart.saved { background: var(--orange-100); border-color: var(--orange); color: var(--orange); }
+@keyframes save-heart-pop {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.22); }
+  70%  { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+.save-heart.is-popping { animation: save-heart-pop .45s var(--ease); }
 
 .filter-check { display: flex; align-items: center; gap: .6rem; padding: .35rem 0; cursor: pointer; }
 .filter-check input { width: 18px; height: 18px; accent-color: var(--orange); }

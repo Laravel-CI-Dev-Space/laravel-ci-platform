@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 #[Fillable([
@@ -77,19 +78,57 @@ class Event extends Model
     }
 
     /**
-     * URL absolue de la cover (chemin public ou URL externe).
+     * URL absolue de la cover.
+     *
+     * Formats supportés :
+     * - URL externe (seeders, picsum…) : https://…
+     * - Upload Filament (disque public) : events/cover.jpg → /storage/events/…
+     * - Asset statique public : assets/web/img/…
      */
     public function coverUrl(): ?string
     {
-        if (blank($this->cover)) {
+        $path = $this->normalizeCoverPath();
+
+        if ($path === null) {
             return null;
         }
 
-        if (str_starts_with($this->cover, 'http://') || str_starts_with($this->cover, 'https://')) {
-            return $this->cover;
+        if (filter_var($path, FILTER_VALIDATE_URL)) {
+            return $path;
         }
 
-        return asset(ltrim($this->cover, '/'));
+        $path = ltrim($path, '/');
+
+        if (str_starts_with($path, 'storage/')) {
+            return url($path);
+        }
+
+        if (str_starts_with($path, 'assets/')) {
+            return asset($path);
+        }
+
+        return Storage::disk('public')->url($path);
+    }
+
+    private function normalizeCoverPath(): ?string
+    {
+        $cover = $this->cover;
+
+        if (blank($cover)) {
+            return null;
+        }
+
+        if (is_array($cover)) {
+            $cover = $cover[array_key_first($cover)] ?? null;
+        }
+
+        if (! is_string($cover)) {
+            return null;
+        }
+
+        $cover = trim($cover);
+
+        return $cover !== '' ? $cover : null;
     }
 
     public function getRouteKeyName(): string
@@ -97,6 +136,9 @@ class Event extends Model
         return 'slug';
     }
 
+    /**
+     * Get the route key for the model.
+     */
     public function getRouteKey(): mixed
     {
         return $this->resolveSlug();

@@ -38,4 +38,13 @@ class JobOfferPolicy
 
         return $jobOffer->applicationFor($user) === null;
     }
+
+    public function favorite(User $user, JobOffer $jobOffer): bool
+    {
+        if (! $user->hasRole('member') || ! $user->can('job.favorite')) {
+            return false;
+        }
+
+        return $jobOffer->isPubliclyVisible();
+    }
 }

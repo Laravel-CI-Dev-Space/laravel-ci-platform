@@ -33,3 +33,6 @@ Thumbs.db
 
 # Generated artifact — regenerated via `php artisan sitemap:generate`
 /public/sitemap.xml
+
+# Notes PR locales (non versionnées)
+/docs/pr-sprint-roger.md

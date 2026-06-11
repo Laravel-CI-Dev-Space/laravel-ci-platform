@@ -13,6 +13,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\View\View;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -96,6 +97,12 @@ class JobList extends Component
         $this->resetPage();
     }
 
+    #[On('job-favorite-toggled')]
+    public function refreshOffers(): void
+    {
+        unset($this->offers);
+    }
+
     /**
      * @return LengthAwarePaginator<int, JobOffer>
      */
@@ -108,6 +115,7 @@ class JobList extends Component
             $this->skill,
             $this->category,
             $this->sort,
+            auth()->id(),
         )->paginate(12);
     }
 
