@@ -138,8 +138,20 @@ Route::middleware(['auth', 'active', 'profile.complete', 'role:member|admin|supe
 });
 
 // ─── MEMBER PUBLIC PROFILE ─────────────────────────────────
-Route::get('/members/{username}', fn (string $username) => view('web.members.show', compact('username')))
-    ->name('members.show');
+Route::get('/members/{username}', function (string $username) {
+    $member = User::where('github_username', $username)
+        ->with('profile')
+        ->withCount(['questions', 'answers', 'articles'])
+        ->firstOrFail();
+
+    if ($member->profile) {
+        $member->bio      = $member->profile->bio;
+        $member->location = collect([$member->profile->city, $member->profile->country])->filter()->implode(', ');
+        $member->skills   = $member->profile->tech_stack;
+    }
+
+    return view('web.members.show', compact('member'));
+})->name('members.show');
 
 // ─── AUTHENTICATION ────────────────────────────────────────
 Route::get('/login', fn () => view('web.login'))
