@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Events;
 
+use App\Filament\Resources\Concerns\AuthorizesViaPermission;
 use App\Filament\Resources\Events\Pages\CreateEvent;
 use App\Filament\Resources\Events\Pages\EditEvent;
 use App\Filament\Resources\Events\Pages\ListEvents;
@@ -21,6 +22,8 @@ use Filament\Tables\Table;
 
 class EventResource extends Resource
 {
+    use AuthorizesViaPermission;
+
     protected static ?string $model = Event::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCalendarDays;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire\Events;
 
+use App\Livewire\Concerns\RateLimited;
 use App\Models\Event;
 use App\Models\GuestRegistration;
 use App\Services\Events\GuestRegistrationService;
@@ -15,7 +16,7 @@ use Livewire\WithFileUploads;
 
 class GuestRegistrationForm extends Component
 {
-    use WithFileUploads;
+    use RateLimited, WithFileUploads;
 
     public int $eventId;
 
@@ -65,6 +66,12 @@ class GuestRegistrationForm extends Component
      */
     public function submit(GuestRegistrationService $guestService): void
     {
+        if ($this->tooManyAttempts('events.guest-register', 5)) {
+            $this->addError('email', $this->rateLimitMessage('events.guest-register'));
+
+            return;
+        }
+
         $this->validate();
 
         $event = Event::find($this->eventId);
@@ -126,7 +133,8 @@ class GuestRegistrationForm extends Component
         $dir = public_path("assets/web/img/guests/{$eventId}");
         File::ensureDirectoryExists($dir);
 
-        $filename = uniqid('guest_', true) . '.' . $this->photo->getClientOriginalExtension();
+        // Extension dérivée du MIME réel du fichier, jamais du nom fourni par le client.
+        $filename = uniqid('guest_', true) . '.' . $this->photo->extension();
         $this->photo->move($dir, $filename);
 
         return "assets/web/img/guests/{$eventId}/{$filename}";

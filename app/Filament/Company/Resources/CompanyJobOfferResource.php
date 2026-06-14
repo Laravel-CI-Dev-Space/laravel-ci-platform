@@ -8,13 +8,21 @@ use App\Filament\Company\Resources\CompanyJobOfferResource\Pages\CreateCompanyJo
 use App\Filament\Company\Resources\CompanyJobOfferResource\Pages\ListCompanyJobOffers;
 use App\Filament\Company\Resources\CompanyJobOfferResource\Pages\ViewCompanyJobOffer;
 use App\Models\JobOffer;
+use App\Models\JobOfferCategory;
+use App\Models\JobSkill;
 use BackedEnum;
 use Filament\Actions\Action;
+use Filament\Actions\ViewAction;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
-use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -52,59 +60,59 @@ class CompanyJobOfferResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
-            \Filament\Schemas\Components\Section::make('Informations principales')
+            Section::make('Informations principales')
                 ->columns(2)
                 ->schema([
-                    \Filament\Forms\Components\TextInput::make('title')
+                    TextInput::make('title')
                         ->label('Intitulé du poste')->required()->maxLength(200)->columnSpanFull(),
 
-                    \Filament\Forms\Components\Select::make('contract_type')
+                    Select::make('contract_type')
                         ->label('Type de contrat')
                         ->options(['cdi' => 'CDI', 'cdd' => 'CDD', 'freelance' => 'Freelance', 'internship' => 'Stage', 'apprenticeship' => 'Alternance'])
                         ->required(),
 
-                    \Filament\Forms\Components\Select::make('level')
+                    Select::make('level')
                         ->label('Niveau')
                         ->options(['junior' => 'Junior', 'intermediate' => 'Intermédiaire', 'senior' => 'Senior', 'lead' => 'Lead', 'any' => 'Tous niveaux'])
                         ->required(),
 
-                    \Filament\Forms\Components\TextInput::make('location')->label('Ville')->nullable(),
-                    \Filament\Forms\Components\TextInput::make('country')->label('Pays')->default("Côte d'Ivoire"),
-                    \Filament\Forms\Components\Toggle::make('is_remote')->label('Télétravail'),
-                    \Filament\Forms\Components\Toggle::make('is_urgent')->label('Urgente'),
-                    \Filament\Forms\Components\TextInput::make('salary_min')->label('Salaire min (FCFA)')->numeric()->nullable(),
-                    \Filament\Forms\Components\TextInput::make('salary_max')->label('Salaire max (FCFA)')->numeric()->nullable(),
-                    \Filament\Forms\Components\Toggle::make('salary_visible')->label('Afficher le salaire')->default(true),
+                    TextInput::make('location')->label('Ville')->nullable(),
+                    TextInput::make('country')->label('Pays')->default("Côte d'Ivoire"),
+                    Toggle::make('is_remote')->label('Télétravail'),
+                    Toggle::make('is_urgent')->label('Urgente'),
+                    TextInput::make('salary_min')->label('Salaire min (FCFA)')->numeric()->minValue(0)->nullable(),
+                    TextInput::make('salary_max')->label('Salaire max (FCFA)')->numeric()->minValue(0)->gte('salary_min')->nullable(),
+                    Toggle::make('salary_visible')->label('Afficher le salaire')->default(true),
 
-                    \Filament\Forms\Components\Textarea::make('description')
+                    Textarea::make('description')
                         ->label('Description du poste')->required()->minLength(100)->rows(10)->columnSpanFull(),
                 ]),
 
-            \Filament\Schemas\Components\Section::make('Catégories & Compétences')
+            Section::make('Catégories & Compétences')
                 ->columns(2)
                 ->schema([
-                    \Filament\Forms\Components\Select::make('categories')
+                    Select::make('categories')
                         ->label('Catégories')
                         ->multiple()
                         ->searchable()
                         ->preload()
-                        ->options(\App\Models\JobOfferCategory::orderBy('name')->pluck('name', 'id'))
+                        ->options(JobOfferCategory::orderBy('name')->pluck('name', 'id'))
                         ->required(),
 
-                    \Filament\Forms\Components\Select::make('skills')
+                    Select::make('skills')
                         ->label('Compétences requises (max 10)')
                         ->multiple()
                         ->searchable()
                         ->preload()
-                        ->options(\App\Models\JobSkill::orderBy('name')->pluck('name', 'id'))
+                        ->options(JobSkill::orderBy('name')->pluck('name', 'id'))
                         ->required(),
                 ]),
 
-            \Filament\Schemas\Components\Section::make('Médias')
+            Section::make('Médias')
                 ->description('Image de couverture et fiche de poste (PDF ou Word)')
                 ->columns(2)
                 ->schema([
-                    \Filament\Forms\Components\FileUpload::make('cover_image')
+                    FileUpload::make('cover_image')
                         ->label('Image de couverture')
                         ->image()
                         ->maxSize(2048)
@@ -114,7 +122,7 @@ class CompanyJobOfferResource extends Resource
                         ->nullable()
                         ->helperText('JPG, PNG, WebP — max 2 Mo'),
 
-                    \Filament\Forms\Components\FileUpload::make('attachment_path')
+                    FileUpload::make('attachment_path')
                         ->label('Fiche de poste (document)')
                         ->acceptedFileTypes([
                             'application/pdf',
@@ -146,7 +154,7 @@ class CompanyJobOfferResource extends Resource
                     ->badge()
                     ->color('gray')
                     ->formatStateUsing(fn ($state) => match ($state) {
-                        'cdi' => 'CDI', 'cdd' => 'CDD', 'freelance' => 'Freelance',
+                        'cdi'        => 'CDI', 'cdd' => 'CDD', 'freelance' => 'Freelance',
                         'internship' => 'Stage', 'apprenticeship' => 'Alternance', default => $state,
                     }),
 

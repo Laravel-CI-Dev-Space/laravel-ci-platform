@@ -24,6 +24,10 @@
           <li class="nav-item"><a class="nav-link {{ request()->routeIs('jobs.*') ? 'active' : '' }}" href="{{ route('jobs.index') }}">Jobs</a></li>
           <li class="nav-item"><a class="nav-link {{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">About</a></li>
         </ul>
+
+        {{-- Search bar --}}
+        @livewire('search.search-bar')
+
         @auth
           <a href="{{ route('dashboard') }}" class="btn btn-github">
             <i class="fa-solid fa-gauge"></i> Dashboard

@@ -15,6 +15,13 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 class MemberExportController extends Controller
 {
     /**
+     * Nombre maximum de lignes rendues dans le PDF (DomPDF charge tout en
+     * mémoire pour générer le rendu : au-delà, l'export Excel/CSV doit être
+     * utilisé).
+     */
+    private const MAX_PDF_ROWS = 1000;
+
+    /**
      * Exports all members as a CSV file (opens in Excel).
      */
     public function excel(Request $request): StreamedResponse
@@ -64,9 +71,13 @@ class MemberExportController extends Controller
      */
     public function pdf(Request $request): Response
     {
-        $members = $this->buildQuery($request)->get();
+        $query = $this->buildQuery($request);
 
-        $pdf = Pdf::loadView('admin.exports.members-pdf', compact('members'))
+        $total     = (clone $query)->count();
+        $members   = $query->limit(self::MAX_PDF_ROWS)->get();
+        $truncated = $total > self::MAX_PDF_ROWS;
+
+        $pdf = Pdf::loadView('admin.exports.members-pdf', compact('members', 'truncated', 'total'))
             ->setPaper('a4', 'landscape');
 
         return $pdf->download('membres-' . now()->format('Y-m-d') . '.pdf');

@@ -196,7 +196,7 @@ class EditProfile extends Component
         }
 
         if ($this->cvFile) {
-            $data['cv'] = $assetService->upload(
+            $data['cv'] = $assetService->uploadPrivate(
                 file: $this->cvFile,
                 folder: 'cv',
                 prefix: 'cv',

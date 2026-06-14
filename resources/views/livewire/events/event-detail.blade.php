@@ -95,7 +95,7 @@
                     @endif
 
                     <div class="prose mb-4">
-                        {!! $event->description !!}
+                        {!! clean($event->description) !!}
                     </div>
 
                     @if ($event->program)
@@ -104,7 +104,7 @@
                                 <i class="fa-solid fa-list-check me-2 text-orange"></i>Programme
                             </div>
                             <div class="prose">
-                                {!! $event->program !!}
+                                {!! clean($event->program) !!}
                             </div>
                         </div>
                     @endif

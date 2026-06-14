@@ -11,8 +11,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\Support\LogOptions;
+use Laravel\Scout\Searchable;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 #[Fillable([
     'user_id', 'title', 'slug', 'body', 'body_html', 'status',
@@ -21,7 +22,7 @@ use Spatie\Activitylog\Models\Concerns\LogsActivity;
 ])]
 class Question extends Model
 {
-    use HasFactory, LogsActivity, SoftDeletes;
+    use HasFactory, LogsActivity, Searchable, SoftDeletes;
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -140,5 +141,35 @@ class Question extends Model
     public function isOwnedBy(User $user): bool
     {
         return $this->user_id === $user->id;
+    }
+
+    /**
+     * Représentation indexée dans Meilisearch pour la recherche globale.
+     *
+     * @return array<string, mixed>
+     */
+    public function toSearchableArray(): array
+    {
+        return [
+            'id'         => $this->id,
+            'title'      => $this->title,
+            'body'       => strip_tags($this->body),
+            'slug'       => $this->slug,
+            'status'     => $this->status,
+            'tags'       => $this->tags->pluck('name')->join(', '),
+            'votes'      => $this->votes_score,
+            'answers'    => $this->answers_count,
+            'type'       => 'question',
+            'url'        => route('forum.show', $this->slug),
+            'created_at' => $this->created_at?->toDateString(),
+        ];
+    }
+
+    /**
+     * Seules les questions publiées sont indexées.
+     */
+    public function shouldBeSearchable(): bool
+    {
+        return $this->status === 'published';
     }
 }

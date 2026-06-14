@@ -2,7 +2,10 @@
 
 namespace App\Filament\Resources\Users\Schemas;
 
+use App\Enums\UserPermission;
+use App\Enums\UserRole;
 use Filament\Actions\Action;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -99,11 +102,30 @@ class UserForm
                         ->label('Role')
                         ->relationship('roles', 'name')
                         ->preload()
-                        ->searchable(),
+                        ->searchable()
+                        // Seul un super-admin peut modifier les rôles, et ne peut
+                        // pas modifier son propre rôle (anti auto-élévation/déclassement).
+                        ->visible(fn () => auth()->user()?->hasRole(UserRole::SuperAdmin->value) ?? false)
+                        ->disabled(fn ($record) => $record !== null && $record->is(auth()->user())),
 
                     DateTimePicker::make('last_login_at')
                         ->label('Last login')
                         ->disabled(),
+                ]),
+
+            Section::make('Permissions individuelles')
+                ->description('Accordez ou retirez des permissions précises à cet utilisateur, indépendamment de son rôle. Réservé aux super-administrateurs.')
+                ->visible(fn () => auth()->user()?->hasRole(UserRole::SuperAdmin->value) ?? false)
+                ->schema([
+                    CheckboxList::make('permissions')
+                        ->label('Permissions supplémentaires')
+                        ->relationship('permissions', 'name')
+                        ->options(fn () => collect(UserPermission::cases())
+                            ->mapWithKeys(fn (UserPermission $permission) => [$permission->value => $permission->value]))
+                        ->searchable()
+                        ->bulkToggleable()
+                        ->columns(2)
+                        ->disabled(fn ($record) => $record !== null && $record->is(auth()->user())),
                 ]),
         ]);
     }

@@ -34,7 +34,7 @@
 
 <h1>Liste des membres — Laravel CI Platform</h1>
 <p class="meta">
-    Généré le {{ now()->format('d/m/Y à H:i') }} · {{ $members->count() }} membre(s)
+    Généré le {{ now()->format('d/m/Y à H:i') }} · {{ $members->count() }} membre(s){{ $truncated ? ' sur ' . $total . ' (export limité, utilisez le CSV pour la liste complète)' : '' }}
 </p>
 
 <table>

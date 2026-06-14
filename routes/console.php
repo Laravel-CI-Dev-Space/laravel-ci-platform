@@ -15,6 +15,18 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
+/*
+ * ── Traitement de la file d'attente (QUEUE_CONNECTION=database) ──
+ * Sur un hébergement mutualisé sans worker `queue:work` permanent,
+ * RunScheduler déclenche `schedule:run` à chaque requête : ce job
+ * traite donc les jobs en attente (notifications, emails) par lots
+ * d'au plus 50, pendant 50s max, sans bloquer indéfiniment.
+ */
+Schedule::command('queue:work --stop-when-empty --max-time=50 --max-jobs=50 --tries=3')
+    ->everyMinute()
+    ->name('process-queue')
+    ->withoutOverlapping();
+
 /* ── Expire les offres d'emploi périmées (quotidien, minuit) ── */
 Schedule::call(fn () => app(ExpireOldOffers::class)->handle(app(JobOfferService::class)))
     ->daily()
@@ -60,7 +72,7 @@ $reputationSchedule = Schedule::command('reputation:recalculate')->name('recalcu
 
 try {
     $reputationFrequency = SiteSetting::get('reputation_recalculate_frequency', 'monthly');
-} catch (\Throwable) {
+} catch (Throwable) {
     $reputationFrequency = 'monthly';
 }
 

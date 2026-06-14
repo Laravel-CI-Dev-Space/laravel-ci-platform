@@ -4,6 +4,7 @@ namespace App\Services\Auth;
 
 use App\Enums\UserRole;
 use App\Exceptions\AccountBannedException;
+use App\Exceptions\AccountEmailConflictException;
 use App\Models\User;
 use App\Services\Analytics\AnalyticsService;
 use App\Services\NotificationService;
@@ -27,12 +28,20 @@ class SocialiteService
         $created = false;
 
         $user = DB::transaction(function () use ($githubUser, &$created) {
-            // Look up by github_id first (most reliable identifier)
-            $user = User::where('github_id', $githubUser->getId())->first()
-                 ?? User::where('email', $githubUser->getEmail())->first();
+            // Le seul identifiant fiable et stable est le github_id : un email
+            // ne doit jamais permettre de rattacher la connexion à un compte
+            // existant (un compte GitHub différent pourrait revendiquer le
+            // même email public et ainsi prendre le contrôle d'un compte).
+            $user = User::where('github_id', $githubUser->getId())->first();
 
             if ($user) {
                 return $this->updateUser($user, $githubUser);
+            }
+
+            // Empêche la création d'un doublon si l'email est déjà utilisé
+            // par un autre compte (lié à un autre github_id).
+            if (User::where('email', $githubUser->getEmail())->exists()) {
+                throw new AccountEmailConflictException;
             }
 
             $created = true;

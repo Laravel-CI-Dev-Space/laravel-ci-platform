@@ -58,7 +58,7 @@
             <span class="section-eyebrow">{{ $origin->eyebrow }}</span>
           @endif
           <h2>{{ $origin->title }}</h2>
-          <div class="text-muted-2">{!! $origin->content !!}</div>
+          <div class="text-muted-2">{!! clean($origin->content) !!}</div>
         </div>
 
         {{-- Colonne média --}}

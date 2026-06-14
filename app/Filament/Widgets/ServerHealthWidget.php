@@ -7,6 +7,7 @@ namespace App\Filament\Widgets;
 use App\Enums\UserRole;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
@@ -26,26 +27,36 @@ class ServerHealthWidget extends BaseWidget
 
     protected function getStats(): array
     {
-        $cpuCount  = max((int) (shell_exec('nproc') ?: 1), 1);
-        $load      = sys_getloadavg();
-        $load1     = $load[0] ?? 0.0;
-        $loadRatio = $load1 / $cpuCount;
+        // Mis en cache pour éviter de recalculer charge/disque/jobs à chaque
+        // poll (toutes les 30s) sur tous les onglets admin ouverts.
+        [$load1, $cpuCount, $loadRatio, $diskUsedPct, $diskTotal, $diskFree, $failedJobs, $pendingJobs, $dbStatus, $dbColor] = Cache::remember(
+            'server_health_widget_stats',
+            now()->addSeconds(15),
+            function (): array {
+                $cpuCount  = max((int) (shell_exec('nproc') ?: 1), 1);
+                $load      = sys_getloadavg();
+                $load1     = $load[0] ?? 0.0;
+                $loadRatio = $load1 / $cpuCount;
 
-        $diskFree    = disk_free_space(base_path()) ?: 0;
-        $diskTotal   = disk_total_space(base_path()) ?: 1;
-        $diskUsedPct = (int) round((($diskTotal - $diskFree) / $diskTotal) * 100);
+                $diskFree    = disk_free_space(base_path()) ?: 0;
+                $diskTotal   = disk_total_space(base_path()) ?: 1;
+                $diskUsedPct = (int) round((($diskTotal - $diskFree) / $diskTotal) * 100);
 
-        $failedJobs  = DB::table('failed_jobs')->count();
-        $pendingJobs = DB::table('jobs')->count();
+                $failedJobs  = DB::table('failed_jobs')->count();
+                $pendingJobs = DB::table('jobs')->count();
 
-        try {
-            DB::select('select 1');
-            $dbStatus = 'OK';
-            $dbColor  = 'success';
-        } catch (Throwable) {
-            $dbStatus = 'Erreur';
-            $dbColor  = 'danger';
-        }
+                try {
+                    DB::select('select 1');
+                    $dbStatus = 'OK';
+                    $dbColor  = 'success';
+                } catch (Throwable) {
+                    $dbStatus = 'Erreur';
+                    $dbColor  = 'danger';
+                }
+
+                return [$load1, $cpuCount, $loadRatio, $diskUsedPct, $diskTotal, $diskFree, $failedJobs, $pendingJobs, $dbStatus, $dbColor];
+            }
+        );
 
         return [
             Stat::make('Charge serveur (1 min)', number_format($load1, 2))

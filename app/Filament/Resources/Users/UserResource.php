@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Users;
 
+use App\Enums\UserPermission;
 use App\Enums\UserRole;
 use App\Filament\Resources\Users\Pages\CreateUser;
 use App\Filament\Resources\Users\Pages\EditUser;
@@ -56,6 +57,31 @@ class UserResource extends Resource
     public static function getRelations(): array
     {
         return [];
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->can(UserPermission::AdminUserManage->value) ?? false;
+    }
+
+    public static function canEdit($record): bool
+    {
+        return auth()->user()?->can(UserPermission::AdminUserManage->value) ?? false;
+    }
+
+    /**
+     * La création manuelle de comptes et la suppression sont réservées au
+     * super-admin : ce sont les opérations les plus sensibles (un compte
+     * supprimé/créé peut contourner le flux d'inscription GitHub).
+     */
+    public static function canCreate(): bool
+    {
+        return auth()->user()?->hasRole(UserRole::SuperAdmin->value) ?? false;
+    }
+
+    public static function canDelete($record): bool
+    {
+        return auth()->user()?->hasRole(UserRole::SuperAdmin->value) ?? false;
     }
 
     public static function getPages(): array

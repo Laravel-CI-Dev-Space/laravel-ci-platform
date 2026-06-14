@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Grades;
 
-use App\Enums\UserRole;
+use App\Enums\UserPermission;
+use App\Filament\Resources\Concerns\AuthorizesViaPermission;
 use App\Filament\Resources\Grades\Pages\CreateGrade;
 use App\Filament\Resources\Grades\Pages\EditGrade;
 use App\Filament\Resources\Grades\Pages\ListGrades;
@@ -19,6 +20,13 @@ use Filament\Tables\Table;
 
 class GradeResource extends Resource
 {
+    use AuthorizesViaPermission;
+
+    protected static function viewPermission(): string
+    {
+        return UserPermission::AdminSettings->value;
+    }
+
     protected static ?string $model = Grade::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTrophy;
@@ -34,17 +42,6 @@ class GradeResource extends Resource
     public static function getNavigationGroup(): ?string
     {
         return 'Membres';
-    }
-
-    /**
-     * Seuls les administrateurs et super-administrateurs gèrent les grades.
-     */
-    public static function canViewAny(): bool
-    {
-        return auth()->user()?->hasAnyRole([
-            UserRole::SuperAdmin->value,
-            UserRole::Admin->value,
-        ]) ?? false;
     }
 
     public static function form(Schema $schema): Schema

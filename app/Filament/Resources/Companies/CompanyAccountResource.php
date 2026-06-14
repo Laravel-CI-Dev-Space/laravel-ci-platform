@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Companies;
 
+use App\Enums\UserPermission;
 use App\Filament\Resources\Companies\Pages\ListCompanyAccounts;
 use App\Filament\Resources\Companies\Tables\CompanyAccountsTable;
+use App\Filament\Resources\Concerns\AuthorizesViaPermission;
 use App\Models\CompanyAccount;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -15,6 +17,13 @@ use Filament\Tables\Table;
 
 class CompanyAccountResource extends Resource
 {
+    use AuthorizesViaPermission;
+
+    protected static function managePermission(): string
+    {
+        return UserPermission::AdminUserManage->value;
+    }
+
     protected static ?string $model = CompanyAccount::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserGroup;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Resources;
 
+use App\Filament\Resources\Concerns\AuthorizesViaPermission;
 use App\Filament\Resources\Resources\Pages\ListResources;
 use App\Filament\Resources\Resources\Tables\ResourcesTable;
 use App\Models\Resource as ResourceModel;
@@ -15,6 +16,8 @@ use Filament\Tables\Table;
 
 class ResourceResource extends Resource
 {
+    use AuthorizesViaPermission;
+
     protected static ?string $model = ResourceModel::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedArchiveBox;

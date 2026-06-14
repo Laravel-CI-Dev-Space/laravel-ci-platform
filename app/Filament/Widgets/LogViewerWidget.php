@@ -16,7 +16,7 @@ class LogViewerWidget extends Widget
 
     protected int|string|array $columnSpan = 'full';
 
-    protected ?string $pollingInterval = '3s';
+    protected ?string $pollingInterval = '10s';
 
     public string $search = '';
 

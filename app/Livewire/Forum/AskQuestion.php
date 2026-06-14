@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire\Forum;
 
+use App\Livewire\Concerns\RateLimited;
 use App\Models\Tag;
 use App\Models\User;
 use App\Services\Forum\QuestionService;
@@ -13,6 +14,8 @@ use Livewire\Component;
 
 class AskQuestion extends Component
 {
+    use RateLimited;
+
     public string $title = '';
 
     public string $body = '';
@@ -71,6 +74,12 @@ class AskQuestion extends Component
 
     public function save(QuestionService $questionService): void
     {
+        if ($this->tooManyAttempts('forum.questions', 10)) {
+            $this->addError('title', $this->rateLimitMessage('forum.questions'));
+
+            return;
+        }
+
         $this->validate();
 
         /** @var User $user */

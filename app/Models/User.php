@@ -10,10 +10,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Permission\Traits\HasRoles;
 
+// is_active, suspended_until, email_verified_at sont mass-assignables car
+// édités via UserResource (Filament), réservé aux titulaires de la
+// permission admin.user.manage. Ne jamais les exposer dans un formulaire
+// "modifier mon profil" côté membre (utiliser ::forceFill() si besoin
+// hors admin).
 #[Fillable([
     'name',
     'email',

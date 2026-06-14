@@ -20,6 +20,7 @@ use App\Models\EventRegistration;
 use App\Models\JobApplication;
 use App\Models\User;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -163,13 +164,32 @@ class NotificationService
 
     /**
      * Crée une notification in-app pour tous les admins et super-admins.
+     * Insertion en masse (une seule requête) plutôt qu'une par admin.
      */
     public function notifyAdmins(string $type, array $data): void
     {
-        $admins = User::role([UserRole::Admin->value, UserRole::SuperAdmin->value])->get();
+        $adminIds = User::role([UserRole::Admin->value, UserRole::SuperAdmin->value])->pluck('id');
 
-        foreach ($admins as $admin) {
-            $this->createInAppNotification($admin, $type, $data);
+        if ($adminIds->isEmpty()) {
+            return;
+        }
+
+        $now = now();
+
+        try {
+            DB::table('notifications')->insert(
+                $adminIds->map(fn (int $adminId) => [
+                    'id'              => (string) Str::uuid(),
+                    'type'            => 'App\\Notifications\\' . str($type)->studly(),
+                    'notifiable_type' => User::class,
+                    'notifiable_id'   => $adminId,
+                    'data'            => json_encode($data),
+                    'created_at'      => $now,
+                    'updated_at'      => $now,
+                ])->all()
+            );
+        } catch (\Exception $e) {
+            Log::error("Notification in-app (admins) échouée : {$e->getMessage()}");
         }
     }
 
@@ -208,14 +228,15 @@ class NotificationService
     }
 
     /**
-     * Envoie un email avec gestion des erreurs.
+     * Met l'email en file d'attente (les mailables implémentent ShouldQueue),
+     * pour ne pas bloquer la requête en cours sur l'envoi SMTP.
      */
     private function sendMail(string $to, $mailable): void
     {
         try {
-            Mail::to($to)->send($mailable);
+            Mail::to($to)->queue($mailable);
         } catch (\Exception $e) {
-            Log::error("Envoi email échoué vers {$to} : {$e->getMessage()}");
+            Log::error("Mise en file de l'email échouée vers {$to} : {$e->getMessage()}");
         }
     }
 }

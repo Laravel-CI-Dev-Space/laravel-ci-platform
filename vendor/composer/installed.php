@@ -3,7 +3,7 @@
         'name' => 'laravel/laravel',
         'pretty_version' => 'dev-develop',
         'version' => 'dev-develop',
-        'reference' => '17fe9e3037a2b7ca1a6a41a9700d897b070f88f1',
+        'reference' => 'dbb3d1815196c132a2de2d71847cf1ef0a3c82e0',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -211,6 +211,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'ezyang/htmlpurifier' => array(
+            'pretty_version' => 'v4.19.0',
+            'version' => '4.19.0.0',
+            'reference' => 'b287d2a16aceffbf6e0295559b39662612b77fcf',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../ezyang/htmlpurifier',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'fakerphp/faker' => array(
             'pretty_version' => 'v1.24.1',
             'version' => '1.24.1.0',
@@ -399,6 +408,15 @@
             'install_path' => __DIR__ . '/../hamcrest/hamcrest-php',
             'aliases' => array(),
             'dev_requirement' => true,
+        ),
+        'http-interop/http-factory-guzzle' => array(
+            'pretty_version' => '1.2.1',
+            'version' => '1.2.1.0',
+            'reference' => 'c2c859ceb05c3f42e710b60555f4c35b6a4a3995',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../http-interop/http-factory-guzzle',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'iamcal/sql-parser' => array(
             'pretty_version' => 'v0.7',
@@ -679,7 +697,7 @@
         'laravel/laravel' => array(
             'pretty_version' => 'dev-develop',
             'version' => 'dev-develop',
-            'reference' => '17fe9e3037a2b7ca1a6a41a9700d897b070f88f1',
+            'reference' => 'dbb3d1815196c132a2de2d71847cf1ef0a3c82e0',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -718,6 +736,15 @@
             'reference' => 'a19af51bb144bf87f08397921fa619f85c7d4e72',
             'type' => 'library',
             'install_path' => __DIR__ . '/../laravel/prompts',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'laravel/scout' => array(
+            'pretty_version' => 'v11.2.0',
+            'version' => '11.2.0.0',
+            'reference' => '5a267813fe0d7bca58b993c3bae592b2c814591e',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../laravel/scout',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
@@ -853,6 +880,24 @@
             'reference' => 'fcf91eb64359852f00d921887b219479b4f21251',
             'type' => 'library',
             'install_path' => __DIR__ . '/../masterminds/html5',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'meilisearch/meilisearch-php' => array(
+            'pretty_version' => 'v1.16.1',
+            'version' => '1.16.1.0',
+            'reference' => 'f9f63e0e7d12ffaae54f7317fa8f4f4dfa8ae7b6',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../meilisearch/meilisearch-php',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'mews/purifier' => array(
+            'pretty_version' => '3.4.4',
+            'version' => '3.4.4.0',
+            'reference' => 'b2705cc6c832ce7229373418e191d71b6c037841',
+            'type' => 'package',
+            'install_path' => __DIR__ . '/../mews/purifier',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
@@ -1041,6 +1086,27 @@
             'install_path' => __DIR__ . '/../phar-io/version',
             'aliases' => array(),
             'dev_requirement' => true,
+        ),
+        'php-http/async-client-implementation' => array(
+            'dev_requirement' => false,
+            'provided' => array(
+                0 => '*',
+            ),
+        ),
+        'php-http/client-implementation' => array(
+            'dev_requirement' => false,
+            'provided' => array(
+                0 => '*',
+            ),
+        ),
+        'php-http/discovery' => array(
+            'pretty_version' => '1.20.0',
+            'version' => '1.20.0.0',
+            'reference' => '82fe4c73ef3363caed49ff8dd1539ba06044910d',
+            'type' => 'composer-plugin',
+            'install_path' => __DIR__ . '/../php-http/discovery',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'phpdocumentor/reflection-common' => array(
             'pretty_version' => '2.2.0',
@@ -1234,7 +1300,8 @@
         'psr/http-client-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0',
+                0 => '*',
+                1 => '1.0',
             ),
         ),
         'psr/http-factory' => array(
@@ -1249,7 +1316,9 @@
         'psr/http-factory-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0',
+                0 => '*',
+                1 => '1.0',
+                2 => '^1.0',
             ),
         ),
         'psr/http-message' => array(
@@ -1264,7 +1333,8 @@
         'psr/http-message-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0',
+                0 => '*',
+                1 => '1.0',
             ),
         ),
         'psr/log' => array(
@@ -1719,6 +1789,15 @@
             'reference' => 'dfb55726c3a76ea3b6459fcfda1ec2d80a682411',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/polyfill-php80',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'symfony/polyfill-php81' => array(
+            'pretty_version' => 'v1.38.1',
+            'version' => '1.38.1.0',
+            'reference' => '6bfb9c766cacffbc8e118cb87217d08ed84e5cd7',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../symfony/polyfill-php81',
             'aliases' => array(),
             'dev_requirement' => false,
         ),

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Questions;
 
+use App\Filament\Resources\Concerns\AuthorizesViaPermission;
 use App\Filament\Resources\Questions\Pages\EditQuestion;
 use App\Filament\Resources\Questions\Pages\ListQuestions;
 use App\Filament\Resources\Questions\Pages\ViewQuestion;
@@ -16,9 +17,12 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class QuestionResource extends Resource
 {
+    use AuthorizesViaPermission;
+
     protected static ?string $model = Question::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedQuestionMarkCircle;
@@ -54,6 +58,11 @@ class QuestionResource extends Resource
     public static function getRelations(): array
     {
         return [];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with('user');
     }
 
     public static function getPages(): array

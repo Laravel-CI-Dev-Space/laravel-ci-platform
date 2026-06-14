@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Exceptions\AccountBannedException;
+use App\Exceptions\AccountEmailConflictException;
 use App\Http\Controllers\Controller;
 use App\Services\Auth\SocialiteService;
 use Illuminate\Http\RedirectResponse;
@@ -34,7 +35,7 @@ class SocialiteController extends Controller
             return redirect()->route('dashboard')
                 ->with('success', "Bienvenue {$user->name} !");
 
-        } catch (AccountBannedException $e) {
+        } catch (AccountBannedException|AccountEmailConflictException $e) {
             return redirect()->route('login')
                 ->with('error', $e->getMessage());
 

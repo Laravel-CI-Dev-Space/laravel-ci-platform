@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Searchable;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
 
@@ -23,7 +24,7 @@ use Spatie\Activitylog\Support\LogOptions;
 ])]
 class JobOffer extends Model
 {
-    use HasFactory, LogsActivity, SoftDeletes;
+    use HasFactory, LogsActivity, Searchable, SoftDeletes;
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -149,5 +150,38 @@ class JobOffer extends Model
         return $this->attachment_path
             ? asset('assets/job-attachments/' . $this->attachment_path)
             : null;
+    }
+
+    /**
+     * Représentation indexée dans Meilisearch pour la recherche globale.
+     *
+     * @return array<string, mixed>
+     */
+    public function toSearchableArray(): array
+    {
+        return [
+            'id'            => $this->id,
+            'title'         => $this->title,
+            'description'   => strip_tags($this->description),
+            'slug'          => $this->slug,
+            'contract_type' => $this->contract_type,
+            'level'         => $this->level,
+            'location'      => $this->location,
+            'is_remote'     => $this->is_remote,
+            'company'       => $this->company?->name,
+            'skills'        => $this->skills->pluck('name')->join(', '),
+            'status'        => $this->status,
+            'type'          => 'job',
+            'url'           => route('jobs.show', $this->slug),
+            'created_at'    => $this->created_at?->toDateString(),
+        ];
+    }
+
+    /**
+     * Seules les offres actives sont indexées.
+     */
+    public function shouldBeSearchable(): bool
+    {
+        return $this->status === 'active';
     }
 }

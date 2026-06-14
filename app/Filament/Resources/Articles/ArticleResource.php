@@ -10,15 +10,19 @@ use App\Filament\Resources\Articles\Pages\ViewArticle;
 use App\Filament\Resources\Articles\Schemas\ArticleForm;
 use App\Filament\Resources\Articles\Schemas\ArticleInfolist;
 use App\Filament\Resources\Articles\Tables\ArticlesTable;
+use App\Filament\Resources\Concerns\AuthorizesViaPermission;
 use App\Models\Article;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class ArticleResource extends Resource
 {
+    use AuthorizesViaPermission;
+
     protected static ?string $model = Article::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
@@ -54,6 +58,11 @@ class ArticleResource extends Resource
     public static function getRelations(): array
     {
         return [];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with('author');
     }
 
     public static function getPages(): array

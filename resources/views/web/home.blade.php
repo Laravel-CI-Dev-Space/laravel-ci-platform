@@ -13,7 +13,13 @@
             <i class="fa-brands fa-laravel"></i>
             {{ $settings->firstWhere('key', 'home_hero_badge')?->value ?? 'Laravel 13 · PHP 8.3 · Open source' }}
           </span>
-          <h1>{!! $settings->firstWhere('key', 'home_hero_title')?->value ?? "The Laravel Community of <span class=\"accent\">Côte d'Ivoire</span>" !!}</h1>
+          <h1>
+            @if ($heroTitle = $settings->firstWhere('key', 'home_hero_title')?->value)
+              {{ $heroTitle }}
+            @else
+              The Laravel Community of <span class="accent">Côte d'Ivoire</span>
+            @endif
+          </h1>
           <p class="lead">{{ $settings->firstWhere('key', 'home_hero_subtitle')?->value ?? 'Join 500+ developers — share, learn, and grow together.' }}</p>
           <div class="d-flex flex-wrap gap-3 mt-4">
             <a href="{{ route('login') }}" class="btn btn-brand btn-lg">

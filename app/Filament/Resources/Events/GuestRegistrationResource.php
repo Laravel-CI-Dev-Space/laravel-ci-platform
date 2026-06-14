@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Events;
 
+use App\Filament\Resources\Concerns\AuthorizesViaPermission;
 use App\Filament\Resources\Events\GuestRegistrationResource\Pages\ListGuestRegistrations;
 use App\Models\AllEventRegistration;
 use BackedEnum;
@@ -16,6 +17,8 @@ use Filament\Tables\Table;
 
 class GuestRegistrationResource extends Resource
 {
+    use AuthorizesViaPermission;
+
     protected static ?string $model = AllEventRegistration::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;

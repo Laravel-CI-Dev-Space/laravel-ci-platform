@@ -16,6 +16,13 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 class RegistrationExportController extends Controller
 {
     /**
+     * Nombre maximum de lignes rendues dans le PDF (DomPDF charge tout en
+     * mémoire pour générer le rendu : au-delà, l'export Excel/CSV doit être
+     * utilisé).
+     */
+    private const MAX_PDF_ROWS = 1000;
+
+    /**
      * Exports all registrations as a CSV file (opens in Excel).
      */
     public function excel(Request $request): StreamedResponse
@@ -73,12 +80,17 @@ class RegistrationExportController extends Controller
      */
     public function pdf(Request $request): Response
     {
-        $registrations = $this->buildQuery($request)->get();
-        $event         = $request->filled('event_id')
+        $query = $this->buildQuery($request);
+
+        $total         = (clone $query)->count();
+        $registrations = $query->limit(self::MAX_PDF_ROWS)->get();
+        $truncated     = $total > self::MAX_PDF_ROWS;
+
+        $event = $request->filled('event_id')
             ? Event::find($request->integer('event_id'))
             : null;
 
-        $pdf = Pdf::loadView('admin.exports.registrations-pdf', compact('registrations', 'event'))
+        $pdf = Pdf::loadView('admin.exports.registrations-pdf', compact('registrations', 'event', 'truncated', 'total'))
             ->setPaper('a4', 'landscape');
 
         return $pdf->download('inscriptions-' . now()->format('Y-m-d') . '.pdf');

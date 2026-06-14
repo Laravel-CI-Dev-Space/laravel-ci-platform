@@ -23,17 +23,22 @@ use App\Http\Controllers\Forum\AnswerController;
 use App\Http\Controllers\Forum\QuestionController;
 use App\Http\Controllers\Jobs\JobApplicationController;
 use App\Http\Controllers\Jobs\JobOfferController;
+use App\Http\Controllers\Search\SearchController;
 use App\Http\Controllers\Web\AboutController;
 use App\Http\Controllers\Web\HomeController;
 use App\Livewire\EditProfile;
 use App\Models\Article;
 use App\Models\Question;
+use App\Models\Report;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 // ─── PUBLIC WEB PAGES ──────────────────────────────────────
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [AboutController::class, 'index'])->name('about');
+
+// ─── SEARCH ───────────────────────────────────────────────────
+Route::get('/search', [SearchController::class, 'index'])->name('search.index');
 
 // ─── FORUM — Routes publiques ──────────────────────────────
 Route::prefix('forum')->name('forum.')->group(function () {
@@ -51,8 +56,10 @@ Route::prefix('forum')->name('forum.')->group(function () {
 // ─── FORUM — Routes authentifiées (membres + admins + modérateurs) ──
 Route::middleware(['auth', 'active', 'profile.complete', 'role:member|admin|super-admin|moderator'])->group(function () {
     Route::post('/forum/questions', [QuestionController::class, 'store'])
+        ->middleware('throttle:10,1')
         ->name('forum.questions.store');
     Route::post('/forum/{question}/answers', [AnswerController::class, 'store'])
+        ->middleware('throttle:20,1')
         ->name('forum.answers.store');
 
     Route::get('/forum/{question}/edit', [QuestionController::class, 'edit'])
@@ -86,6 +93,7 @@ Route::prefix('resources')->name('resources.')->group(function () {
 // ─── BLOG & RESSOURCES — Routes authentifiées ─────────────────────
 Route::middleware(['auth', 'active', 'profile.complete', 'role:member|admin|super-admin|moderator'])->group(function () {
     Route::post('/blog/articles', [ArticleController::class, 'store'])
+        ->middleware('throttle:10,1')
         ->name('blog.articles.store');
     Route::get('/blog/{article}/edit', [ArticleController::class, 'edit'])
         ->name('blog.articles.edit');
@@ -102,7 +110,9 @@ Route::prefix('events')->name('events.')->group(function () {
     Route::get('/', [EventController::class, 'index'])->name('index');
     Route::get('/{slug}', [EventController::class, 'show'])->name('show');
     // Inscription invité (public, pas besoin d'être connecté)
-    Route::post('/{event}/guest-register', [GuestRegistrationController::class, 'store'])->name('guest.register');
+    Route::post('/{event}/guest-register', [GuestRegistrationController::class, 'store'])
+        ->middleware('throttle:5,1')
+        ->name('guest.register');
     // Vérification de ticket (public)
     Route::get('/ticket/{token}', fn (string $token) => view('web.events.ticket-verify', compact('token')))
         ->name('ticket.verify');
@@ -132,6 +142,7 @@ Route::prefix('jobs')->name('jobs.')->group(function () {
 // ─── JOB BOARD — Routes authentifiées ─────────────────────────────
 Route::middleware(['auth', 'active', 'profile.complete', 'role:member|admin|super-admin|moderator'])->group(function () {
     Route::post('/jobs/{offer}/apply', [JobApplicationController::class, 'store'])
+        ->middleware('throttle:10,1')
         ->name('jobs.applications.store');
     Route::post('/jobs/{offer}/favorite', [JobOfferController::class, 'toggleFavorite'])
         ->name('jobs.favorite');
@@ -282,11 +293,49 @@ Route::middleware(['auth', 'active'])->group(function () {
 
                     return view('dashboard.moderator.overview', compact('stats', 'pendingArticles', 'pendingQuestions', 'newMembers'));
                 })->name('overview');
-                Route::get('/reports', fn () => view('dashboard.moderator.reports'))->name('reports');
-                Route::patch('/reports/{id}/resolve', fn () => back())->name('reports.resolve')->whereNumber('id');
-                Route::patch('/reports/{id}/dismiss', fn () => back())->name('reports.dismiss')->whereNumber('id');
-                Route::get('/questions', fn () => view('dashboard.moderator.questions'))->name('questions');
-                Route::patch('/questions/{id}/pin', fn () => back())->name('questions.pin')->whereNumber('id');
+                Route::get('/reports', function () {
+                    $reports = Report::with(['reportable', 'reporter'])->latest()->paginate(15);
+
+                    $stats = [
+                        'pending'        => Report::where('status', 'pending')->count(),
+                        'resolved_today' => Report::where('status', 'resolved')->whereDate('handled_at', today())->count(),
+                        'dismissed'      => Report::where('status', 'rejected')->count(),
+                        'total'          => Report::count(),
+                    ];
+
+                    return view('dashboard.moderator.reports', compact('reports', 'stats'));
+                })->name('reports');
+                Route::patch('/reports/{report}/resolve', function (Report $report) {
+                    $report->update([
+                        'status'     => 'resolved',
+                        'handled_by' => auth()->id(),
+                        'handled_at' => now(),
+                    ]);
+
+                    return back()->with('success', 'Signalement marqué comme résolu.');
+                })->name('reports.resolve');
+                Route::patch('/reports/{report}/dismiss', function (Report $report) {
+                    $report->update([
+                        'status'     => 'rejected',
+                        'handled_by' => auth()->id(),
+                        'handled_at' => now(),
+                    ]);
+
+                    return back()->with('success', 'Signalement classé sans suite.');
+                })->name('reports.dismiss');
+                Route::get('/questions', function () {
+                    $questions = Question::with('user')
+                        ->withCount('reports')
+                        ->latest()
+                        ->paginate(15);
+
+                    return view('dashboard.moderator.questions', compact('questions'));
+                })->name('questions');
+                Route::patch('/questions/{question}/pin', function (Question $question) {
+                    $question->update(['is_pinned' => ! $question->is_pinned]);
+
+                    return back()->with('success', $question->is_pinned ? 'Question épinglée.' : 'Question désépinglée.');
+                })->name('questions.pin');
                 Route::get('/articles', fn () => view('dashboard.moderator.articles'))->name('articles');
             });
 
@@ -331,9 +380,13 @@ Route::prefix('company')->name('company.')->group(function () {
     // company.guest redirige vers company.dashboard (pas vers HOME web)
     Route::middleware('company.guest')->group(function () {
         Route::get('/login', [CompanyLoginController::class, 'showLoginForm'])->name('login');
-        Route::post('/login', [CompanyLoginController::class, 'login'])->name('login.submit');
+        Route::post('/login', [CompanyLoginController::class, 'login'])
+            ->middleware('throttle:5,1')
+            ->name('login.submit');
         Route::get('/register', [CompanyRegisterController::class, 'showRegistrationForm'])->name('register');
-        Route::post('/register', [CompanyRegisterController::class, 'store'])->name('register.submit');
+        Route::post('/register', [CompanyRegisterController::class, 'store'])
+            ->middleware('throttle:3,1')
+            ->name('register.submit');
     });
 
     // Déconnexion

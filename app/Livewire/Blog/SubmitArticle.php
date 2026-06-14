@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire\Blog;
 
+use App\Livewire\Concerns\RateLimited;
 use App\Models\Tag;
 use App\Models\User;
 use App\Services\Blog\ArticleService;
@@ -14,7 +15,7 @@ use Livewire\WithFileUploads;
 
 class SubmitArticle extends Component
 {
-    use WithFileUploads;
+    use RateLimited, WithFileUploads;
 
     public string $title = '';
 
@@ -100,6 +101,12 @@ class SubmitArticle extends Component
      */
     public function save(ArticleService $articleService): void
     {
+        if ($this->tooManyAttempts('blog.articles', 10)) {
+            $this->addError('title', $this->rateLimitMessage('blog.articles'));
+
+            return;
+        }
+
         $this->validate();
 
         /** @var User $user */

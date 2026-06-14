@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire\Jobs;
 
+use App\Livewire\Concerns\RateLimited;
 use App\Models\JobOffer;
 use App\Models\User;
 use App\Services\Jobs\JobApplicationService;
@@ -14,7 +15,7 @@ use Livewire\WithFileUploads;
 
 class JobApplicationForm extends Component
 {
-    use WithFileUploads;
+    use RateLimited, WithFileUploads;
 
     public int $jobOfferId = 0;
 
@@ -61,6 +62,12 @@ class JobApplicationForm extends Component
      */
     public function submit(JobApplicationService $applicationService): void
     {
+        if ($this->tooManyAttempts('jobs.apply', 10)) {
+            $this->addError('cv', $this->rateLimitMessage('jobs.apply'));
+
+            return;
+        }
+
         $this->validate();
 
         if (empty($this->coverLetter) && $this->cv === null) {

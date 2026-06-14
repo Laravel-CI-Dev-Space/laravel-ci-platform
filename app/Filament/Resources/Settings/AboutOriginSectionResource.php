@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Settings;
 
+use App\Enums\UserPermission;
+use App\Filament\Resources\Concerns\AuthorizesViaPermission;
 use App\Filament\Resources\Settings\Pages\CreateAboutOriginSection;
 use App\Filament\Resources\Settings\Pages\EditAboutOriginSection;
 use App\Filament\Resources\Settings\Pages\ListAboutOriginSections;
@@ -18,6 +20,13 @@ use Filament\Tables\Table;
 
 class AboutOriginSectionResource extends Resource
 {
+    use AuthorizesViaPermission;
+
+    protected static function viewPermission(): string
+    {
+        return UserPermission::AdminSettings->value;
+    }
+
     protected static ?string $model = AboutOriginSection::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;

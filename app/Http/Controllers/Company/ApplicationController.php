@@ -11,8 +11,9 @@ use App\Models\JobOffer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ApplicationController extends Controller
 {
@@ -79,18 +80,15 @@ class ApplicationController extends Controller
     /**
      * Retourne le CV du candidat en téléchargement.
      */
-    public function downloadCv(JobApplication $application): BinaryFileResponse
+    public function downloadCv(JobApplication $application): StreamedResponse
     {
         /** @var CompanyAccount $account */
         $account = Auth::guard('company')->user();
 
         abort_unless($application->jobOffer->company_id === $account->company_id, 403);
         abort_unless($application->cv_path !== null, 404, 'Aucun CV fourni pour cette candidature.');
+        abort_unless(Storage::disk('local')->exists("cv/{$application->cv_path}"), 404, 'Fichier CV introuvable.');
 
-        $path = public_path('assets/cv/' . $application->cv_path);
-
-        abort_unless(file_exists($path), 404, 'Fichier CV introuvable.');
-
-        return response()->download($path);
+        return Storage::disk('local')->download("cv/{$application->cv_path}");
     }
 }

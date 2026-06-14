@@ -25,7 +25,7 @@
   <h1>Liste des inscriptions — Laravel CI</h1>
   <div class="sub">
     {{ $event ? 'Événement : ' . $event->title . ' · ' : '' }}Exporté le {{ now()->format('d/m/Y à H:i') }}
-    · {{ $registrations->count() }} inscription(s)
+    · {{ $registrations->count() }} inscription(s){{ $truncated ? ' sur ' . $total . ' (export limité, utilisez le CSV pour la liste complète)' : '' }}
   </div>
 
   <table>

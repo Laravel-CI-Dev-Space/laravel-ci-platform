@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\JobOffers;
 
+use App\Filament\Resources\Concerns\AuthorizesViaPermission;
 use App\Filament\Resources\JobOffers\Pages\EditJobOffer;
 use App\Filament\Resources\JobOffers\Pages\ListJobOffers;
 use App\Filament\Resources\JobOffers\Pages\ViewJobOffer;
@@ -16,9 +17,12 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class JobOfferResource extends Resource
 {
+    use AuthorizesViaPermission;
+
     protected static ?string $model = JobOffer::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBriefcase;
@@ -54,6 +58,11 @@ class JobOfferResource extends Resource
     public static function getRelations(): array
     {
         return [];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with('company');
     }
 
     public static function getPages(): array

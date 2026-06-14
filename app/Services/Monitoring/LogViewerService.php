@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Monitoring;
 
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Str;
 
@@ -41,22 +42,43 @@ class LogViewerService
 
         $path = $this->path();
 
-        $totalLines   = (int) trim(Process::run(['wc', '-l', $path])->output());
-        $totalEntries = (int) trim(Process::run(['grep', '-cE', '^\[[0-9]{4}-', $path])->output());
+        // Coûteux (10 process spawn par appel) : mis en cache tant que le
+        // fichier de log n'a pas changé, pour supporter le polling 10s du widget.
+        // Le timestamp est stocké en int (pas en Carbon) pour éviter les soucis
+        // de unserialize() d'objets Carbon selon le driver de cache.
+        $stats = Cache::remember(
+            "log_viewer_stats:{$this->path()}:{$this->cacheVersion()}",
+            now()->addSeconds(10),
+            function () use ($path): array {
+                $totalLines   = (int) trim(Process::run(['wc', '-l', $path])->output());
+                $totalEntries = (int) trim(Process::run(['grep', '-cE', '^\[[0-9]{4}-', $path])->output());
 
-        $levelCounts = [];
+                $levelCounts = [];
 
-        foreach (self::LEVELS as $level) {
-            $levelCounts[$level] = (int) trim(Process::run(['grep', '-icE', '\.' . $level . ':', $path])->output());
-        }
+                foreach (self::LEVELS as $level) {
+                    $levelCounts[$level] = (int) trim(Process::run(['grep', '-icE', '\.' . $level . ':', $path])->output());
+                }
 
-        return [
-            'totalLines'   => $totalLines,
-            'totalEntries' => $totalEntries,
-            'fileSize'     => self::formatBytes((int) filesize($path)),
-            'lastModified' => Carbon::createFromTimestamp((int) filemtime($path)),
-            'levelCounts'  => $levelCounts,
-        ];
+                return [
+                    'totalLines'       => $totalLines,
+                    'totalEntries'     => $totalEntries,
+                    'fileSize'         => self::formatBytes((int) filesize($path)),
+                    'lastModifiedTime' => (int) filemtime($path),
+                    'levelCounts'      => $levelCounts,
+                ];
+            }
+        );
+
+        $stats['lastModified'] = Carbon::createFromTimestamp($stats['lastModifiedTime']);
+        unset($stats['lastModifiedTime']);
+
+        return $stats;
+    }
+
+    /** Identifiant qui change dès que le fichier de log est modifié (taille + mtime). */
+    private function cacheVersion(): string
+    {
+        return filesize($this->path()) . ':' . filemtime($this->path());
     }
 
     /**
@@ -78,34 +100,7 @@ class LogViewerService
             return [];
         }
 
-        $output = Process::run(['tail', '-n', (string) $tailLines, $this->path()])->output();
-
-        $entries = [];
-        $current = null;
-
-        foreach (explode("\n", $output) as $line) {
-            if (preg_match(self::ENTRY_PATTERN, $line, $matches)) {
-                if ($current !== null) {
-                    $entries[] = $current;
-                }
-
-                $current = [
-                    'timestamp'  => $matches[1],
-                    'channel'    => $matches[2],
-                    'level'      => strtolower($matches[3]),
-                    'message'    => Str::limit($matches[4], 200),
-                    'fullText'   => $matches[4],
-                    'extraLines' => 0,
-                ];
-            } elseif ($current !== null && trim($line) !== '') {
-                $current['extraLines']++;
-                $current['fullText'] .= ' ' . $line;
-            }
-        }
-
-        if ($current !== null) {
-            $entries[] = $current;
-        }
+        $entries = $this->parseEntries($tailLines);
 
         if ($level !== null && $level !== '') {
             $entries = array_values(array_filter(
@@ -131,6 +126,53 @@ class LogViewerService
         }, $entries);
 
         return array_reverse(array_slice($entries, -$limit));
+    }
+
+    /**
+     * Lit et parse les `$tailLines` dernières lignes du fichier de log.
+     * Coûteux (spawn `tail` + parsing ligne à ligne) : mis en cache tant que
+     * le fichier n'a pas changé, pour supporter le polling du widget.
+     *
+     * @return array<int, array{timestamp: string, channel: string, level: string, message: string, fullText: string, extraLines: int}>
+     */
+    private function parseEntries(int $tailLines): array
+    {
+        return Cache::remember(
+            "log_viewer_entries:{$this->path()}:{$tailLines}:{$this->cacheVersion()}",
+            now()->addSeconds(10),
+            function () use ($tailLines): array {
+                $output = Process::run(['tail', '-n', (string) $tailLines, $this->path()])->output();
+
+                $entries = [];
+                $current = null;
+
+                foreach (explode("\n", $output) as $line) {
+                    if (preg_match(self::ENTRY_PATTERN, $line, $matches)) {
+                        if ($current !== null) {
+                            $entries[] = $current;
+                        }
+
+                        $current = [
+                            'timestamp'  => $matches[1],
+                            'channel'    => $matches[2],
+                            'level'      => strtolower($matches[3]),
+                            'message'    => Str::limit($matches[4], 200),
+                            'fullText'   => $matches[4],
+                            'extraLines' => 0,
+                        ];
+                    } elseif ($current !== null && trim($line) !== '') {
+                        $current['extraLines']++;
+                        $current['fullText'] .= ' ' . $line;
+                    }
+                }
+
+                if ($current !== null) {
+                    $entries[] = $current;
+                }
+
+                return $entries;
+            }
+        );
     }
 
     private static function formatBytes(int $bytes): string

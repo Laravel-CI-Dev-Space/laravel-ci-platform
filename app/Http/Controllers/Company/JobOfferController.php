@@ -61,7 +61,7 @@ class JobOfferController extends Controller
             'is_remote'      => ['boolean'],
             'is_hybrid'      => ['boolean'],
             'salary_min'     => ['nullable', 'integer', 'min:0'],
-            'salary_max'     => ['nullable', 'integer', 'min:0'],
+            'salary_max'     => ['nullable', 'integer', 'min:0', 'gte:salary_min'],
             'currency'       => ['string', 'max:10'],
             'salary_visible' => ['boolean'],
             'is_urgent'      => ['boolean'],

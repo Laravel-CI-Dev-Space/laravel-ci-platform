@@ -10,8 +10,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\Support\LogOptions;
+use Laravel\Scout\Searchable;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 #[Fillable([
     'user_id', 'reviewed_by', 'title', 'slug', 'excerpt', 'body', 'body_html',
@@ -20,7 +21,7 @@ use Spatie\Activitylog\Models\Concerns\LogsActivity;
 ])]
 class Article extends Model
 {
-    use HasFactory, LogsActivity, SoftDeletes;
+    use HasFactory, LogsActivity, Searchable, SoftDeletes;
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -136,4 +137,35 @@ class Article extends Model
         'intermediate' => 'warning',
         'advanced'     => 'danger',
     ];
+
+    /**
+     * Représentation indexée dans Meilisearch pour la recherche globale.
+     *
+     * @return array<string, mixed>
+     */
+    public function toSearchableArray(): array
+    {
+        return [
+            'id'         => $this->id,
+            'title'      => $this->title,
+            'excerpt'    => $this->excerpt,
+            'body'       => strip_tags($this->body),
+            'slug'       => $this->slug,
+            'level'      => $this->level,
+            'status'     => $this->status,
+            'tags'       => $this->tags->pluck('name')->join(', '),
+            'author'     => $this->author?->name,
+            'type'       => 'article',
+            'url'        => route('blog.show', $this->slug),
+            'created_at' => $this->created_at?->toDateString(),
+        ];
+    }
+
+    /**
+     * Seuls les articles publiés sont indexés.
+     */
+    public function shouldBeSearchable(): bool
+    {
+        return $this->status === 'published';
+    }
 }

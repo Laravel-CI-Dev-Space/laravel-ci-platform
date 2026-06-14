@@ -11,17 +11,17 @@ use App\Models\JobOffer;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Actions\ViewAction;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class CompanyApplicationResource extends Resource
 {
@@ -45,8 +45,8 @@ class CompanyApplicationResource extends Resource
     /** Restreint aux candidatures des offres de la company authentifiée. */
     public static function getEloquentQuery(): Builder
     {
-        $account    = auth('company')->user();
-        $offerIds   = JobOffer::where('company_id', $account?->company_id)->pluck('id');
+        $account  = auth('company')->user();
+        $offerIds = JobOffer::where('company_id', $account?->company_id)->pluck('id');
 
         return parent::getEloquentQuery()
             ->with(['user', 'jobOffer'])
@@ -61,31 +61,31 @@ class CompanyApplicationResource extends Resource
     public static function infolist(Schema $schema): Schema
     {
         return $schema->components([
-            \Filament\Schemas\Components\Section::make('Candidat')
+            Section::make('Candidat')
                 ->columns(2)
                 ->schema([
-                    \Filament\Infolists\Components\TextEntry::make('user.name')
+                    TextEntry::make('user.name')
                         ->label('Nom complet'),
-                    \Filament\Infolists\Components\TextEntry::make('user.email')
+                    TextEntry::make('user.email')
                         ->label('Email')
                         ->copyable(),
-                    \Filament\Infolists\Components\TextEntry::make('user.github_username')
+                    TextEntry::make('user.github_username')
                         ->label('GitHub')
                         ->formatStateUsing(fn ($state) => $state ? "@{$state}" : '—')
                         ->url(fn ($state) => $state ? "https://github.com/{$state}" : null)
                         ->openUrlInNewTab()
                         ->placeholder('—'),
-                    \Filament\Infolists\Components\TextEntry::make('created_at')
+                    TextEntry::make('created_at')
                         ->label('Candidature soumise le')
                         ->dateTime('d/m/Y à H:i'),
                 ]),
 
-            \Filament\Schemas\Components\Section::make("Offre d'emploi")
+            Section::make("Offre d'emploi")
                 ->columns(2)
                 ->schema([
-                    \Filament\Infolists\Components\TextEntry::make('jobOffer.title')
+                    TextEntry::make('jobOffer.title')
                         ->label('Intitulé du poste'),
-                    \Filament\Infolists\Components\TextEntry::make('status')
+                    TextEntry::make('status')
                         ->label('Statut de la candidature')
                         ->badge()
                         ->color(fn ($state) => match ($state) {
@@ -106,23 +106,23 @@ class CompanyApplicationResource extends Resource
                         }),
                 ]),
 
-            \Filament\Schemas\Components\Section::make('Documents & Liens')
+            Section::make('Documents & Liens')
                 ->columns(2)
                 ->schema([
-                    \Filament\Infolists\Components\TextEntry::make('cv_path')
+                    TextEntry::make('cv_path')
                         ->label('CV')
                         ->formatStateUsing(fn ($state) => $state ? 'CV disponible' : 'Aucun CV fourni')
                         ->url(fn ($record) => $record->cv_path
-                            ? asset('assets/cv/' . $record->cv_path) : null)
+                            ? route('company.applications.cv', $record) : null)
                         ->openUrlInNewTab()
                         ->badge()
                         ->color(fn ($state) => $state ? 'success' : 'gray'),
-                    \Filament\Infolists\Components\TextEntry::make('portfolio_url')
+                    TextEntry::make('portfolio_url')
                         ->label('Portfolio')
                         ->url(fn ($state) => $state)
                         ->openUrlInNewTab()
                         ->placeholder('Non renseigné'),
-                    \Filament\Infolists\Components\TextEntry::make('linkedin_url')
+                    TextEntry::make('linkedin_url')
                         ->label('LinkedIn')
                         ->url(fn ($state) => $state)
                         ->openUrlInNewTab()
@@ -130,18 +130,18 @@ class CompanyApplicationResource extends Resource
                         ->columnSpanFull(),
                 ]),
 
-            \Filament\Schemas\Components\Section::make('Lettre de motivation')
+            Section::make('Lettre de motivation')
                 ->schema([
-                    \Filament\Infolists\Components\TextEntry::make('cover_letter')
+                    TextEntry::make('cover_letter')
                         ->label('')
                         ->prose()
                         ->placeholder('Aucune lettre de motivation fournie.')
                         ->columnSpanFull(),
                 ]),
 
-            \Filament\Schemas\Components\Section::make('Note interne')
+            Section::make('Note interne')
                 ->schema([
-                    \Filament\Infolists\Components\TextEntry::make('employer_note')
+                    TextEntry::make('employer_note')
                         ->label('')
                         ->placeholder('Aucune note.')
                         ->columnSpanFull(),

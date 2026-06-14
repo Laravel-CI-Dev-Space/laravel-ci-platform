@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire\Forum;
 
+use App\Livewire\Concerns\RateLimited;
 use App\Models\User;
 use App\Services\Forum\VoteService;
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +14,8 @@ use Livewire\Component;
 
 class VoteButtons extends Component
 {
+    use RateLimited;
+
     public string $modelType = '';
 
     public int $modelId = 0;
@@ -54,6 +57,10 @@ class VoteButtons extends Component
         if (! Auth::check()) {
             $this->redirect(route('login'));
 
+            return;
+        }
+
+        if ($this->tooManyAttempts('forum.vote', 30)) {
             return;
         }
 

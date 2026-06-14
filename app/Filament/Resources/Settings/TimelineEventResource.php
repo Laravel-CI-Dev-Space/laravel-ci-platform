@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Settings;
 
+use App\Enums\UserPermission;
+use App\Filament\Resources\Concerns\AuthorizesViaPermission;
 use App\Filament\Resources\Settings\Pages\CreateTimelineEvent;
 use App\Filament\Resources\Settings\Pages\EditTimelineEvent;
 use App\Filament\Resources\Settings\Pages\ListTimelineEvents;
@@ -18,6 +20,13 @@ use Filament\Tables\Table;
 
 class TimelineEventResource extends Resource
 {
+    use AuthorizesViaPermission;
+
+    protected static function viewPermission(): string
+    {
+        return UserPermission::AdminSettings->value;
+    }
+
     protected static ?string $model = TimelineEvent::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClock;

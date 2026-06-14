@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Livewire\Blog;
 
 use App\Enums\UserRole;
+use App\Livewire\Concerns\RateLimited;
 use App\Models\Article;
 use App\Models\Comment;
 use App\Models\User;
@@ -16,7 +17,7 @@ use Livewire\WithPagination;
 
 class CommentSection extends Component
 {
-    use WithPagination;
+    use RateLimited, WithPagination;
 
     public int $articleId;
 
@@ -53,6 +54,13 @@ class CommentSection extends Component
     public function addComment(CommentService $commentService): void
     {
         abort_unless(Auth::check(), 403);
+
+        if ($this->tooManyAttempts('blog.comment', 10)) {
+            $this->addError('body', $this->rateLimitMessage('blog.comment'));
+
+            return;
+        }
+
         $this->validate();
 
         /** @var User $user */
@@ -91,6 +99,12 @@ class CommentSection extends Component
     public function addReply(CommentService $commentService): void
     {
         abort_unless(Auth::check() && $this->replyingTo !== null, 403);
+
+        if ($this->tooManyAttempts('blog.comment', 10)) {
+            $this->addError('replyBody', $this->rateLimitMessage('blog.comment'));
+
+            return;
+        }
 
         $this->validateOnly('replyBody', [
             'replyBody' => ['required', 'string', 'min:5', 'max:500'],

@@ -57,12 +57,12 @@
                   @endif
                   <a href="{{ route('forum.show', $question) }}" class="text-navy">{{ Str::limit($question->title, 55) }}</a>
                 </td>
-                <td>{{ $question->author->name ?? 'Unknown' }}</td>
-                <td>{{ $question->votes_count }}</td>
+                <td>{{ $question->user->name ?? 'Unknown' }}</td>
+                <td>{{ $question->votes_score }}</td>
                 <td>{{ $question->answers_count }}</td>
                 <td>
-                  <span class="badge {{ $question->is_solved ? 'bg-success-subtle text-success' : ($question->reports_count > 0 ? 'bg-danger-subtle text-danger' : 'bg-warning-subtle text-warning') }}">
-                    {{ $question->is_solved ? 'Solved' : ($question->reports_count > 0 ? 'Reported' : 'Open') }}
+                  <span class="badge {{ $question->hasAcceptedAnswer() ? 'bg-success-subtle text-success' : ($question->reports_count > 0 ? 'bg-danger-subtle text-danger' : 'bg-warning-subtle text-warning') }}">
+                    {{ $question->hasAcceptedAnswer() ? 'Solved' : ($question->reports_count > 0 ? 'Reported' : 'Open') }}
                   </span>
                 </td>
                 <td>{{ $question->created_at->format('M d, Y') }}</td>

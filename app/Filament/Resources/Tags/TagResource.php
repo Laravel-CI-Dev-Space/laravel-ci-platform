@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Tags;
 
+use App\Filament\Resources\Concerns\AuthorizesViaPermission;
 use App\Filament\Resources\Tags\Pages\CreateTag;
 use App\Filament\Resources\Tags\Pages\EditTag;
 use App\Filament\Resources\Tags\Pages\ListTags;
@@ -16,6 +17,8 @@ use Filament\Tables\Table;
 
 class TagResource extends Resource
 {
+    use AuthorizesViaPermission;
+
     protected static ?string $model = Tag::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTag;

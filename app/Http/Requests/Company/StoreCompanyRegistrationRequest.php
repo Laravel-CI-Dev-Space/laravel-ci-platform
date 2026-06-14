@@ -26,7 +26,7 @@ class StoreCompanyRegistrationRequest extends FormRequest
             'country'         => ['required', 'string', 'max:100'],
             'business_domain' => ['required', 'string', 'max:150'],
             'website'         => ['nullable', 'url', 'max:255'],
-            'logo'            => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,svg', 'max:2048'],
+            'logo'            => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'motivation'      => ['nullable', 'string', 'max:1000'],
         ];
     }
@@ -48,7 +48,7 @@ class StoreCompanyRegistrationRequest extends FormRequest
             'business_domain.required' => "Le domaine d'activité est obligatoire.",
             'website.url'              => "L'URL du site web est invalide.",
             'logo.image'               => 'Le logo doit être une image.',
-            'logo.mimes'               => 'Le logo doit être au format JPG, PNG, WebP ou SVG.',
+            'logo.mimes'               => 'Le logo doit être au format JPG, PNG ou WebP.',
             'logo.max'                 => 'Le logo ne peut pas dépasser 2 Mo.',
             'motivation.max'           => 'Le message de présentation ne peut pas dépasser :max caractères.',
         ];

@@ -145,7 +145,7 @@ class Profile extends Model
 
     public function cvUrl(): ?string
     {
-        return $this->cv ? asset('assets/cv/' . $this->cv) : null;
+        return $this->cv ? route('cv.download', $this->user_id) : null;
     }
 
     public function laravelLevelLabel(): string

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class AssetService
@@ -12,11 +13,11 @@ class AssetService
      * Uses file_get_contents + File::put instead of $file->move() to avoid
      * rename() failures with Livewire TemporaryUploadedFile across storage paths.
      *
-     * @param  mixed       $file   UploadedFile or Livewire TemporaryUploadedFile
-     * @param  string      $folder Sub-directory under public/assets (e.g. avatars, cv)
-     * @param  string      $prefix Filename prefix (e.g. avatar, cv)
-     * @param  int         $userId Owner's user ID
-     * @param  string|null $old    Previous filename to delete
+     * @param  mixed  $file  UploadedFile or Livewire TemporaryUploadedFile
+     * @param  string  $folder  Sub-directory under public/assets (e.g. avatars, cv)
+     * @param  string  $prefix  Filename prefix (e.g. avatar, cv)
+     * @param  int  $userId  Owner's user ID
+     * @param  string|null  $old  Previous filename to delete
      * @return string Saved filename
      */
     public function upload(
@@ -53,6 +54,45 @@ class AssetService
         if (File::exists($path)) {
             File::delete($path);
         }
+    }
+
+    /**
+     * Stores an uploaded file on the private "local" disk (storage/app/private/{folder}).
+     * Use this for documents that must not be publicly accessible (e.g. CVs).
+     *
+     * @param  mixed  $file  UploadedFile or Livewire TemporaryUploadedFile
+     * @param  string  $folder  Sub-directory under storage/app/private (e.g. cv)
+     * @param  string  $prefix  Filename prefix (e.g. cv)
+     * @param  int  $userId  Owner's user ID
+     * @param  string|null  $old  Previous filename to delete
+     * @return string Saved filename
+     */
+    public function uploadPrivate(
+        mixed $file,
+        string $folder,
+        string $prefix,
+        int $userId,
+        ?string $old = null
+    ): string {
+        if ($old) {
+            $this->deletePrivate($folder, $old);
+        }
+
+        $extension = $file->extension();
+        $filename  = Str::lower("{$prefix}_{$userId}_" . time() . "_{$this->randomString()}.{$extension}");
+
+        Storage::disk('local')->put(
+            "{$folder}/{$filename}",
+            file_get_contents($file->getRealPath())
+        );
+
+        return $filename;
+    }
+
+    /** Deletes a stored file from the private "local" disk (storage/app/private/{folder}). */
+    public function deletePrivate(string $folder, string $filename): void
+    {
+        Storage::disk('local')->delete("{$folder}/{$filename}");
     }
 
     /** Returns the public URL for a stored file. */

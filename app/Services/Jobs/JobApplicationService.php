@@ -38,7 +38,7 @@ class JobApplicationService
         $cvPath = null;
 
         if ($cvFile !== null) {
-            $cvPath = $this->assetService->upload($cvFile, 'cv', 'cv', $user->id);
+            $cvPath = $this->assetService->uploadPrivate($cvFile, 'cv', 'cv', $user->id);
         }
 
         $application = JobApplication::create([
