@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Jobs;
 
+use App\Enums\UserPermission;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreJobOfferRequest extends FormRequest
@@ -13,7 +14,7 @@ class StoreJobOfferRequest extends FormRequest
         $user = $this->user();
 
         // Autorisé : membre avec la permission appropriée OU compte entreprise
-        return ($user !== null && $user->can('job.offer.create'))
+        return ($user !== null && $user->can(UserPermission::JobOfferCreate->value))
             || auth('company')->check();
     }
 

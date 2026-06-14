@@ -24,6 +24,7 @@ use App\Http\Controllers\Forum\QuestionController;
 use App\Http\Controllers\Jobs\JobApplicationController;
 use App\Http\Controllers\Jobs\JobOfferController;
 use App\Http\Controllers\Search\SearchController;
+use App\Http\Controllers\ViewAsMemberController;
 use App\Http\Controllers\Web\AboutController;
 use App\Http\Controllers\Web\HomeController;
 use App\Livewire\EditProfile;
@@ -44,27 +45,29 @@ Route::get('/search', [SearchController::class, 'index'])->name('search.index');
 Route::prefix('forum')->name('forum.')->group(function () {
     Route::get('/', [QuestionController::class, 'index'])->name('index');
 
-    // Protégé: créer une question (membres + admins/modérateurs)
+    // Protégé: créer une question (membres + admins/modérateurs disposant de la permission)
     Route::get('/ask', [QuestionController::class, 'create'])
         ->name('ask')
-        ->middleware(['auth', 'active', 'profile.complete', 'role:member|admin|super-admin|moderator']);
+        ->middleware(['auth', 'active', 'profile.complete', 'permission:forum.question.create']);
 
     // Public: doit venir en dernier
     Route::get('/{slug}', [QuestionController::class, 'show'])->name('show');
 });
 
 // ─── FORUM — Routes authentifiées (membres + admins + modérateurs) ──
-Route::middleware(['auth', 'active', 'profile.complete', 'role:member|admin|super-admin|moderator'])->group(function () {
+Route::middleware(['auth', 'active', 'profile.complete'])->group(function () {
     Route::post('/forum/questions', [QuestionController::class, 'store'])
-        ->middleware('throttle:10,1')
+        ->middleware(['throttle:10,1', 'permission:forum.question.create'])
         ->name('forum.questions.store');
     Route::post('/forum/{question}/answers', [AnswerController::class, 'store'])
-        ->middleware('throttle:20,1')
+        ->middleware(['throttle:20,1', 'permission:forum.answer.create'])
         ->name('forum.answers.store');
 
     Route::get('/forum/{question}/edit', [QuestionController::class, 'edit'])
+        ->middleware('permission:forum.question.edit')
         ->name('forum.edit');
     Route::delete('/forum/{question}', [QuestionController::class, 'destroy'])
+        ->middleware('permission:forum.question.delete')
         ->name('forum.destroy');
 });
 
@@ -72,10 +75,10 @@ Route::middleware(['auth', 'active', 'profile.complete', 'role:member|admin|supe
 Route::prefix('blog')->name('blog.')->group(function () {
     Route::get('/', [ArticleController::class, 'index'])->name('index');
 
-    // Protégé : soumettre un article (membres + admins + modérateurs)
+    // Protégé : soumettre un article (membres + admins + modérateurs disposant de la permission)
     Route::get('/submit', [ArticleController::class, 'create'])
         ->name('create')
-        ->middleware(['auth', 'active', 'profile.complete', 'role:member|admin|super-admin|moderator']);
+        ->middleware(['auth', 'active', 'profile.complete', 'permission:blog.article.create']);
 
     // Public : doit venir en dernier
     Route::get('/{slug}', [ArticleController::class, 'show'])->name('show');
@@ -91,17 +94,21 @@ Route::prefix('resources')->name('resources.')->group(function () {
 });
 
 // ─── BLOG & RESSOURCES — Routes authentifiées ─────────────────────
-Route::middleware(['auth', 'active', 'profile.complete', 'role:member|admin|super-admin|moderator'])->group(function () {
+Route::middleware(['auth', 'active', 'profile.complete'])->group(function () {
     Route::post('/blog/articles', [ArticleController::class, 'store'])
-        ->middleware('throttle:10,1')
+        ->middleware(['throttle:10,1', 'permission:blog.article.create'])
         ->name('blog.articles.store');
     Route::get('/blog/{article}/edit', [ArticleController::class, 'edit'])
+        ->middleware('permission:blog.article.edit')
         ->name('blog.articles.edit');
     Route::post('/blog/{article}/submit', [ArticleController::class, 'submit'])
+        ->middleware('permission:blog.article.submit')
         ->name('blog.articles.submit');
     Route::delete('/blog/{article}', [ArticleController::class, 'destroy'])
+        ->middleware('permission:blog.article.delete')
         ->name('blog.articles.destroy');
     Route::post('/resources', [ResourceController::class, 'store'])
+        ->middleware('permission:blog.resource.upload')
         ->name('resources.store');
 });
 
@@ -140,11 +147,12 @@ Route::prefix('jobs')->name('jobs.')->group(function () {
 });
 
 // ─── JOB BOARD — Routes authentifiées ─────────────────────────────
-Route::middleware(['auth', 'active', 'profile.complete', 'role:member|admin|super-admin|moderator'])->group(function () {
+Route::middleware(['auth', 'active', 'profile.complete'])->group(function () {
     Route::post('/jobs/{offer}/apply', [JobApplicationController::class, 'store'])
-        ->middleware('throttle:10,1')
+        ->middleware(['throttle:10,1', 'permission:job.apply'])
         ->name('jobs.applications.store');
     Route::post('/jobs/{offer}/favorite', [JobOfferController::class, 'toggleFavorite'])
+        ->middleware('permission:job.favorite')
         ->name('jobs.favorite');
 });
 
@@ -182,6 +190,14 @@ Route::get('/auth/github/callback', [SocialiteController::class, 'callback'])
 Route::post('/logout', [AuthController::class, 'logout'])
     ->name('logout')
     ->middleware('auth');
+
+// ─── VIEW AS MEMBER — Admin/Moderator only ────────────────────
+Route::middleware(['auth', 'active'])->group(function () {
+    Route::post('/view-as-member/enable', [ViewAsMemberController::class, 'enable'])
+        ->name('view-as-member.enable');
+    Route::post('/view-as-member/disable', [ViewAsMemberController::class, 'disable'])
+        ->name('view-as-member.disable');
+});
 
 // ─── AUTHENTICATED ROUTES ──────────────────────────────────
 Route::middleware(['auth', 'active'])->group(function () {

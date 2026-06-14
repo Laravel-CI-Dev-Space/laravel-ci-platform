@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Events;
 
+use App\Enums\UserPermission;
 use App\Models\EventRegistration;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
@@ -16,7 +17,8 @@ class CancelEventRegistrationRequest extends FormRequest
         $registration = $this->route('registration');
 
         return $registration !== null
-            && $this->user()?->id === $registration->user_id;
+            && $this->user()?->id === $registration->user_id
+            && $this->user()?->can(UserPermission::EventCancel->value);
     }
 
     public function rules(): array

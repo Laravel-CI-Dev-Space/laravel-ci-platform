@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Forum;
 
-use App\Enums\UserRole;
+use App\Enums\UserPermission;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreQuestionRequest extends FormRequest
@@ -15,12 +15,7 @@ class StoreQuestionRequest extends FormRequest
 
         return $user !== null
             && $user->isActive()
-            && $user->hasAnyRole([
-                UserRole::Member->value,
-                UserRole::Admin->value,
-                UserRole::SuperAdmin->value,
-                UserRole::Moderator->value,
-            ]);
+            && $user->can(UserPermission::ForumQuestionCreate->value);
     }
 
     public function rules(): array

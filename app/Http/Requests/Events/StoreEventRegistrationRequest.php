@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Events;
 
+use App\Enums\UserPermission;
 use App\Models\Event;
 use App\Models\EventRegistration;
 use Illuminate\Foundation\Http\FormRequest;
@@ -15,7 +16,9 @@ class StoreEventRegistrationRequest extends FormRequest
     {
         $user = $this->user();
 
-        return $user !== null && $user->isActive();
+        return $user !== null
+            && $user->isActive()
+            && $user->can(UserPermission::EventRegister->value);
     }
 
     public function rules(): array

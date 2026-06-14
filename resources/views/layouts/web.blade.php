@@ -37,6 +37,8 @@
 </head>
 <body>
 
+  <x-web.viewing-as-banner />
+
   <x-web.header />
 
   <main>

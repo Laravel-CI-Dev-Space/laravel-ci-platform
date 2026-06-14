@@ -8,6 +8,7 @@ use App\Http\Middleware\CompanyMustChangePassword;
 use App\Http\Middleware\EnsureProfileComplete;
 use App\Http\Middleware\RunScheduler;
 use App\Http\Middleware\TrackPageView;
+use App\Http\Middleware\ViewingAsMember;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -25,16 +26,18 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             TrackPageView::class,
             RunScheduler::class,
+            ViewingAsMember::class,
         ]);
 
         $middleware->alias([
             // Middleware custom
-            'active'           => CheckMemberActive::class,
-            'profile.complete' => EnsureProfileComplete::class,
-            'company.auth'     => CompanyAuthenticated::class,
-            'company.active'   => CompanyActive::class,
-            'company.password' => CompanyMustChangePassword::class,
-            'company.guest'    => CompanyGuest::class,
+            'active'            => CheckMemberActive::class,
+            'profile.complete'  => EnsureProfileComplete::class,
+            'company.auth'      => CompanyAuthenticated::class,
+            'company.active'    => CompanyActive::class,
+            'company.password'  => CompanyMustChangePassword::class,
+            'company.guest'     => CompanyGuest::class,
+            'viewing.as.member' => ViewingAsMember::class,
 
             // Middlewares Spatie Permission
             'role'               => RoleMiddleware::class,

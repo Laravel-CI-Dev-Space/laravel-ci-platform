@@ -78,20 +78,23 @@ enum UserPermission: string
                 fn (string $p) => $p !== self::AdminSettings->value,
             )),
 
-            UserRole::Moderator => [
-                self::ForumQuestionPin->value,
-                self::ForumQuestionDelete->value,
-                self::ForumAnswerDelete->value,
-                self::ForumCommentDelete->value,
-                self::BlogArticlePublish->value,
-                self::BlogArticleUnpublish->value,
-                self::BlogCommentDelete->value,
-                self::BlogResourceDelete->value,
-                self::ModerationReportHandle->value,
-                self::ModerationContentHide->value,
-                self::ModerationUserSuspend->value,
-                self::AdminAccess->value,
-            ],
+            UserRole::Moderator => array_unique(array_merge(
+                [
+                    self::ForumQuestionPin->value,
+                    self::ForumQuestionDelete->value,
+                    self::ForumAnswerDelete->value,
+                    self::ForumCommentDelete->value,
+                    self::BlogArticlePublish->value,
+                    self::BlogArticleUnpublish->value,
+                    self::BlogCommentDelete->value,
+                    self::BlogResourceDelete->value,
+                    self::ModerationReportHandle->value,
+                    self::ModerationContentHide->value,
+                    self::ModerationUserSuspend->value,
+                    self::AdminAccess->value,
+                ],
+                self::forRole(UserRole::Member) // hérite de toutes les permissions membre
+            )),
 
             UserRole::Member => [
                 self::ForumQuestionCreate->value,

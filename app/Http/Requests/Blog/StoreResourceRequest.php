@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Blog;
 
-use App\Enums\UserRole;
+use App\Enums\UserPermission;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreResourceRequest extends FormRequest
 {
     /**
-     * Vérifie que l'utilisateur est un membre actif.
+     * Vérifie que l'utilisateur est un membre actif disposant de la permission de téléverser une ressource.
      */
     public function authorize(): bool
     {
@@ -18,12 +18,7 @@ class StoreResourceRequest extends FormRequest
 
         return $user !== null
             && $user->isActive()
-            && $user->hasAnyRole([
-                UserRole::Member->value,
-                UserRole::Admin->value,
-                UserRole::SuperAdmin->value,
-                UserRole::Moderator->value,
-            ]);
+            && $user->can(UserPermission::BlogResourceUpload->value);
     }
 
     public function rules(): array

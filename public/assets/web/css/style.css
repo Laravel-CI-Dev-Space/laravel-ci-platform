@@ -1817,3 +1817,53 @@ html.reveal-ready .reveal.in { opacity: 1; transform: none; }
     .search-bar-wrapper { width: 100%; }
     .search-dropdown { min-width: 100%; }
 }
+
+/* ===== VIEWING AS MEMBER BANNER ===== */
+.viewing-as-banner {
+    position: sticky;
+    top: 0;
+    z-index: 1100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 10px 20px;
+    background: var(--navy);
+    color: #fff;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.viewing-as-banner i {
+    color: var(--orange);
+}
+
+.btn-back-admin {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border: 1px solid var(--orange);
+    border-radius: 2rem;
+    background: transparent;
+    color: #fff;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.btn-back-admin:hover {
+    background: var(--orange);
+    color: #fff;
+}
+
+@media (max-width: 575px) {
+    .viewing-as-banner {
+        flex-direction: column;
+        gap: 8px;
+        padding: 10px 12px;
+        font-size: 0.82rem;
+    }
+}

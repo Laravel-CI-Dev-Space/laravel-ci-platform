@@ -4,13 +4,18 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Forum;
 
+use App\Enums\UserPermission;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreReportRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user() !== null;
+        $user = $this->user();
+
+        return $user !== null
+            && $user->isActive()
+            && $user->can(UserPermission::ForumReport->value);
     }
 
     public function rules(): array
