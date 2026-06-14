@@ -114,6 +114,8 @@
               @endforeach
             </div>
           @endif
+
+          <x-web.event-media-section :event="$event" />
         </div>
 
         <div class="col-lg-4">

@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\JobOffer;
+use App\Observers\JobOfferObserver;
 use BladeUI\Icons\Factory;
 use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
@@ -21,5 +23,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Carbon::setLocale(config('app.locale'));
+
+        JobOffer::observe(JobOfferObserver::class);
     }
 }

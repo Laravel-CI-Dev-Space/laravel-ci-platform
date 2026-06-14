@@ -74,6 +74,12 @@
         </a>
       </li>
       <li>
+        <a class="nav-link {{ request()->routeIs('dashboard.member.alerts') ? 'active' : '' }}"
+           href="{{ route('dashboard.member.alerts') }}">
+          <i class="ti ti-bell-ringing"></i><span class="nav-text">Alertes emploi</span>
+        </a>
+      </li>
+      <li>
         <a class="nav-link {{ request()->routeIs('dashboard.member.profile') ? 'active' : '' }}"
            href="{{ route('dashboard.member.profile') }}">
           <i class="ti ti-user-circle"></i><span class="nav-text">Profile</span>

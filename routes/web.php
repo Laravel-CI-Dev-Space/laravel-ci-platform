@@ -160,6 +160,7 @@ Route::middleware(['auth', 'active'])->group(function () {
                 Route::get('/applications', [DashboardController::class, 'memberApplications'])->name('applications');
                 Route::get('/applications/{jobApplication}', [MemberJobApplicationController::class, 'show'])->name('applications.show');
                 Route::get('/favorites', [DashboardController::class, 'memberFavorites'])->name('favorites');
+                Route::get('/alerts', [DashboardController::class, 'memberAlerts'])->name('alerts');
                 Route::get('/profile', fn () => view('dashboard.member.profile'))->name('profile');
                 Route::post('/profile', fn () => back())->name('profile.update');
             });
