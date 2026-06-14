@@ -420,12 +420,21 @@
           </label>
         </div>
 
-        <div class="form-check form-switch">
+        <div class="form-check form-switch mb-3">
           <input class="form-check-input" type="checkbox" role="switch" id="pref-job-alert"
                  wire:click="toggleNotificationPreference('job_alert')"
                  @checked($notificationPreferences['job_alert'])>
           <label class="form-check-label" for="pref-job-alert">
             Alertes emploi correspondant à mon profil
+          </label>
+        </div>
+
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" role="switch" id="pref-mention"
+                 wire:click="toggleNotificationPreference('mention')"
+                 @checked($notificationPreferences['mention'])>
+          <label class="form-check-label" for="pref-mention">
+            Quelqu'un me mentionne avec @@mon-pseudo
           </label>
         </div>
       </div>

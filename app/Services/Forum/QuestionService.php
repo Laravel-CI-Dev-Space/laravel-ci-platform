@@ -12,6 +12,10 @@ use Illuminate\Support\Str;
 
 class QuestionService
 {
+    public function __construct(
+        private readonly MentionService $mentionService,
+    ) {}
+
     /**
      * Récupère les questions paginées avec filtres et tri.
      */
@@ -53,7 +57,7 @@ class QuestionService
             'title'            => $data['title'],
             'slug'             => $this->generateUniqueSlug($data['title']),
             'body'             => $data['body'],
-            'body_html'        => $this->parseMarkdown($data['body']),
+            'body_html'        => $this->mentionService->renderMentions($this->parseMarkdown($data['body'])),
             'status'           => 'published',
             'last_activity_at' => now(),
         ]);
@@ -61,6 +65,8 @@ class QuestionService
         $question->tags()->sync($data['tags']);
 
         Tag::whereIn('id', $data['tags'])->increment('usage_count');
+
+        $this->mentionService->processMentions($question->body, $user, $question);
 
         return $question;
     }
@@ -114,7 +120,7 @@ class QuestionService
         $question->update([
             'title'     => $data['title'],
             'body'      => $data['body'],
-            'body_html' => $this->parseMarkdown($data['body']),
+            'body_html' => $this->mentionService->renderMentions($this->parseMarkdown($data['body'])),
             'edited_at' => now(),
         ]);
 

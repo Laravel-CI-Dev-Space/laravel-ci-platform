@@ -49,8 +49,8 @@ class EventService
      */
     public function getBySlug(string $slug): Event
     {
-        return Event::published()
-            ->with(['creator'])
+        return Event::whereIn('status', ['published', 'completed'])
+            ->with(['creator', 'photos', 'recapPublisher'])
             ->withCount(['confirmedRegistrations'])
             ->where('slug', $slug)
             ->firstOrFail();

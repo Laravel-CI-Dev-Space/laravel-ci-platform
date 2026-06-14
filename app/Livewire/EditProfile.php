@@ -66,6 +66,7 @@ class EditProfile extends Component
         'article_published' => true,
         'event_reminder'    => true,
         'job_alert'         => true,
+        'mention'           => true,
     ];
 
     // État

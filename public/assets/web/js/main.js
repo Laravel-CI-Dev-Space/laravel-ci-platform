@@ -365,3 +365,68 @@
   if (typeof bootstrap === 'undefined') return;
   document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach((el) => new bootstrap.Tooltip(el));
 })();
+
+// ================================
+// EVENT RECAP — LIGHTBOX
+// ================================
+(function () {
+  const links = Array.from(document.querySelectorAll('[data-lightbox="event-recap"]'));
+  if (links.length === 0) return;
+
+  let currentIndex = 0;
+  let overlay = null;
+
+  function buildOverlay() {
+    overlay = document.createElement('div');
+    overlay.className = 'recap-lightbox-overlay';
+    overlay.innerHTML = `
+      <button type="button" class="recap-lightbox-close" aria-label="Fermer">&times;</button>
+      <button type="button" class="recap-lightbox-prev" aria-label="Précédent">&larr;</button>
+      <img class="recap-lightbox-img" src="" alt="" />
+      <button type="button" class="recap-lightbox-next" aria-label="Suivant">&rarr;</button>
+    `;
+    document.body.appendChild(overlay);
+
+    overlay.querySelector('.recap-lightbox-close').addEventListener('click', closeLightbox);
+    overlay.querySelector('.recap-lightbox-prev').addEventListener('click', () => show(currentIndex - 1));
+    overlay.querySelector('.recap-lightbox-next').addEventListener('click', () => show(currentIndex + 1));
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) closeLightbox();
+    });
+  }
+
+  function show(index) {
+    currentIndex = (index + links.length) % links.length;
+    const link = links[currentIndex];
+    const img = overlay.querySelector('.recap-lightbox-img');
+    img.src = link.getAttribute('href');
+    img.alt = link.getAttribute('data-caption') || '';
+  }
+
+  function openLightbox(index) {
+    if (!overlay) buildOverlay();
+    show(index);
+    document.addEventListener('keydown', onKeydown);
+  }
+
+  function closeLightbox() {
+    if (overlay) {
+      overlay.remove();
+      overlay = null;
+    }
+    document.removeEventListener('keydown', onKeydown);
+  }
+
+  function onKeydown(e) {
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') show(currentIndex - 1);
+    if (e.key === 'ArrowRight') show(currentIndex + 1);
+  }
+
+  links.forEach((link, index) => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      openLightbox(index);
+    });
+  });
+})();

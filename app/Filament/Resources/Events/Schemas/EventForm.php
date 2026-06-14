@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Events\Schemas;
 
+use App\Models\Event;
 use Filament\Actions\Action;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Set;
@@ -253,6 +257,75 @@ class EventForm
                                 ->disabled()
                                 ->helperText('Géré automatiquement.'),
                         ]),
+                ]),
+
+            Section::make('Récapitulatif post-événement')
+                ->visible(fn (callable $get): bool => $get('status') === 'completed')
+                ->schema([
+                    Placeholder::make('recap_status')
+                        ->label('Statut du récapitulatif')
+                        ->content(fn (?Event $record): string => $record?->hasRecap()
+                            ? 'Publié le ' . $record->recap_published_at->translatedFormat('d/m/Y à H:i')
+                            : 'Non publié'),
+
+                    Textarea::make('recap_summary')
+                        ->label('Résumé')
+                        ->rows(3)
+                        ->maxLength(1000)
+                        ->columnSpanFull(),
+
+                    RichEditor::make('recap_content')
+                        ->label('Contenu détaillé')
+                        ->toolbarButtons([
+                            'bold', 'italic', 'underline', 'strike',
+                            'h2', 'h3', 'bulletList', 'orderedList',
+                            'link', 'blockquote', 'codeBlock',
+                        ])
+                        ->columnSpanFull(),
+
+                    Repeater::make('photos')
+                        ->label('Photos')
+                        ->relationship()
+                        ->schema([
+                            FileUpload::make('path')
+                                ->label('Image')
+                                ->image()
+                                ->disk('assets')
+                                ->directory('events/recap')
+                                ->required(),
+
+                            TextInput::make('caption')
+                                ->label('Légende')
+                                ->maxLength(255),
+                        ])
+                        ->columns(2)
+                        ->maxItems(10)
+                        ->reorderable()
+                        ->orderColumn('order')
+                        ->columnSpanFull(),
+
+                    TextInput::make('recap_video_url_1')
+                        ->label('Vidéo 1 (URL)')
+                        ->url()
+                        ->maxLength(255),
+
+                    TextInput::make('recap_video_url_2')
+                        ->label('Vidéo 2 (URL)')
+                        ->url()
+                        ->maxLength(255),
+
+                    TextInput::make('recap_video_url_3')
+                        ->label('Vidéo 3 (URL)')
+                        ->url()
+                        ->maxLength(255),
+
+                    FileUpload::make('recap_document_path')
+                        ->label('Document de récapitulatif')
+                        ->disk('assets')
+                        ->directory('documents/events')
+                        ->acceptedFileTypes(['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'])
+                        ->maxSize(10240)
+                        ->columnSpanFull(),
                 ]),
         ]);
     }

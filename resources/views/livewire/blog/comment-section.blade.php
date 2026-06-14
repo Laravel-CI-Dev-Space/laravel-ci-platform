@@ -98,7 +98,7 @@
                 </div>
 
                 {{-- Corps --}}
-                <p class="mb-2">{{ $comment->body }}</p>
+                <p class="mb-2">{!! app(\App\Services\Forum\MentionService::class)->renderMentions(nl2br(e($comment->body))) !!}</p>
 
                 {{-- Actions --}}
                 <div class="d-flex align-items-center gap-3" style="font-size:.8rem">

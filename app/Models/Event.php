@@ -23,6 +23,9 @@ use Spatie\Activitylog\Support\LogOptions;
     'promo_code', 'promo_discount_type', 'promo_discount_value',
     'promo_expires_at', 'promo_max_uses', 'promo_uses_count',
     'ticketing_enabled', 'ticket_prefix', 'guest_registration_enabled',
+    'recap_summary', 'recap_content', 'recap_video_url_1', 'recap_video_url_2',
+    'recap_video_url_3', 'recap_document_path', 'recap_document_name',
+    'recap_published_at', 'recap_published_by',
 ])]
 class Event extends Model
 {
@@ -55,6 +58,7 @@ class Event extends Model
             'promo_uses_count'           => 'integer',
             'ticketing_enabled'          => 'boolean',
             'guest_registration_enabled' => 'boolean',
+            'recap_published_at'         => 'datetime',
         ];
     }
 
@@ -76,6 +80,16 @@ class Event extends Model
     public function guestRegistrations(): HasMany
     {
         return $this->hasMany(GuestRegistration::class);
+    }
+
+    public function photos(): HasMany
+    {
+        return $this->hasMany(EventPhoto::class)->orderBy('order');
+    }
+
+    public function recapPublisher(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'recap_published_by');
     }
 
     public function confirmedGuestRegistrations(): HasMany
@@ -187,5 +201,56 @@ class Event extends Model
         }
 
         return $base;
+    }
+
+    /**
+     * Vérifie si l'événement dispose d'un récapitulatif publié.
+     */
+    public function hasRecap(): bool
+    {
+        return $this->recap_published_at !== null;
+    }
+
+    /**
+     * Retourne les URLs vidéo du récapitulatif sous forme de tableau (sans valeurs vides).
+     *
+     * @return array<int, string>
+     */
+    public function recapVideoUrls(): array
+    {
+        return array_values(array_filter([
+            $this->recap_video_url_1,
+            $this->recap_video_url_2,
+            $this->recap_video_url_3,
+        ]));
+    }
+
+    /**
+     * Retourne l'URL publique du document de récapitulatif, ou null.
+     */
+    public function recapDocumentUrl(): ?string
+    {
+        if ($this->recap_document_path === null) {
+            return null;
+        }
+
+        return asset('assets/documents/events/' . $this->recap_document_path);
+    }
+
+    /**
+     * Convertit une URL YouTube/Vimeo en URL d'intégration (embed).
+     */
+    public function toEmbedUrl(string $url): string
+    {
+        if (preg_match('/youtu\.be\/([a-zA-Z0-9_-]+)/', $url, $matches)
+            || preg_match('/youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/', $url, $matches)) {
+            return 'https://www.youtube.com/embed/' . $matches[1];
+        }
+
+        if (preg_match('/vimeo\.com\/(\d+)/', $url, $matches)) {
+            return 'https://player.vimeo.com/video/' . $matches[1];
+        }
+
+        return $url;
     }
 }

@@ -10,6 +10,10 @@ use App\Models\User;
 
 class AnswerService
 {
+    public function __construct(
+        private readonly MentionService $mentionService,
+    ) {}
+
     /**
      * Crée une réponse à une question.
      */
@@ -19,11 +23,13 @@ class AnswerService
             'question_id' => $question->id,
             'user_id'     => $user->id,
             'body'        => $data['body'],
-            'body_html'   => $this->parseMarkdown($data['body']),
+            'body_html'   => $this->mentionService->renderMentions($this->parseMarkdown($data['body'])),
         ]);
 
         $question->increment('answers_count');
         $question->update(['last_activity_at' => now()]);
+
+        $this->mentionService->processMentions($answer->body, $user, $answer);
 
         return $answer;
     }

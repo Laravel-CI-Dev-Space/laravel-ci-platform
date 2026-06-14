@@ -217,4 +217,63 @@
             </div>
         </div>
     </section>
+
+    {{-- ===== RÉCAPITULATIF ===== --}}
+    @if ($event->hasRecap())
+        <section id="recap" class="section">
+            <div class="container">
+                <div class="section-eyebrow">Après l'événement</div>
+                <h2 class="mb-4">Récapitulatif</h2>
+
+                @if ($event->recap_summary)
+                    <p class="lead mb-4">{{ $event->recap_summary }}</p>
+                @endif
+
+                @if ($event->recap_content)
+                    <div class="recap-content mb-4">
+                        {!! clean($event->recap_content) !!}
+                    </div>
+                @endif
+
+                @if ($event->photos->isNotEmpty())
+                    <div class="row g-3 mb-4">
+                        @foreach ($event->photos as $photo)
+                            <div class="col-md-4 col-6">
+                                <a href="{{ $photo->url() }}"
+                                   data-lightbox="event-recap"
+                                   data-caption="{{ $photo->caption }}"
+                                   class="recap-photo d-block">
+                                    <img src="{{ $photo->url() }}"
+                                         alt="{{ $photo->caption ?? $event->title }}"
+                                         class="img-fluid rounded" loading="lazy" />
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+
+                @if (! empty($event->recapVideoUrls()))
+                    <div class="row g-3 mb-4">
+                        @foreach ($event->recapVideoUrls() as $videoUrl)
+                            <div class="col-md-6">
+                                <div class="ratio ratio-16x9">
+                                    <iframe src="{{ $event->toEmbedUrl($videoUrl) }}"
+                                            title="Vidéo récapitulative"
+                                            allowfullscreen></iframe>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+
+                @if ($event->recapDocumentUrl())
+                    <a href="{{ $event->recapDocumentUrl() }}" target="_blank" rel="noopener"
+                       class="btn-outline-navy d-inline-flex align-items-center gap-2">
+                        <i class="fa-solid fa-file-arrow-down"></i>
+                        Télécharger {{ $event->recap_document_name ?? 'le document' }}
+                    </a>
+                @endif
+            </div>
+        </section>
+    @endif
 </div>

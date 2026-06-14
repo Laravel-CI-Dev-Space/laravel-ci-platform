@@ -11,6 +11,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class CommentService
 {
+    public function __construct(
+        private readonly MentionService $mentionService,
+    ) {}
+
     /**
      * Crée un commentaire sur une question ou réponse.
      */
@@ -25,6 +29,8 @@ class CommentService
         ]);
 
         $commentable->increment('comments_count');
+
+        $this->mentionService->processMentions($comment->body, $user, $comment);
 
         return $comment;
     }

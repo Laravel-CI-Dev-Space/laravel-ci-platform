@@ -1867,3 +1867,112 @@ html.reveal-ready .reveal.in { opacity: 1; transform: none; }
         font-size: 0.82rem;
     }
 }
+
+/* ================================ */
+/* MENTIONS */
+/* ================================ */
+
+.mention {
+    color: #FF6600;
+    background: #FFF5EE;
+    padding: 1px 4px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.mention:hover {
+    background: #FFE5D4;
+    color: #FF6600;
+}
+
+/* ================================ */
+/* EVENT RECAP */
+/* ================================ */
+
+.recap-content {
+    line-height: 1.7;
+}
+
+.recap-content img {
+    max-width: 100%;
+    border-radius: 8px;
+}
+
+.recap-photo {
+    overflow: hidden;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.recap-photo img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.recap-photo:hover img {
+    transform: scale(1.05);
+}
+
+/* ================================ */
+/* RECAP LIGHTBOX */
+/* ================================ */
+
+.recap-lightbox-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.recap-lightbox-img {
+    max-width: 90vw;
+    max-height: 85vh;
+    border-radius: 6px;
+}
+
+.recap-lightbox-close,
+.recap-lightbox-prev,
+.recap-lightbox-next {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.recap-lightbox-close:hover,
+.recap-lightbox-prev:hover,
+.recap-lightbox-next:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.recap-lightbox-close {
+    top: 20px;
+    right: 20px;
+}
+
+.recap-lightbox-prev {
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.recap-lightbox-next {
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}

@@ -7,18 +7,24 @@ use App\Mail\ArticlePublishedMail;
 use App\Mail\CompanyAccessMail;
 use App\Mail\CompanyRegistrationRejectedMail;
 use App\Mail\EventConfirmationMail;
+use App\Mail\EventRecapPublishedMail;
 use App\Mail\EventReminderMail;
 use App\Mail\JobAlertMail;
+use App\Mail\MentionMail;
 use App\Mail\NewAnswerMail;
 use App\Mail\NewJobApplicationMail;
 use App\Mail\WelcomeMail;
 use App\Models\Answer;
 use App\Models\Article;
+use App\Models\Comment;
 use App\Models\CompanyAccount;
 use App\Models\CompanyRegistrationRequest;
+use App\Models\Event;
 use App\Models\EventRegistration;
 use App\Models\JobApplication;
+use App\Models\Question;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -151,6 +157,38 @@ class NotificationService
     }
 
     /**
+     * Notifie un utilisateur qu'il a été mentionné via @username.
+     */
+    public function sendMention(User $mentionedUser, User $author, Model $source): void
+    {
+        if (! $this->userWantsNotification($mentionedUser, 'mention')) {
+            return;
+        }
+
+        $this->sendMail($mentionedUser->email, new MentionMail($mentionedUser, $author, $source));
+
+        $this->createInAppNotification($mentionedUser, 'mention', $this->buildMentionContext($author, $source));
+    }
+
+    /**
+     * Notifie un participant que le récapitulatif d'un événement est disponible.
+     */
+    public function sendEventRecapPublished(User $user, Event $event): void
+    {
+        if (! $this->userWantsNotification($user, 'event_recap')) {
+            return;
+        }
+
+        $this->sendMail($user->email, new EventRecapPublishedMail($user, $event));
+
+        $this->createInAppNotification($user, 'event_recap', [
+            'message' => "Le récapitulatif de \"{$event->title}\" est disponible !",
+            'url'     => route('events.show', $event->slug) . '#recap',
+            'icon'    => 'fa-solid fa-images',
+        ]);
+    }
+
+    /**
      * Notifie les admins d'une nouvelle demande entreprise.
      */
     public function sendCompanyRegistrationRequest(CompanyRegistrationRequest $request): void
@@ -211,6 +249,50 @@ class NotificationService
         } catch (\Exception $e) {
             Log::error("Notification in-app échouée : {$e->getMessage()}");
         }
+    }
+
+    /**
+     * Construit le contenu de la notification in-app pour une mention.
+     */
+    private function buildMentionContext(User $author, Model $source): array
+    {
+        return match (true) {
+            $source instanceof Question => [
+                'message' => "{$author->name} vous a mentionné dans la question « {$source->title} »",
+                'url'     => route('forum.show', $source->slug),
+                'icon'    => 'fa-solid fa-at',
+            ],
+            $source instanceof Answer => [
+                'message' => "{$author->name} vous a mentionné dans une réponse à « {$source->question->title} »",
+                'url'     => route('forum.show', $source->question->slug) . '#answer-' . $source->id,
+                'icon'    => 'fa-solid fa-at',
+            ],
+            $source instanceof Comment => [
+                'message' => "{$author->name} vous a mentionné dans un commentaire",
+                'url'     => $this->resolveCommentUrl($source),
+                'icon'    => 'fa-solid fa-at',
+            ],
+            default => [
+                'message' => "{$author->name} vous a mentionné",
+                'url'     => route('home'),
+                'icon'    => 'fa-solid fa-at',
+            ],
+        };
+    }
+
+    /**
+     * Résout l'URL vers le contenu auquel un commentaire appartient.
+     */
+    public function resolveCommentUrl(Comment $comment): string
+    {
+        $commentable = $comment->commentable;
+
+        return match (true) {
+            $commentable instanceof Question => route('forum.show', $commentable->slug) . '#comment-' . $comment->id,
+            $commentable instanceof Answer   => route('forum.show', $commentable->question->slug) . '#comment-' . $comment->id,
+            $commentable instanceof Article  => route('blog.show', $commentable->slug) . '#comment-' . $comment->id,
+            default                          => route('home'),
+        };
     }
 
     /**
