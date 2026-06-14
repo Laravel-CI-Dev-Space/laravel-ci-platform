@@ -25,13 +25,20 @@ class SiteSetting extends Model
         return $value ?? $default;
     }
 
-    /** Récupère tous les paramètres d'un groupe (mis en cache). */
+    /**
+     * Récupère tous les paramètres d'un groupe (mis en cache).
+     * Le résultat est mis en cache sous forme de tableau (et non de
+     * Collection de modèles) pour éviter les soucis de unserialize()
+     * d'objets selon le driver de cache.
+     */
     public static function getGroup(string $group): Collection
     {
-        return Cache::rememberForever(
+        $rows = Cache::rememberForever(
             "site_setting_group:{$group}",
-            fn () => static::where('group', $group)->orderBy('order')->get()
+            fn () => static::where('group', $group)->orderBy('order')->get()->toArray()
         );
+
+        return static::hydrate($rows);
     }
 
     /** Met à jour ou crée un paramètre par clé et invalide son cache. */
