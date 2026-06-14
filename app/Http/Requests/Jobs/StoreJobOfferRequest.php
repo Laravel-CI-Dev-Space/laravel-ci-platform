@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Jobs;
 
+use App\Enums\JobContractType;
+use App\Enums\JobLevel;
 use App\Enums\UserPermission;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreJobOfferRequest extends FormRequest
 {
@@ -23,8 +26,8 @@ class StoreJobOfferRequest extends FormRequest
         return [
             'title'          => ['required', 'string', 'min:5', 'max:200'],
             'description'    => ['required', 'string', 'min:100'],
-            'contract_type'  => ['required', 'in:cdi,cdd,freelance,internship,apprenticeship'],
-            'level'          => ['required', 'in:junior,intermediate,senior,lead,any'],
+            'contract_type'  => ['required', Rule::enum(JobContractType::class)],
+            'level'          => ['required', Rule::enum(JobLevel::class)],
             'location'       => ['nullable', 'string', 'max:150'],
             'country'        => ['nullable', 'string', 'max:100'],
             'is_remote'      => ['boolean'],

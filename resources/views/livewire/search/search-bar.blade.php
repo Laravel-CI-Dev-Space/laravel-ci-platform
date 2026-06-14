@@ -62,7 +62,7 @@
                             <div class="result-content">
                                 <div class="result-title">{{ Str::limit($article->title, 60) }}</div>
                                 <div class="result-meta">
-                                    {{ \App\Models\Article::$levelLabels[$article->level] ?? $article->level }} ·
+                                    {{ $article->level->label() }} ·
                                     {{ $article->author?->name }}
                                 </div>
                             </div>
@@ -87,7 +87,7 @@
                                 <div class="result-title">{{ Str::limit($job->title, 60) }}</div>
                                 <div class="result-meta">
                                     {{ $job->company?->name }} ·
-                                    {{ strtoupper($job->contract_type) }}
+                                    {{ $job->contract_type->label() }}
                                 </div>
                             </div>
                         </button>

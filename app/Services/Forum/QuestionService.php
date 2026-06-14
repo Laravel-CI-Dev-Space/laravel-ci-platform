@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Forum;
 
+use App\Enums\QuestionStatus;
 use App\Models\Question;
 use App\Models\Tag;
 use App\Models\User;
@@ -108,7 +109,7 @@ class QuestionService
      */
     public function toggleVisibility(Question $question): void
     {
-        $newStatus = $question->status === 'published' ? 'hidden' : 'published';
+        $newStatus = $question->status === QuestionStatus::Published ? QuestionStatus::Hidden : QuestionStatus::Published;
         $question->update(['status' => $newStatus]);
     }
 

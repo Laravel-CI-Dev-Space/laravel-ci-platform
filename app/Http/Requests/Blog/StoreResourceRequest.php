@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Blog;
 
+use App\Enums\ResourceType;
 use App\Enums\UserPermission;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreResourceRequest extends FormRequest
 {
@@ -26,7 +28,7 @@ class StoreResourceRequest extends FormRequest
         return [
             'title'       => ['required', 'string', 'min:5', 'max:200'],
             'description' => ['nullable', 'string', 'max:1000'],
-            'type'        => ['required', 'in:boilerplate,cheatsheet,guide,pdf,other'],
+            'type'        => ['required', Rule::enum(ResourceType::class)],
             'file'        => ['required', 'file', 'mimes:pdf,doc,docx,zip,txt,md', 'max:10240'],
             'is_public'   => ['boolean'],
         ];

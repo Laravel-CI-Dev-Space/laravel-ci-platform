@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\EventRegistrationStatus;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,6 +20,7 @@ class EventRegistration extends Model
     protected function casts(): array
     {
         return [
+            'status'           => EventRegistrationStatus::class,
             'reminder_sent'    => 'boolean',
             'registered_at'    => 'datetime',
             'cancelled_at'     => 'datetime',
@@ -39,22 +41,22 @@ class EventRegistration extends Model
 
     public function isConfirmed(): bool
     {
-        return $this->status === 'confirmed';
+        return $this->status === EventRegistrationStatus::Confirmed;
     }
 
     public function isWaitlisted(): bool
     {
-        return $this->status === 'waitlisted';
+        return $this->status === EventRegistrationStatus::Waitlisted;
     }
 
     public function isCancelled(): bool
     {
-        return $this->status === 'cancelled';
+        return $this->status === EventRegistrationStatus::Cancelled;
     }
 
     public function isAttended(): bool
     {
-        return $this->status === 'attended';
+        return $this->status === EventRegistrationStatus::Attended;
     }
 
     public function isPaid(): bool

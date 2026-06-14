@@ -6,10 +6,9 @@ namespace Tests\Unit\Services;
 
 use App\Models\User;
 use App\Services\Forum\MentionService;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-uses(RefreshDatabase::class, TestCase::class);
+uses(TestCase::class);
 
 beforeEach(function () {
     $this->mentionService = app(MentionService::class);

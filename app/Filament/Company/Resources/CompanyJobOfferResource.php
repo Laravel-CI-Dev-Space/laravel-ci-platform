@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Filament\Company\Resources;
 
+use App\Enums\JobContractType;
+use App\Enums\JobLevel;
+use App\Enums\JobOfferStatus;
 use App\Filament\Company\Resources\CompanyJobOfferResource\Pages\CreateCompanyJobOffer;
 use App\Filament\Company\Resources\CompanyJobOfferResource\Pages\ListCompanyJobOffers;
 use App\Filament\Company\Resources\CompanyJobOfferResource\Pages\ViewCompanyJobOffer;
@@ -68,12 +71,12 @@ class CompanyJobOfferResource extends Resource
 
                     Select::make('contract_type')
                         ->label('Type de contrat')
-                        ->options(['cdi' => 'CDI', 'cdd' => 'CDD', 'freelance' => 'Freelance', 'internship' => 'Stage', 'apprenticeship' => 'Alternance'])
+                        ->options(JobContractType::options())
                         ->required(),
 
                     Select::make('level')
                         ->label('Niveau')
-                        ->options(['junior' => 'Junior', 'intermediate' => 'Intermédiaire', 'senior' => 'Senior', 'lead' => 'Lead', 'any' => 'Tous niveaux'])
+                        ->options(JobLevel::options())
                         ->required(),
 
                     TextInput::make('location')->label('Ville')->nullable(),
@@ -153,29 +156,15 @@ class CompanyJobOfferResource extends Resource
                     ->label('Contrat')
                     ->badge()
                     ->color('gray')
-                    ->formatStateUsing(fn ($state) => match ($state) {
-                        'cdi'        => 'CDI', 'cdd' => 'CDD', 'freelance' => 'Freelance',
-                        'internship' => 'Stage', 'apprenticeship' => 'Alternance', default => $state,
-                    }),
+                    ->formatStateUsing(fn (JobContractType $state): string => $state->label()),
 
                 TextColumn::make('status')
                     ->label('Statut')
                     ->badge()
-                    ->color(fn ($state) => match ($state) {
-                        'active'   => 'success',
-                        'pending'  => 'warning',
-                        'expired'  => 'danger',
-                        'filled'   => 'info',
-                        'rejected' => 'danger',
-                        default    => 'gray',
-                    })
-                    ->formatStateUsing(fn ($state) => match ($state) {
-                        'active'   => 'Active',
-                        'pending'  => 'En validation',
-                        'expired'  => 'Expirée',
-                        'filled'   => 'Pourvue',
-                        'rejected' => 'Refusée',
-                        default    => ucfirst($state),
+                    ->color(fn (JobOfferStatus $state): string => $state->color())
+                    ->formatStateUsing(fn (JobOfferStatus $state): string => match ($state) {
+                        JobOfferStatus::Pending => 'En validation',
+                        default                 => $state->label(),
                     }),
 
                 IconColumn::make('is_remote')->label('Remote')->boolean(),
@@ -202,13 +191,7 @@ class CompanyJobOfferResource extends Resource
             ->filters([
                 SelectFilter::make('status')
                     ->label('Statut')
-                    ->options([
-                        'active'   => 'Active',
-                        'pending'  => 'En validation',
-                        'expired'  => 'Expirée',
-                        'filled'   => 'Pourvue',
-                        'rejected' => 'Refusée',
-                    ]),
+                    ->options(JobOfferStatus::options()),
             ])
 
             ->actions([
@@ -217,7 +200,7 @@ class CompanyJobOfferResource extends Resource
                     ->label('Marquer comme pourvue')
                     ->icon('heroicon-o-check-circle')
                     ->color('success')
-                    ->visible(fn (JobOffer $r): bool => $r->status === 'active')
+                    ->visible(fn (JobOffer $r): bool => $r->status === JobOfferStatus::Active)
                     ->requiresConfirmation()
                     ->action(function (JobOffer $record): void {
                         $record->update(['status' => 'filled']);

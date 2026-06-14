@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\EventStatus;
+use App\Enums\EventType;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -43,6 +45,8 @@ class Event extends Model
     protected function casts(): array
     {
         return [
+            'type'                       => EventType::class,
+            'status'                     => EventStatus::class,
             'starts_at'                  => 'datetime',
             'ends_at'                    => 'datetime',
             'promo_expires_at'           => 'datetime',

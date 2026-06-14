@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Events\Schemas;
 
+use App\Enums\EventStatus;
+use App\Enums\EventType;
 use App\Models\Event;
 use Filament\Actions\Action;
 use Filament\Forms\Components\DateTimePicker;
@@ -51,26 +53,15 @@ class EventForm
 
                     Select::make('type')
                         ->label('Type')
-                        ->options([
-                            'meetup'     => 'Meetup',
-                            'webinar'    => 'Webinaire',
-                            'hackathon'  => 'Hackathon',
-                            'conference' => 'Conférence',
-                            'workshop'   => 'Workshop',
-                        ])
+                        ->options(EventType::options())
                         ->required()
-                        ->default('meetup'),
+                        ->default(EventType::Meetup->value),
 
                     Select::make('status')
                         ->label('Statut')
-                        ->options([
-                            'draft'     => 'Brouillon',
-                            'published' => 'Publié',
-                            'cancelled' => 'Annulé',
-                            'completed' => 'Terminé',
-                        ])
+                        ->options(EventStatus::options())
                         ->required()
-                        ->default('draft'),
+                        ->default(EventStatus::Draft->value),
                 ]),
 
             Section::make('Date et lieu')

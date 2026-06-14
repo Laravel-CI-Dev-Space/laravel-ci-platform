@@ -164,21 +164,15 @@
       <div class="row g-4">
         @forelse($articles as $article)
         @php
-          $levelCssMap = [
-            'beginner'     => ['class' => 'lv-beginner',     'badge' => 'badge-green',  'dot' => 'var(--green)',            'label' => 'Beginner'],
-            'intermediate' => ['class' => 'lv-intermediate', 'badge' => 'badge-orange', 'dot' => 'var(--level-intermediate)', 'label' => 'Intermediate'],
-            'advanced'     => ['class' => 'lv-advanced',     'badge' => '',             'dot' => 'var(--level-advanced)',    'label' => 'Advanced'],
-          ];
-          $lv       = $levelCssMap[$article->level] ?? $levelCssMap['beginner'];
           $wordCount = str_word_count(strip_tags($article->body ?? ''));
           $readTime  = max(1, (int) round($wordCount / 200));
         @endphp
         <div class="col-md-6 col-lg-4 reveal">
           <article class="card-soft article-card">
-            <div class="level-banner {{ $lv['class'] }}"></div>
+            <div class="level-banner {{ $article->level->bannerClass() }}"></div>
             <div class="card-pad">
-              <span class="badge-pill {{ $lv['badge'] }}" @if(!$lv['badge']) style="background:#fdeaec;color:var(--level-advanced)" @endif>
-                <span class="lv-dot" style="background:{{ $lv['dot'] }}"></span> {{ $lv['label'] }}
+              <span class="badge-pill" style="background:{{ $article->level->badgeBackground() }};color:{{ $article->level->accentColor() }}">
+                <span class="lv-dot" style="background:{{ $article->level->accentColor() }}"></span> {{ $article->level->label() }}
               </span>
               <h3 class="art-title">
                 <a href="{{ route('blog.show', $article->slug) }}">{{ $article->title }}</a>
@@ -217,12 +211,6 @@
       <div class="row g-4">
         @forelse($events as $event)
         @php
-          $typeMap = [
-            'meetup'    => ['class' => 'ev-meetup',    'badge' => 'badge-orange',                             'icon' => 'fa-solid fa-people-roof',   'label' => 'Meetup'],
-            'webinar'   => ['class' => 'ev-webinar',   'badge' => '',                                         'icon' => 'fa-solid fa-video',         'label' => 'Webinar'],
-            'hackathon' => ['class' => 'ev-hackathon', 'badge' => '',                                         'icon' => 'fa-solid fa-laptop-code',   'label' => 'Hackathon'],
-          ];
-          $ev          = $typeMap[$event->type] ?? $typeMap['meetup'];
           $spotsUsed   = $event->registrations_count ?? 0;
           $capacity    = $event->capacity;
           $progress    = $capacity ? min(100, round($spotsUsed / $capacity * 100)) : 0;
@@ -230,13 +218,10 @@
         @endphp
         <div class="col-md-6 col-lg-4 reveal">
           <article class="card-soft event-card">
-            <div class="event-banner {{ $ev['class'] }}"></div>
+            <div class="event-banner {{ $event->type->bannerClass() }}"></div>
             <div class="card-pad">
-              <span class="badge-pill {{ $ev['badge'] }}"
-                @if($event->type === 'webinar') style="background:#e7ebff;color:#4361ee"
-                @elseif($event->type === 'hackathon') style="background:#f1e7ff;color:#7209b7"
-                @endif>
-                <i class="{{ $ev['icon'] }}"></i> {{ $ev['label'] }}
+              <span class="badge-pill" style="background:{{ $event->type->background() }};color:{{ $event->type->color() }}">
+                <i class="{{ $event->type->icon() }}"></i> {{ $event->type->label() }}
               </span>
               <h3 class="art-title">{{ $event->title }}</h3>
               <div class="d-flex flex-column gap-2 my-3" style="font-size:.88rem;color:var(--muted)">

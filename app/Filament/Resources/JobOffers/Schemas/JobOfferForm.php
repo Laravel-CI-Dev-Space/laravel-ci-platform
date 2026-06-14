@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\JobOffers\Schemas;
 
+use App\Enums\JobContractType;
+use App\Enums\JobLevel;
+use App\Enums\JobOfferStatus;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -27,17 +30,17 @@ class JobOfferForm
 
                     Select::make('contract_type')
                         ->label('Type de contrat')
-                        ->options(['cdi' => 'CDI', 'cdd' => 'CDD', 'freelance' => 'Freelance', 'internship' => 'Stage', 'apprenticeship' => 'Alternance'])
+                        ->options(JobContractType::options())
                         ->required(),
 
                     Select::make('level')
                         ->label('Niveau')
-                        ->options(['junior' => 'Junior', 'intermediate' => 'Intermédiaire', 'senior' => 'Senior', 'lead' => 'Lead', 'any' => 'Tous niveaux'])
+                        ->options(JobLevel::options())
                         ->required(),
 
                     Select::make('status')
                         ->label('Statut')
-                        ->options(['draft' => 'Brouillon', 'pending' => 'En attente', 'active' => 'Active', 'expired' => 'Expirée', 'filled' => 'Pourvue', 'rejected' => 'Refusée'])
+                        ->options(JobOfferStatus::options())
                         ->required(),
 
                     Toggle::make('is_remote')->label('Télétravail'),

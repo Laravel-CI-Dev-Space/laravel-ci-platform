@@ -133,15 +133,15 @@
                 <a href="{{ route('blog.show', $article->slug) }}" class="fw-semibold text-dark text-decoration-none d-block mb-1"
                    style="font-size:.9rem">{{ Str::limit($article->title, 55) }}</a>
                 <div class="text-secondary" style="font-size:.78rem">
-                  {{ ucfirst($article->level ?? 'beginner') }}
+                  {{ $article->level->label() }}
                   · {{ $article->created_at->diffForHumans() }}
                 </div>
               </div>
               @php
                 $badge = match($article->status) {
-                  'published' => ['bg-success-subtle text-success', 'Published'],
-                  'pending'   => ['bg-warning-subtle text-warning', 'Pending'],
-                  'rejected'  => ['bg-danger-subtle text-danger', 'Rejected'],
+                  \App\Enums\ArticleStatus::Published => ['bg-success-subtle text-success', 'Published'],
+                  \App\Enums\ArticleStatus::Pending   => ['bg-warning-subtle text-warning', 'Pending'],
+                  \App\Enums\ArticleStatus::Rejected  => ['bg-danger-subtle text-danger', 'Rejected'],
                   default     => ['bg-secondary-subtle text-secondary', 'Draft'],
                 };
               @endphp
@@ -217,12 +217,11 @@
               </div>
               @php
                 $appBadge = match($application->status) {
-                  'pending'     => ['bg-warning-subtle text-warning', 'Pending'],
-                  'viewed'      => ['bg-info-subtle text-info', 'Viewed'],
-                  'shortlisted' => ['bg-primary-subtle text-primary', 'Shortlisted'],
-                  'accepted'    => ['bg-success-subtle text-success', 'Accepted'],
-                  'rejected'    => ['bg-danger-subtle text-danger', 'Rejected'],
-                  default       => ['bg-secondary-subtle text-secondary', ucfirst($application->status)],
+                  \App\Enums\JobApplicationStatus::Pending     => ['bg-warning-subtle text-warning', 'Pending'],
+                  \App\Enums\JobApplicationStatus::Viewed      => ['bg-info-subtle text-info', 'Viewed'],
+                  \App\Enums\JobApplicationStatus::Shortlisted => ['bg-primary-subtle text-primary', 'Shortlisted'],
+                  \App\Enums\JobApplicationStatus::Accepted    => ['bg-success-subtle text-success', 'Accepted'],
+                  \App\Enums\JobApplicationStatus::Rejected    => ['bg-danger-subtle text-danger', 'Rejected'],
                 };
               @endphp
               <span class="badge {{ $appBadge[0] }}">{{ $appBadge[1] }}</span>

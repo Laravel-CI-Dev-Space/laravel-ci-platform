@@ -62,7 +62,7 @@
                 </td>
                 <td>{{ $article->author->name ?? 'Unknown' }}</td>
                 <td>
-                  <span class="badge-pill {{ match(strtolower($article->level ?? '')) { 'intermediate' => 'badge-orange', 'advanced' => '' , default => 'badge-green' } }}">{{ ucfirst($article->level ?? 'Beginner') }}</span>
+                  <span class="badge-pill" style="background:{{ $article->level->badgeBackground() }};color:{{ $article->level->accentColor() }}">{{ $article->level->label() }}</span>
                 </td>
                 <td>
                   <span class="badge {{ $article->is_published ? 'bg-success-subtle text-success' : 'bg-warning-subtle text-warning' }}">{{ $article->is_published ? 'Published' : 'Draft' }}</span>

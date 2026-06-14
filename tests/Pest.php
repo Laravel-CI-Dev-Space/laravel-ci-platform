@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 /*
@@ -14,10 +13,14 @@ use Tests\TestCase;
 | case class. By default, that class is "PHPUnit\Framework\TestCase". Of course, you may
 | need to change it using the "pest()" function to bind different classes or traits.
 |
+| Tests\TestCase already applies RefreshDatabase and seeds essential
+| reference data (roles/permissions, site settings, vitrine config, ...)
+| in its setUp(), so every test extending it starts from a working
+| baseline without needing to repeat ->use(RefreshDatabase::class).
+|
 */
 
 pest()->extend(TestCase::class)
-    ->use(RefreshDatabase::class)
     ->in('Feature');
 
 /*

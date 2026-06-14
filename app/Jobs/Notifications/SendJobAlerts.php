@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Jobs\Notifications;
 
+use App\Enums\JobLevel;
 use App\Enums\UserRole;
 use App\Models\JobOffer;
 use App\Models\SiteSetting;
@@ -25,11 +26,11 @@ class SendJobAlerts implements ShouldQueue
      * Correspondance entre le niveau Laravel d'un membre et les niveaux d'offres pertinents.
      */
     private const LEVEL_MAP = [
-        'debutant'      => ['junior'],
-        'intermediaire' => ['junior', 'intermediate'],
-        'avance'        => ['intermediate', 'senior'],
-        'expert'        => ['senior', 'lead'],
-        'maitre'        => ['senior', 'lead'],
+        'debutant'      => [JobLevel::Junior],
+        'intermediaire' => [JobLevel::Junior, JobLevel::Intermediate],
+        'avance'        => [JobLevel::Intermediate, JobLevel::Senior],
+        'expert'        => [JobLevel::Senior, JobLevel::Lead],
+        'maitre'        => [JobLevel::Senior, JobLevel::Lead],
     ];
 
     /**
@@ -105,7 +106,7 @@ class SendJobAlerts implements ShouldQueue
             ->all();
 
         return $offers->filter(function (JobOffer $offer) use ($levels, $stack) {
-            if ($offer->level === 'any' || in_array($offer->level, $levels, true)) {
+            if ($offer->level === JobLevel::Any || in_array($offer->level, $levels, true)) {
                 return true;
             }
 

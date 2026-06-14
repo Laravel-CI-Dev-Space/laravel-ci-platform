@@ -44,8 +44,8 @@
                   </form>
                 </div>
                 <div class="d-flex flex-wrap gap-2 mt-2">
-                  <span class="badge-pill badge-soft">{{ $job->contract_type }}</span>
-                  <span class="badge-pill badge-soft">{{ $job->level }}</span>
+                  <span class="badge-pill badge-soft">{{ $job->contract_type->label() }}</span>
+                  <span class="badge-pill badge-soft">{{ $job->level->label() }}</span>
                   @foreach(($job->tags ?? []) as $tag)
                     <span class="tag">{{ $tag }}</span>
                   @endforeach

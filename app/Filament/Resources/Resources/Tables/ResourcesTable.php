@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Resources\Tables;
 
+use App\Enums\ResourceType;
 use App\Models\Resource as ResourceModel;
 use App\Services\Blog\ResourceService;
 use Filament\Actions\DeleteAction;
@@ -27,20 +28,8 @@ class ResourcesTable
                 TextColumn::make('type')
                     ->label('Type')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'pdf'         => 'danger',
-                        'boilerplate' => 'warning',
-                        'guide'       => 'info',
-                        'cheatsheet'  => 'success',
-                        default       => 'gray',
-                    })
-                    ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'boilerplate' => 'Boilerplate',
-                        'cheatsheet'  => 'Cheatsheet',
-                        'guide'       => 'Guide',
-                        'pdf'         => 'PDF',
-                        default       => 'Autre',
-                    }),
+                    ->color(fn (ResourceType $state): string => $state->color())
+                    ->formatStateUsing(fn (ResourceType $state): string => $state->label()),
 
                 TextColumn::make('user.name')
                     ->label('Déposé par')

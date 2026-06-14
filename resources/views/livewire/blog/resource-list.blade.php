@@ -53,18 +53,18 @@
             @forelse ($resources as $resource)
                 @php
                     $icon = match ($resource->type) {
-                        'pdf'         => 'fa-file-pdf',
-                        'boilerplate' => 'fa-file-zipper',
-                        'guide'       => 'fa-book-open',
-                        'cheatsheet'  => 'fa-file-lines',
-                        default       => 'fa-file',
+                        \App\Enums\ResourceType::Pdf         => 'fa-file-pdf',
+                        \App\Enums\ResourceType::Boilerplate => 'fa-file-zipper',
+                        \App\Enums\ResourceType::Guide       => 'fa-book-open',
+                        \App\Enums\ResourceType::Cheatsheet  => 'fa-file-lines',
+                        default                               => 'fa-file',
                     };
                     $iconColor = match ($resource->type) {
-                        'pdf'         => '#e74c3c',
-                        'boilerplate' => '#f39c12',
-                        'guide'       => '#3498db',
-                        'cheatsheet'  => '#27ae60',
-                        default       => 'var(--muted)',
+                        \App\Enums\ResourceType::Pdf         => '#e74c3c',
+                        \App\Enums\ResourceType::Boilerplate => '#f39c12',
+                        \App\Enums\ResourceType::Guide       => '#3498db',
+                        \App\Enums\ResourceType::Cheatsheet  => '#27ae60',
+                        default                               => 'var(--muted)',
                     };
                 @endphp
                 <div class="resource-card mb-3 reveal">
@@ -83,7 +83,7 @@
                         <div class="d-flex align-items-center gap-3" style="font-size:.82rem;color:var(--muted)">
                             <span>
                                 <i class="fa-solid fa-tag me-1"></i>
-                                {{ ['boilerplate' => 'Boilerplate', 'cheatsheet' => 'Cheatsheet', 'guide' => 'Guide', 'pdf' => 'PDF', 'other' => 'Autre'][$resource->type] ?? $resource->type }}
+                                {{ $resource->type->label() }}
                             </span>
                             <span>
                                 <i class="fa-solid fa-weight-hanging me-1"></i>

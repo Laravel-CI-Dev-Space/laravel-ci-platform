@@ -206,19 +206,8 @@
 
                                     {{-- Tags --}}
                                     <div class="d-flex flex-wrap gap-2 my-2">
-                                        @php
-                                        $contractLabel = match($offer->contract_type) {
-                                            'cdi' => 'CDI', 'cdd' => 'CDD', 'freelance' => 'Freelance',
-                                            'internship' => 'Stage', 'apprenticeship' => 'Alternance',
-                                            default => ucfirst($offer->contract_type),
-                                        };
-                                        $levelLabel = match($offer->level) {
-                                            'junior' => 'Junior', 'intermediate' => 'Intermédiaire',
-                                            'senior' => 'Senior', 'lead' => 'Lead', default => 'Tous niveaux',
-                                        };
-                                        @endphp
-                                        <span class="badge-pill badge-soft">{{ $contractLabel }}</span>
-                                        <span class="badge-pill badge-soft">{{ $levelLabel }}</span>
+                                        <span class="badge-pill badge-soft">{{ $offer->contract_type->label() }}</span>
+                                        <span class="badge-pill badge-soft">{{ $offer->level->label() }}</span>
                                         @foreach ($offer->skills->take(4) as $skill)
                                             <span class="tag">{{ $skill->name }}</span>
                                         @endforeach

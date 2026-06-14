@@ -1,13 +1,5 @@
 <div>
     @php
-        $typeConfig = match($event->type) {
-            'meetup'     => ['label' => 'Meetup',      'icon' => 'fa-solid fa-people-roof',       'bg' => '#fff4e5', 'color' => '#ea580c'],
-            'webinar'    => ['label' => 'Webinaire',   'icon' => 'fa-solid fa-video',             'bg' => '#e7ebff', 'color' => '#4361ee'],
-            'hackathon'  => ['label' => 'Hackathon',   'icon' => 'fa-solid fa-laptop-code',       'bg' => '#f1e7ff', 'color' => '#7209b7'],
-            'conference' => ['label' => 'Conférence',  'icon' => 'fa-solid fa-microphone',        'bg' => '#e7fff1', 'color' => '#2d9b4e'],
-            'workshop'   => ['label' => 'Workshop',    'icon' => 'fa-solid fa-screwdriver-wrench','bg' => '#e7f7ff', 'color' => '#0891b2'],
-            default      => ['label' => ucfirst($event->type), 'icon' => 'fa-solid fa-calendar',  'bg' => '#f1f5f9', 'color' => '#64748b'],
-        };
         $spotsLeft   = $event->spotsLeft();
         $capacity    = $event->capacity;
         $pct         = ($capacity && $capacity > 0)
@@ -28,8 +20,8 @@
                         <span>{{ $event->title }}</span>
                     </div>
                     <span class="badge-pill mb-2"
-                          style="background:{{ $typeConfig['bg'] }};color:{{ $typeConfig['color'] }}">
-                        <i class="{{ $typeConfig['icon'] }}"></i> {{ $typeConfig['label'] }}
+                          style="background:{{ $event->type->background() }};color:{{ $event->type->color() }}">
+                        <i class="{{ $event->type->icon() }}"></i> {{ $event->type->label() }}
                     </span>
                     <h1 class="my-3" style="font-size:var(--fs-h1)">{{ $event->title }}</h1>
                     <div class="d-flex flex-wrap gap-3" style="color:var(--muted);font-size:.95rem">
@@ -140,10 +132,10 @@
                             <div class="sidebar-title">Détails</div>
 
                             <div class="info-row">
-                                <div class="ic"><i class="{{ $typeConfig['icon'] }}"></i></div>
+                                <div class="ic"><i class="{{ $event->type->icon() }}"></i></div>
                                 <div>
                                     <div class="lbl">Type</div>
-                                    <div class="val">{{ $typeConfig['label'] }}</div>
+                                    <div class="val">{{ $event->type->label() }}</div>
                                 </div>
                             </div>
 

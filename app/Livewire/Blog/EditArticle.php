@@ -42,7 +42,7 @@ class EditArticle extends Component
         $this->title        = $article->title;
         $this->excerpt      = $article->excerpt ?? '';
         $this->body         = $article->body;
-        $this->level        = $article->level;
+        $this->level        = $article->level->value;
         $this->selectedTags = $article->tags->pluck('id')->map(fn ($id) => (int) $id)->toArray();
     }
 

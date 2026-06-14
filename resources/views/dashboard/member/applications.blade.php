@@ -57,26 +57,23 @@
         @php
             $offer = $application->jobOffer;
             $statusMap = [
-                'pending'     => ['bg-secondary-subtle text-secondary', 'ti-clock',        'En attente'],
-                'viewed'      => ['bg-info-subtle text-info',           'ti-eye',          'Vue'],
-                'shortlisted' => ['bg-primary-subtle text-primary',     'ti-star',         'Présélectionné'],
-                'accepted'    => ['bg-success-subtle text-success',     'ti-circle-check', 'Acceptée'],
-                'rejected'    => ['bg-danger-subtle text-danger',       'ti-x',            'Refusée'],
+                \App\Enums\JobApplicationStatus::Pending->value     => ['bg-secondary-subtle text-secondary', 'ti-clock',        'En attente'],
+                \App\Enums\JobApplicationStatus::Viewed->value      => ['bg-info-subtle text-info',           'ti-eye',          'Vue'],
+                \App\Enums\JobApplicationStatus::Shortlisted->value => ['bg-primary-subtle text-primary',     'ti-star',         'Présélectionné'],
+                \App\Enums\JobApplicationStatus::Accepted->value    => ['bg-success-subtle text-success',     'ti-circle-check', 'Acceptée'],
+                \App\Enums\JobApplicationStatus::Rejected->value    => ['bg-danger-subtle text-danger',       'ti-x',            'Refusée'],
             ];
-            [$sBadge, $sIcon, $sLabel] = $statusMap[$application->status] ?? $statusMap['pending'];
+            [$sBadge, $sIcon, $sLabel] = $statusMap[$application->status->value] ?? $statusMap['pending'];
 
-            $contractLabel = match($offer->contract_type ?? '') {
-                'cdi' => 'CDI', 'cdd' => 'CDD', 'freelance' => 'Freelance',
-                'internship' => 'Stage', 'apprenticeship' => 'Alternance', default => '—',
-            };
+            $contractLabel = $offer->contract_type?->label() ?? '—';
         @endphp
         <div class="col-12">
             <div class="card border-0 shadow-sm overflow-hidden"
                  style="border-left:4px solid
-                    @if ($application->status === 'accepted') #2ecc71
-                    @elseif ($application->status === 'rejected') #e74c3c
-                    @elseif ($application->status === 'shortlisted') #3498db
-                    @elseif ($application->status === 'viewed') #17a2b8
+                    @if ($application->status === \App\Enums\JobApplicationStatus::Accepted) #2ecc71
+                    @elseif ($application->status === \App\Enums\JobApplicationStatus::Rejected) #e74c3c
+                    @elseif ($application->status === \App\Enums\JobApplicationStatus::Shortlisted) #3498db
+                    @elseif ($application->status === \App\Enums\JobApplicationStatus::Viewed) #17a2b8
                     @else #adb5bd
                     @endif !important; border-radius:.75rem; transition:box-shadow .15s;"
                  onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.09)'"
@@ -96,7 +93,7 @@
                             </div>
 
                             <h6 class="fw-bold mb-1" style="font-size:.98rem">
-                                @if ($offer->status === 'active')
+                                @if ($offer->status === \App\Enums\JobOfferStatus::Active)
                                     <a href="{{ route('jobs.show', $offer->slug) }}" class="text-dark text-decoration-none">
                                         {{ $offer->title }}
                                     </a>
@@ -142,7 +139,7 @@
                             @if ($offer->salaryRange())
                                 <span style="font-size:.82rem;font-weight:600;color:#e8590c">{{ $offer->salaryRange() }}</span>
                             @endif
-                            @if ($offer->status === 'active')
+                            @if ($offer->status === \App\Enums\JobOfferStatus::Active)
                                 <a href="{{ route('jobs.show', $offer->slug) }}" class="btn btn-light btn-sm px-2" title="Voir l'offre">
                                     <i class="ti ti-external-link" style="font-size:1rem"></i>
                                 </a>

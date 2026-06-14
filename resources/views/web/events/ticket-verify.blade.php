@@ -8,7 +8,8 @@
     $guestReg  = \App\Models\GuestRegistration::where('ticket_qr_token', $token)
         ->with('event')->first();
     $registration = $memberReg ?? $guestReg;
-    $isValid = $registration && in_array($registration->status, ['confirmed', 'attended']);
+    $statusValue = $registration?->status instanceof \BackedEnum ? $registration->status->value : $registration?->status;
+    $isValid = $registration && in_array($statusValue, ['confirmed', 'attended'], true);
     $name = $memberReg ? $memberReg->user->name : ($guestReg ? $guestReg->fullName() : '—');
 @endphp
 
@@ -30,7 +31,7 @@
                  style="border:2px solid #fde68a;background:#fffbeb">
                 <i class="fa-solid fa-circle-exclamation" style="font-size:3rem;color:#d97706"></i>
                 <h2 class="mt-3 mb-1" style="color:#92400e">Ticket
-                    {{ $registration->status === 'cancelled' ? 'annulé' : 'en attente' }}
+                    {{ $statusValue === 'cancelled' ? 'annulé' : 'en attente' }}
                 </h2>
                 <p class="text-muted-2">Ce ticket ne donne pas accès à l'événement.</p>
             </div>

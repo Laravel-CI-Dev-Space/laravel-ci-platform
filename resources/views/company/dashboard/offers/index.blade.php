@@ -38,22 +38,14 @@
             @forelse ($offers as $offer)
                 @php
                 $statusBadge = match($offer->status) {
-                    'active'   => ['bg-success-subtle text-success',     'Actif'],
-                    'pending'  => ['bg-warning-subtle text-warning',     'En attente'],
-                    'draft'    => ['bg-secondary-subtle text-secondary', 'Brouillon'],
-                    'expired'  => ['bg-danger-subtle text-danger',       'Expiré'],
-                    'filled'   => ['bg-info-subtle text-info',           'Pourvu'],
-                    'rejected' => ['bg-danger-subtle text-danger',       'Refusé'],
-                    default    => ['bg-secondary-subtle text-secondary', ucfirst($offer->status)],
+                    \App\Enums\JobOfferStatus::Active   => ['bg-success-subtle text-success',     'Actif'],
+                    \App\Enums\JobOfferStatus::Pending  => ['bg-warning-subtle text-warning',     'En attente'],
+                    \App\Enums\JobOfferStatus::Draft    => ['bg-secondary-subtle text-secondary', 'Brouillon'],
+                    \App\Enums\JobOfferStatus::Expired  => ['bg-danger-subtle text-danger',       'Expiré'],
+                    \App\Enums\JobOfferStatus::Filled   => ['bg-info-subtle text-info',           'Pourvu'],
+                    \App\Enums\JobOfferStatus::Rejected => ['bg-danger-subtle text-danger',       'Refusé'],
                 };
-                $contractLabel = match($offer->contract_type) {
-                    'cdi'            => 'CDI',
-                    'cdd'            => 'CDD',
-                    'freelance'      => 'Freelance',
-                    'internship'     => 'Stage',
-                    'apprenticeship' => 'Alternance',
-                    default          => ucfirst($offer->contract_type),
-                };
+                $contractLabel = $offer->contract_type->label();
                 @endphp
                 <tr>
                     <td style="max-width:280px">

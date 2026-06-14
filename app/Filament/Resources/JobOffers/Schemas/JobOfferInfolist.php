@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\JobOffers\Schemas;
 
+use App\Enums\JobContractType;
+use App\Enums\JobLevel;
+use App\Enums\JobOfferStatus;
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
@@ -21,20 +24,12 @@ class JobOfferInfolist
                     TextEntry::make('company.name')->label('Entreprise')->placeholder('—'),
                     TextEntry::make('poster.name')->label('Publié par')->placeholder('—'),
                     TextEntry::make('contract_type')->label('Contrat')
-                        ->formatStateUsing(fn ($state) => match ($state) {
-                            'cdi' => 'CDI', 'cdd' => 'CDD', 'freelance' => 'Freelance',
-                            'internship' => 'Stage', 'apprenticeship' => 'Alternance', default => $state,
-                        }),
+                        ->formatStateUsing(fn (JobContractType $state): string => $state->label()),
                     TextEntry::make('level')->label('Niveau')
-                        ->formatStateUsing(fn ($state) => match ($state) {
-                            'junior' => 'Junior', 'intermediate' => 'Intermédiaire',
-                            'senior' => 'Senior', 'lead' => 'Lead', default => 'Tous niveaux',
-                        }),
+                        ->formatStateUsing(fn (JobLevel $state): string => $state->label()),
                     TextEntry::make('status')->label('Statut')->badge()
-                        ->color(fn ($state) => match ($state) {
-                            'active' => 'success', 'pending' => 'warning', 'expired' => 'danger',
-                            'filled' => 'info', 'rejected' => 'danger', default => 'gray',
-                        }),
+                        ->color(fn (JobOfferStatus $state): string => $state->color())
+                        ->formatStateUsing(fn (JobOfferStatus $state): string => $state->label()),
                     TextEntry::make('location')->label('Lieu')->placeholder('—'),
                     TextEntry::make('country')->label('Pays')->placeholder('—'),
                     IconEntry::make('is_remote')->label('Télétravail')->boolean(),

@@ -78,19 +78,8 @@
 
                     {{-- Skills & tags --}}
                     <div class="d-flex flex-wrap gap-2 mt-4">
-                        @php
-                        $contractLabel = match($offer->contract_type) {
-                            'cdi' => 'CDI', 'cdd' => 'CDD', 'freelance' => 'Freelance',
-                            'internship' => 'Stage', 'apprenticeship' => 'Alternance',
-                            default => ucfirst($offer->contract_type),
-                        };
-                        $levelLabel = match($offer->level) {
-                            'junior' => 'Junior', 'intermediate' => 'Intermédiaire',
-                            'senior' => 'Senior', 'lead' => 'Lead', default => 'Tous niveaux',
-                        };
-                        @endphp
-                        <span class="badge-pill badge-soft">{{ $contractLabel }}</span>
-                        <span class="badge-pill badge-soft">{{ $levelLabel }}</span>
+                        <span class="badge-pill badge-soft">{{ $offer->contract_type->label() }}</span>
+                        <span class="badge-pill badge-soft">{{ $offer->level->label() }}</span>
                         @foreach ($offer->skills as $skill)
                             <span class="tag">{{ $skill->name }}</span>
                         @endforeach
@@ -103,7 +92,7 @@
                                 <i class="fa-solid fa-circle-check fa-2x text-success mb-2"></i>
                                 <p class="mb-0 fw-semibold">Vous avez déjà postulé à cette offre.</p>
                             </div>
-                        @elseif ($offer->status === 'active')
+                        @elseif ($offer->status === \App\Enums\JobOfferStatus::Active)
                             <div class="mt-5">
                                 @livewire('jobs.job-application-form', ['offer' => $offer], key('apply-'.$offer->id))
                             </div>
@@ -147,7 +136,7 @@
                                         <button class="btn btn-success w-100" disabled>
                                             <i class="fa-solid fa-circle-check me-1"></i>Déjà postulé
                                         </button>
-                                    @elseif ($offer->status === 'active')
+                                    @elseif ($offer->status === \App\Enums\JobOfferStatus::Active)
                                         <a href="#apply-form" class="btn btn-brand w-100">
                                             <i class="fa-solid fa-paper-plane me-1"></i>Postuler maintenant
                                         </a>

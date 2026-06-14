@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Jobs;
 
+use App\Enums\JobOfferStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Jobs\StoreJobApplicationRequest;
 use App\Models\JobOffer;
@@ -21,7 +22,7 @@ class JobApplicationController extends Controller
      */
     public function store(StoreJobApplicationRequest $request, JobOffer $offer): RedirectResponse
     {
-        abort_unless($offer->status === 'active', 422, 'Cette offre n\'est plus disponible.');
+        abort_unless($offer->status === JobOfferStatus::Active, 422, 'Cette offre n\'est plus disponible.');
 
         /** @var User $user */
         $user = Auth::user();

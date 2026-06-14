@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Events;
 
+use App\Enums\EventStatus;
 use App\Models\Event;
 use App\Models\EventPhoto;
 use App\Models\User;
@@ -137,7 +138,7 @@ class EventRecapService
      */
     public function publish(User $admin, Event $event): Event
     {
-        if ($event->status !== 'completed') {
+        if ($event->status !== EventStatus::Completed) {
             throw new \Exception('Le récapitulatif ne peut être publié que pour un événement terminé.');
         }
 

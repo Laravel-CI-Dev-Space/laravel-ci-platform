@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Questions\Schemas;
 
+use App\Enums\QuestionStatus;
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
@@ -27,13 +28,8 @@ class QuestionInfolist
                     TextEntry::make('status')
                         ->label('Statut')
                         ->badge()
-                        ->color(fn (string $state): string => match ($state) {
-                            'published' => 'success',
-                            'hidden'    => 'warning',
-                            'closed'    => 'gray',
-                            'deleted'   => 'danger',
-                            default     => 'gray',
-                        }),
+                        ->color(fn (QuestionStatus $state): string => $state->color())
+                        ->formatStateUsing(fn (QuestionStatus $state): string => $state->label()),
 
                     IconEntry::make('is_pinned')
                         ->label('Épinglé')

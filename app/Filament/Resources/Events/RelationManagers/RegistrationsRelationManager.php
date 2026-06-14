@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Events\RelationManagers;
 
+use App\Enums\EventRegistrationStatus;
 use App\Models\EventRegistration;
 use Filament\Actions\Action as TableAction;
 use Filament\Notifications\Notification;
@@ -36,22 +37,8 @@ class RegistrationsRelationManager extends RelationManager
                 TextColumn::make('status')
                     ->label('Statut')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'confirmed'  => 'success',
-                        'waitlisted' => 'warning',
-                        'cancelled'  => 'danger',
-                        'attended'   => 'info',
-                        'pending'    => 'gray',
-                        default      => 'gray',
-                    })
-                    ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'confirmed'  => 'Confirmé',
-                        'waitlisted' => 'En attente',
-                        'cancelled'  => 'Annulé',
-                        'attended'   => 'Présent',
-                        'pending'    => 'En attente',
-                        default      => $state,
-                    }),
+                    ->color(fn (EventRegistrationStatus $state): string => $state->color())
+                    ->formatStateUsing(fn (EventRegistrationStatus $state): string => $state->label()),
 
                 TextColumn::make('registered_at')
                     ->label('Inscrit le')
@@ -67,7 +54,7 @@ class RegistrationsRelationManager extends RelationManager
                     ->label('Marquer présent')
                     ->icon('heroicon-o-check-badge')
                     ->color('success')
-                    ->visible(fn (EventRegistration $record): bool => $record->status === 'confirmed')
+                    ->visible(fn (EventRegistration $record): bool => $record->status === EventRegistrationStatus::Confirmed)
                     ->requiresConfirmation()
                     ->action(function (EventRegistration $record): void {
                         $record->update(['status' => 'attended']);
@@ -82,7 +69,7 @@ class RegistrationsRelationManager extends RelationManager
                     ->label('Annuler')
                     ->icon('heroicon-o-x-mark')
                     ->color('danger')
-                    ->visible(fn (EventRegistration $record): bool => in_array($record->status, ['confirmed', 'waitlisted']))
+                    ->visible(fn (EventRegistration $record): bool => in_array($record->status, [EventRegistrationStatus::Confirmed, EventRegistrationStatus::Waitlisted], true))
                     ->requiresConfirmation()
                     ->action(function (EventRegistration $record): void {
                         $wasConfirmed = $record->isConfirmed();

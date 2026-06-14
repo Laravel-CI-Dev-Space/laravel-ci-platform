@@ -144,14 +144,11 @@
                     <div class="row g-4">
                     @forelse ($articles as $article)
                         @php
-                            $levelLabels = ['beginner' => 'Débutant', 'intermediate' => 'Intermédiaire', 'advanced' => 'Avancé'];
-                            $levelColors = ['beginner' => 'var(--green,#2ecc71)', 'intermediate' => 'var(--orange,#e8590c)', 'advanced' => 'var(--level-advanced,#e74c3c)'];
-                            $levelBg     = ['beginner' => '#edfaf3', 'intermediate' => '#fff5f0', 'advanced' => '#fdeaec'];
                             $readTime    = max(1, (int) round(str_word_count(strip_tags($article->body ?? '')) / 200));
                         @endphp
                         <div class="col-12 col-sm-6 col-xl-4">
                             <article class="card-soft article-card h-100 d-flex flex-column overflow-hidden"
-                                     style="border-top:3px solid {{ $levelColors[$article->level] ?? 'var(--orange)' }}; border-radius:.85rem;">
+                                     style="border-top:3px solid {{ $article->level->accentColor() }}; border-radius:.85rem;">
 
                                 {{-- Cover image --}}
                                 @if ($article->cover_image)
@@ -165,8 +162,8 @@
                                 <div class="card-pad flex-grow-1 d-flex flex-column">
                                     {{-- Badge niveau --}}
                                     <span class="badge-pill mb-2 d-inline-flex align-items-center gap-1"
-                                          style="background:{{ $levelBg[$article->level] ?? '#f5f5f5' }}; color:{{ $levelColors[$article->level] ?? 'var(--orange)' }}; font-size:.72rem; font-weight:700; border-radius:2rem; padding:.25rem .7rem; width:fit-content">
-                                        {{ $levelLabels[$article->level] ?? $article->level }}
+                                          style="background:{{ $article->level->badgeBackground() }}; color:{{ $article->level->accentColor() }}; font-size:.72rem; font-weight:700; border-radius:2rem; padding:.25rem .7rem; width:fit-content">
+                                        {{ $article->level->label() }}
                                     </span>
 
                                     {{-- Titre --}}

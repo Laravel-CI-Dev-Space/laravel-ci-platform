@@ -82,7 +82,7 @@ class EventRegistrationService
             entityId: $event->id,
             metadata: [
                 'event_title' => $event->title,
-                'status'      => $registration->status,
+                'status'      => $registration->status->value,
                 'is_paid'     => $event->is_paid,
             ],
         );

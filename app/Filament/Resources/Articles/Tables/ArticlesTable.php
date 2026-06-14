@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Articles\Tables;
 
+use App\Enums\ArticleLevel;
+use App\Enums\ArticleStatus;
 use App\Models\Article;
 use Filament\Actions\Action as TableAction;
 use Filament\Actions\EditAction;
@@ -39,43 +41,21 @@ class ArticlesTable
                     ->searchable()
                     ->limit(55)
                     ->tooltip(fn (Article $record): string => $record->title)
-                    ->url(fn (Article $record): string => $record->status === 'published'
+                    ->url(fn (Article $record): string => $record->status === ArticleStatus::Published
                         ? route('blog.show', $record->slug)
                         : '#'),
 
                 TextColumn::make('level')
                     ->label('Niveau')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'beginner'     => 'success',
-                        'intermediate' => 'warning',
-                        'advanced'     => 'danger',
-                        default        => 'gray',
-                    })
-                    ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'beginner'     => 'Débutant',
-                        'intermediate' => 'Intermédiaire',
-                        'advanced'     => 'Avancé',
-                        default        => $state,
-                    }),
+                    ->color(fn (ArticleLevel $state): string => $state->color())
+                    ->formatStateUsing(fn (ArticleLevel $state): string => $state->label()),
 
                 TextColumn::make('status')
                     ->label('Statut')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'draft'     => 'gray',
-                        'pending'   => 'warning',
-                        'published' => 'success',
-                        'rejected'  => 'danger',
-                        default     => 'gray',
-                    })
-                    ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'draft'     => 'Brouillon',
-                        'pending'   => 'En attente',
-                        'published' => 'Publié',
-                        'rejected'  => 'Rejeté',
-                        default     => $state,
-                    }),
+                    ->color(fn (ArticleStatus $state): string => $state->color())
+                    ->formatStateUsing(fn (ArticleStatus $state): string => $state->label()),
 
                 TextColumn::make('views_count')
                     ->label('Vues')
@@ -100,20 +80,11 @@ class ArticlesTable
             ->filters([
                 SelectFilter::make('status')
                     ->label('Statut')
-                    ->options([
-                        'draft'     => 'Brouillon',
-                        'pending'   => 'En attente',
-                        'published' => 'Publié',
-                        'rejected'  => 'Rejeté',
-                    ]),
+                    ->options(ArticleStatus::options()),
 
                 SelectFilter::make('level')
                     ->label('Niveau')
-                    ->options([
-                        'beginner'     => 'Débutant',
-                        'intermediate' => 'Intermédiaire',
-                        'advanced'     => 'Avancé',
-                    ]),
+                    ->options(ArticleLevel::options()),
 
                 Filter::make('pending')
                     ->label('En attente uniquement')
@@ -144,7 +115,7 @@ class ArticlesTable
                     ->label('Publier')
                     ->icon('heroicon-o-check-circle')
                     ->color('success')
-                    ->visible(fn (Article $record): bool => $record->status === 'pending')
+                    ->visible(fn (Article $record): bool => $record->status === ArticleStatus::Pending)
                     ->requiresConfirmation()
                     ->modalHeading('Publier cet article ?')
                     ->modalDescription('L\'article sera immédiatement visible par tous les membres.')
@@ -166,7 +137,7 @@ class ArticlesTable
                     ->label('Rejeter')
                     ->icon('heroicon-o-x-circle')
                     ->color('danger')
-                    ->visible(fn (Article $record): bool => $record->status === 'pending')
+                    ->visible(fn (Article $record): bool => $record->status === ArticleStatus::Pending)
                     ->schema([
                         Textarea::make('rejection_reason')
                             ->label('Raison du rejet')
@@ -192,7 +163,7 @@ class ArticlesTable
                     ->label('Dépublier')
                     ->icon('heroicon-o-arrow-uturn-left')
                     ->color('gray')
-                    ->visible(fn (Article $record): bool => $record->status === 'published')
+                    ->visible(fn (Article $record): bool => $record->status === ArticleStatus::Published)
                     ->requiresConfirmation()
                     ->modalHeading('Dépublier cet article ?')
                     ->modalDescription("L'article repassera en brouillon et ne sera plus visible.")

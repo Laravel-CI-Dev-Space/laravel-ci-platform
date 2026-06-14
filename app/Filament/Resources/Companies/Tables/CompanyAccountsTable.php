@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Companies\Tables;
 
+use App\Enums\CompanyAccountStatus;
 use App\Models\CompanyAccount;
 use App\Services\Company\CompanyAccountService;
 use Filament\Actions\Action as TableAction;
@@ -38,20 +39,8 @@ class CompanyAccountsTable
                 TextColumn::make('status')
                     ->label('Statut')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'active'    => 'success',
-                        'pending'   => 'warning',
-                        'suspended' => 'danger',
-                        'rejected'  => 'gray',
-                        default     => 'gray',
-                    })
-                    ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'active'    => 'Actif',
-                        'pending'   => 'En attente',
-                        'suspended' => 'Suspendu',
-                        'rejected'  => 'Refusé',
-                        default     => $state,
-                    }),
+                    ->color(fn (CompanyAccountStatus $state): string => $state->color())
+                    ->formatStateUsing(fn (CompanyAccountStatus $state): string => $state->label()),
 
                 TextColumn::make('last_login_at')
                     ->label('Dernière connexion')
@@ -68,12 +57,7 @@ class CompanyAccountsTable
             ->filters([
                 SelectFilter::make('status')
                     ->label('Statut')
-                    ->options([
-                        'active'    => 'Actif',
-                        'pending'   => 'En attente',
-                        'suspended' => 'Suspendu',
-                        'rejected'  => 'Refusé',
-                    ]),
+                    ->options(CompanyAccountStatus::options()),
             ])
 
             ->actions([

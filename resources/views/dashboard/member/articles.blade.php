@@ -145,19 +145,21 @@
                     ?: Str::limit(strip_tags($article->body ?? ''), 100);
 
                 $statusMap = [
-                    'published' => ['bg-success-subtle text-success',     'ti-circle-check', 'Publié'],
-                    'pending'   => ['bg-warning-subtle text-warning',     'ti-clock',        'En attente'],
-                    'rejected'  => ['bg-danger-subtle text-danger',       'ti-x',            'Rejeté'],
-                    'draft'     => ['bg-secondary-subtle text-secondary', 'ti-pencil',       'Brouillon'],
+                    \App\Enums\ArticleStatus::Published->value => ['bg-success-subtle text-success',     'ti-circle-check', 'Publié'],
+                    \App\Enums\ArticleStatus::Pending->value   => ['bg-warning-subtle text-warning',     'ti-clock',        'En attente'],
+                    \App\Enums\ArticleStatus::Rejected->value  => ['bg-danger-subtle text-danger',       'ti-x',            'Rejeté'],
+                    \App\Enums\ArticleStatus::Draft->value     => ['bg-secondary-subtle text-secondary', 'ti-pencil',       'Brouillon'],
                 ];
-                [$sBadge, $sIcon, $sLabel] = $statusMap[$article->status] ?? $statusMap['draft'];
+                [$sBadge, $sIcon, $sLabel] = $statusMap[$article->status->value] ?? $statusMap['draft'];
 
-                $levelMap = [
-                    'beginner'     => ['#2ecc71', 'ti-seedling',  'Débutant'],
-                    'intermediate' => ['#f39c12', 'ti-chart-bar', 'Intermédiaire'],
-                    'advanced'     => ['#e74c3c', 'ti-flame',     'Avancé'],
+                $levelIconMap = [
+                    \App\Enums\ArticleLevel::Beginner->value     => 'ti-seedling',
+                    \App\Enums\ArticleLevel::Intermediate->value => 'ti-chart-bar',
+                    \App\Enums\ArticleLevel::Advanced->value     => 'ti-flame',
                 ];
-                [$lColor, $lIcon, $lLabel] = $levelMap[$article->level ?? 'beginner'] ?? $levelMap['beginner'];
+                $lColor = $article->level->accentColor();
+                $lIcon  = $levelIconMap[$article->level->value];
+                $lLabel = $article->level->label();
 
                 $cardTags = $article->tags->pluck('name')->map('strtolower')->implode(',');
                 $cardTitle = strtolower($article->title);
@@ -194,7 +196,7 @@
 
                         {{-- Titre --}}
                         <h6 class="fw-bold mb-1 lh-sm" style="font-size:.95rem">
-                            @if ($article->status === 'published')
+                            @if ($article->status === \App\Enums\ArticleStatus::Published)
                                 <a href="{{ route('blog.show', $article->slug) }}"
                                    class="text-dark text-decoration-none stretched-link-off">
                                     {{ Str::limit($article->title, 60) }}
@@ -225,7 +227,7 @@
                         @endif
 
                         {{-- Raison du rejet --}}
-                        @if ($article->status === 'rejected' && $article->rejection_reason)
+                        @if ($article->status === \App\Enums\ArticleStatus::Rejected && $article->rejection_reason)
                             <div class="alert alert-danger py-1 px-2 mb-2" style="font-size:.72rem">
                                 <i class="ti ti-alert-triangle me-1"></i>
                                 {{ Str::limit($article->rejection_reason, 80) }}
@@ -250,7 +252,7 @@
                         </div>
 
                         <div class="d-flex gap-1">
-                            @if ($article->status === 'published')
+                            @if ($article->status === \App\Enums\ArticleStatus::Published)
                                 <a href="{{ route('blog.show', $article->slug) }}" target="_blank"
                                    class="btn btn-light btn-sm px-2" title="Voir l'article publié">
                                     <i class="ti ti-external-link" style="font-size:1rem"></i>
@@ -270,7 +272,7 @@
                                 </span>
                             @endif
 
-                            @if (in_array($article->status, ['draft', 'rejected']))
+                            @if (in_array($article->status, [\App\Enums\ArticleStatus::Draft, \App\Enums\ArticleStatus::Rejected]))
                                 <form method="POST" action="{{ route('blog.articles.submit', $article) }}" class="d-inline">
                                     @csrf
                                     <button class="btn btn-warning btn-sm px-2" title="Soumettre pour validation"
@@ -279,7 +281,7 @@
                                     </button>
                                 </form>
                             @endif
-                            @if ($article->status === 'pending')
+                            @if ($article->status === \App\Enums\ArticleStatus::Pending)
                                 <span class="btn btn-light btn-sm px-2 disabled" title="En cours de validation">
                                     <i class="ti ti-hourglass" style="font-size:1rem; color:#f39c12"></i>
                                 </span>

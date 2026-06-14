@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Questions\Schemas;
 
+use App\Enums\QuestionStatus;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -34,12 +35,7 @@ class QuestionForm
 
                     Select::make('status')
                         ->label('Statut')
-                        ->options([
-                            'published' => 'Publié',
-                            'hidden'    => 'Caché',
-                            'closed'    => 'Fermé',
-                            'deleted'   => 'Supprimé',
-                        ])
+                        ->options(QuestionStatus::options())
                         ->required(),
 
                     Toggle::make('is_pinned')

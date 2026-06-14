@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Enums\JobContractType;
+use App\Enums\JobLevel;
+use App\Enums\JobOfferStatus;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -48,6 +51,9 @@ class JobOffer extends Model
             'applications_count' => 'integer',
             'salary_min'         => 'integer',
             'salary_max'         => 'integer',
+            'contract_type'      => JobContractType::class,
+            'level'              => JobLevel::class,
+            'status'             => JobOfferStatus::class,
         ];
     }
 
@@ -164,13 +170,13 @@ class JobOffer extends Model
             'title'         => $this->title,
             'description'   => strip_tags($this->description),
             'slug'          => $this->slug,
-            'contract_type' => $this->contract_type,
-            'level'         => $this->level,
+            'contract_type' => $this->contract_type->value,
+            'level'         => $this->level->value,
             'location'      => $this->location,
             'is_remote'     => $this->is_remote,
             'company'       => $this->company?->name,
             'skills'        => $this->skills->pluck('name')->join(', '),
-            'status'        => $this->status,
+            'status'        => $this->status->value,
             'type'          => 'job',
             'url'           => route('jobs.show', $this->slug),
             'created_at'    => $this->created_at?->toDateString(),
@@ -182,6 +188,6 @@ class JobOffer extends Model
      */
     public function shouldBeSearchable(): bool
     {
-        return $this->status === 'active';
+        return $this->status === JobOfferStatus::Active;
     }
 }

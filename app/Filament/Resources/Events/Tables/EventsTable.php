@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Events\Tables;
 
+use App\Enums\EventStatus;
+use App\Enums\EventType;
 use App\Jobs\Events\SendEventReminder;
 use App\Models\Event;
 use Filament\Actions\Action as TableAction;
@@ -33,40 +35,20 @@ class EventsTable
                 TextColumn::make('type')
                     ->label('Type')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'meetup'     => 'warning',
-                        'webinar'    => 'info',
-                        'hackathon'  => 'purple',
-                        'conference' => 'success',
-                        'workshop'   => 'cyan',
-                        default      => 'gray',
+                    ->color(fn (EventType $state): string => match ($state) {
+                        EventType::Meetup     => 'warning',
+                        EventType::Webinar    => 'info',
+                        EventType::Hackathon  => 'purple',
+                        EventType::Conference => 'success',
+                        EventType::Workshop   => 'cyan',
                     })
-                    ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'meetup'     => 'Meetup',
-                        'webinar'    => 'Webinaire',
-                        'hackathon'  => 'Hackathon',
-                        'conference' => 'Conférence',
-                        'workshop'   => 'Workshop',
-                        default      => $state,
-                    }),
+                    ->formatStateUsing(fn (EventType $state): string => $state->label()),
 
                 TextColumn::make('status')
                     ->label('Statut')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'draft'     => 'gray',
-                        'published' => 'success',
-                        'cancelled' => 'danger',
-                        'completed' => 'info',
-                        default     => 'gray',
-                    })
-                    ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'draft'     => 'Brouillon',
-                        'published' => 'Publié',
-                        'cancelled' => 'Annulé',
-                        'completed' => 'Terminé',
-                        default     => $state,
-                    }),
+                    ->color(fn (EventStatus $state): string => $state->color())
+                    ->formatStateUsing(fn (EventStatus $state): string => $state->label()),
 
                 TextColumn::make('starts_at')
                     ->label('Date de début')
@@ -118,22 +100,11 @@ class EventsTable
             ->filters([
                 SelectFilter::make('status')
                     ->label('Statut')
-                    ->options([
-                        'draft'     => 'Brouillon',
-                        'published' => 'Publié',
-                        'cancelled' => 'Annulé',
-                        'completed' => 'Terminé',
-                    ]),
+                    ->options(EventStatus::options()),
 
                 SelectFilter::make('type')
                     ->label('Type')
-                    ->options([
-                        'meetup'     => 'Meetup',
-                        'webinar'    => 'Webinaire',
-                        'hackathon'  => 'Hackathon',
-                        'conference' => 'Conférence',
-                        'workshop'   => 'Workshop',
-                    ]),
+                    ->options(EventType::options()),
 
                 Filter::make('upcoming')
                     ->label('À venir uniquement')
@@ -164,7 +135,7 @@ class EventsTable
                     ->label('Publier')
                     ->icon('heroicon-o-check-circle')
                     ->color('success')
-                    ->visible(fn (Event $record): bool => $record->status === 'draft')
+                    ->visible(fn (Event $record): bool => $record->status === EventStatus::Draft)
                     ->requiresConfirmation()
                     ->modalHeading('Publier cet événement ?')
                     ->modalDescription('L\'événement sera immédiatement visible par tous les membres.')
@@ -181,7 +152,7 @@ class EventsTable
                     ->label('Annuler l\'événement')
                     ->icon('heroicon-o-x-circle')
                     ->color('danger')
-                    ->visible(fn (Event $record): bool => $record->status === 'published')
+                    ->visible(fn (Event $record): bool => $record->status === EventStatus::Published)
                     ->schema([
                         Textarea::make('cancellation_reason')
                             ->label('Raison de l\'annulation')
@@ -205,7 +176,7 @@ class EventsTable
                     ->label('Envoyer rappel')
                     ->icon('heroicon-o-bell')
                     ->color('gray')
-                    ->visible(fn (Event $record): bool => $record->status === 'published' && $record->isUpcoming())
+                    ->visible(fn (Event $record): bool => $record->status === EventStatus::Published && $record->isUpcoming())
                     ->requiresConfirmation()
                     ->modalHeading('Envoyer un rappel maintenant ?')
                     ->modalDescription('Un email de rappel sera envoyé à tous les inscrits confirmés.')

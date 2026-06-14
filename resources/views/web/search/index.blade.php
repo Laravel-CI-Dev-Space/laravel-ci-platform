@@ -115,7 +115,7 @@
                                         <span class="badge-pill mb-2 d-inline-flex align-items-center gap-1"
                                               style="background:#edfaf3; color:var(--green,#2ecc71); font-size:.72rem; font-weight:700; border-radius:2rem; padding:.25rem .7rem; width:fit-content">
                                             <i class="fa-solid fa-book-open"></i>
-                                            {{ \App\Models\Article::$levelLabels[$model->level] ?? $model->level }}
+                                            {{ $model->level->label() }}
                                         </span>
                                         <h3 class="art-title mb-1" style="font-size:1.05rem">
                                             <a href="{{ route('blog.show', $model->slug) }}">{{ $model->title }}</a>
@@ -153,8 +153,8 @@
                                         </p>
                                         <div class="d-flex gap-3 align-items-center flex-wrap" style="font-size:.78rem; color:var(--muted)">
                                             <span><i class="fa-regular fa-building me-1"></i>{{ $model->company?->name }}</span>
-                                            <span><i class="fa-solid fa-file-contract me-1"></i>{{ strtoupper($model->contract_type) }}</span>
-                                            <span><i class="fa-solid fa-layer-group me-1"></i>{{ ucfirst($model->level) }}</span>
+                                            <span><i class="fa-solid fa-file-contract me-1"></i>{{ $model->contract_type->label() }}</span>
+                                            <span><i class="fa-solid fa-layer-group me-1"></i>{{ $model->level->label() }}</span>
                                             @if ($model->is_remote)
                                                 <span class="badge-pill" style="background:#edfaf3; color:var(--green,#2ecc71); font-size:.7rem; padding:.15rem .5rem; border-radius:2rem">
                                                     <i class="fa-solid fa-house-laptop"></i> Télétravail

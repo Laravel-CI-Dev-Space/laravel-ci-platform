@@ -2,24 +2,6 @@
 
 @section('subject', 'Nouvelles offres correspondant à votre profil — Laravel CI')
 
-@php
-    $contractLabels = [
-        'cdi'           => 'CDI',
-        'cdd'           => 'CDD',
-        'freelance'     => 'Freelance',
-        'internship'    => 'Stage',
-        'apprenticeship'=> 'Alternance',
-    ];
-
-    $levelLabels = [
-        'junior'       => 'Junior',
-        'intermediate' => 'Intermédiaire',
-        'senior'       => 'Senior',
-        'lead'         => 'Lead',
-        'any'          => 'Tous niveaux',
-    ];
-@endphp
-
 @section('content')
 
     <p class="greeting">
@@ -36,8 +18,8 @@
             <h4>{{ $offer->title }}</h4>
             <div class="meta">
                 {{ $offer->company?->name }} ·
-                {{ $contractLabels[$offer->contract_type] ?? $offer->contract_type }} ·
-                {{ $levelLabels[$offer->level] ?? $offer->level }}
+                {{ $offer->contract_type->label() }} ·
+                {{ $offer->level->label() }}
                 @if($offer->is_remote) · Remote @endif
             </div>
             <a href="{{ route('jobs.show', $offer->slug) }}">Voir l'offre &rarr;</a>

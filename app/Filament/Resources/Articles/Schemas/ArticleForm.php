@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Articles\Schemas;
 
+use App\Enums\ArticleLevel;
+use App\Enums\ArticleStatus;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -39,21 +41,12 @@ class ArticleForm
 
                     Select::make('level')
                         ->label('Niveau')
-                        ->options([
-                            'beginner'     => 'Débutant',
-                            'intermediate' => 'Intermédiaire',
-                            'advanced'     => 'Avancé',
-                        ])
+                        ->options(ArticleLevel::options())
                         ->required(),
 
                     Select::make('status')
                         ->label('Statut')
-                        ->options([
-                            'draft'     => 'Brouillon',
-                            'pending'   => 'En attente',
-                            'published' => 'Publié',
-                            'rejected'  => 'Rejeté',
-                        ])
+                        ->options(ArticleStatus::options())
                         ->required(),
 
                     Textarea::make('rejection_reason')

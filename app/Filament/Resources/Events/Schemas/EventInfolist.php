@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Events\Schemas;
 
+use App\Enums\EventStatus;
+use App\Enums\EventType;
 use App\Models\Event;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
@@ -26,40 +28,20 @@ class EventInfolist
                     TextEntry::make('type')
                         ->label('Type')
                         ->badge()
-                        ->color(fn (string $state): string => match ($state) {
-                            'meetup'     => 'warning',
-                            'webinar'    => 'info',
-                            'hackathon'  => 'purple',
-                            'conference' => 'success',
-                            'workshop'   => 'cyan',
-                            default      => 'gray',
+                        ->color(fn (EventType $state): string => match ($state) {
+                            EventType::Meetup     => 'warning',
+                            EventType::Webinar    => 'info',
+                            EventType::Hackathon  => 'purple',
+                            EventType::Conference => 'success',
+                            EventType::Workshop   => 'cyan',
                         })
-                        ->formatStateUsing(fn (string $state): string => match ($state) {
-                            'meetup'     => 'Meetup',
-                            'webinar'    => 'Webinaire',
-                            'hackathon'  => 'Hackathon',
-                            'conference' => 'Conférence',
-                            'workshop'   => 'Workshop',
-                            default      => $state,
-                        }),
+                        ->formatStateUsing(fn (EventType $state): string => $state->label()),
 
                     TextEntry::make('status')
                         ->label('Statut')
                         ->badge()
-                        ->color(fn (string $state): string => match ($state) {
-                            'draft'     => 'gray',
-                            'published' => 'success',
-                            'cancelled' => 'danger',
-                            'completed' => 'info',
-                            default     => 'gray',
-                        })
-                        ->formatStateUsing(fn (string $state): string => match ($state) {
-                            'draft'     => 'Brouillon',
-                            'published' => 'Publié',
-                            'cancelled' => 'Annulé',
-                            'completed' => 'Terminé',
-                            default     => $state,
-                        }),
+                        ->color(fn (EventStatus $state): string => $state->color())
+                        ->formatStateUsing(fn (EventStatus $state): string => $state->label()),
 
                     TextEntry::make('creator.name')
                         ->label('Créé par')
@@ -187,7 +169,7 @@ class EventInfolist
                 ]),
 
             Section::make('Raison d\'annulation')
-                ->visible(fn (Event $record): bool => $record->status === 'cancelled')
+                ->visible(fn (Event $record): bool => $record->status === EventStatus::Cancelled)
                 ->schema([
                     TextEntry::make('cancellation_reason')
                         ->label('')

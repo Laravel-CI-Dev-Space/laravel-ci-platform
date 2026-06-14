@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Articles\Schemas;
 
+use App\Enums\ArticleLevel;
+use App\Enums\ArticleStatus;
 use App\Models\Article;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
@@ -31,36 +33,14 @@ class ArticleInfolist
                     TextEntry::make('level')
                         ->label('Niveau')
                         ->badge()
-                        ->color(fn (string $state): string => match ($state) {
-                            'beginner'     => 'success',
-                            'intermediate' => 'warning',
-                            'advanced'     => 'danger',
-                            default        => 'gray',
-                        })
-                        ->formatStateUsing(fn (string $state): string => match ($state) {
-                            'beginner'     => 'Débutant',
-                            'intermediate' => 'Intermédiaire',
-                            'advanced'     => 'Avancé',
-                            default        => $state,
-                        }),
+                        ->color(fn (ArticleLevel $state): string => $state->color())
+                        ->formatStateUsing(fn (ArticleLevel $state): string => $state->label()),
 
                     TextEntry::make('status')
                         ->label('Statut')
                         ->badge()
-                        ->color(fn (string $state): string => match ($state) {
-                            'draft'     => 'gray',
-                            'pending'   => 'warning',
-                            'published' => 'success',
-                            'rejected'  => 'danger',
-                            default     => 'gray',
-                        })
-                        ->formatStateUsing(fn (string $state): string => match ($state) {
-                            'draft'     => 'Brouillon',
-                            'pending'   => 'En attente',
-                            'published' => 'Publié',
-                            'rejected'  => 'Rejeté',
-                            default     => $state,
-                        }),
+                        ->color(fn (ArticleStatus $state): string => $state->color())
+                        ->formatStateUsing(fn (ArticleStatus $state): string => $state->label()),
 
                     TextEntry::make('views_count')
                         ->label('Vues'),
@@ -100,7 +80,7 @@ class ArticleInfolist
                 ]),
 
             Section::make('Raison du rejet')
-                ->visible(fn (Article $record): bool => $record->status === 'rejected')
+                ->visible(fn (Article $record): bool => $record->status === ArticleStatus::Rejected)
                 ->schema([
                     TextEntry::make('rejection_reason')
                         ->label('')

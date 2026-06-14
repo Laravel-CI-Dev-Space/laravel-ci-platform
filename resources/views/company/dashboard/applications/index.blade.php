@@ -41,12 +41,11 @@
             @forelse ($applications as $application)
                 @php
                 $badge = match($application->status) {
-                    'pending'     => ['bg-secondary-subtle text-secondary', 'En attente'],
-                    'viewed'      => ['bg-info-subtle text-info', 'Vue'],
-                    'shortlisted' => ['bg-primary-subtle text-primary', 'Présélectionnée'],
-                    'accepted'    => ['bg-success-subtle text-success', 'Acceptée'],
-                    'rejected'    => ['bg-danger-subtle text-danger', 'Refusée'],
-                    default       => ['bg-secondary-subtle text-secondary', ucfirst($application->status)],
+                    \App\Enums\JobApplicationStatus::Pending     => ['bg-secondary-subtle text-secondary', 'En attente'],
+                    \App\Enums\JobApplicationStatus::Viewed      => ['bg-info-subtle text-info', 'Vue'],
+                    \App\Enums\JobApplicationStatus::Shortlisted => ['bg-primary-subtle text-primary', 'Présélectionnée'],
+                    \App\Enums\JobApplicationStatus::Accepted    => ['bg-success-subtle text-success', 'Acceptée'],
+                    \App\Enums\JobApplicationStatus::Rejected    => ['bg-danger-subtle text-danger', 'Refusée'],
                 };
                 @endphp
                 <tr>

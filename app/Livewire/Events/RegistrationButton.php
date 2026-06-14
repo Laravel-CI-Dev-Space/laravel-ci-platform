@@ -48,7 +48,7 @@ class RegistrationButton extends Component
 
             if ($registration !== null) {
                 $this->isRegistered   = true;
-                $this->status         = $registration->status;
+                $this->status         = $registration->status->value;
                 $this->registrationId = $registration->id;
                 $this->ticketNumber   = $registration->ticket_number;
             }

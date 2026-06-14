@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\QuestionStatus;
 use App\Enums\UserRole;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -43,6 +44,7 @@ class Question extends Model
             'votes_score'      => 'integer',
             'answers_count'    => 'integer',
             'comments_count'   => 'integer',
+            'status'           => QuestionStatus::class,
         ];
     }
 
@@ -155,7 +157,7 @@ class Question extends Model
             'title'      => $this->title,
             'body'       => strip_tags($this->body),
             'slug'       => $this->slug,
-            'status'     => $this->status,
+            'status'     => $this->status->value,
             'tags'       => $this->tags->pluck('name')->join(', '),
             'votes'      => $this->votes_score,
             'answers'    => $this->answers_count,
@@ -170,6 +172,6 @@ class Question extends Model
      */
     public function shouldBeSearchable(): bool
     {
-        return $this->status === 'published';
+        return $this->status === QuestionStatus::Published;
     }
 }

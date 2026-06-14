@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Events;
 
+use App\Enums\EventStatus;
 use App\Models\Event;
 use App\Models\GuestRegistration;
 use Illuminate\Foundation\Http\FormRequest;
@@ -57,7 +58,7 @@ class StoreGuestRegistrationRequest extends FormRequest
                 return;
             }
 
-            if ($event->status !== 'published') {
+            if ($event->status !== EventStatus::Published) {
                 $v->errors()->add('event', "Cet événement n'est pas ouvert aux inscriptions.");
 
                 return;

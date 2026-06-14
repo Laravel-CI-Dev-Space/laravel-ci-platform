@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Events\Pages;
 
+use App\Enums\EventStatus;
 use App\Filament\Resources\Events\EventResource;
 use App\Models\Event;
 use App\Services\Events\EventRecapService;
@@ -27,7 +28,7 @@ class EditEvent extends EditRecord
                 ->icon('heroicon-o-megaphone')
                 ->color('success')
                 ->requiresConfirmation()
-                ->visible(fn (Event $record): bool => $record->status === 'completed' && ! $record->hasRecap())
+                ->visible(fn (Event $record): bool => $record->status === EventStatus::Completed && ! $record->hasRecap())
                 ->action(function (Event $record, EventRecapService $recapService): void {
                     $recapService->publish(auth()->user(), $record);
 

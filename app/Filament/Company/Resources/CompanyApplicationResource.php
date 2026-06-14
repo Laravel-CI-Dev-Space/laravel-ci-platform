@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Company\Resources;
 
+use App\Enums\JobApplicationStatus;
 use App\Filament\Company\Resources\CompanyApplicationResource\Pages\ListCompanyApplications;
 use App\Filament\Company\Resources\CompanyApplicationResource\Pages\ViewCompanyApplication;
 use App\Models\JobApplication;
@@ -88,22 +89,8 @@ class CompanyApplicationResource extends Resource
                     TextEntry::make('status')
                         ->label('Statut de la candidature')
                         ->badge()
-                        ->color(fn ($state) => match ($state) {
-                            'pending'     => 'gray',
-                            'viewed'      => 'info',
-                            'shortlisted' => 'primary',
-                            'accepted'    => 'success',
-                            'rejected'    => 'danger',
-                            default       => 'gray',
-                        })
-                        ->formatStateUsing(fn ($state) => match ($state) {
-                            'pending'     => 'En attente',
-                            'viewed'      => 'Vue',
-                            'shortlisted' => 'Présélectionnée',
-                            'accepted'    => 'Acceptée',
-                            'rejected'    => 'Refusée',
-                            default       => ucfirst($state),
-                        }),
+                        ->color(fn (JobApplicationStatus $state): string => $state->color())
+                        ->formatStateUsing(fn (JobApplicationStatus $state): string => $state->label()),
                 ]),
 
             Section::make('Documents & Liens')
@@ -166,22 +153,8 @@ class CompanyApplicationResource extends Resource
                 TextColumn::make('status')
                     ->label('Statut')
                     ->badge()
-                    ->color(fn ($state) => match ($state) {
-                        'pending'     => 'gray',
-                        'viewed'      => 'info',
-                        'shortlisted' => 'primary',
-                        'accepted'    => 'success',
-                        'rejected'    => 'danger',
-                        default       => 'gray',
-                    })
-                    ->formatStateUsing(fn ($state) => match ($state) {
-                        'pending'     => 'En attente',
-                        'viewed'      => 'Vue',
-                        'shortlisted' => 'Présélectionnée',
-                        'accepted'    => 'Acceptée',
-                        'rejected'    => 'Refusée',
-                        default       => ucfirst($state),
-                    }),
+                    ->color(fn (JobApplicationStatus $state): string => $state->color())
+                    ->formatStateUsing(fn (JobApplicationStatus $state): string => $state->label()),
 
                 TextColumn::make('created_at')
                     ->label('Reçue le')
@@ -192,13 +165,7 @@ class CompanyApplicationResource extends Resource
             ->filters([
                 SelectFilter::make('status')
                     ->label('Statut')
-                    ->options([
-                        'pending'     => 'En attente',
-                        'viewed'      => 'Vue',
-                        'shortlisted' => 'Présélectionnée',
-                        'accepted'    => 'Acceptée',
-                        'rejected'    => 'Refusée',
-                    ]),
+                    ->options(JobApplicationStatus::options()),
 
                 SelectFilter::make('job_offer_id')
                     ->label('Offre')
@@ -217,7 +184,7 @@ class CompanyApplicationResource extends Resource
                     ->label('Présélectionner')
                     ->icon('heroicon-o-star')
                     ->color('primary')
-                    ->visible(fn (JobApplication $r): bool => in_array($r->status, ['pending', 'viewed']))
+                    ->visible(fn (JobApplication $r): bool => in_array($r->status, [JobApplicationStatus::Pending, JobApplicationStatus::Viewed], true))
                     ->action(function (JobApplication $record): void {
                         $record->update(['status' => 'shortlisted']);
                         Notification::make()->title('Candidature présélectionnée')->success()->send();
@@ -227,7 +194,7 @@ class CompanyApplicationResource extends Resource
                     ->label('Accepter')
                     ->icon('heroicon-o-check-circle')
                     ->color('success')
-                    ->visible(fn (JobApplication $r): bool => $r->status !== 'accepted')
+                    ->visible(fn (JobApplication $r): bool => $r->status !== JobApplicationStatus::Accepted)
                     ->requiresConfirmation()
                     ->action(function (JobApplication $record): void {
                         $record->update(['status' => 'accepted']);
@@ -238,7 +205,7 @@ class CompanyApplicationResource extends Resource
                     ->label('Refuser')
                     ->icon('heroicon-o-x-circle')
                     ->color('danger')
-                    ->visible(fn (JobApplication $r): bool => $r->status !== 'rejected')
+                    ->visible(fn (JobApplication $r): bool => $r->status !== JobApplicationStatus::Rejected)
                     ->schema([
                         Textarea::make('employer_note')
                             ->label('Note interne (optionnel)')

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Questions\Tables;
 
+use App\Enums\QuestionStatus;
 use App\Models\Question;
 use App\Services\Forum\QuestionService;
 use Filament\Actions\Action as TableAction;
@@ -39,13 +40,8 @@ class QuestionsTable
                 TextColumn::make('status')
                     ->label('Statut')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'published' => 'success',
-                        'hidden'    => 'warning',
-                        'closed'    => 'gray',
-                        'deleted'   => 'danger',
-                        default     => 'gray',
-                    }),
+                    ->color(fn (QuestionStatus $state): string => $state->color())
+                    ->formatStateUsing(fn (QuestionStatus $state): string => $state->label()),
 
                 ToggleColumn::make('is_pinned')
                     ->label('Épinglé')
@@ -73,12 +69,7 @@ class QuestionsTable
             ->filters([
                 SelectFilter::make('status')
                     ->label('Statut')
-                    ->options([
-                        'published' => 'Publié',
-                        'hidden'    => 'Caché',
-                        'closed'    => 'Fermé',
-                        'deleted'   => 'Supprimé',
-                    ]),
+                    ->options(QuestionStatus::options()),
 
                 Filter::make('pinned')
                     ->label('Épinglées uniquement')
@@ -111,7 +102,7 @@ class QuestionsTable
                     ->label('Cacher')
                     ->icon('heroicon-o-eye-slash')
                     ->color('warning')
-                    ->visible(fn (Question $record): bool => $record->status === 'published')
+                    ->visible(fn (Question $record): bool => $record->status === QuestionStatus::Published)
                     ->requiresConfirmation()
                     ->modalHeading('Cacher cette question ?')
                     ->action(fn (Question $record) => $record->update(['status' => 'hidden'])),
@@ -120,7 +111,7 @@ class QuestionsTable
                     ->label('Publier')
                     ->icon('heroicon-o-check-circle')
                     ->color('success')
-                    ->visible(fn (Question $record): bool => $record->status === 'hidden')
+                    ->visible(fn (Question $record): bool => $record->status === QuestionStatus::Hidden)
                     ->action(fn (Question $record) => $record->update(['status' => 'published'])),
 
                 DeleteAction::make()

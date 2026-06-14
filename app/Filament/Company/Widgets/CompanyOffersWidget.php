@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace App\Filament\Company\Widgets;
 
+use App\Enums\JobContractType;
+use App\Enums\JobOfferStatus;
+use App\Filament\Company\Resources\CompanyApplicationResource;
 use App\Models\JobOffer;
+use Filament\Actions\Action;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -40,29 +44,15 @@ class CompanyOffersWidget extends BaseWidget
                     ->label('Contrat')
                     ->badge()
                     ->color('gray')
-                    ->formatStateUsing(fn ($state) => match ($state) {
-                        'cdi' => 'CDI', 'cdd' => 'CDD', 'freelance' => 'Freelance',
-                        'internship' => 'Stage', 'apprenticeship' => 'Alternance', default => $state,
-                    }),
+                    ->formatStateUsing(fn (JobContractType $state): string => $state->label()),
 
                 TextColumn::make('status')
                     ->label('Statut')
                     ->badge()
-                    ->color(fn ($state) => match ($state) {
-                        'active'   => 'success',
-                        'pending'  => 'warning',
-                        'expired'  => 'danger',
-                        'filled'   => 'info',
-                        'rejected' => 'danger',
-                        default    => 'gray',
-                    })
-                    ->formatStateUsing(fn ($state) => match ($state) {
-                        'active'   => 'Active',
-                        'pending'  => 'En validation',
-                        'expired'  => 'Expirée',
-                        'filled'   => 'Pourvue',
-                        'rejected' => 'Refusée',
-                        default    => ucfirst($state),
+                    ->color(fn (JobOfferStatus $state): string => $state->color())
+                    ->formatStateUsing(fn (JobOfferStatus $state): string => match ($state) {
+                        JobOfferStatus::Pending => 'En validation',
+                        default                 => $state->label(),
                     }),
 
                 TextColumn::make('applications_count')
@@ -87,11 +77,11 @@ class CompanyOffersWidget extends BaseWidget
                     ->placeholder('—'),
             ])
             ->actions([
-                \Filament\Actions\Action::make('applications')
+                Action::make('applications')
                     ->label(fn (JobOffer $r) => $r->applications_count . ' candidature' . ($r->applications_count !== 1 ? 's' : ''))
                     ->icon('heroicon-o-users')
                     ->color(fn (JobOffer $r) => $r->applications_count > 0 ? 'primary' : 'gray')
-                    ->url(\App\Filament\Company\Resources\CompanyApplicationResource::getUrl('index')),
+                    ->url(CompanyApplicationResource::getUrl('index')),
             ])
             ->paginated(false);
     }

@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -rn \"report.*status\\\\|->status\\\\|'pending'\\\\|'resolved'\\\\|'reviewed'\\\\|'rejected'\" resources/views/livewire/**/*report* resources/views/**/*report*)",
+      "Bash(grep -rln \"Report\" resources/views/ app/Livewire/)",
+      "Bash(php -l app/Models/Report.php)",
+      "Bash(php -l app/Models/Resource.php)",
+      "Bash(php -l app/Filament/Resources/Resources/Tables/ResourcesTable.php)",
+      "Bash(php -l app/Http/Requests/Blog/StoreResourceRequest.php)",
+      "Bash(grep -rln 'levelLabels\\\\|levelColors\\\\|Article::$level\\\\|->level\\\\|article->status\\\\|\\\\$article->status\\\\|\\\\$article->level' app/ resources/)",
+      "Bash(grep -rn \"counts\\\\[\" app/Http/Controllers/ -r)",
+      "Bash(grep -rln \"dashboard.member.articles\\\\|MemberDashboard\\\\|Member.*Article\" app/Http/Controllers)",
+      "Bash(grep -n 'model\\\\|$results\\\\|type' app/Services/Search/SearchService.php)",
+      "Bash(grep -rn '\\\\$event->type\\\\|\\\\$event->status\\\\|->type ===\\\\|->type ==\\\\|typeConfig\\\\|typeMap\\\\|\\\\$event->level' resources/views/livewire/events/ resources/views/web/home.blade.php resources/views/web/events/)",
+      "Bash(grep -rn 'registration->status\\\\|reg->status\\\\|$reg\\\\['\\\\''status'\\\\''\\\\]' resources/views/ app/Http/Controllers/Events/ app/Livewire/Events/)",
+      "Bash(grep -n '$lv\\\\[' resources/views/web/home.blade.php)",
+      "Bash(grep -n '$lv\\\\b' resources/views/web/home.blade.php)",
+      "Bash(grep -iE 'companyaccount|account->status|\\\\$account')"
+    ]
+  }
+}

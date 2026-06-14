@@ -134,7 +134,7 @@
                             <div style="font-size:.75rem;color:#adb5bd">
                                 par {{ $article->author->name }}
                                 · {{ $article->created_at->diffForHumans() }}
-                                · <span class="badge px-2" style="background:{{ $article->level === 'beginner' ? '#edfaf3' : ($article->level === 'intermediate' ? '#fff5f0' : '#fdeaec') }};color:{{ $article->level === 'beginner' ? '#2ecc71' : ($article->level === 'intermediate' ? '#e8590c' : '#e74c3c') }};font-size:.65rem;">{{ ['beginner'=>'Débutant','intermediate'=>'Intermédiaire','advanced'=>'Avancé'][$article->level] ?? $article->level }}</span>
+                                · <span class="badge px-2" style="background:{{ $article->level->badgeBackground() }};color:{{ $article->level->accentColor() }};font-size:.65rem;">{{ $article->level->label() }}</span>
                             </div>
                         </div>
                     </div>

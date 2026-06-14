@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Company\Resources\CompanyApplicationResource\Pages;
 
+use App\Enums\JobApplicationStatus;
 use App\Filament\Company\Resources\CompanyApplicationResource;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Textarea;
@@ -29,7 +30,7 @@ class ViewCompanyApplication extends ViewRecord
                 ->label('Présélectionner')
                 ->icon('heroicon-o-star')
                 ->color('primary')
-                ->visible(fn () => in_array($this->record->status, ['pending', 'viewed']))
+                ->visible(fn () => in_array($this->record->status, [JobApplicationStatus::Pending, JobApplicationStatus::Viewed], true))
                 ->action(function (): void {
                     $this->record->update(['status' => 'shortlisted']);
                     Notification::make()->title('Candidature présélectionnée')->success()->send();
@@ -40,7 +41,7 @@ class ViewCompanyApplication extends ViewRecord
                 ->label('Accepter')
                 ->icon('heroicon-o-check-circle')
                 ->color('success')
-                ->visible(fn () => $this->record->status !== 'accepted')
+                ->visible(fn () => $this->record->status !== JobApplicationStatus::Accepted)
                 ->requiresConfirmation()
                 ->action(function (): void {
                     $this->record->update(['status' => 'accepted']);
@@ -52,7 +53,7 @@ class ViewCompanyApplication extends ViewRecord
                 ->label('Refuser')
                 ->icon('heroicon-o-x-circle')
                 ->color('danger')
-                ->visible(fn () => $this->record->status !== 'rejected')
+                ->visible(fn () => $this->record->status !== JobApplicationStatus::Rejected)
                 ->schema([
                     Textarea::make('employer_note')
                         ->label('Note interne (optionnel)')

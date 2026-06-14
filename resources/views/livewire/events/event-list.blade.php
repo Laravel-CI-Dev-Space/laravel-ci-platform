@@ -70,14 +70,6 @@
                 <div class="row g-4">
                     @foreach ($events as $event)
                         @php
-                            $typeConfig = match($event->type) {
-                                'meetup'     => ['label' => 'Meetup',      'icon' => 'fa-solid fa-people-roof',   'bg' => '#fff4e5', 'color' => '#ea580c', 'bannerClass' => 'ev-meetup'],
-                                'webinar'    => ['label' => 'Webinaire',   'icon' => 'fa-solid fa-video',         'bg' => '#e7ebff', 'color' => '#4361ee', 'bannerClass' => 'ev-webinar'],
-                                'hackathon'  => ['label' => 'Hackathon',   'icon' => 'fa-solid fa-laptop-code',   'bg' => '#f1e7ff', 'color' => '#7209b7', 'bannerClass' => 'ev-hackathon'],
-                                'conference' => ['label' => 'Conférence',  'icon' => 'fa-solid fa-microphone',    'bg' => '#e7fff1', 'color' => '#2d9b4e', 'bannerClass' => 'ev-meetup'],
-                                'workshop'   => ['label' => 'Workshop',    'icon' => 'fa-solid fa-screwdriver-wrench', 'bg' => '#e7f7ff', 'color' => '#0891b2', 'bannerClass' => 'ev-webinar'],
-                                default      => ['label' => ucfirst($event->type), 'icon' => 'fa-solid fa-calendar', 'bg' => '#f1f5f9', 'color' => '#64748b', 'bannerClass' => 'ev-meetup'],
-                            };
                             $spotsLeft = $event->spotsLeft();
                             $pct       = ($event->capacity && $event->capacity > 0)
                                 ? min(100, round(($event->registrations_count / $event->capacity) * 100))
@@ -92,7 +84,7 @@
                                         <i class="fa-solid fa-clock-rotate-left"></i> Événement passé
                                     </span>
                                 @endif
-                                <div class="event-banner {{ $typeConfig['bannerClass'] }}"></div>
+                                <div class="event-banner {{ $event->type->bannerClass() }}"></div>
                                 <div class="card-pad">
                                     <div class="d-flex gap-3 mb-3">
                                         <div class="event-date-chip">
@@ -101,9 +93,9 @@
                                         </div>
                                         <div>
                                             <span class="badge-pill"
-                                                  style="background:{{ $typeConfig['bg'] }};color:{{ $typeConfig['color'] }}">
-                                                <i class="{{ $typeConfig['icon'] }}"></i>
-                                                {{ $typeConfig['label'] }}
+                                                  style="background:{{ $event->type->background() }};color:{{ $event->type->color() }}">
+                                                <i class="{{ $event->type->icon() }}"></i>
+                                                {{ $event->type->label() }}
                                             </span>
                                             <h3 class="art-title mt-2 mb-0" style="font-size:1.05rem">
                                                 <a href="{{ route('events.show', $event->slug) }}" class="text-navy">

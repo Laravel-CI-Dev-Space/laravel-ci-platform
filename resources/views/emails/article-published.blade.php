@@ -20,7 +20,7 @@
         </div>
         <div class="info-row">
             <strong>Niveau</strong>
-            <span class="badge">{{ \App\Models\Article::$levelLabels[$article->level] ?? $article->level }}</span>
+            <span class="badge">{{ $article->level->label() }}</span>
         </div>
     </div>
 

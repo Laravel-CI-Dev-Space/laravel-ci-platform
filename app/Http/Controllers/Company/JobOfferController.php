@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Company;
 
+use App\Enums\JobContractType;
+use App\Enums\JobLevel;
 use App\Http\Controllers\Controller;
 use App\Models\CompanyAccount;
 use App\Models\JobOffer;
@@ -13,6 +15,7 @@ use App\Services\Jobs\JobOfferService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class JobOfferController extends Controller
@@ -54,8 +57,8 @@ class JobOfferController extends Controller
         $data = $request->validate([
             'title'          => ['required', 'string', 'max:200'],
             'description'    => ['required', 'string', 'min:100'],
-            'contract_type'  => ['required', 'in:cdi,cdd,freelance,internship,apprenticeship'],
-            'level'          => ['required', 'in:junior,intermediate,senior,lead,any'],
+            'contract_type'  => ['required', Rule::enum(JobContractType::class)],
+            'level'          => ['required', Rule::enum(JobLevel::class)],
             'location'       => ['nullable', 'string', 'max:150'],
             'country'        => ['nullable', 'string', 'max:100'],
             'is_remote'      => ['boolean'],

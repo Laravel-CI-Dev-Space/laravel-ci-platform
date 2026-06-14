@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Blog;
 
+use App\Enums\ArticleLevel;
 use App\Enums\UserPermission;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -28,7 +29,7 @@ class StoreArticleRequest extends FormRequest
             'title'       => ['required', 'string', 'min:10', 'max:300'],
             'excerpt'     => ['nullable', 'string', 'max:500'],
             'body'        => ['required', 'string', 'min:100'],
-            'level'       => ['required', 'in:beginner,intermediate,advanced'],
+            'level'       => ['required', Rule::enum(ArticleLevel::class)],
             'tags'        => ['required', 'array', 'min:1', 'max:5'],
             'tags.*'      => ['integer', Rule::exists('tags', 'id')->whereIn('scope', ['blog', 'both'])],
             'cover_image' => ['nullable', 'image', 'max:2048'],

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\ArticleLevel;
+use App\Enums\ArticleStatus;
 use App\Enums\UserRole;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -41,6 +43,8 @@ class Article extends Model
             'newsletter_sent' => 'boolean',
             'views_count'     => 'integer',
             'comments_count'  => 'integer',
+            'level'           => ArticleLevel::class,
+            'status'          => ArticleStatus::class,
         ];
     }
 
@@ -113,30 +117,18 @@ class Article extends Model
 
     public function isPublished(): bool
     {
-        return $this->status === 'published';
+        return $this->status === ArticleStatus::Published;
     }
 
     public function isPending(): bool
     {
-        return $this->status === 'pending';
+        return $this->status === ArticleStatus::Pending;
     }
 
     public function isOwnedBy(User $user): bool
     {
         return $this->user_id === $user->id;
     }
-
-    public static array $levelLabels = [
-        'beginner'     => 'Débutant',
-        'intermediate' => 'Intermédiaire',
-        'advanced'     => 'Avancé',
-    ];
-
-    public static array $levelColors = [
-        'beginner'     => 'success',
-        'intermediate' => 'warning',
-        'advanced'     => 'danger',
-    ];
 
     /**
      * Représentation indexée dans Meilisearch pour la recherche globale.
@@ -151,8 +143,8 @@ class Article extends Model
             'excerpt'    => $this->excerpt,
             'body'       => strip_tags($this->body),
             'slug'       => $this->slug,
-            'level'      => $this->level,
-            'status'     => $this->status,
+            'level'      => $this->level->value,
+            'status'     => $this->status->value,
             'tags'       => $this->tags->pluck('name')->join(', '),
             'author'     => $this->author?->name,
             'type'       => 'article',
@@ -166,6 +158,6 @@ class Article extends Model
      */
     public function shouldBeSearchable(): bool
     {
-        return $this->status === 'published';
+        return $this->status === ArticleStatus::Published;
     }
 }

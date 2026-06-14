@@ -53,7 +53,7 @@
       <div class="row align-items-center g-5 {{ $origin->media_position === 'left' ? 'flex-row-reverse' : '' }}">
 
         {{-- Colonne texte --}}
-        <div class="col-lg-{{ $origin->media_type === 'none' ? '12' : '6' }} reveal">
+        <div class="col-lg-{{ $origin->media_type === \App\Enums\MediaType::None ? '12' : '6' }} reveal">
           @if($origin->eyebrow)
             <span class="section-eyebrow">{{ $origin->eyebrow }}</span>
           @endif
@@ -62,7 +62,7 @@
         </div>
 
         {{-- Colonne média --}}
-        @if($origin->media_type !== 'none')
+        @if($origin->media_type !== \App\Enums\MediaType::None)
         <div class="col-lg-6 reveal" data-delay="0.08">
           @if($origin->isImage())
             <img src="{{ $origin->mediaUrl() }}"

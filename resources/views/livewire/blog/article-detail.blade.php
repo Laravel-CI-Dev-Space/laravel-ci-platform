@@ -108,14 +108,9 @@
                         <span>{{ $article->tags->first()->name ?? 'Article' }}</span>
                     </div>
 
-                    @php
-                        $levelLabels  = ['beginner' => 'Débutant', 'intermediate' => 'Intermédiaire', 'advanced' => 'Avancé'];
-                        $levelBadge   = ['beginner' => 'badge-green', 'intermediate' => 'badge-orange', 'advanced' => ''];
-                        $levelStyle   = $article->level === 'advanced' ? 'background:#fdeaec;color:var(--level-advanced)' : '';
-                    @endphp
-                    <span class="badge-pill {{ $levelBadge[$article->level] ?? '' }}" style="{{ $levelStyle }}">
-                        <span class="lv-dot" style="background:var(--level-{{ $article->level }})"></span>
-                        {{ $levelLabels[$article->level] ?? $article->level }}
+                    <span class="badge-pill" style="background:{{ $article->level->badgeBackground() }};color:{{ $article->level->accentColor() }}">
+                        <span class="lv-dot" style="background:{{ $article->level->accentColor() }}"></span>
+                        {{ $article->level->label() }}
                     </span>
 
                     <h1 class="mt-3">{{ $article->title }}</h1>
@@ -272,12 +267,11 @@
                         @foreach ($similarArticles as $related)
                             <div class="col-md-4 reveal">
                                 <article class="card-soft article-card">
-                                    <div class="level-banner lv-{{ $related->level }}"></div>
+                                    <div class="level-banner lv-{{ $related->level->value }}"></div>
                                     <div class="card-pad">
-                                        @php $rLabel = ['beginner'=>'Débutant','intermediate'=>'Intermédiaire','advanced'=>'Avancé']; @endphp
-                                        <span class="badge-pill badge-{{ $related->level === 'beginner' ? 'green' : ($related->level === 'intermediate' ? 'orange' : '') }}">
-                                            <span class="lv-dot" style="background:var(--level-{{ $related->level }})"></span>
-                                            {{ $rLabel[$related->level] ?? $related->level }}
+                                        <span class="badge-pill" style="background:{{ $related->level->badgeBackground() }};color:{{ $related->level->accentColor() }}">
+                                            <span class="lv-dot" style="background:{{ $related->level->accentColor() }}"></span>
+                                            {{ $related->level->label() }}
                                         </span>
                                         <h3 class="art-title">
                                             <a href="{{ route('blog.show', $related->slug) }}">{{ $related->title }}</a>

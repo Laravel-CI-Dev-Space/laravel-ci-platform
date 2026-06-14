@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Settings\Tables;
 
+use App\Enums\MediaType;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
@@ -24,18 +25,13 @@ class AboutOriginSectionsTable
                 TextColumn::make('media_type')
                     ->label('Média')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'image'   => 'success',
-                        'video'   => 'info',
-                        'youtube' => 'danger',
-                        default   => 'gray',
+                    ->color(fn (MediaType $state): string => match ($state) {
+                        MediaType::Image   => 'success',
+                        MediaType::Video   => 'info',
+                        MediaType::Youtube => 'danger',
+                        default            => 'gray',
                     })
-                    ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'image'   => 'Image',
-                        'video'   => 'Vidéo',
-                        'youtube' => 'YouTube',
-                        default   => 'Aucun',
-                    }),
+                    ->formatStateUsing(fn (MediaType $state): string => $state->label()),
 
                 TextColumn::make('media_position')
                     ->label('Position')

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Blog;
 
+use App\Enums\ArticleStatus;
 use App\Models\Article;
 use App\Models\Tag;
 use App\Models\User;
@@ -132,7 +133,7 @@ class ArticleService
     public function submitForReview(User $user, Article $article): void
     {
         abort_unless($article->isOwnedBy($user), 403);
-        abort_unless(in_array($article->status, ['draft', 'rejected'], true), 422);
+        abort_unless(in_array($article->status, [ArticleStatus::Draft, ArticleStatus::Rejected], true), 422);
 
         $article->update(['status' => 'pending']);
     }

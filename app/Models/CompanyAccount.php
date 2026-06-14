@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\CompanyAccountStatus;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -30,6 +31,7 @@ class CompanyAccount extends Authenticatable
             'password'            => 'hashed',
             'password_changed_at' => 'datetime',
             'last_login_at'       => 'datetime',
+            'status'              => CompanyAccountStatus::class,
         ];
     }
 
@@ -65,22 +67,22 @@ class CompanyAccount extends Authenticatable
 
     public function isPending(): bool
     {
-        return $this->status === 'pending';
+        return $this->status === CompanyAccountStatus::Pending;
     }
 
     public function isActive(): bool
     {
-        return $this->status === 'active';
+        return $this->status === CompanyAccountStatus::Active;
     }
 
     public function isSuspended(): bool
     {
-        return $this->status === 'suspended';
+        return $this->status === CompanyAccountStatus::Suspended;
     }
 
     public function isRejected(): bool
     {
-        return $this->status === 'rejected';
+        return $this->status === CompanyAccountStatus::Rejected;
     }
 
     /** Retourne true si le mot de passe temporaire n'a pas encore été changé. */
