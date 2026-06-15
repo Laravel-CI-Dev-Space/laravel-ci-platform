@@ -53,3 +53,25 @@ function something()
 {
     // ..
 }
+
+function makeMember(array $attributes = []): \App\Models\User
+{
+    $user = \App\Models\User::factory()->create($attributes);
+    $user->assignRole('member');
+    \App\Models\Profile::create(['user_id' => $user->id]);
+
+    return $user;
+}
+
+function makeCompanyAccount(array $attributes = []): \App\Models\CompanyAccount
+{
+    return \App\Models\CompanyAccount::create(array_merge([
+        'first_name'          => 'Jean',
+        'last_name'           => 'Dupont',
+        'email'               => fake()->unique()->safeEmail(),
+        'password'            => 'secret',
+        'position'            => 'RH',
+        'status'              => \App\Enums\CompanyAccountStatus::Active,
+        'password_changed_at' => now(),
+    ], $attributes));
+}

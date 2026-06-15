@@ -152,11 +152,11 @@
                                 <div class="sidebar-title">Détails du poste</div>
                                 <div class="info-row">
                                     <div class="ic"><i class="fa-solid fa-briefcase"></i></div>
-                                    <div><div class="lbl">Contrat</div><div class="val">{{ $contractLabel }}</div></div>
+                                    <div><div class="lbl">Contrat</div><div class="val">{{ $offer->contract_type->label() }}</div></div>
                                 </div>
                                 <div class="info-row">
                                     <div class="ic"><i class="fa-solid fa-layer-group"></i></div>
-                                    <div><div class="lbl">Niveau</div><div class="val">{{ $levelLabel }}</div></div>
+                                    <div><div class="lbl">Niveau</div><div class="val">{{ $offer->level->label() }}</div></div>
                                 </div>
                                 @if ($offer->location)
                                     <div class="info-row">
