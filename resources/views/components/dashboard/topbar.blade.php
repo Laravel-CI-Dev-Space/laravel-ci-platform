@@ -15,6 +15,17 @@
   <div>
     <ul class="list-unstyled d-flex align-items-center mb-0 gap-1">
 
+      @if (session('viewing_as_member', false))
+        <li class="me-2">
+          <form method="POST" action="{{ route('view-as-member.disable') }}">
+            @csrf
+            <button type="submit" class="btn btn-sm btn-warning d-inline-flex align-items-center gap-1">
+              <i class="ti ti-user-shield"></i> Retour au mode Administrateur
+            </button>
+          </form>
+        </li>
+      @endif
+
       <!-- Bell icon -->
       <li class="dashboard-notification-bell">
         @livewire('notifications.notification-bell')

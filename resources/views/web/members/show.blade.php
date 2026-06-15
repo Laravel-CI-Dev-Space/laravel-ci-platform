@@ -95,7 +95,7 @@
         <!-- RECENT QUESTIONS -->
         <div class="col-lg-8">
           <h2 class="section-heading mb-4" style="font-size:var(--fs-h3)">Recent questions</h2>
-          @forelse($member->questions ?? [] as $question)
+          @forelse($recentQuestions as $question)
             <div class="q-card">
               <div class="q-stats">
                 <div class="q-vote"><span>{{ $question->votes_count }}</span><small>votes</small></div>
@@ -123,7 +123,7 @@
         <div class="col-lg-4">
           <div class="sidebar-card">
             <div class="sidebar-title">Recent articles</div>
-            @forelse($member->articles ?? [] as $article)
+            @forelse($recentArticles as $article)
               <div class="tag-list-item">
                 <a href="{{ route('blog.show', $article) }}" style="font-weight:500">{{ $article->title }}</a>
               </div>

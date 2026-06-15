@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\MediaType;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 #[Fillable([
     'eyebrow', 'title', 'content', 'media_type', 'media_path',
@@ -12,12 +13,31 @@ use Illuminate\Database\Eloquent\Model;
 ])]
 class AboutOriginSection extends Model
 {
+    private const CACHE_KEY = 'about_origin_section:active';
+
     protected function casts(): array
     {
         return [
             'is_active'  => 'boolean',
             'media_type' => MediaType::class,
         ];
+    }
+
+    /** Retourne la section "origines" active (mise en cache indéfiniment). */
+    public static function cachedActive(): ?self
+    {
+        $row = Cache::rememberForever(
+            self::CACHE_KEY,
+            fn () => static::where('is_active', true)->first()?->toArray()
+        );
+
+        return $row ? static::hydrate([$row])->first() : null;
+    }
+
+    protected static function booted(): void
+    {
+        static::saved(fn () => Cache::forget(self::CACHE_KEY));
+        static::deleted(fn () => Cache::forget(self::CACHE_KEY));
     }
 
     /** Retourne l'URL du média ou null selon le type. */

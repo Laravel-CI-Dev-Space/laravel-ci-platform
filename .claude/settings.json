@@ -15,7 +15,17 @@
       "Bash(grep -rn 'registration->status\\\\|reg->status\\\\|$reg\\\\['\\\\''status'\\\\''\\\\]' resources/views/ app/Http/Controllers/Events/ app/Livewire/Events/)",
       "Bash(grep -n '$lv\\\\[' resources/views/web/home.blade.php)",
       "Bash(grep -n '$lv\\\\b' resources/views/web/home.blade.php)",
-      "Bash(grep -iE 'companyaccount|account->status|\\\\$account')"
+      "Bash(grep -iE 'companyaccount|account->status|\\\\$account')",
+      "Bash(grep -n '@php\\\\|->get\\(\\)\\\\|->all\\(\\)\\\\|->paginate\\\\|::where\\\\|auth\\(\\)->user\\(\\)\\\\|$user' resources/views/dashboard/member/overview.blade.php)",
+      "Bash(grep -nE '$recentQuestions|$recentArticles|->tags|->user|->author|->answers_count|->votes_score' resources/views/dashboard/member/overview.blade.php)",
+      "Bash(grep -n '@php\\\\|jobFavorites\\\\|favorites\\(\\)\\\\|$jobs\\\\|->get\\(\\)\\\\|->with\\(' resources/views/dashboard/member/favorites.blade.php)",
+      "Bash(grep -n -E '\\\\$member->\\(questions|articles|answers\\)|@php|->get\\\\\\(' resources/views/web/members/show.blade.php)",
+      "Bash(php -l app/Filament/Company/Widgets/CompanyRecentApplicationsWidget.php)",
+      "Bash(php -l resources/views/web/members/show.blade.php)",
+      "Bash(php -l app/Filament/Pages/ViewAsMember.php)",
+      "Bash(php -l app/Http/Middleware/EnsureMemberDashboardAccess.php)",
+      "Bash(php -l bootstrap/app.php)",
+      "Bash(php -l app/Http/Controllers/ViewAsMemberController.php)"
     ]
   }
 }

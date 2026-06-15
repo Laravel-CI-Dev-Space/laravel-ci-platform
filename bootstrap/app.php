@@ -5,6 +5,7 @@ use App\Http\Middleware\CompanyActive;
 use App\Http\Middleware\CompanyAuthenticated;
 use App\Http\Middleware\CompanyGuest;
 use App\Http\Middleware\CompanyMustChangePassword;
+use App\Http\Middleware\EnsureMemberDashboardAccess;
 use App\Http\Middleware\EnsureProfileComplete;
 use App\Http\Middleware\RunScheduler;
 use App\Http\Middleware\TrackPageView;
@@ -38,6 +39,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'company.password'  => CompanyMustChangePassword::class,
             'company.guest'     => CompanyGuest::class,
             'viewing.as.member' => ViewingAsMember::class,
+            'member.dashboard'  => EnsureMemberDashboardAccess::class,
 
             // Middlewares Spatie Permission
             'role'               => RoleMiddleware::class,

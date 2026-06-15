@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\CachesActiveRecords;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -9,6 +10,8 @@ use Illuminate\Database\Eloquent\Model;
 #[Fillable(['period', 'title', 'description', 'order', 'is_active'])]
 class TimelineEvent extends Model
 {
+    use CachesActiveRecords;
+
     protected function casts(): array
     {
         return [

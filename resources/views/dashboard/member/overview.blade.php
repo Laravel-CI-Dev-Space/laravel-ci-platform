@@ -13,7 +13,7 @@
   $articleCount    = $me->articles()->where('status', 'published')->count();
   $votesScore      = $me->questions()->sum('votes_score');
 
-  $recentQuestions = $me->questions()->latest()->take(5)->get();
+  $recentQuestions = $me->questions()->withCount('answers')->latest()->take(5)->get();
 
   $recentArticles  = $me->articles()->latest()->take(5)->get();
 
@@ -103,7 +103,7 @@
                   {{ $question->hasAcceptedAnswer() ? 'Answered' : 'Open' }}
                 </span>
                 <span>·</span>
-                <span><i class="ti ti-messages"></i> {{ $question->answers()->count() }}</span>
+                <span><i class="ti ti-messages"></i> {{ $question->answers_count }}</span>
                 <span>·</span>
                 <span>{{ $question->created_at->diffForHumans() }}</span>
               </div>

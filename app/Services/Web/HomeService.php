@@ -20,7 +20,7 @@ class HomeService
 
         return [
             'settings'  => SiteSetting::getGroup('home'),
-            'stats'     => HomeStat::active()->get(),
+            'stats'     => HomeStat::cachedActive(),
             'questions' => Question::with(['user', 'tags'])
                 ->published()
                 ->withCount('answers')
@@ -37,7 +37,7 @@ class HomeService
                 ->orderBy('starts_at')
                 ->limit($previewEvents)
                 ->get(),
-            'partners' => Partner::active()->get(),
+            'partners' => Partner::cachedActive(),
         ];
     }
 

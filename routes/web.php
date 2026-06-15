@@ -171,7 +171,10 @@ Route::get('/members/{username}', function (string $username) {
         $member->grade      = $member->profile->grade;
     }
 
-    return view('web.members.show', compact('member'));
+    $recentQuestions = $member->questions()->with('tags')->latest()->take(5)->get();
+    $recentArticles  = $member->articles()->where('status', 'published')->latest()->take(5)->get();
+
+    return view('web.members.show', compact('member', 'recentQuestions', 'recentArticles'));
 })->name('members.show');
 
 // ─── AUTHENTICATION ────────────────────────────────────────
@@ -219,7 +222,7 @@ Route::middleware(['auth', 'active'])->group(function () {
             ->name('dashboard');
 
         // ─── MEMBER DASHBOARD ──────────────────────────────
-        Route::middleware('role:member')
+        Route::middleware('member.dashboard')
             ->prefix('dashboard/member')
             ->name('dashboard.member.')
             ->group(function () {

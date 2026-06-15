@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Filament\Company\Widgets;
 
+use App\Enums\JobApplicationStatus;
+use App\Filament\Company\Resources\CompanyApplicationResource;
 use App\Models\JobApplication;
 use App\Models\JobOffer;
-use Filament\Tables\Columns\BadgeColumn;
+use Filament\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
-use Illuminate\Database\Eloquent\Builder;
 
 class CompanyRecentApplicationsWidget extends BaseWidget
 {
@@ -46,22 +47,8 @@ class CompanyRecentApplicationsWidget extends BaseWidget
                 TextColumn::make('status')
                     ->label('Statut')
                     ->badge()
-                    ->color(fn ($state) => match ($state) {
-                        'pending'     => 'gray',
-                        'viewed'      => 'info',
-                        'shortlisted' => 'primary',
-                        'accepted'    => 'success',
-                        'rejected'    => 'danger',
-                        default       => 'gray',
-                    })
-                    ->formatStateUsing(fn ($state) => match ($state) {
-                        'pending'     => 'En attente',
-                        'viewed'      => 'Vue',
-                        'shortlisted' => 'Présélectionnée',
-                        'accepted'    => 'Acceptée',
-                        'rejected'    => 'Refusée',
-                        default       => ucfirst($state),
-                    }),
+                    ->color(fn (JobApplicationStatus $state): string => $state->color())
+                    ->formatStateUsing(fn (JobApplicationStatus $state): string => $state->label()),
 
                 TextColumn::make('created_at')
                     ->label('Reçue le')
@@ -70,10 +57,10 @@ class CompanyRecentApplicationsWidget extends BaseWidget
                     ->color('gray'),
             ])
             ->actions([
-                \Filament\Actions\Action::make('view')
+                Action::make('view')
                     ->label('Voir')
                     ->icon('heroicon-o-eye')
-                    ->url(fn (JobApplication $record) => \App\Filament\Company\Resources\CompanyApplicationResource::getUrl('view', ['record' => $record]))
+                    ->url(fn (JobApplication $record) => CompanyApplicationResource::getUrl('view', ['record' => $record]))
                     ->color('gray'),
             ])
             ->paginated(false);

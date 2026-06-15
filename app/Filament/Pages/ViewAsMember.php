@@ -8,7 +8,6 @@ use App\Enums\UserRole;
 use BackedEnum;
 use Filament\Pages\Page;
 use Filament\Support\Icons\Heroicon;
-use Illuminate\Http\RedirectResponse;
 
 /**
  * Page d'action permettant à un admin/super-admin/modérateur de basculer
@@ -38,11 +37,11 @@ class ViewAsMember extends Page
     /**
      * Active immédiatement le mode "Naviguer en tant que Membre" et redirige vers l'accueil.
      */
-    public function mount(): RedirectResponse
+    public function mount()
     {
         session(['viewing_as_member' => true]);
 
-        return redirect()->route('home')
+        return redirect()->route('dashboard.member.overview')
             ->with('success', 'Vous naviguez désormais en tant que membre.');
     }
 }

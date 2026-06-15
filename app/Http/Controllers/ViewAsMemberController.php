@@ -32,7 +32,7 @@ class ViewAsMemberController extends Controller
 
         session(['viewing_as_member' => true]);
 
-        return redirect()->route('home')
+        return redirect()->route('dashboard.member.overview')
             ->with('success', 'Vous naviguez désormais en tant que membre.');
     }
 

@@ -16,11 +16,11 @@ class AboutService
     {
         return [
             'settings' => SiteSetting::getGroup('about'),
-            'origin'   => AboutOriginSection::where('is_active', true)->first(),
-            'timeline' => TimelineEvent::active()->get(),
-            'team'     => TeamMember::active()->get(),
-            'values'   => CommunityValue::active()->get(),
-            'partners' => Partner::active()->get(),
+            'origin'   => AboutOriginSection::cachedActive(),
+            'timeline' => TimelineEvent::cachedActive(),
+            'team'     => TeamMember::cachedActive(),
+            'values'   => CommunityValue::cachedActive(),
+            'partners' => Partner::cachedActive(),
         ];
     }
 }
