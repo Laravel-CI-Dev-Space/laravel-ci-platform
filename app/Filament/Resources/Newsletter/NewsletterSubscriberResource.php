@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Newsletter;
 
+use App\Filament\Resources\Concerns\AuthorizesViaPermission;
 use App\Filament\Resources\Newsletter\Pages\CreateNewsletterSubscriber;
 use App\Filament\Resources\Newsletter\Pages\EditNewsletterSubscriber;
 use App\Filament\Resources\Newsletter\Pages\ListNewsletterSubscribers;
@@ -22,6 +23,8 @@ use Illuminate\Database\Eloquent\Builder;
 
 class NewsletterSubscriberResource extends Resource
 {
+    use AuthorizesViaPermission;
+
     protected static ?string $model = NewsletterSubscriber::class;
 
     protected static string|\BackedEnum|null $navigationIcon = Heroicon::OutlinedEnvelope;

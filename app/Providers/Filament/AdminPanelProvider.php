@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\AdminDashboard;
+use App\Filament\Resources\Newsletter\NewsletterSubscriberResource;
 use App\Http\Middleware\FilamentAdminAccess;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -46,6 +47,7 @@ class AdminPanelProvider extends PanelProvider
             ->authGuard('web')
 
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
+            ->resources([NewsletterSubscriberResource::class])
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
 
