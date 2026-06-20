@@ -437,3 +437,20 @@ Route::prefix('company')->name('company.')->group(function () {
         Route::get('/applications/{application}/cv', [CompanyApplicationController::class, 'downloadCv'])->name('applications.cv');
     });
 });
+
+// ─── E2E TEST-ONLY LOGIN — never enabled outside local/testing ─
+if (app()->environment(['local', 'testing', 'e2e'])) {
+    Route::get('/_e2e/login/{email}', function (string $email) {
+        $user = \App\Models\User::where('email', $email)->firstOrFail();
+        auth()->guard('web')->login($user);
+
+        return redirect('/');
+    })->name('e2e.login');
+
+    Route::get('/_e2e/login-company/{email}', function (string $email) {
+        $account = \App\Models\CompanyAccount::where('email', $email)->firstOrFail();
+        auth()->guard('company')->login($account);
+
+        return redirect('/company/portal');
+    })->name('e2e.login-company');
+}

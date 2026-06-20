@@ -5,11 +5,15 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite",
-    "prepare": "husky"
+    "prepare": "husky",
+    "e2e:setup": "touch database/e2e.sqlite && php artisan migrate:fresh --seed --env=e2e --force",
+    "e2e:serve": "npm run e2e:setup && APP_ENV=e2e php artisan serve --port=8010",
+    "e2e": "playwright test"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.5.3",
     "@commitlint/config-conventional": "^20.5.3",
+    "@playwright/test": "^1.61.0",
     "@tailwindcss/vite": "^4.0.0",
     "concurrently": "^9.0.1",
     "husky": "^9.1.7",

@@ -25,6 +25,10 @@ class DatabaseSeeder extends Seeder
             GradeSeeder::class,               // 14. Grades de réputation
         ]);
 
+        if (config('database.default') === 'sqlite' && str_contains((string) config('database.connections.sqlite.database'), 'e2e')) {
+            $this->call(E2eSeeder::class);
+        }
+
         $this->command->info('');
         $this->command->info('🇨🇮 Laravel CI — Database seeded successfully!');
         $this->command->info('');
