@@ -19,7 +19,7 @@
 
   @php
     $favicon    = $globalSettings->get('identity_favicon')?->value;
-    $faviconUrl = $favicon ? asset('assets/' . $favicon) : asset('assets/web/img/favicon.png');
+    $faviconUrl = $favicon ? asset('assets/' . $favicon) : asset('assets/web/img/mascot.png');
   @endphp
   <link rel="icon" href="{{ $faviconUrl }}" />
 
