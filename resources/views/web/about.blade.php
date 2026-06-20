@@ -1,6 +1,7 @@
 @extends('layouts.web')
 
 @section('title', 'About — Laravel CI')
+@section('description', 'Learn about Laravel Côte d\'Ivoire — our mission, founding team, and vision for the Ivorian PHP & Laravel developer community.')
 
 @section('content')
 
@@ -11,8 +12,8 @@
         <div class="col-lg-7">
           <span class="badge-pill badge-navy"><i class="fa-brands fa-laravel text-orange"></i> Founded 2026 · Open source</span>
           <h1 class="my-3">{{ $settings->firstWhere('key', 'about_hero_title')?->value ?? "We're building the home for Ivorian Laravel developers" }}</h1>
-          <p class="lead" style="max-width:42rem">{{ $settings->firstWhere('key', 'about_hero_subtitle')?->value ?? "Laravel Côte d'Ivoire is the first structured developer community dedicated to Laravel & PHP in Côte d'Ivoire." }}</p>
-          <a href="{{ route('login') }}" class="btn btn-brand btn-lg mt-2"><i class="fa-solid fa-user-plus"></i> Join us</a>
+          <p class="lead" style="max-width:42rem">{{ $settings->firstWhere('key', 'about_hero_subtitle')?->value ?? "Laravel Côte d'Ivoire is the first structured developer community dedicated to Laravel & PHP in Côte d'Ivoire and the diaspora — built on knowledge sharing, inclusion, and collective growth." }}</p>
+          <a href="{{ route('join') }}" class="btn btn-brand btn-lg mt-2"><i class="fa-solid fa-user-plus"></i> Join us</a>
         </div>
         <div class="col-lg-5 d-none d-lg-block">
           <div class="mascot-art" style="width:clamp(200px,22vw,280px)">
@@ -205,9 +206,9 @@
       <div class="cta-banner reveal">
         <h2 class="mb-3">{{ $settings->firstWhere('key', 'about_cta_title')?->value ?? 'Your seat at the table is ready' }}</h2>
         <p class="lead mb-4" style="color:rgba(255,255,255,.9);max-width:38rem;margin-inline:auto">
-          {{ $settings->firstWhere('key', 'about_cta_text')?->value ?? 'Join 500+ Ivorian developers building the future of African tech.' }}
+          {{ $settings->firstWhere('key', 'about_cta_text')?->value ?? 'Join 500+ Ivorian developers building the future of African tech, one commit at a time.' }}
         </p>
-        <a href="{{ route('login') }}" class="btn btn-light btn-lg"><i class="fa-brands fa-github"></i> Join the Community</a>
+        <a href="{{ route('join') }}" class="btn btn-light btn-lg"><i class="fa-brands fa-github"></i> Join the Community</a>
       </div>
     </div>
   </section>

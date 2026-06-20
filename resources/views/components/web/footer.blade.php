@@ -35,22 +35,22 @@
         <p style="max-width:22rem">{{ $tagline }}</p>
         <div class="social-row">
           @if($github)
-            <a href="{{ $github }}" class="social-icon" target="_blank" rel="noopener" aria-label="GitHub">
+            <a href="{{ $github }}" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
               <i class="fa-brands fa-github"></i>
             </a>
           @endif
           @if($linkedin)
-            <a href="{{ $linkedin }}" class="social-icon" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <a href="{{ $linkedin }}" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
               <i class="fa-brands fa-linkedin-in"></i>
             </a>
           @endif
           @if($whatsapp)
-            <a href="{{ $whatsapp }}" class="social-icon" target="_blank" rel="noopener" aria-label="WhatsApp">
+            <a href="{{ $whatsapp }}" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
               <i class="fa-brands fa-whatsapp"></i>
             </a>
           @endif
           @if($twitter)
-            <a href="{{ $twitter }}" class="social-icon" target="_blank" rel="noopener" aria-label="X / Twitter">
+            <a href="{{ $twitter }}" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="X / Twitter">
               <i class="fa-brands fa-x-twitter"></i>
             </a>
           @endif
@@ -80,10 +80,10 @@
         <h5>{{ $col2Title }}</h5>
         <ul class="footer-links">
           <li><a href="{{ route('about') }}">About us</a></li>
-          <li><a href="{{ route('login') }}">Become a member</a></li>
+          <li><a href="{{ route('join') }}">Join us</a></li>
           <li><a href="{{ $cocUrl }}">Code of conduct</a></li>
           @if($github)
-            <li><a href="{{ $github }}" target="_blank" rel="noopener">{{ $githubLabel }}</a></li>
+            <li><a href="{{ $github }}" target="_blank" rel="noopener noreferrer">{{ $githubLabel }}</a></li>
           @endif
         </ul>
       </div>
@@ -104,7 +104,7 @@
           @endif
           @if($whatsapp)
             <li>
-              <a href="{{ $whatsapp }}" target="_blank" rel="noopener">
+              <a href="{{ $whatsapp }}" target="_blank" rel="noopener noreferrer">
                 <i class="fa-brands fa-whatsapp me-2"></i>{{ $whatsappLabel }}
               </a>
             </li>
@@ -112,6 +112,10 @@
         </ul>
       </div>
 
+    </div>
+
+    <div class="footer-mascot-wrap" aria-hidden="true">
+      <img class="footer-mascot" src="{{ asset('assets/web/img/mascot.png') }}" alt="" loading="lazy" />
     </div>
 
     <div class="footer-bottom">

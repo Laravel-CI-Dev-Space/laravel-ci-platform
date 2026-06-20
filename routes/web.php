@@ -37,6 +37,20 @@ use Illuminate\Support\Facades\Route;
 // ─── PUBLIC WEB PAGES ──────────────────────────────────────
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [AboutController::class, 'index'])->name('about');
+Route::get('/join', fn () => view('web.join'))->name('join');
+
+Route::get('/robots.txt', function () {
+    $lines = [
+        'User-agent: *',
+        'Disallow: /dashboard',
+        'Disallow: /admin',
+        'Disallow: /profil',
+        '',
+        'Sitemap: ' . url('/sitemap.xml'),
+    ];
+
+    return response(implode("\n", $lines), 200, ['Content-Type' => 'text/plain']);
+});
 
 // ─── SEARCH ───────────────────────────────────────────────────
 Route::get('/search', [SearchController::class, 'index'])->name('search.index');

@@ -1474,6 +1474,21 @@ h1, h2, h3, h4, h5, h6 {
   display: flex; flex-wrap: wrap; gap: .8rem; justify-content: space-between; align-items: center;
 }
 .footer-bottom .heart { color: var(--orange); }
+.footer-mascot-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 2.5rem;
+  pointer-events: none;
+}
+.footer-mascot {
+  width: clamp(100px, 12vw, 140px);
+  opacity: .92;
+  filter: drop-shadow(0 8px 14px rgba(0,0,0,.25));
+  transform: rotate(-4deg);
+}
+.accordion-button { font-weight: 600; color: var(--navy); }
+.accordion-button:not(.collapsed) { background: var(--light-2); color: var(--navy); box-shadow: none; }
+.accordion-button:focus { box-shadow: 0 0 0 .2rem rgba(255,102,0,.2); }
 
 /* ================================
    PAGINATION

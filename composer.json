@@ -19,7 +19,8 @@
         "meilisearch/meilisearch-php": "^1.16",
         "mews/purifier": "*",
         "spatie/laravel-activitylog": "^5.0",
-        "spatie/laravel-permission": "^6.0"
+        "spatie/laravel-permission": "^6.0",
+        "spatie/laravel-sitemap": "^8.1"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

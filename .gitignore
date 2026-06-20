@@ -31,3 +31,6 @@ Thumbs.db
 /test-results
 /blob-report
 /playwright/.cache
+
+# Generated artifact — regenerated via `php artisan sitemap:generate`
+/public/sitemap.xml

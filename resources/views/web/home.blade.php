@@ -1,6 +1,7 @@
 @extends('layouts.web')
 
 @section('title', $settings->firstWhere('key', 'home_hero_title')?->value ?? "Laravel CI — The Laravel Community of Côte d'Ivoire")
+@section('description', $settings->firstWhere('key', 'home_hero_subtitle')?->value ?? 'Join 500+ Ivorian Laravel & PHP developers. Share knowledge, find jobs, attend events, and grow together.')
 
 @section('content')
 
@@ -22,7 +23,7 @@
           </h1>
           <p class="lead">{{ $settings->firstWhere('key', 'home_hero_subtitle')?->value ?? 'Join 500+ developers — share, learn, and grow together.' }}</p>
           <div class="d-flex flex-wrap gap-3 mt-4">
-            <a href="{{ route('login') }}" class="btn btn-brand btn-lg">
+            <a href="{{ route('join') }}" class="btn btn-brand btn-lg">
               <i class="fa-solid fa-user-plus"></i>
               {{ $settings->firstWhere('key', 'home_cta_primary_label')?->value ?? 'Join the Community' }}
             </a>
@@ -283,7 +284,7 @@
           {{ $settings->firstWhere('key', 'home_cta_banner_text')?->value ?? 'Sign in with GitHub, ask your first question, and meet 500+ developers who have your back.' }}
         </p>
         <div class="cta-cmd"><span class="cta-cmd-prompt">$</span> composer create-project laravel-ci/community <button class="cta-cmd-copy" type="button" aria-label="Copy"><i class="fa-regular fa-copy"></i></button></div>
-        <a href="{{ route('login') }}" class="btn btn-light btn-lg"><i class="fa-brands fa-github"></i> Join the Community</a>
+        <a href="{{ route('join') }}" class="btn btn-light btn-lg"><i class="fa-brands fa-github"></i> Join the Community</a>
       </div>
     </div>
   </section>
