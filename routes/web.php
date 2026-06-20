@@ -39,6 +39,13 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [AboutController::class, 'index'])->name('about');
 Route::get('/join', fn () => view('web.join'))->name('join');
 
+Route::get('/newsletter/unsubscribe/{token}', function (string $token) {
+    $subscriber = \App\Models\NewsletterSubscriber::where('token', $token)->firstOrFail();
+    $subscriber->unsubscribe();
+
+    return view('web.newsletter-unsubscribed');
+})->name('newsletter.unsubscribe');
+
 Route::get('/robots.txt', function () {
     $lines = [
         'User-agent: *',

@@ -6,7 +6,9 @@ namespace App\Filament\Resources\Articles\Tables;
 
 use App\Enums\ArticleLevel;
 use App\Enums\ArticleStatus;
+use App\Mail\NewsletterArticleMail;
 use App\Models\Article;
+use App\Models\NewsletterSubscriber;
 use Filament\Actions\Action as TableAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
@@ -19,6 +21,7 @@ use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Mail;
 
 class ArticlesTable
 {
@@ -168,6 +171,32 @@ class ArticlesTable
                     ->modalHeading('Dépublier cet article ?')
                     ->modalDescription("L'article repassera en brouillon et ne sera plus visible.")
                     ->action(fn (Article $record): bool => $record->update(['status' => 'draft'])),
+
+                TableAction::make('send_newsletter')
+                    ->label('Envoyer la newsletter')
+                    ->icon('heroicon-o-envelope')
+                    ->color('info')
+                    ->visible(fn (Article $record): bool => $record->status === ArticleStatus::Published && ! $record->newsletter_sent)
+                    ->requiresConfirmation()
+                    ->modalHeading('Envoyer la newsletter ?')
+                    ->modalDescription(function (Article $record): string {
+                        $count = NewsletterSubscriber::active()->count();
+                        return "Cet article sera envoyé à {$count} abonné(s) actif(s). Cette action est irréversible.";
+                    })
+                    ->action(function (Article $record): void {
+                        $subscribers = NewsletterSubscriber::active()->get();
+
+                        foreach ($subscribers as $subscriber) {
+                            Mail::to($subscriber->email)->send(new NewsletterArticleMail($record, $subscriber));
+                        }
+
+                        $record->update(['newsletter_sent' => true]);
+
+                        Notification::make()
+                            ->title("Newsletter envoyée à {$subscribers->count()} abonné(s)")
+                            ->success()
+                            ->send();
+                    }),
             ])
 
             ->defaultSort('created_at', 'desc');

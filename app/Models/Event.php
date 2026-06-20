@@ -28,6 +28,7 @@ use Spatie\Activitylog\Support\LogOptions;
     'recap_summary', 'recap_content', 'recap_video_url_1', 'recap_video_url_2',
     'recap_video_url_3', 'recap_document_path', 'recap_document_name',
     'recap_published_at', 'recap_published_by',
+    'newsletter_sent',
 ])]
 class Event extends Model
 {
@@ -63,6 +64,7 @@ class Event extends Model
             'ticketing_enabled'          => 'boolean',
             'guest_registration_enabled' => 'boolean',
             'recap_published_at'         => 'datetime',
+            'newsletter_sent'            => 'boolean',
         ];
     }
 

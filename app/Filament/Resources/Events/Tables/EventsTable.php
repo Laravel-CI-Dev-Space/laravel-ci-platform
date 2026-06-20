@@ -7,7 +7,9 @@ namespace App\Filament\Resources\Events\Tables;
 use App\Enums\EventStatus;
 use App\Enums\EventType;
 use App\Jobs\Events\SendEventReminder;
+use App\Mail\NewsletterEventMail;
 use App\Models\Event;
+use App\Models\NewsletterSubscriber;
 use Filament\Actions\Action as TableAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
@@ -18,6 +20,7 @@ use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Mail;
 
 class EventsTable
 {
@@ -185,6 +188,32 @@ class EventsTable
 
                         Notification::make()
                             ->title('Rappel planifié dans la file')
+                            ->success()
+                            ->send();
+                    }),
+
+                TableAction::make('send_newsletter')
+                    ->label('Envoyer la newsletter')
+                    ->icon('heroicon-o-envelope')
+                    ->color('info')
+                    ->visible(fn (Event $record): bool => $record->status === EventStatus::Published && ! $record->newsletter_sent)
+                    ->requiresConfirmation()
+                    ->modalHeading('Envoyer la newsletter ?')
+                    ->modalDescription(function (Event $record): string {
+                        $count = NewsletterSubscriber::active()->count();
+                        return "Cet événement sera envoyé à {$count} abonné(s) actif(s). Cette action est irréversible.";
+                    })
+                    ->action(function (Event $record): void {
+                        $subscribers = NewsletterSubscriber::active()->get();
+
+                        foreach ($subscribers as $subscriber) {
+                            Mail::to($subscriber->email)->send(new NewsletterEventMail($record, $subscriber));
+                        }
+
+                        $record->update(['newsletter_sent' => true]);
+
+                        Notification::make()
+                            ->title("Newsletter envoyée à {$subscribers->count()} abonné(s)")
                             ->success()
                             ->send();
                     }),
