@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\CompanyAccountStatus;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -21,9 +23,14 @@ use Spatie\Activitylog\Support\LogOptions;
     'password_changed_at', 'last_login_at',
 ])]
 #[Hidden(['password', 'remember_token'])]
-class CompanyAccount extends Authenticatable
+class CompanyAccount extends Authenticatable implements FilamentUser
 {
     use HasFactory, LogsActivity, Notifiable;
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return true;
+    }
 
     protected function casts(): array
     {

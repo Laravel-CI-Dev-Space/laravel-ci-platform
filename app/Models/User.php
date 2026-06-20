@@ -2,7 +2,11 @@
 
 namespace App\Models;
 
+use App\Enums\UserPermission;
+use App\Enums\UserRole;
 use Database\Factories\UserFactory;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -31,10 +35,18 @@ use Spatie\Permission\Traits\HasRoles;
     'email_verified_at',
 ])]
 #[Hidden(['remember_token'])]
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, HasRoles, LogsActivity, Notifiable;
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->hasAnyRole([
+            UserRole::SuperAdmin->value,
+            UserRole::Admin->value,
+        ]) || $this->can(UserPermission::AdminAccess->value);
+    }
 
     protected function casts(): array
     {
