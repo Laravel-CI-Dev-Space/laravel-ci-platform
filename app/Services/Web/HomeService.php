@@ -34,6 +34,7 @@ class HomeService
                 ->get(),
             'events' => Event::published()
                 ->upcoming()
+                ->with('creator')
                 ->orderBy('starts_at')
                 ->limit($previewEvents)
                 ->get(),

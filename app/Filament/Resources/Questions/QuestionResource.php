@@ -62,7 +62,7 @@ class QuestionResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->with('user');
+        return parent::getEloquentQuery()->with(['user', 'tags']);
     }
 
     public static function getPages(): array

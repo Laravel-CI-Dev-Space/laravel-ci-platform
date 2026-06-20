@@ -63,6 +63,7 @@ class EventService
     {
         return Event::published()
             ->upcoming()
+            ->with('creator')
             ->orderBy('starts_at')
             ->limit($limit)
             ->get();
