@@ -4,32 +4,7 @@
 
 @section('content')
 
-@php
-  /** @var \App\Models\User $me */
-  $me = auth()->user();
-
-  $questionCount   = $me->questions()->count();
-  $answerCount     = $me->answers()->count();
-  $articleCount    = $me->articles()->where('status', 'published')->count();
-  $votesScore      = $me->questions()->sum('votes_score');
-
-  $recentQuestions = $me->questions()->withCount('answers')->latest()->take(5)->get();
-
-  $recentArticles  = $me->articles()->latest()->take(5)->get();
-
-  $upcomingRegs    = $me->eventRegistrations()
-                        ->with('event')
-                        ->whereHas('event', fn($q) => $q->where('starts_at', '>', now()))
-                        ->latest()
-                        ->take(3)
-                        ->get();
-
-  $recentApps      = $me->jobApplications()
-                        ->with(['jobOffer', 'jobOffer.company'])
-                        ->latest()
-                        ->take(5)
-                        ->get();
-@endphp
+@php /** @var \App\Models\User $me */ @endphp
 
   <x-dashboard.breadcrumb :items="[['label' => 'Dashboard', 'href' => route('dashboard.member.overview')], ['label' => 'Overview']]" />
 

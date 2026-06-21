@@ -14,12 +14,16 @@ class HomeService
     /** Récupère toutes les données pour la page d'accueil. */
     public function getHomeData(): array
     {
-        $previewQuestions = (int) SiteSetting::get('home_questions_preview', 3);
-        $previewArticles  = (int) SiteSetting::get('home_articles_preview', 3);
-        $previewEvents    = (int) SiteSetting::get('home_events_preview', 3);
+        // getGroup() charge toutes les clés 'home.*' en 1 seule requête mise en cache.
+        // On réutilise la collection pour extraire les limites — évite 3 get() individuels.
+        $homeSettings = SiteSetting::getGroup('home');
+
+        $previewQuestions = (int) ($homeSettings['home_questions_preview'] ?? 3);
+        $previewArticles  = (int) ($homeSettings['home_articles_preview'] ?? 3);
+        $previewEvents    = (int) ($homeSettings['home_events_preview'] ?? 3);
 
         return [
-            'settings'  => SiteSetting::getGroup('home'),
+            'settings'  => $homeSettings,
             'stats'     => HomeStat::cachedActive(),
             'questions' => Question::with(['user', 'tags'])
                 ->published()
