@@ -53,17 +53,17 @@
               @endauth
             </div>
             <div class="p-3 d-flex flex-column gap-1 small lh-lg">
-              <a href="{{ route('dashboard') }}"><span>Dashboard</span></a>
+              <a href="{{ route('dashboard') }}"><span>Tableau de bord</span></a>
               @auth
-              <a href="{{ route('dashboard.member.profile') }}"><span>Profile Settings</span></a>
+              <a href="{{ route('dashboard.member.profile') }}"><span>Paramètres du profil</span></a>
               @endauth
-              <a href="{{ route('home') }}"><span>Back to Site</span></a>
+              <a href="{{ route('home') }}"><span>Retour au site</span></a>
             </div>
             <div class="border-top p-3">
               <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit" class="btn btn-sm btn-outline-danger w-100">
-                  <i class="ti ti-logout me-1"></i> Log out
+                  <i class="ti ti-logout me-1"></i> Déconnexion
                 </button>
               </form>
             </div>

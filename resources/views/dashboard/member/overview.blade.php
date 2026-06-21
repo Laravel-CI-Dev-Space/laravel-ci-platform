@@ -1,81 +1,85 @@
 @extends('layouts.dashboard')
 
-@section('title', 'My Dashboard')
+@section('title', 'Mon tableau de bord — Laravel CI')
 
 @section('content')
 
 @php /** @var \App\Models\User $me */ @endphp
 
-  <x-dashboard.breadcrumb :items="[['label' => 'Dashboard', 'href' => route('dashboard.member.overview')], ['label' => 'Overview']]" />
+  <x-dashboard.breadcrumb :items="[['label' => 'Tableau de bord', 'href' => route('dashboard.member.overview')], ['label' => 'Vue d\'ensemble']]" />
 
-  <div class="row mb-4">
-    <div class="col-12">
-      <h1 class="fs-4 fw-bold mb-1">Welcome back, {{ $me->name }} 👋</h1>
-      <p class="text-secondary mb-0">Here's your activity on Laravel CI.</p>
+  {{-- ── Bienvenue ──────────────────────────────────────── --}}
+  <div class="row align-items-center mb-4 g-3">
+    <div class="col">
+      <h1 class="fs-4 fw-bold mb-1">Bon retour, {{ $me->name }} 👋</h1>
+      <p class="text-secondary mb-0">Voici un résumé de votre activité sur Laravel CI.</p>
+    </div>
+    <div class="col-auto d-none d-md-block">
+      <img src="{{ asset('assets/web/img/mascot.png') }}" alt="Mascotte Laravel CI"
+           style="height:72px;width:auto;object-fit:contain;filter:drop-shadow(0 4px 8px rgba(0,0,0,.12))">
     </div>
   </div>
-
-  {{-- LIVEWIRE: @livewire('dashboard.member-overview') --}}
 
   {{-- ── Stat cards ────────────────────────────────────── --}}
   <div class="row g-3 mb-4">
     <div class="col-lg-3 col-sm-6 col-12">
       <x-dashboard.stat-card
-        title="Questions"
+        title="Questions posées"
         :value="$questionCount"
-        change="asked"
+        change="sur le forum"
         icon="ti ti-message-circle-question"
         color="primary"
       />
     </div>
     <div class="col-lg-3 col-sm-6 col-12">
       <x-dashboard.stat-card
-        title="Answers"
+        title="Réponses données"
         :value="$answerCount"
-        change="given"
+        change="à la communauté"
         icon="ti ti-message-check"
         color="success"
       />
     </div>
     <div class="col-lg-3 col-sm-6 col-12">
       <x-dashboard.stat-card
-        title="Articles"
+        title="Articles publiés"
         :value="$articleCount"
-        change="published"
+        change="sur le blog"
         icon="ti ti-file-text"
         color="info"
       />
     </div>
     <div class="col-lg-3 col-sm-6 col-12">
       <x-dashboard.stat-card
-        title="Votes received"
+        title="Votes reçus"
         :value="$votesScore"
-        change="on questions"
+        change="sur vos questions"
         icon="ti ti-star"
         color="warning"
       />
     </div>
   </div>
 
-  {{-- ── Recent activity ───────────────────────────────── --}}
+  {{-- ── Activité récente ───────────────────────────────── --}}
   <div class="row g-3">
 
     {{-- Questions --}}
     <div class="col-lg-6">
       <div class="card h-100">
         <div class="card-header bg-white d-flex justify-content-between align-items-center px-4 py-3">
-          <h5 class="mb-0">My Recent Questions</h5>
-          <a href="{{ route('dashboard.member.questions') }}" class="small text-primary">View all</a>
+          <h5 class="mb-0">Mes dernières questions</h5>
+          <a href="{{ route('dashboard.member.questions') }}" class="small text-primary">Voir tout</a>
         </div>
         <ul class="list-group list-group-flush">
           @forelse($recentQuestions as $question)
             <li class="list-group-item px-4 py-3">
-              <a href="{{ route('forum.show', $question->slug) }}" class="fw-semibold text-dark text-decoration-none d-block mb-1"
+              <a href="{{ route('forum.show', $question->slug) }}"
+                 class="fw-semibold text-dark text-decoration-none d-block mb-1"
                  style="font-size:.9rem">{{ Str::limit($question->title, 65) }}</a>
               <div class="d-flex align-items-center gap-2 text-secondary" style="font-size:.78rem">
                 <span class="{{ $question->hasAcceptedAnswer() ? 'text-success' : 'text-muted' }}">
                   <i class="ti ti-{{ $question->hasAcceptedAnswer() ? 'circle-check-filled' : 'circle' }}"></i>
-                  {{ $question->hasAcceptedAnswer() ? 'Answered' : 'Open' }}
+                  {{ $question->hasAcceptedAnswer() ? 'Résolue' : 'Ouverte' }}
                 </span>
                 <span>·</span>
                 <span><i class="ti ti-messages"></i> {{ $question->answers_count }}</span>
@@ -85,9 +89,9 @@
             </li>
           @empty
             <li class="list-group-item px-4 py-5 text-center text-secondary">
-              <i class="ti ti-message-circle-question d-block mb-2" style="font-size:1.8rem"></i>
-              No questions yet.
-              <a href="{{ route('forum.index') }}" class="text-primary text-decoration-none">Ask your first one!</a>
+              <img src="{{ asset('assets/web/img/mascot.png') }}" alt="Mascotte" style="height:56px;opacity:.5" class="d-block mx-auto mb-3">
+              <p class="mb-1 fw-semibold">Aucune question pour l'instant.</p>
+              <a href="{{ route('forum.index') }}" class="text-primary text-decoration-none small">Poser ma première question</a>
             </li>
           @endforelse
         </ul>
@@ -98,47 +102,47 @@
     <div class="col-lg-6">
       <div class="card h-100">
         <div class="card-header bg-white d-flex justify-content-between align-items-center px-4 py-3">
-          <h5 class="mb-0">My Articles</h5>
-          <a href="{{ route('dashboard.member.articles') }}" class="small text-primary">View all</a>
+          <h5 class="mb-0">Mes articles</h5>
+          <a href="{{ route('dashboard.member.articles') }}" class="small text-primary">Voir tout</a>
         </div>
         <ul class="list-group list-group-flush">
           @forelse($recentArticles as $article)
             <li class="list-group-item d-flex align-items-center gap-3 px-4 py-3">
               <div class="flex-grow-1">
-                <a href="{{ route('blog.show', $article->slug) }}" class="fw-semibold text-dark text-decoration-none d-block mb-1"
+                <a href="{{ route('blog.show', $article->slug) }}"
+                   class="fw-semibold text-dark text-decoration-none d-block mb-1"
                    style="font-size:.9rem">{{ Str::limit($article->title, 55) }}</a>
                 <div class="text-secondary" style="font-size:.78rem">
-                  {{ $article->level->label() }}
-                  · {{ $article->created_at->diffForHumans() }}
+                  {{ $article->level->label() }} · {{ $article->created_at->diffForHumans() }}
                 </div>
               </div>
               @php
                 $badge = match($article->status) {
-                  \App\Enums\ArticleStatus::Published => ['bg-success-subtle text-success', 'Published'],
-                  \App\Enums\ArticleStatus::Pending   => ['bg-warning-subtle text-warning', 'Pending'],
-                  \App\Enums\ArticleStatus::Rejected  => ['bg-danger-subtle text-danger', 'Rejected'],
-                  default     => ['bg-secondary-subtle text-secondary', 'Draft'],
+                  \App\Enums\ArticleStatus::Published => ['bg-success-subtle text-success', 'Publié'],
+                  \App\Enums\ArticleStatus::Pending   => ['bg-warning-subtle text-warning', 'En attente'],
+                  \App\Enums\ArticleStatus::Rejected  => ['bg-danger-subtle text-danger', 'Rejeté'],
+                  default                             => ['bg-secondary-subtle text-secondary', 'Brouillon'],
                 };
               @endphp
               <span class="badge {{ $badge[0] }} small">{{ $badge[1] }}</span>
             </li>
           @empty
             <li class="list-group-item px-4 py-5 text-center text-secondary">
-              <i class="ti ti-file-text d-block mb-2" style="font-size:1.8rem"></i>
-              No articles yet.
-              <a href="{{ route('dashboard.member.articles') }}" class="text-primary text-decoration-none">Write your first!</a>
+              <img src="{{ asset('assets/web/img/mascot.png') }}" alt="Mascotte" style="height:56px;opacity:.5" class="d-block mx-auto mb-3">
+              <p class="mb-1 fw-semibold">Aucun article pour l'instant.</p>
+              <a href="{{ route('dashboard.member.articles') }}" class="text-primary text-decoration-none small">Écrire mon premier article</a>
             </li>
           @endforelse
         </ul>
       </div>
     </div>
 
-    {{-- Upcoming events --}}
+    {{-- Événements à venir --}}
     <div class="col-lg-6">
       <div class="card h-100">
         <div class="card-header bg-white d-flex justify-content-between align-items-center px-4 py-3">
-          <h5 class="mb-0">My Upcoming Events</h5>
-          <a href="{{ route('dashboard.member.events') }}" class="small text-primary">View all</a>
+          <h5 class="mb-0">Mes prochains événements</h5>
+          <a href="{{ route('dashboard.member.events') }}" class="small text-primary">Voir tout</a>
         </div>
         <ul class="list-group list-group-flush">
           @forelse($upcomingRegs as $reg)
@@ -146,37 +150,38 @@
             <li class="list-group-item d-flex align-items-center gap-3 px-4 py-3">
               <div class="text-center bg-primary-subtle rounded p-2" style="min-width:48px">
                 <div class="fw-bold text-primary" style="font-size:.7rem;text-transform:uppercase">
-                  {{ $event->starts_at->format('M') }}
+                  {{ $event->starts_at->translatedFormat('M') }}
                 </div>
                 <div class="fw-bold text-primary" style="font-size:1.1rem;line-height:1">
                   {{ $event->starts_at->format('d') }}
                 </div>
               </div>
               <div class="flex-grow-1">
-                <a href="{{ route('events.show', $event->slug) }}" class="fw-semibold text-dark text-decoration-none d-block"
+                <a href="{{ route('events.show', $event->slug) }}"
+                   class="fw-semibold text-dark text-decoration-none d-block"
                    style="font-size:.9rem">{{ Str::limit($event->title, 55) }}</a>
                 <div class="text-secondary" style="font-size:.78rem">
-                  {{ $event->location ?? 'Online' }} · {{ $event->starts_at->format('H:i') }}
+                  {{ $event->location ?? 'En ligne' }} · {{ $event->starts_at->format('H:i') }}
                 </div>
               </div>
             </li>
           @empty
             <li class="list-group-item px-4 py-5 text-center text-secondary">
-              <i class="ti ti-calendar-event d-block mb-2" style="font-size:1.8rem"></i>
-              No upcoming events.
-              <a href="{{ route('events.index') }}" class="text-primary text-decoration-none">Browse events!</a>
+              <img src="{{ asset('assets/web/img/mascot.png') }}" alt="Mascotte" style="height:56px;opacity:.5" class="d-block mx-auto mb-3">
+              <p class="mb-1 fw-semibold">Aucun événement à venir.</p>
+              <a href="{{ route('events.index') }}" class="text-primary text-decoration-none small">Découvrir les événements</a>
             </li>
           @endforelse
         </ul>
       </div>
     </div>
 
-    {{-- Job applications --}}
+    {{-- Candidatures --}}
     <div class="col-lg-6">
       <div class="card h-100">
         <div class="card-header bg-white d-flex justify-content-between align-items-center px-4 py-3">
-          <h5 class="mb-0">My Applications</h5>
-          <a href="{{ route('dashboard.member.applications') }}" class="small text-primary">View all</a>
+          <h5 class="mb-0">Mes candidatures</h5>
+          <a href="{{ route('dashboard.member.applications') }}" class="small text-primary">Voir tout</a>
         </div>
         <ul class="list-group list-group-flush">
           @forelse($recentApps as $application)
@@ -192,20 +197,20 @@
               </div>
               @php
                 $appBadge = match($application->status) {
-                  \App\Enums\JobApplicationStatus::Pending     => ['bg-warning-subtle text-warning', 'Pending'],
-                  \App\Enums\JobApplicationStatus::Viewed      => ['bg-info-subtle text-info', 'Viewed'],
-                  \App\Enums\JobApplicationStatus::Shortlisted => ['bg-primary-subtle text-primary', 'Shortlisted'],
-                  \App\Enums\JobApplicationStatus::Accepted    => ['bg-success-subtle text-success', 'Accepted'],
-                  \App\Enums\JobApplicationStatus::Rejected    => ['bg-danger-subtle text-danger', 'Rejected'],
+                  \App\Enums\JobApplicationStatus::Pending     => ['bg-warning-subtle text-warning', 'En attente'],
+                  \App\Enums\JobApplicationStatus::Viewed      => ['bg-info-subtle text-info', 'Vue'],
+                  \App\Enums\JobApplicationStatus::Shortlisted => ['bg-primary-subtle text-primary', 'Présélectionné'],
+                  \App\Enums\JobApplicationStatus::Accepted    => ['bg-success-subtle text-success', 'Acceptée'],
+                  \App\Enums\JobApplicationStatus::Rejected    => ['bg-danger-subtle text-danger', 'Refusée'],
                 };
               @endphp
               <span class="badge {{ $appBadge[0] }}">{{ $appBadge[1] }}</span>
             </li>
           @empty
             <li class="list-group-item px-4 py-5 text-center text-secondary">
-              <i class="ti ti-briefcase d-block mb-2" style="font-size:1.8rem"></i>
-              No applications yet.
-              <a href="{{ route('jobs.index') }}" class="text-primary text-decoration-none">Browse jobs!</a>
+              <img src="{{ asset('assets/web/img/mascot.png') }}" alt="Mascotte" style="height:56px;opacity:.5" class="d-block mx-auto mb-3">
+              <p class="mb-1 fw-semibold">Aucune candidature pour l'instant.</p>
+              <a href="{{ route('jobs.index') }}" class="text-primary text-decoration-none small">Parcourir les offres d'emploi</a>
             </li>
           @endforelse
         </ul>

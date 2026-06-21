@@ -524,7 +524,7 @@ class DemoSeeder extends Seeder
             ['slug' => $data['slug']],
             array_merge($data, [
                 'company_id'    => $company->id,
-                'posted_by'     => $account->id,
+                'posted_by'     => null,
                 'status'        => JobOfferStatus::Active,
                 'country'       => "Côte d'Ivoire",
                 'views_count'   => rand(30, 200),

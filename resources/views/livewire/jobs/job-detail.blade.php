@@ -73,7 +73,7 @@
                     @endif
 
                     <div class="prose article-body">
-                        {!! nl2br(e($offer->description)) !!}
+                        {!! $offer->description !!}
                     </div>
 
                     {{-- Skills & tags --}}
