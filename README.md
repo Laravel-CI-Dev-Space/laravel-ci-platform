@@ -668,36 +668,243 @@ class QuestionList extends Component
 
 ## 🚀 Installation locale
 
+### Prérequis
+
+| Outil | Version minimale | Vérification |
+|---|---|---|
+| PHP | 8.3+ | `php --version` |
+| Composer | 2.x | `composer --version` |
+| Node.js | 18+ | `node --version` |
+| MySQL | 8.0+ | `mysql --version` |
+| Redis | 6+ (optionnel en local) | `redis-cli ping` |
+| Git | — | `git --version` |
+
+> **Redis** est configuré par défaut pour le cache et les sessions. En local vous pouvez le remplacer par `file` dans le `.env` (voir étape 3).
+
+---
+
+### Étape 1 — Cloner le dépôt
+
 ```bash
-# 1. Cloner le repo
-git clone https://github.com/Laravel-CI-Dev-Space/laravel-ci.git
-cd laravel-ci
+git clone git@github.com:Laravel-CI-Dev-Space/laravel-ci-platform.git
+cd laravel-ci-platform
 
-# 2. Installer les dépendances PHP
+# Créer votre branche de travail depuis la branche principale
+git checkout main
+git checkout -b solo/votre-prenom
+```
+
+---
+
+### Étape 2 — Installer les dépendances
+
+```bash
 composer install
+npm install
+```
 
-# 3. Copier et configurer l'environnement
+---
+
+### Étape 3 — Configurer l'environnement
+
+```bash
 cp .env.example .env
 php artisan key:generate
+```
 
-# 4. Configurer la base de données dans .env
-# DB_DATABASE=laravel_ci
-# DB_USERNAME=root
-# DB_PASSWORD=
+Ouvrir `.env` et remplir les valeurs suivantes :
 
-# 5. Configurer GitHub OAuth dans .env
-# GITHUB_CLIENT_ID=xxxxxxxxxxxx
-# GITHUB_CLIENT_SECRET=xxxxxxxxxxxx
-# GITHUB_REDIRECT_URI=http://localhost:8000/auth/github/callback
+```dotenv
+APP_NAME=LaravelCi
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://localhost:8000
 
-# 6. Migrer et seeder
-php artisan migrate --seed
+# ─── Base de données ───────────────────────────────────────
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=laravel_ci        # créer cette base au préalable
+DB_USERNAME=root
+DB_PASSWORD=
 
-# 7. Installer les dépendances front
-npm install && npm run build
+# ─── Sessions & Cache ──────────────────────────────────────
+# Si Redis n'est pas installé, utiliser file à la place
+SESSION_DRIVER=file           # ou redis
+CACHE_STORE=file              # ou redis
+QUEUE_CONNECTION=sync         # sync = pas de worker nécessaire en local
 
-# 8. Lancer le serveur
+# ─── GitHub OAuth ──────────────────────────────────────────
+# Créer une OAuth App sur https://github.com/settings/developers
+# Homepage URL    : http://localhost:8000
+# Callback URL    : http://localhost:8000/auth/github/callback
+GITHUB_CLIENT_ID=votre_client_id
+GITHUB_CLIENT_SECRET=votre_client_secret
+GITHUB_REDIRECT_URI=http://localhost:8000/auth/github/callback
+
+# ─── Mail (optionnel, array = aucun envoi réel) ────────────
+MAIL_MAILER=array
+
+# ─── Scout / Meilisearch (optionnel) ──────────────────────
+SCOUT_DRIVER=null             # désactiver si Meilisearch n'est pas installé
+```
+
+> **GitHub OAuth est obligatoire** : l'authentification est 100 % GitHub. Sans les clés, aucun login n'est possible.
+
+---
+
+### Étape 4 — Créer la base de données
+
+```sql
+-- Dans MySQL
+CREATE DATABASE laravel_ci CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+
+---
+
+### Étape 5 — Migrations
+
+```bash
+php artisan migrate
+```
+
+Cela exécute les **58 migrations** dans l'ordre : users, profiles, questions, answers, articles, events, jobs, analytics, etc.
+
+---
+
+### Étape 6 — Seeders (données de démo)
+
+```bash
+php artisan db:seed
+```
+
+Le `DatabaseSeeder` exécute **15 seeders dans l'ordre** :
+
+| # | Seeder | Contenu |
+|---|---|---|
+| 1 | `RoleSeeder` | Rôles (super-admin, admin, moderator, member) + permissions |
+| 2 | `TagSeeder` | Tags forum & blog |
+| 3 | `JobOfferCategorySeeder` | Catégories d'offres d'emploi |
+| 4 | `JobSkillSeeder` | Compétences techniques |
+| 5 | `UserSeeder` | Comptes de test (admin, modérateur, membres) |
+| 6 | `SiteSettingSeeder` | Paramètres du site (nom, réseaux sociaux, limites…) |
+| 7 | `HomeStatSeeder` | Statistiques affichées en page d'accueil |
+| 8 | `PartnerSeeder` | Logos partenaires |
+| 9 | `TeamMemberSeeder` | Membres fondateurs (page À propos) |
+| 10 | `CommunityValueSeeder` | Valeurs communautaires |
+| 11 | `TimelineEventSeeder` | Historique de la communauté |
+| 12 | `AboutOriginSectionSeeder` | Section "Notre naissance" |
+| 13 | `EventSeeder` | 2 événements (meetup gratuit + workshop payant) |
+| 14 | `GradeSeeder` | Grades de réputation |
+| 15 | `DemoSeeder` | 12 membres, 6 articles, 6 questions, inscriptions, 2 entreprises + offres d'emploi |
+
+**Comptes créés après le seed :**
+
+| Rôle | Email | Connexion |
+|---|---|---|
+| Super Admin | yanne.kouassi@epitech.eu | GitHub OAuth (compte réel) |
+| Admin | admin@laravelci.com | GitHub OAuth |
+| Modérateur | moderator@laravelci.com | GitHub OAuth |
+| Membre | member@laravelci.com | GitHub OAuth |
+| Membre suspendu | suspended@laravelci.com | — |
+
+> Les comptes de test nécessitent que leur `github_username` soit associé à un vrai compte GitHub pour pouvoir se connecter en local. Pour les tests, utilisez l'endpoint `/_e2e/login/{email}` (disponible en env `local`).
+
+---
+
+### Étape 7 — Lier le stockage
+
+```bash
+php artisan storage:link
+```
+
+Crée le lien symbolique `public/storage → storage/app/public` (avatars, couvertures d'offres, logos équipe).
+
+---
+
+### Étape 8 — Compiler les assets
+
+```bash
+# Développement (avec HMR)
+npm run dev
+
+# Production
+npm run build
+```
+
+---
+
+### Étape 9 — Lancer le serveur
+
+```bash
+# Tout en un (serveur PHP + Vite HMR)
 composer run dev
+
+# Ou séparément
+php artisan serve       # http://localhost:8000
+npm run dev             # Vite HMR sur port 5173
+```
+
+---
+
+### Résumé en une ligne (après config .env)
+
+```bash
+composer install && npm install && php artisan migrate --seed && php artisan storage:link && npm run build && php artisan serve
+```
+
+---
+
+### Commandes utiles en développement
+
+```bash
+# Vider tous les caches
+php artisan optimize:clear
+
+# Re-seeder proprement (remet la DB à zéro)
+php artisan migrate:fresh --seed
+
+# Voir toutes les routes
+php artisan route:list
+
+# Mettre en cache les routes (prod)
+php artisan route:cache
+
+# Formater le code avant un commit
+./vendor/bin/pint
+```
+
+---
+
+## 🧪 Tests
+
+Les tests utilisent **Pest v3** avec SQLite en mémoire — aucune connexion MySQL requise.
+
+```bash
+# Lancer tous les tests
+php artisan test
+
+# Tests d'un module uniquement
+php artisan test --filter=Forum
+php artisan test --filter=Blog
+php artisan test --filter=Events
+php artisan test --filter=Jobs
+php artisan test --filter=Company
+
+# Stopper au premier échec
+php artisan test --stop-on-failure
+
+# Avec couverture de code
+php artisan test --coverage
+```
+
+**État actuel de la suite de tests : 265 passent / 301 au total.**
+
+Les 35 tests en échec sont des routes POST sans token CSRF dans leur requête de test (`419 Page Expired`). C'est un problème connu dans la suite existante, non lié à votre installation. Les modules couverts et fonctionnels : Auth, Blog (GET), Events (GET), Forum (GET), Company (GET), Models, Services, Mail.
+
+```bash
+# Lancer uniquement les tests qui passent (modules stables)
+php artisan test --testsuite=Unit
 ```
 
 ---
