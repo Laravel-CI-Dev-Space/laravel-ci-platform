@@ -30,11 +30,11 @@
         @livewire('search.search-bar')
 
         @auth
-          <a href="{{ route('dashboard') }}" class="btn btn-github">
+          <a href="{{ route('dashboard') }}" class="btn btn-github mt-2 mt-lg-0">
             <i class="fa-solid fa-gauge"></i> Dashboard
           </a>
         @else
-          <a href="{{ route('login') }}" class="btn btn-github">
+          <a href="{{ route('login') }}" class="btn btn-github mt-2 mt-lg-0">
             <i class="fa-brands fa-github"></i> {{ $headerCta }}
           </a>
         @endauth

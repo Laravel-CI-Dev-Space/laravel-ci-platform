@@ -10,16 +10,7 @@
                         <span>Blog</span>
                     </div>
                     <h1 class="mb-2">Blog &amp; Ressources</h1>
-                    <p class="lead mb-3">Tutoriels, analyses et ressources rédigés par la communauté Laravel ivoirienne.</p>
-                    {{-- Niveau --}}
-                    <div class="filter-pills">
-                        @foreach (['all' => 'Tous', 'beginner' => 'Débutant', 'intermediate' => 'Intermédiaire', 'advanced' => 'Avancé'] as $value => $label)
-                            <button wire:click="$set('level','{{ $value }}')"
-                                    class="filter-pill {{ $level === $value ? 'active' : '' }}">
-                                {{ $label }}
-                            </button>
-                        @endforeach
-                    </div>
+                    <p class="lead mb-0">Tutoriels, analyses et ressources rédigés par la communauté Laravel ivoirienne.</p>
                 </div>
                 <div class="col-lg-4 d-none d-lg-block">
                     <div class="mascot-art">
@@ -34,6 +25,16 @@
     {{-- ===== LAYOUT PRINCIPAL ===== --}}
     <section class="section-sm">
         <div class="container">
+
+            {{-- Filtre niveau --}}
+            <div class="filter-pills mb-4">
+                @foreach (['all' => 'Tous', 'beginner' => 'Débutant', 'intermediate' => 'Intermédiaire', 'advanced' => 'Avancé'] as $value => $label)
+                    <button wire:click="$set('level','{{ $value }}')"
+                            class="filter-pill {{ $level === $value ? 'active' : '' }}">
+                        {{ $label }}
+                    </button>
+                @endforeach
+            </div>
 
             {{-- Toggle mobile sidebar --}}
             <button class="btn btn-ghost d-lg-none mb-3 w-100" type="button"

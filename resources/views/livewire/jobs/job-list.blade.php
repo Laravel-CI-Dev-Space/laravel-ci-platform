@@ -10,18 +10,7 @@
                         <span>Job Board</span>
                     </div>
                     <h1 class="mb-2">Job Board</h1>
-                    <p class="lead mb-3">Offres Laravel &amp; PHP pour les développeurs ivoiriens — local, remote et diaspora.</p>
-                    <div class="d-flex align-items-center gap-3">
-                        <span class="text-muted-2">
-                            <strong class="text-navy">{{ number_format($offers->total()) }}</strong>
-                            offre{{ $offers->total() !== 1 ? 's' : '' }} disponible{{ $offers->total() !== 1 ? 's' : '' }}
-                        </span>
-                        @auth
-                            <a href="{{ route('company.login') }}" class="btn btn-ghost btn-sm">
-                                <i class="fa-solid fa-building me-1"></i>Espace entreprise
-                            </a>
-                        @endauth
-                    </div>
+                    <p class="lead mb-0">Offres Laravel &amp; PHP pour les développeurs ivoiriens — local, remote et diaspora.</p>
                 </div>
                 <div class="col-lg-4 d-none d-lg-block">
                     <div class="mascot-art">
@@ -36,6 +25,20 @@
     {{-- ===== LAYOUT FILTRES + LISTE ===== --}}
     <section class="section-sm">
         <div class="container">
+
+            {{-- KPI + Espace entreprise --}}
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <span class="text-muted-2">
+                    <strong class="text-navy">{{ number_format($offers->total()) }}</strong>
+                    offre{{ $offers->total() !== 1 ? 's' : '' }} disponible{{ $offers->total() !== 1 ? 's' : '' }}
+                </span>
+                @auth
+                    <a href="{{ route('company.login') }}" class="btn btn-ghost btn-sm">
+                        <i class="fa-solid fa-building me-1"></i>Espace entreprise
+                    </a>
+                @endauth
+            </div>
+
             <button class="btn btn-ghost d-lg-none mb-3 w-100" type="button"
                     data-bs-toggle="offcanvas" data-bs-target="#jobFilters">
                 <i class="fa-solid fa-sliders me-1"></i> Filtres

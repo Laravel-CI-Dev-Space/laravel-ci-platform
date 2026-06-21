@@ -22,6 +22,10 @@ class PageView extends Model
         'referrer',
         'device_type',
         'browser',
+        'method',
+        'route_name',
+        'status_code',
+        'duration_ms',
         'created_at',
     ];
 

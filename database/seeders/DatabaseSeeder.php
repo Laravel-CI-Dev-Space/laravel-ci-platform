@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             AboutOriginSectionSeeder::class, // 12. Section Notre naissance
             EventSeeder::class,              // 13. Événements (meetup gratuit + workshop payant)
             GradeSeeder::class,               // 14. Grades de réputation
+            DemoSeeder::class,               // 15. Données démo (membres, articles, questions, events, entreprises)
         ]);
 
         if (config('database.default') === 'sqlite' && str_contains((string) config('database.connections.sqlite.database'), 'e2e')) {

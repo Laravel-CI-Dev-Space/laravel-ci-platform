@@ -15,15 +15,13 @@ class TrackPageView
 
     public function handle(Request $request, Closure $next): Response
     {
+        $start = microtime(true);
+
         $response = $next($request);
 
-        if (
-            $request->isMethod('GET')
-            && ! $request->ajax()
-            && ! $request->expectsJson()
-            && $response->getStatusCode() < 400
-        ) {
-            $this->analytics->trackPageView($request);
+        if (! $request->ajax() && ! $request->expectsJson()) {
+            $durationMs = (int) round((microtime(true) - $start) * 1000);
+            $this->analytics->trackPageView($request, $response->getStatusCode(), $durationMs);
         }
 
         return $response;

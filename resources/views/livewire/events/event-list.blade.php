@@ -10,27 +10,7 @@
                         <span>Événements</span>
                     </div>
                     <h1 class="mb-2">Événements</h1>
-                    <p class="lead mb-3">Meetups, webinaires et hackathons — à Abidjan et en ligne. Venez apprendre et construire avec la communauté.</p>
-
-                    {{-- Filtres type --}}
-                    <div class="filter-pills mb-2">
-                        @foreach (['all' => 'Tous', 'meetup' => 'Meetup', 'webinar' => 'Webinaire', 'hackathon' => 'Hackathon', 'conference' => 'Conférence', 'workshop' => 'Workshop'] as $value => $label)
-                            <button wire:click="$set('type', '{{ $value }}')"
-                                    class="filter-pill {{ $type === $value ? 'active' : '' }}">
-                                {{ $label }}
-                            </button>
-                        @endforeach
-                    </div>
-
-                    {{-- Filtres période --}}
-                    <div class="filter-pills">
-                        @foreach (['upcoming' => 'À venir', 'past' => 'Passés', 'all' => 'Tous'] as $value => $label)
-                            <button wire:click="$set('period', '{{ $value }}')"
-                                    class="filter-pill {{ $period === $value ? 'active' : '' }}">
-                                {{ $label }}
-                            </button>
-                        @endforeach
-                    </div>
+                    <p class="lead mb-0">Meetups, webinaires et hackathons — à Abidjan et en ligne. Venez apprendre et construire avec la communauté.</p>
                 </div>
                 <div class="col-lg-4 d-none d-lg-block">
                     <div class="mascot-art">
@@ -45,6 +25,24 @@
     {{-- ===== LISTE DES ÉVÉNEMENTS ===== --}}
     <section class="section">
         <div class="container">
+
+            {{-- Filtres type + période --}}
+            <div class="filter-pills mb-2">
+                @foreach (['all' => 'Tous', 'meetup' => 'Meetup', 'webinar' => 'Webinaire', 'hackathon' => 'Hackathon', 'conference' => 'Conférence', 'workshop' => 'Workshop'] as $value => $label)
+                    <button wire:click="$set('type', '{{ $value }}')"
+                            class="filter-pill {{ $type === $value ? 'active' : '' }}">
+                        {{ $label }}
+                    </button>
+                @endforeach
+            </div>
+            <div class="filter-pills mb-4">
+                @foreach (['upcoming' => 'À venir', 'past' => 'Passés', 'all' => 'Tous'] as $value => $label)
+                    <button wire:click="$set('period', '{{ $value }}')"
+                            class="filter-pill {{ $period === $value ? 'active' : '' }}">
+                        {{ $label }}
+                    </button>
+                @endforeach
+            </div>
 
             {{-- Tri --}}
             <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">

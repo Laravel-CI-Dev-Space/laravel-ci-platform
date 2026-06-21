@@ -7,6 +7,9 @@ namespace App\Filament\Pages;
 use App\Enums\UserRole;
 use App\Filament\Widgets\LogViewerWidget;
 use App\Filament\Widgets\RecentActivityFeedWidget;
+use App\Filament\Widgets\RequestLatencyStatsWidget;
+use App\Filament\Widgets\RequestLatencyWidget;
+use App\Filament\Widgets\RequestOriginWidget;
 use App\Filament\Widgets\ServerHealthWidget;
 use BackedEnum;
 use Filament\Pages\Page;
@@ -39,6 +42,9 @@ class SystemMonitoring extends Page
     {
         return [
             ServerHealthWidget::class,
+            RequestLatencyStatsWidget::class,
+            RequestLatencyWidget::class,
+            RequestOriginWidget::class,
             RecentActivityFeedWidget::class,
             LogViewerWidget::class,
         ];

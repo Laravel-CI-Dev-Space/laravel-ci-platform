@@ -26,7 +26,7 @@ class AnalyticsService
     /**
      * Records a page view from an incoming HTTP request.
      */
-    public function trackPageView(Request $request): void
+    public function trackPageView(Request $request, int $statusCode = 200, ?int $durationMs = null): void
     {
         try {
             $path = $request->path();
@@ -52,6 +52,10 @@ class AnalyticsService
                 'referrer'     => $this->sanitizeUrl($request->header('Referer')),
                 'device_type'  => $this->detectDevice($ua),
                 'browser'      => $this->detectBrowser($ua),
+                'method'       => $request->method(),
+                'route_name'   => $request->route()?->getName(),
+                'status_code'  => $statusCode,
+                'duration_ms'  => $durationMs,
                 'created_at'   => now(),
             ]);
         } catch (\Throwable) {
