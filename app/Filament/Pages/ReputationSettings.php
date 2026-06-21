@@ -31,7 +31,7 @@ class ReputationSettings extends Page implements HasForms
 
     protected static ?string $title = 'Réputation & Grades';
 
-    protected static ?int $navigationSort = 5;
+    protected static ?int $navigationSort = 2;
 
     public ?array $data = [];
 

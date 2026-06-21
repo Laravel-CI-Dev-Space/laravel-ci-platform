@@ -33,7 +33,7 @@ class TagResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return 'Contenu';
+        return 'Forum';
     }
 
     public static function form(Schema $schema): Schema

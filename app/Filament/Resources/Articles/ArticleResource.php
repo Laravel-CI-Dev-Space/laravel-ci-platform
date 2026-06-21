@@ -33,11 +33,11 @@ class ArticleResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Articles';
 
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 1;
 
     public static function getNavigationGroup(): ?string
     {
-        return 'Contenu';
+        return 'Blog';
     }
 
     public static function form(Schema $schema): Schema

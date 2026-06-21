@@ -41,7 +41,7 @@ class HomeStatResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return 'Configuration';
+        return 'Vitrine';
     }
 
     public static function form(Schema $schema): Schema

@@ -31,11 +31,11 @@ class GuestRegistrationResource extends Resource
 
     protected static ?string $slug = 'inscriptions';
 
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 2;
 
     public static function getNavigationGroup(): ?string
     {
-        return 'Communauté';
+        return 'Événements';
     }
 
     public static function table(Table $table): Table

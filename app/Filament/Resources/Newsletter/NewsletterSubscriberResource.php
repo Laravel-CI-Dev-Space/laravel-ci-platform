@@ -31,11 +31,11 @@ class NewsletterSubscriberResource extends Resource
 
     protected static ?string $navigationLabel = 'Newsletter';
 
-    protected static ?int $navigationSort = 99;
+    protected static ?int $navigationSort = 1;
 
     public static function getNavigationGroup(): ?string
     {
-        return 'Contenu';
+        return 'Communication';
     }
 
     protected static ?string $modelLabel = 'Abonné';

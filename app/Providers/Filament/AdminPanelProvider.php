@@ -66,13 +66,15 @@ class AdminPanelProvider extends PanelProvider
             )
 
             ->navigationGroups([
-                NavigationGroup::make('Entreprises'),
+                NavigationGroup::make('Forum'),
+                NavigationGroup::make('Blog'),
+                NavigationGroup::make('Événements'),
                 NavigationGroup::make('Job Board'),
+                NavigationGroup::make('Recruteurs'),
                 NavigationGroup::make('Membres'),
-                NavigationGroup::make('Communauté'),
-                NavigationGroup::make('Contenu'),
-                NavigationGroup::make('Monitoring'),
-                NavigationGroup::make('Configuration')->collapsed(),
+                NavigationGroup::make('Communication'),
+                NavigationGroup::make('Vitrine')->collapsed(),
+                NavigationGroup::make('Monitoring')->collapsed(),
             ])
 
             ->middleware([
