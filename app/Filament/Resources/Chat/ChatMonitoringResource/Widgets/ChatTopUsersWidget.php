@@ -7,7 +7,6 @@ namespace App\Filament\Resources\Chat\ChatMonitoringResource\Widgets;
 use App\Models\Chat\ChatTokenBudget;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
 
 class ChatTopUsersWidget extends ChartWidget
 {
@@ -18,6 +17,8 @@ class ChatTopUsersWidget extends ChartWidget
     protected ?string $description = 'Tokens consommés par utilisateur';
 
     protected int|string|array $columnSpan = 'full';
+
+    protected static ?string $maxHeight = '220px';
 
     protected function getData(): array
     {
