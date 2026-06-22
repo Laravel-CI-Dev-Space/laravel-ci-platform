@@ -1,7 +1,7 @@
 {
   "_meta": {
     "titre": "Fichier de connaissance officiel — Laravel Côte d'Ivoire",
-    "version": "2.0",
+    "version": "2.1",
     "date_mise_a_jour": "2026-06-22",
     "sources": [
       "Documentation Officielle du Projet — v1.0 (2025)",
@@ -142,6 +142,21 @@
 
   "organisation_gouvernance": {
     "principe": "La communauté ne doit pas reposer sur une seule personne.",
+    "co_fondateurs": [
+      {
+        "nom": "Kouassi Yanne Cedric Wilson",
+        "alias": "Ky-Wilson",
+        "role": "Co-fondateur",
+        "linkedin": "https://www.linkedin.com/in/yanne-cedric-wilson-kouassi-17bb12303/",
+        "note": "Développeur Laravel, initiateur du projet Laravel CI, en charge de la plateforme technique et de la vision communautaire."
+      },
+      {
+        "nom": "Kepson Diazz",
+        "role": "Co-fondateur",
+        "linkedin": "https://www.linkedin.com/in/kepson-diazz-2365711a8/",
+        "note": "Co-fondateur de Laravel Côte d'Ivoire."
+      }
+    ],
     "equipe_fondatrice": {
       "taille_ideale": "3 à 5 membres aux rôles complémentaires",
       "roles": [
