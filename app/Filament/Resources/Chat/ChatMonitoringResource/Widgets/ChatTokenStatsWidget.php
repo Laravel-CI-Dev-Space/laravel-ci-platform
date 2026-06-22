@@ -24,22 +24,22 @@ class ChatTokenStatsWidget extends BaseWidget
         $monthStart = Carbon::now()->startOfMonth();
 
         // ── Tokens aujourd'hui ──────────────────────────────────
-        $todayTotal = ChatTokenBudget::whereDate('date', $today)
+        $todayTotal = (int) ChatTokenBudget::whereDate('date', $today)
             ->sum(DB::raw('public_tokens_used + dashboard_tokens_used'));
 
-        $todayPublic = ChatTokenBudget::whereDate('date', $today)
+        $todayPublic = (int) ChatTokenBudget::whereDate('date', $today)
             ->sum('public_tokens_used');
 
-        $todayDashboard = ChatTokenBudget::whereDate('date', $today)
+        $todayDashboard = (int) ChatTokenBudget::whereDate('date', $today)
             ->sum('dashboard_tokens_used');
 
         // ── Tokens cette semaine ────────────────────────────────
-        $weekTotal = ChatTokenBudget::whereBetween('date', [$weekStart, $today])
+        $weekTotal = (int) ChatTokenBudget::whereBetween('date', [$weekStart, $today])
             ->sum(DB::raw('public_tokens_used + dashboard_tokens_used'));
 
         $prevWeekStart = Carbon::now()->subWeek()->startOfWeek();
         $prevWeekEnd   = Carbon::now()->subWeek()->endOfWeek();
-        $prevWeekTotal = ChatTokenBudget::whereBetween('date', [$prevWeekStart, $prevWeekEnd])
+        $prevWeekTotal = (int) ChatTokenBudget::whereBetween('date', [$prevWeekStart, $prevWeekEnd])
             ->sum(DB::raw('public_tokens_used + dashboard_tokens_used'));
 
         $weekTrend  = $prevWeekTotal > 0
@@ -47,7 +47,7 @@ class ChatTokenStatsWidget extends BaseWidget
             : 0;
 
         // ── Tokens ce mois ──────────────────────────────────────
-        $monthTotal = ChatTokenBudget::whereBetween('date', [$monthStart, $today])
+        $monthTotal = (int) ChatTokenBudget::whereBetween('date', [$monthStart, $today])
             ->sum(DB::raw('public_tokens_used + dashboard_tokens_used'));
 
         // ── Utilisateurs actifs aujourd'hui ─────────────────────
