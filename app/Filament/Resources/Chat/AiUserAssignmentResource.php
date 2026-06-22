@@ -9,11 +9,13 @@ use App\Models\Chat\AiModel;
 use App\Models\Chat\AiUserAssignment;
 use App\Models\User;
 use BackedEnum;
+use Filament\Actions\Action;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\EditAction;
 use Filament\Forms\Components\Select;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
-use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -74,8 +76,8 @@ class AiUserAssignmentResource extends Resource
                 TextColumn::make('created_at')->label('Date')->since()->sortable(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                EditAction::make(),
+                DeleteAction::make(),
             ]);
     }
 

@@ -7,13 +7,15 @@ namespace App\Filament\Resources\Chat;
 use App\Filament\Resources\Chat\AiProviderResource\Pages;
 use App\Models\Chat\AiProvider;
 use BackedEnum;
+use Filament\Actions\Action;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\EditAction;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
-use Filament\Tables;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -91,8 +93,8 @@ class AiProviderResource extends Resource
                 TextColumn::make('priority')->label('Priorité')->sortable(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                EditAction::make(),
+                DeleteAction::make(),
             ]);
     }
 

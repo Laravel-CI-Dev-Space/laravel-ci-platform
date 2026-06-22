@@ -7,11 +7,13 @@ namespace App\Filament\Resources\Chat;
 use App\Filament\Resources\Chat\ChatMonitoringResource\Pages;
 use App\Models\Chat\ChatTokenBudget;
 use BackedEnum;
+use Filament\Actions\Action;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\EditAction;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
-use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
@@ -71,7 +73,7 @@ class ChatMonitoringResource extends Resource
                     ->query(fn (Builder $q) => $q->whereBetween('date', [now()->startOfWeek(), now()->endOfWeek()])),
             ])
             ->actions([
-                Tables\Actions\Action::make('set_limit')
+                Action::make('set_limit')
                     ->label('Modifier limite')
                     ->icon(Heroicon::OutlinedPencil)
                     ->form([
