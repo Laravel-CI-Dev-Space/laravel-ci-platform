@@ -156,7 +156,6 @@
 
 </div>
 
-@push('styles')
 <style>
 /* ── Bouton flottant ─────────────────────────────────── */
 .chat-fab {
@@ -326,4 +325,3 @@
 .chat-send-btn:disabled { opacity: .45; cursor: not-allowed; }
 .chat-send-btn:not(:disabled):hover { background: #c94a06; }
 </style>
-@endpush
