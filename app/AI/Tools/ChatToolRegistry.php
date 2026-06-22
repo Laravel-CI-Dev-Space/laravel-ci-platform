@@ -180,10 +180,10 @@ TEXT;
 
             try {
                 $columns = DB::select("SHOW COLUMNS FROM `{$table}`");
-                $cols    = array_map(fn ($c) => $c->Field . ' (' . $c->Type . ')', $columns);
-                $lines[] = "- {$table}: " . implode(', ', $cols);
+                $cols    = array_map(fn ($c) => $c->Field, $columns);
+                $lines[] = "{$table}(" . implode(',', $cols) . ")";
             } catch (\Throwable) {
-                $lines[] = "- {$table}";
+                $lines[] = $table;
             }
         }
 

@@ -36,12 +36,16 @@ class ChatService
         // Sauvegarder le message utilisateur
         $this->saveMessage($session, ChatMessage::ROLE_USER, $message);
 
+        // Les DB tools uniquement en dashboard — le contexte public n'en a pas besoin
+        // et le schéma complet représente ~10k tokens (trop coûteux pour les free tiers)
+        $tools = $context === ChatSession::CONTEXT_DASHBOARD ? $registry->definitions() : [];
+
         // Construire le payload
         $messages = $this->buildMessageHistory($session);
         $payload  = ChatPayload::make(
             systemPrompt: $this->promptBuilder->build($user, $context),
             messages:     $messages,
-            tools:        $registry->definitions(),
+            tools:        $tools,
             maxTokens:    2048,
             context:      $context,
             stream:       false,
