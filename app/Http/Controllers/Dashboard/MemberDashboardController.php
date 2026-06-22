@@ -160,7 +160,7 @@ class MemberDashboardController extends Controller
 
         $sessions = ChatSession::where('user_id', $user->id)
             ->withCount('messages')
-            ->latest('last_message_at')
+            ->latest('last_activity_at')
             ->take(20)
             ->get();
 
