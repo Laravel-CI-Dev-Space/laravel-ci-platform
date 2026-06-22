@@ -139,7 +139,7 @@
                             class="chat-input"
                             rows="1"
                             @keydown.enter.prevent="if (!$event.shiftKey) { $wire.sendMessage() }"
-                            @input="this.style.height='auto'; this.style.height=Math.min(this.scrollHeight,120)+'px'"
+                            @input="$el.style.height='auto'; $el.style.height=Math.min($el.scrollHeight,120)+'px'"
                             :disabled="$wire.loading"
                         ></textarea>
                         <button type="submit" class="chat-send-btn" :disabled="$wire.loading || !$wire.input.trim()">

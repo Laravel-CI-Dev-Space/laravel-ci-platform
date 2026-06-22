@@ -11,6 +11,9 @@ use Illuminate\Support\Carbon;
 
 class SystemPromptBuilder
 {
+    // Limite par section knowledge pour ne pas dépasser les quotas TPM Groq free tier
+    private const KNOWLEDGE_MAX_CHARS = 6000;
+
     public function build(User $user, string $context): string
     {
         $sections = [];
@@ -18,7 +21,7 @@ class SystemPromptBuilder
         // 1. Comportement de base (fichiers type "behavior" uploadés par l'admin)
         $behavior = AiKnowledgeFile::activeContentByType(AiKnowledgeFile::TYPE_BEHAVIOR);
         if ($behavior) {
-            $sections[] = $behavior;
+            $sections[] = $this->cap($behavior);
         } else {
             $sections[] = $this->defaultBehavior();
         }
@@ -26,13 +29,13 @@ class SystemPromptBuilder
         // 2. Connaissance de la plateforme (fichiers type "platform")
         $platform = AiKnowledgeFile::activeContentByType(AiKnowledgeFile::TYPE_PLATFORM);
         if ($platform) {
-            $sections[] = "## Connaissance de la plateforme\n\n" . $platform;
+            $sections[] = "## Connaissance de la plateforme\n\n" . $this->cap($platform);
         }
 
         // 3. Connaissance Laravel/PHP (fichiers type "laravel")
         $laravel = AiKnowledgeFile::activeContentByType(AiKnowledgeFile::TYPE_LARAVEL);
         if ($laravel) {
-            $sections[] = "## Base de connaissance Laravel & PHP\n\n" . $laravel;
+            $sections[] = "## Base de connaissance Laravel & PHP\n\n" . $this->cap($laravel);
         }
 
         // 4. Contexte utilisateur
@@ -96,6 +99,16 @@ Activité résumée de l'utilisateur :
 
 En mode dashboard, tu peux interroger la base de données pour donner à cet utilisateur des détails précis sur son activité (ses questions, articles, candidatures, événements inscrits, etc.).
 TEXT;
+    }
+
+    private function cap(string $content): string
+    {
+        if (mb_strlen($content) <= self::KNOWLEDGE_MAX_CHARS) {
+            return $content;
+        }
+
+        return mb_substr($content, 0, self::KNOWLEDGE_MAX_CHARS)
+            . "\n\n[contenu tronqué — limite système]";
     }
 
     private function defaultBehavior(): string

@@ -35,7 +35,7 @@ class AiProviderSeeder extends Seeder
                 'supports_tools'    => true,
                 'supports_streaming'=> true,
                 'is_active'         => true,
-                'is_default'        => true,
+                'is_default'        => false, // 8k TPM limit — trop bas pour les knowledge files
             ]
         );
 
@@ -49,7 +49,7 @@ class AiProviderSeeder extends Seeder
                 'supports_tools'    => true,
                 'supports_streaming'=> true,
                 'is_active'         => true,
-                'is_default'        => false,
+                'is_default'        => true, // 131k TPM — modèle par défaut
             ]
         );
 
