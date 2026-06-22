@@ -65,9 +65,10 @@ class ChatSession extends Model
 
     public function totalTokens(): int
     {
-        return $this->messages()
-            ->selectRaw('SUM(input_tokens + output_tokens) as total')
-            ->value('total') ?? 0;
+        return (int) $this->messages()
+            ->selectRaw('(input_tokens + output_tokens) as t')
+            ->get()
+            ->sum('t');
     }
 
     public function touchActivity(): bool
