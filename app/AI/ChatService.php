@@ -47,7 +47,7 @@ class ChatService
             systemPrompt: $this->promptBuilder->build($user, $context),
             messages:     $messages,
             tools:        $tools,
-            maxTokens:    2048,
+            maxTokens:    600,
             context:      $context,
             stream:       false,
         );
@@ -96,7 +96,7 @@ class ChatService
             systemPrompt: $this->promptBuilder->build($user, $context),
             messages:     $messages,
             tools:        $registry->definitions(),
-            maxTokens:    2048,
+            maxTokens:    600,
             context:      $context,
             stream:       true,
         );
