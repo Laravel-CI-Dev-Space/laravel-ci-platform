@@ -1,0 +1,678 @@
+{
+  "_meta": {
+    "titre": "Fichier de connaissance officiel — Laravel Côte d'Ivoire",
+    "version": "2.0",
+    "date_mise_a_jour": "2026-06-22",
+    "sources": [
+      "Documentation Officielle du Projet — v1.0 (2025)",
+      "Plan d'Action Réorganisation Communautaire WhatsApp (2026)",
+      "Calendrier Éditorial — v1.0 (2026)"
+    ],
+    "usage": "Fichier de connaissance pour l'assistant IA de la plateforme Laravel CI. À injecter dans le system prompt pour répondre avec précision aux questions sur la communauté.",
+    "confidentialite": "Usage communautaire interne"
+  },
+
+  "identite": {
+    "nom_officiel": "Laravel Côte d'Ivoire",
+    "nom_court": "Laravel CI",
+    "slogan": "Construire la première communauté de référence Laravel pour les développeurs francophones d'Afrique de l'Ouest",
+    "manifeste": "La Côte d'Ivoire ne manque pas de développeurs talentueux. Elle manque d'un espace commun pour les réunir, les faire grandir ensemble et les rendre visibles au reste du monde tech.",
+    "citation_fondatrice": "Le meilleur moment pour créer Laravel Côte d'Ivoire, c'était hier. Le deuxième meilleur moment, c'est maintenant.",
+    "statut": "Communauté tech active — lancée en 2025, réorganisée en 2026",
+    "siege": "Abidjan, Côte d'Ivoire",
+    "rayonnement": "National (CI) + diaspora ivoirienne internationale",
+    "type": "Communauté gratuite, ouverte, non commerciale",
+    "annee_creation": 2025
+  },
+
+  "liens_officiels": {
+    "linkedin": "https://www.linkedin.com/company/laravel-c%C3%B4te-d-ivoire-ci/",
+    "github_organisation": "https://github.com/Laravel-CI-Dev-Space",
+    "site_web": "https://laravel-ci.com",
+    "discord": "À compléter",
+    "whatsapp_groupe": "Sur invitation — groupe privé",
+    "youtube": "À compléter"
+  },
+
+  "chiffres_cles": {
+    "membres_linkedin": "~900 membres (juin 2026)",
+    "objectif_linkedin_mois_3": 150,
+    "objectif_linkedin_mois_6": 300,
+    "objectif_linkedin_mois_12": 500,
+    "membres_discord_objectif_mois_12": "400+",
+    "evenements_objectif_annee_1": "8+",
+    "projets_github_objectif_annee_1": "5+",
+    "offres_emploi_annee_1": "40+",
+    "paires_mentorat_annee_1": "20+"
+  },
+
+  "vision": {
+    "enonce": "Faire de Laravel Côte d'Ivoire la communauté de développeurs Laravel la plus active, la plus inclusive et la plus influente d'Afrique de l'Ouest, en contribuant à l'excellence technique et à l'employabilité des développeurs ivoiriens à l'échelle locale et internationale.",
+    "ambitions": [
+      {
+        "nom": "Excellence technique",
+        "description": "Élever le niveau de compétence Laravel des membres par le partage de connaissances, le mentorat et les ressources de qualité."
+      },
+      {
+        "nom": "Visibilité",
+        "description": "Rendre les développeurs ivoiriens visibles dans l'écosystème Laravel mondial et attirer des opportunités professionnelles vers la Côte d'Ivoire."
+      },
+      {
+        "nom": "Solidarité",
+        "description": "Créer un réseau de soutien mutuel où chaque développeur, quel que soit son niveau, trouve sa place et peut progresser."
+      }
+    ]
+  },
+
+  "mission": [
+    "Rassembler tous les développeurs utilisant ou souhaitant apprendre Laravel en Côte d'Ivoire et dans la diaspora ivoirienne",
+    "Produire et partager des contenus pédagogiques de qualité en français, adaptés au contexte technologique et économique local",
+    "Organiser des événements (meetups, conférences, hackathons) qui favorisent les échanges et la montée en compétences",
+    "Faciliter les connexions professionnelles entre développeurs et entreprises recrutant des profils Laravel",
+    "Contribuer à l'écosystème open source Laravel avec des projets initiés localement",
+    "Servir de pont entre la communauté ivoirienne et les communautés Laravel internationales"
+  ],
+
+  "valeurs": [
+    {
+      "valeur": "Partage",
+      "signification": "Tout membre partage ce qu'il sait, sans rétention d'information. Le savoir circule librement."
+    },
+    {
+      "valeur": "Bienveillance",
+      "signification": "Aucune question n'est stupide. Chaque débutant est accueilli avec respect et patience."
+    },
+    {
+      "valeur": "Excellence",
+      "signification": "Nous visons toujours la qualité : code bien écrit, contenu rigoureux, événements préparés."
+    },
+    {
+      "valeur": "Inclusion",
+      "signification": "La communauté est ouverte à toutes et tous, sans discrimination de niveau, de genre ou d'origine."
+    },
+    {
+      "valeur": "Impact local",
+      "signification": "Nos actions servent en priorité l'écosystème tech ivoirien et africain."
+    },
+    {
+      "valeur": "Ouverture",
+      "signification": "Nous collaborons avec d'autres communautés et restons connectés au monde tech global."
+    }
+  ],
+
+  "contexte_et_genese": {
+    "probleme_identifie": "Absence de communauté Laravel structurée, visible et active en Côte d'Ivoire malgré une scène tech abidjanaise dynamique.",
+    "contexte_ivoirien": {
+      "secteur_startups": "En croissance rapide, notamment à Abidjan (Plateau, Cocody, Marcory)",
+      "incubateurs_actifs": ["Orange Digital Center", "CTIC", "CIV Numérique", "Jokkolabs"],
+      "ecoles_formation": ["ESATIC", "EPITECH Côte d'Ivoire", "L'École 225", "Ada Tech School"],
+      "adoption_digitale": "Fort taux dans les secteurs bancaire, logistique, commerce et santé",
+      "diaspora": "Nombreuse en Europe, Amérique du Nord et autres pays africains"
+    },
+    "modeles_references": ["Laravel Cameroun (pionnier francophone africain)", "Laravel France", "Laravel Nigeria"],
+    "positionnement": "Deuxième grande communauté Laravel d'Afrique francophone, après Laravel Cameroun"
+  },
+
+  "public_cible": [
+    {
+      "profil": "Développeurs Juniors",
+      "description": "Étudiants ou jeunes professionnels qui apprennent Laravel, souvent seuls, sans encadrement ni réseau.",
+      "besoins": ["Ressources en français", "Pairs pour s'entraider", "Mentors pour accélérer leur progression"],
+      "apport_communaute": ["Tutoriels adaptés à leur niveau", "Canal d'entraide", "Accès à des mentors", "Visibilité sur des opportunités de stage et d'emploi"]
+    },
+    {
+      "profil": "Développeurs Expérimentés",
+      "description": "Professionnels avec 2 à 10 ans d'expérience dans des agences, startups ou en freelance.",
+      "besoins": ["Rester à jour sur l'évolution du framework", "Échanger avec des pairs", "Partager leurs expériences"],
+      "apport_communaute": ["Discussions techniques avancées", "Opportunités de prise de parole lors d'événements", "Réseau professionnel", "Accès à des opportunités de missions"]
+    },
+    {
+      "profil": "Formateurs et Enseignants",
+      "description": "Formateurs dans des écoles tech ou bootcamps cherchant des ressources pédagogiques de qualité.",
+      "besoins": ["Ressources pédagogiques", "Intégration dans un écosystème professionnel"],
+      "apport_communaute": ["Ressources pédagogiques partagées", "Réseau d'intervenants", "Visibilité institutionnelle"]
+    },
+    {
+      "profil": "Entreprises et Recruteurs",
+      "description": "Startups, ESN, agences web et PME cherchant à recruter des développeurs Laravel qualifiés.",
+      "besoins": ["Accès à des talents qualifiés", "Visibilité auprès de la communauté"],
+      "apport_communaute": ["Pool de talents qualifiés", "Publication d'offres d'emploi", "Visibilité lors des événements", "Partenariats de sponsoring"]
+    }
+  ],
+
+  "organisation_gouvernance": {
+    "principe": "La communauté ne doit pas reposer sur une seule personne.",
+    "equipe_fondatrice": {
+      "taille_ideale": "3 à 5 membres aux rôles complémentaires",
+      "roles": [
+        {
+          "role": "Coordinateur général",
+          "responsabilites": "Vision, relations externes, partenariats, représentation officielle",
+          "profil_ideal": "Dev senior avec leadership"
+        },
+        {
+          "role": "Responsable technique",
+          "responsabilites": "Contenu tech, GitHub, ressources, code review communautaire",
+          "profil_ideal": "Dev expert Laravel 3+ ans"
+        },
+        {
+          "role": "Responsable communication",
+          "responsabilites": "LinkedIn, Discord, calendrier éditorial, visuels",
+          "profil_ideal": "Dev avec aisance rédactionnelle"
+        },
+        {
+          "role": "Responsable événements",
+          "responsabilites": "Meetups, hackathons, conférence annuelle, logistique",
+          "profil_ideal": "Organisateur rigoureux"
+        },
+        {
+          "role": "Community Manager",
+          "responsabilites": "Animation Discord/WhatsApp, accueil des nouveaux, modération",
+          "profil_ideal": "Personne très disponible"
+        }
+      ]
+    },
+    "prise_de_decision": "Collectivement par l'équipe fondatrice, selon un principe de consensus. Consultation élargie pour les décisions structurantes."
+  },
+
+  "code_de_conduite": {
+    "reference": "Inspiré du Contributor Covenant, adapté au contexte communautaire",
+    "application": "Toutes les plateformes de la communauté",
+    "comportements_attendus": [
+      "Utiliser un langage accueillant et inclusif",
+      "Respecter les points de vue et expériences différents",
+      "Accepter avec grâce les critiques constructives",
+      "Se concentrer sur ce qui est meilleur pour la communauté",
+      "Faire preuve d'empathie envers les autres membres"
+    ],
+    "comportements_inacceptables": [
+      "Harcèlement sous toutes ses formes",
+      "Commentaires insultants, dégradants ou discriminatoires",
+      "Publication d'informations privées sans consentement",
+      "Spam, publicité non sollicitée, autopromotion excessive",
+      "Tout comportement raisonnablement inapproprié"
+    ]
+  },
+
+  "plateformes": [
+    {
+      "nom": "LinkedIn",
+      "url": "https://www.linkedin.com/company/laravel-c%C3%B4te-d-ivoire-ci/",
+      "role": "Visibilité professionnelle, articles techniques, recrutement",
+      "ton": "Professionnel, inspirant",
+      "frequence": "2 à 3 posts/semaine",
+      "membres_actuels": "~900"
+    },
+    {
+      "nom": "Discord",
+      "role": "Entraide quotidienne, discussions techniques, channels thématiques",
+      "ton": "Technique, structuré",
+      "frequence": "1 message/channel/semaine",
+      "channels": ["#general", "#laravel-tips", "#jobs", "#actualites", "#projets", "#evenements"]
+    },
+    {
+      "nom": "GitHub",
+      "url": "https://github.com/Laravel-CI-Dev-Space",
+      "role": "Projets open source, boilerplates, ressources communautaires",
+      "frequence": "Mensuelle"
+    },
+    {
+      "nom": "WhatsApp Groupe",
+      "role": "Entraide quotidienne, partage rapide, cohésion",
+      "ton": "Chill, direct, familier",
+      "frequence": "3 à 5 messages/semaine",
+      "statut": "Groupe privé, sur invitation, réorganisé en 2026"
+    },
+    {
+      "nom": "WhatsApp Chaîne",
+      "role": "Annonces officielles, ressources clés, événements",
+      "ton": "Sobre, clair, informatif",
+      "frequence": "1 à 2 publications/semaine"
+    },
+    {
+      "nom": "YouTube",
+      "role": "Replay des événements, tutoriels vidéo",
+      "frequence": "Mensuelle"
+    }
+  ],
+
+  "evenements": {
+    "format_meetup_type": {
+      "duree_totale": "~2h",
+      "structure": [
+        {"segment": "Accueil et networking", "duree": "15 min", "description": "Moment informel pour briser la glace"},
+        {"segment": "Présentation de la communauté", "duree": "10 min", "description": "Chiffres, nouveautés, annonces"},
+        {"segment": "Talk 1 — Technique", "duree": "30 min", "description": "Présentation + démo d'un sujet Laravel"},
+        {"segment": "Talk 2 — Retour d'expérience", "duree": "25 min", "description": "Un développeur partage son projet réel"},
+        {"segment": "Q&A collectif", "duree": "20 min", "description": "Échanges ouverts avec les speakers"},
+        {"segment": "Networking libre", "duree": "20 min", "description": "Discussions, connexions, suite informelle"}
+      ]
+    },
+    "calendrier_annuel": [
+      {"periode": "Mois 1", "evenement": "Lancement officiel online", "format": "Post LinkedIn + Lives Q&A Discord", "objectif": "100 membres"},
+      {"periode": "Mois 3", "evenement": "1er Meetup Virtuel", "format": "Google Meet 2h — 2 talks", "objectif": "50 participants"},
+      {"periode": "Mois 5", "evenement": "1er Meetup Physique Abidjan", "format": "Coworking — après-midi — 3h", "objectif": "80 participants"},
+      {"periode": "Mois 6", "evenement": "Laravel CI Hackathon #1", "format": "48h en ligne — équipes 3-5", "objectif": "20 équipes"},
+      {"periode": "Mois 8", "evenement": "2e Meetup Virtuel", "format": "Thème : Laravel & Mobile Money", "objectif": "100 participants"},
+      {"periode": "Mois 10", "evenement": "Journée Open Source CI", "format": "Contribution collaborative GitHub", "objectif": "30 contributeurs"},
+      {"periode": "Mois 12", "evenement": "Laravel CI Day — Conférence", "format": "Hybride Abidjan + stream", "objectif": "200+ participants"}
+    ],
+    "types_formats": [
+      "Meetup mensuel Abidjan — physique",
+      "Meetup virtuel bimestriel — Google Meet ou StreamYard",
+      "Hackathon Laravel CI — 48h en ligne",
+      "Laravel CI Day — conférence annuelle hybride"
+    ]
+  },
+
+  "roadmap_12_mois": [
+    {
+      "phase": "Phase 1 — Fondation",
+      "periode": "Semaines 1–2",
+      "objectif": "Poser des bases solides avant tout lancement public",
+      "actions": [
+        "Rédiger le manifeste et la mission",
+        "Créer l'identité visuelle (logo, charte graphique, templates)",
+        "Réserver le nom sur toutes les plateformes",
+        "Recruter 2 à 3 co-fondateurs",
+        "Rédiger et valider le Code de Conduite",
+        "Préparer le post de lancement LinkedIn"
+      ]
+    },
+    {
+      "phase": "Phase 2 — Lancement",
+      "periode": "Semaines 3–6",
+      "objectif": "Établir une présence publique et atteindre les 100 premiers membres",
+      "actions": [
+        "Publier le post de lancement LinkedIn",
+        "Envoyer des messages personnalisés à 50 développeurs Laravel ivoiriens",
+        "Contacter Laravel Cameroun, Laravel France et Laravel Nigeria",
+        "Activer et structurer le Discord",
+        "Publier les 3 premiers contenus LinkedIn"
+      ],
+      "kpis": "100 membres LinkedIn + 50 membres Discord"
+    },
+    {
+      "phase": "Phase 3 — Contenu Régulier",
+      "periode": "Mois 2–4",
+      "objectif": "Installer la régularité éditoriale",
+      "actions": [
+        "Démarrer le calendrier éditorial : 3 posts LinkedIn/semaine",
+        "Publier le premier tutoriel long format",
+        "Lancer la série 'Dev Ivoirien'",
+        "Mettre en ligne le premier projet GitHub (boilerplate Laravel CI)",
+        "Organiser le premier Meetup Virtuel"
+      ],
+      "kpis": "250 membres LinkedIn + 1 ressource GitHub publiée"
+    },
+    {
+      "phase": "Phase 4 — Événements",
+      "periode": "Mois 4–8",
+      "objectif": "Passer du virtuel au physique",
+      "actions": [
+        "Organiser le premier Meetup Physique à Abidjan",
+        "Lancer le premier Hackathon Laravel CI",
+        "Organiser un AMA avec Laravel Cameroun ou Laravel France"
+      ],
+      "kpis": "400 membres LinkedIn + 1 événement physique réussi"
+    },
+    {
+      "phase": "Phase 5 — Croissance",
+      "periode": "Mois 9–12",
+      "objectif": "Consolider les acquis et préparer la pérennisation",
+      "actions": [
+        "Lancer le job board Laravel CI",
+        "Démarrer le programme de mentorat (10 paires)",
+        "Organiser Laravel CI Day",
+        "Établir des partenariats officiels avec au moins 2 entreprises sponsors"
+      ],
+      "kpis": "500 membres LinkedIn + 1 conférence annuelle réussie"
+    }
+  ],
+
+  "kpis": {
+    "quantitatifs": {
+      "mois_3": {
+        "membres_linkedin": 150,
+        "membres_discord": 80,
+        "posts_linkedin_publies": 30,
+        "tutoriels_articles": 5,
+        "evenements_organises": 1,
+        "projets_github": 1,
+        "offres_emploi_diffusees": 5,
+        "paires_mentorat": 0
+      },
+      "mois_6": {
+        "membres_linkedin": 300,
+        "membres_discord": 200,
+        "posts_linkedin_publies": 70,
+        "tutoriels_articles": 15,
+        "evenements_organises": 3,
+        "projets_github": 2,
+        "offres_emploi_diffusees": 15,
+        "paires_mentorat": 5
+      },
+      "mois_12": {
+        "membres_linkedin": "500+",
+        "membres_discord": "400+",
+        "posts_linkedin_publies": "150+",
+        "tutoriels_articles": "30+",
+        "evenements_organises": "8+",
+        "projets_github": "5+",
+        "offres_emploi_diffusees": "40+",
+        "paires_mentorat": "20+"
+      }
+    },
+    "qualitatifs": [
+      "La communauté est citée dans des articles sur la tech ivoirienne",
+      "Des membres trouvent un emploi ou une mission via la communauté",
+      "Des partenariats officiels établis avec des entreprises locales",
+      "Laravel Cameroun ou Laravel France reconnaissent officiellement la communauté",
+      "Des membres non-ivoiriens rejoignent (preuve de rayonnement)",
+      "Des projets open source initiés par la communauté sont utilisés par d'autres"
+    ]
+  },
+
+  "strategie_contenu": {
+    "principes": [
+      "Régularité avant quantité — un post de qualité par semaine vaut mieux que cinq quelconques",
+      "Chaque canal a un rôle distinct",
+      "Les thématiques tournent — pas la même chose deux semaines de suite",
+      "Le contenu doit être utile, pas décoratif",
+      "On parle d'abord à la communauté ivoirienne — contexte local, exemples locaux"
+    ],
+    "thematiques": [
+      {
+        "code": "T1",
+        "nom": "Technique Laravel",
+        "objectif": "Monter en compétences",
+        "exemples_sujets": [
+          "Les 5 commandes Artisan que tout dev Laravel doit connaître",
+          "Lazy loading vs eager loading Eloquent — quand utiliser lequel ?",
+          "Les scopes Eloquent pour écrire des requêtes plus lisibles",
+          "Pipeline Laravel — le pattern le plus sous-utilisé du framework",
+          "Intégrer Orange Money CI dans une app Laravel — de sandbox à production",
+          "Créer une API REST complète avec Laravel 11 et Sanctum",
+          "Déployer Laravel sur un VPS avec Nginx, MySQL et SSL",
+          "Construire un tableau de bord admin avec Laravel Filament",
+          "Gestion des rôles et permissions avec Spatie Laravel Permission",
+          "Tests unitaires et feature tests avec Pest",
+          "Laravel Pulse — monitore ton app en temps réel",
+          "Livewire 3 — composants réactifs sans quitter PHP"
+        ]
+      },
+      {
+        "code": "T2",
+        "nom": "Carrière & Emploi",
+        "objectif": "Booster l'employabilité",
+        "exemples_sujets": [
+          "Comment construire un portfolio Laravel qui convainc un recruteur",
+          "Travailler en remote pour des clients européens — par où commencer ?",
+          "Freelance vs salarié en CI — avantages, inconvénients, conseils",
+          "Les certifications utiles pour un dev Laravel en Afrique",
+          "Comment négocier son salaire de développeur à Abidjan",
+          "Se faire connaître sur LinkedIn quand on est dev Laravel ivoirien",
+          "Dev Laravel — startups d'Abidjan (Plateau, Cocody, Zone 4)",
+          "Missions freelance remote pour ESN européennes"
+        ]
+      },
+      {
+        "code": "T3",
+        "nom": "Vie Communauté",
+        "objectif": "Cohésion et appartenance",
+        "exemples_sujets": [
+          "Portrait mensuel d'un membre : parcours, stack, projet favori",
+          "Interview : comment je suis passé de zéro à dev Laravel senior en CI",
+          "Question de la semaine : quel est ton outil de dev préféré ?",
+          "Sondage : Laravel Filament ou Nova pour ton prochain admin ?",
+          "Défi de la semaine : partage ton snippet Laravel le plus utile",
+          "Bilan mensuel : ce qui s'est passé dans la communauté"
+        ]
+      },
+      {
+        "code": "T4",
+        "nom": "Inspiration & Actualité",
+        "objectif": "Rester à jour et motivé",
+        "exemples_sujets": [
+          "Laravel 12 est sorti — les nouveautés qui changent ta façon de coder",
+          "Livewire 3 vs Inertia.js — lequel choisir ?",
+          "Les meilleurs talks de Laracon 2026",
+          "PHP 8.4 — ce que ça change pour les devs Laravel",
+          "Cette startup ivoirienne a construit son produit avec Laravel",
+          "La scène tech à Abidjan en 2026 — état des lieux"
+        ]
+      },
+      {
+        "code": "T5",
+        "nom": "Événements",
+        "objectif": "Mobiliser et faire venir",
+        "exemples_sujets": [
+          "Annonce J-30 : présentation de l'événement, programme, inscription",
+          "Annonce J-7 : rappel avec programme détaillé et speakers confirmés",
+          "Recap post-meetup : ce qu'on a appris, les temps forts, les photos",
+          "Replay disponible : lien vers la vidéo YouTube"
+        ]
+      },
+      {
+        "code": "T6",
+        "nom": "Open Source",
+        "objectif": "Contribuer et visibilité GitHub",
+        "exemples_sujets": [
+          "Lancement du boilerplate Laravel CI",
+          "La cheatsheet Laravel FR est disponible",
+          "Comment faire ta première Pull Request sur GitHub",
+          "Comment contribuer à l'open source quand on est junior",
+          "Notre organisation GitHub Laravel-CI-Dev-Space — tour d'horizon"
+        ]
+      },
+      {
+        "code": "T7",
+        "nom": "Réseau International",
+        "objectif": "Rayonner au-delà de la CI",
+        "exemples_sujets": [
+          "Laravel Cameroun nous rejoint pour un AMA",
+          "Collaboration avec Laravel France — échange de speakers",
+          "Laravel Sénégal et Laravel CI — premier projet commun",
+          "Comment Laravel Cameroun a construit la plus grande communauté Laravel d'Afrique",
+          "Laracon EU 2026 — les talks à regarder depuis Abidjan"
+        ]
+      }
+    ],
+    "calendrier_mensuel_type": {
+      "semaine_1": {"thematique": "T1 — Technique Laravel", "canaux": ["LinkedIn", "WhatsApp", "Discord", "WA Chaîne"]},
+      "semaine_2": {"thematique": "T2 — Carrière & Emploi", "canaux": ["LinkedIn", "WhatsApp", "Discord #jobs", "WA Chaîne"]},
+      "semaine_3": {"thematique": "T3 — Vie Communauté", "canaux": ["LinkedIn", "WhatsApp", "Discord #general", "WA Chaîne"]},
+      "semaine_4": {"thematique": "T4 — Inspiration & Actualité", "canaux": ["LinkedIn", "WhatsApp", "Discord #actualites", "WA Chaîne"]}
+    },
+    "rotation_3_mois": {
+      "mois_1": {"s1": "T1 Technique", "s2": "T2 Carrière", "s3": "T3 Communauté", "s4": "T4 Inspiration"},
+      "mois_2": {"s1": "T6 Open Source", "s2": "T1 Technique", "s3": "T3 Communauté", "s4": "T5 Événements"},
+      "mois_3": {"s1": "T7 Réseau International", "s2": "T2 Carrière", "s3": "T6 Open Source", "s4": "T4 Inspiration"}
+    }
+  },
+
+  "ressources_open_source": [
+    {
+      "nom": "Boilerplate Laravel CI",
+      "description": "Starter kit avec authentification, API, intégration Mobile Money, multi-langue français/anglais",
+      "statut": "En développement"
+    },
+    {
+      "nom": "Cheatsheet Laravel FR",
+      "description": "Aide-mémoire PDF des commandes Artisan, helpers, conventions Eloquent",
+      "statut": "En développement"
+    },
+    {
+      "nom": "Guide de déploiement CI",
+      "description": "Documentation pour déployer Laravel sur les hébergeurs accessibles depuis la Côte d'Ivoire",
+      "statut": "En développement"
+    },
+    {
+      "nom": "Liste curatée de packages",
+      "description": "Sélection des packages les plus utiles pour les projets web africains",
+      "statut": "En développement"
+    }
+  ],
+
+  "partenariats_strategiques": {
+    "prioritaires": [
+      {
+        "partenaire": "Laravel Cameroun",
+        "type": "Communauté sœur",
+        "potentiel": "Parrainage officiel — source d'inspiration principale",
+        "actions_prevues": ["Repost de l'annonce de lancement", "Échange de conseils", "Partenariat officiel speakers croisés"]
+      },
+      {
+        "partenaire": "Laravel France",
+        "type": "Communauté internationale",
+        "potentiel": "Légitimité internationale, accès à des ressources et intervenants"
+      },
+      {
+        "partenaire": "Laravel Nigeria",
+        "type": "Communauté africaine",
+        "potentiel": "Dynamique anglophone forte, échanges croisés"
+      },
+      {
+        "partenaire": "Laravel Sénégal",
+        "type": "Communauté africaine francophone émergente",
+        "potentiel": "Premier projet commun en cours"
+      }
+    ],
+    "ecoles_tech": ["ESATIC", "EPITECH Côte d'Ivoire", "L'École 225", "Ada Tech School"],
+    "espaces_coworking": "Pour les événements physiques à Abidjan",
+    "entreprises_sponsors": "Startups et ESN locales — visibilité en échange de sponsoring",
+    "sponsors_potentiels_internationaux": ["JetBrains", "DigitalOcean"]
+  },
+
+  "modele_economique": {
+    "principe": "Communauté gratuite et ouverte",
+    "couts_anticipes": [
+      {"poste": "Nom de domaine", "montant": "15–20€/an"},
+      {"poste": "Hébergement site web", "montant": "5–20€/mois (Railway, Render ou VPS)"},
+      {"poste": "Outils communication/design", "montant": "Canva Pro optionnel ~13€/mois"},
+      {"poste": "Organisation événements physiques", "montant": "Salle, rafraîchissements, matériel"},
+      {"poste": "Communication événements", "montant": "Impression flyers, bannières"}
+    ],
+    "sources_revenus": [
+      "Bénévolat des fondateurs (principale ressource au démarrage)",
+      "Sponsoring d'entreprises locales en échange de visibilité",
+      "Partenariats avec espaces de coworking (salles gratuites)",
+      "Partenariats avec écoles tech (ressources logistiques et humaines)",
+      "Dons volontaires des membres via cagnotte (Fedapay, PayDunya)",
+      "Sponsoring international (JetBrains, DigitalOcean)"
+    ]
+  },
+
+  "reorganisation_whatsapp_2026": {
+    "contexte": "Réorganisation du groupe WhatsApp pour filtrer les membres et recréer un espace de qualité focalisé sur Laravel.",
+    "principe_directeur": "On ne vide pas un groupe, on crée une nouvelle maison et on invite ceux qui veulent vraiment y habiter.",
+    "plan_action": {
+      "etape_1": {
+        "nom": "Créer le nouveau groupe",
+        "timing": "Jour 1",
+        "details": {
+          "nom_groupe": "Laravel Côte d'Ivoire — Communauté Officielle",
+          "confidentialite": "Groupe privé, seuls les admins peuvent ajouter des membres",
+          "administrateurs": "2 co-fondateurs minimum"
+        }
+      },
+      "etape_2": {
+        "nom": "Message d'annonce dans l'ancien groupe",
+        "timing": "Jours 1–2",
+        "message_type": "Bienveillant, positif — invite à remplir un Google Form pour rejoindre le nouveau groupe"
+      },
+      "etape_3": {
+        "nom": "Google Form de réinscription",
+        "timing": "Jours 2–9 (7 jours)",
+        "questions": [
+          "Prénom et nom complet",
+          "Numéro WhatsApp",
+          "Niveau avec Laravel (débutant / régulier / avancé / veut apprendre)",
+          "Pourquoi rejoindre Laravel Côte d'Ivoire (2-3 phrases)",
+          "Engagement à participer activement (oui / fera de son mieux / préfère observer)"
+        ]
+      },
+      "etape_4": {
+        "nom": "Tri et intégration manuelle",
+        "timing": "Jours 10–14",
+        "profils": [
+          {"profil": "A — Prioritaire", "critere": "Niveau intermédiaire/avancé, motivation forte", "action": "Ajouter immédiatement"},
+          {"profil": "B — À inclure", "critere": "Débutant motivé, sincère", "action": "Ajouter au groupe"},
+          {"profil": "C — À surveiller", "critere": "Veut observer, réponse vague", "action": "Ajouter mais surveiller"},
+          {"profil": "D — Ne pas ajouter", "critere": "Incohérent, hors-sujet", "action": "Ne pas ajouter"}
+        ]
+      }
+    },
+    "regles_nouveau_groupe": {
+      "ce_qu_on_partage": [
+        "Ressources Laravel : tutoriels, articles, packages, bonnes pratiques",
+        "Offres d'emploi et missions freelance liées au développement web",
+        "Questions techniques sur Laravel, PHP, l'écosystème web",
+        "Annonces d'événements communautaires",
+        "Projets open source initiés par les membres",
+        "Actualités Laravel et tech pertinentes pour le contexte ivoirien"
+      ],
+      "ce_qu_on_n_accepte_pas": [
+        "Spam, publicité non sollicitée, vente hors dev",
+        "Messages hors-sujet : humour, chaînes, actualités non tech",
+        "Discussions politiques ou religieuses",
+        "Autopromotion excessive sans valeur ajoutée",
+        "Harcèlement, insultes, commentaires dégradants"
+      ],
+      "moderation": [
+        {"infraction": "Message hors-sujet", "1ere_fois": "Avertissement privé", "recidive": "Avertissement public"},
+        {"infraction": "Spam ou pub non sollicitée", "1ere_fois": "Suppression + avertissement", "recidive": "Retrait du groupe"},
+        {"infraction": "Comportement irrespectueux", "1ere_fois": "Avertissement privé immédiat", "recidive": "Retrait immédiat"},
+        {"infraction": "Inactivité totale (6 mois)", "1ere_fois": "Message de vérification", "recidive": "Retrait silencieux"}
+      ]
+    },
+    "resultat_attendu": "Un groupe WhatsApp de 30 à 100 membres qualifiés, engagés et focalisés sur Laravel. Qualité > Quantité : un groupe de 40 membres actifs vaut mieux qu'un groupe de 400 silencieux."
+  },
+
+  "description_officielle": "Laravel Côte d'Ivoire est la communauté officielle des développeurs utilisant le framework PHP Laravel en Côte d'Ivoire et dans la diaspora ivoirienne. Notre mission : rassembler, former et connecter tous les passionnés de Laravel en Côte d'Ivoire, du débutant qui pose sa première question au senior qui partage son expertise. Ici, tout le monde est le bienvenu. Rejoignez-nous pour : des tutoriels en français, des meetups à Abidjan, des offres d'emploi Laravel, des projets open source et une communauté bienveillante.",
+
+  "sujets_techniques_prioritaires": {
+    "technique": [
+      "Intégration des passerelles de paiement mobile money (Orange Money, MTN MoMo, Wave, CinetPay)",
+      "Développement d'API REST pour applications mobiles (Flutter, React Native)",
+      "Laravel avec bases de données MySQL sur serveurs hébergés localement",
+      "Authentification et sécurité dans le contexte des apps africaines",
+      "Déploiement sur hébergeurs accessibles depuis l'Afrique (Railway, Render, VPS OVH)",
+      "Laravel Filament pour les tableaux de bord administratifs",
+      "Tests unitaires et fonctionnels avec PHPUnit et Pest"
+    ],
+    "carriere": [
+      "Construire un portfolio Laravel qui convainc un recruteur",
+      "Travailler en remote pour des clients européens et nord-américains",
+      "Freelance vs Salarié : quel statut pour un dev Laravel en CI ?",
+      "Les certifications utiles pour un développeur Laravel en Afrique"
+    ],
+    "communaute": [
+      "Portraits de développeurs ivoiriens à succès",
+      "Retours d'expérience de projets Laravel réels déployés en CI",
+      "Bonnes pratiques issues du terrain africain"
+    ]
+  },
+
+  "outils_recommandes": {
+    "publication": ["Buffer ou Later (programmer les posts LinkedIn)", "Canva (visuels pour carrousels)"],
+    "organisation": ["Google Sheets (calendrier éditorial)", "Notion (banque de sujets, pipeline contenu)"],
+    "redaction": ["Claude IA", "ChatGPT"],
+    "paiement_local": ["Fedapay", "PayDunya"],
+    "hebergement": ["Railway", "Render", "VPS OVH", "Hetzner", "DigitalOcean"]
+  },
+
+  "regles_publication": [
+    "Ne jamais publier le même contenu mot pour mot sur tous les canaux — adapter le ton et le format",
+    "Toujours relire avant de publier",
+    "Ne pas publier plus de 2 posts LinkedIn par jour",
+    "Espacer les publications WhatsApp — minimum 4h entre deux messages",
+    "Utiliser 5 à 10 hashtags pertinents en fin de post LinkedIn",
+    "Répondre aux commentaires et réactions",
+    "Créditer les sources"
+  ],
+
+  "hashtags_officiels": ["#LaravelCI", "#LaravelCotedIvoire", "#DeveloppeurIvoire", "#PHP", "#Laravel", "#Abidjan", "#TechCI"],
+
+  "conclusion": "Laravel Côte d'Ivoire n'est pas un projet parmi d'autres. C'est une infrastructure communautaire durable qui va changer concrètement la trajectoire de centaines de développeurs ivoiriens dans les années à venir. La technologie est un levier de développement économique. Les communautés tech sont les catalyseurs qui accélèrent ce levier."
+}
