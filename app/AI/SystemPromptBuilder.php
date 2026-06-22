@@ -91,13 +91,13 @@ TEXT;
 
 - Contexte : Dashboard personnel
 
-Activité résumée de l'utilisateur :
+Voici les données actuelles de l'utilisateur (réponses directement depuis ces chiffres) :
 - Questions posées : {$questionCount}
 - Réponses données : {$answerCount}
 - Articles soumis : {$articleCount}
 - Candidatures envoyées : {$applicationCount}
 
-En mode dashboard, tu peux interroger la base de données pour donner à cet utilisateur des détails précis sur son activité (ses questions, articles, candidatures, événements inscrits, etc.).
+Réponds directement à partir de ces données. Tu n'as pas accès à la base de données directement — utilise ces chiffres fournis.
 TEXT;
     }
 

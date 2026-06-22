@@ -36,9 +36,10 @@ class ChatService
         // Sauvegarder le message utilisateur
         $this->saveMessage($session, ChatMessage::ROLE_USER, $message);
 
-        // Les DB tools uniquement en dashboard — le contexte public n'en a pas besoin
-        // et le schéma complet représente ~10k tokens (trop coûteux pour les free tiers)
-        $tools = $context === ChatSession::CONTEXT_DASHBOARD ? $registry->definitions() : [];
+        // DB tools uniquement pour les admins/mods en dashboard.
+        // llama-3.3-70b-versatile génère des noms de tool malformés pour les membres non-admins,
+        // et leur résumé d'activité est déjà injecté dans le system prompt.
+        $tools = $this->shouldUseTools($user, $context) ? $registry->definitions() : [];
 
         // Construire le payload
         $messages = $this->buildMessageHistory($session);
@@ -274,6 +275,15 @@ class ChatService
             'tool_result'  => is_array($result) ? $result : ['value' => $result],
             'tool_call_id' => $response->toolCallId,
         ]);
+    }
+
+    private function shouldUseTools(User $user, string $context): bool
+    {
+        if ($context !== ChatSession::CONTEXT_DASHBOARD) {
+            return false;
+        }
+
+        return $user->hasAnyRole(['super-admin', 'admin', 'moderator']);
     }
 
     private function assertBudget(User $user, string $context): void
