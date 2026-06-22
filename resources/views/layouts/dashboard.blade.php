@@ -45,5 +45,10 @@
   <script src="{{ asset('assets/dashboard/js/sidebar.js') }}"></script>
 
   @stack('scripts')
+
+  {{-- ── Chatbot flottant dashboard ───────────────────── --}}
+  @auth
+    @livewire('chat.chat-widget', ['context' => 'dashboard'])
+  @endauth
 </body>
 </html>
