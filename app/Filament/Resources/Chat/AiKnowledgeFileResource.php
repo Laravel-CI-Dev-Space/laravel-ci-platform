@@ -53,12 +53,12 @@ class AiKnowledgeFileResource extends Resource
                 ->placeholder('Guide comportement v1'),
 
             FileUpload::make('disk_path')
-                ->label('Fichier (Markdown ou texte)')
+                ->label('Fichier (Markdown, texte ou JSON)')
                 ->disk('local')
                 ->directory('ai-knowledge')
-                ->acceptedFileTypes(['text/plain', 'text/markdown', 'text/x-markdown'])
-                ->maxSize(512)
-                ->helperText('Fichier .md ou .txt, max 512 Ko.')
+                ->acceptedFileTypes(['text/plain', 'text/markdown', 'text/x-markdown', 'application/json', 'application/octet-stream'])
+                ->maxSize(1024)
+                ->helperText('Fichier .md, .txt ou .json, max 1 Mo.')
                 ->afterStateUpdated(function ($state, callable $set) {
                     if ($state) {
                         $filename = basename($state);
