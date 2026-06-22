@@ -63,7 +63,7 @@ class ChatService
             estimatedCost: $response->estimatedCost,
         );
 
-        $session->touch();
+        $session->touchActivity();
         $session->generateTitle();
 
         return [
@@ -118,7 +118,7 @@ class ChatService
                 outputTokens:  $finalResponse->outputTokens,
                 estimatedCost: $finalResponse->estimatedCost,
             );
-            $session->touch();
+            $session->touchActivity();
             $session->generateTitle();
 
             yield ['done' => true, 'session_id' => $session->id, 'budget' => ChatTokenBudget::forToday($user->id)];

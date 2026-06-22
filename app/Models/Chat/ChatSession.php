@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 class ChatSession extends Model
 {
@@ -69,7 +70,7 @@ class ChatSession extends Model
             ->value('total') ?? 0;
     }
 
-    public function touch(array $attributes = []): bool
+    public function touchActivity(): bool
     {
         $this->last_activity_at = now();
         return $this->save();
@@ -80,7 +81,7 @@ class ChatSession extends Model
         if (! $this->title) {
             $first = $this->messages()->where('role', 'user')->first();
             if ($first) {
-                $this->update(['title' => \Str::limit($first->content, 60)]);
+                $this->update(['title' => Str::limit($first->content, 60)]);
             }
         }
     }
