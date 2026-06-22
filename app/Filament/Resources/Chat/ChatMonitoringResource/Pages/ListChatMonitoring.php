@@ -3,9 +3,10 @@
 namespace App\Filament\Resources\Chat\ChatMonitoringResource\Pages;
 
 use App\Filament\Resources\Chat\ChatMonitoringResource;
-use App\Models\Chat\ChatTokenBudget;
+use App\Filament\Resources\Chat\ChatMonitoringResource\Widgets\ChatTokenStatsWidget;
+use App\Filament\Resources\Chat\ChatMonitoringResource\Widgets\ChatTokenTrendWidget;
+use App\Filament\Resources\Chat\ChatMonitoringResource\Widgets\ChatTopUsersWidget;
 use Filament\Resources\Pages\ListRecords;
-use Filament\Schemas\Components\Text;
 
 class ListChatMonitoring extends ListRecords
 {
@@ -13,6 +14,10 @@ class ListChatMonitoring extends ListRecords
 
     protected function getHeaderWidgets(): array
     {
-        return [];
+        return [
+            ChatTokenStatsWidget::class,
+            ChatTokenTrendWidget::class,
+            ChatTopUsersWidget::class,
+        ];
     }
 }
