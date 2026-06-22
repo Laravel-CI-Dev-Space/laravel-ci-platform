@@ -60,11 +60,9 @@ class AiKnowledgeFileResource extends Resource
                 ->maxSize(1024)
                 ->helperText('Fichier .md, .txt ou .json, max 1 Mo.')
                 ->afterStateUpdated(function ($state, callable $set) {
-                    if ($state) {
-                        $filename = basename($state);
-                        $content  = \Storage::disk('local')->get('ai-knowledge/' . $filename);
-                        $set('filename', $filename);
-                        $set('content', $content ?? '');
+                    if ($state instanceof \Livewire\Features\SupportFileUploads\TemporaryUploadedFile) {
+                        $set('filename', $state->getClientOriginalName());
+                        $set('content', file_get_contents($state->getRealPath()) ?? '');
                     }
                 })
                 ->live(),
