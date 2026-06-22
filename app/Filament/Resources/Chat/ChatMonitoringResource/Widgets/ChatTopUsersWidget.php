@@ -18,7 +18,7 @@ class ChatTopUsersWidget extends ChartWidget
 
     protected int|string|array $columnSpan = 'full';
 
-    protected static ?string $maxHeight = '220px';
+    protected ?string $maxHeight = '220px';
 
     protected function getData(): array
     {
