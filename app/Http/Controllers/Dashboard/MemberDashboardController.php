@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Chat\ChatSession;
+use App\Models\Chat\ChatTokenBudget;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -138,5 +140,38 @@ class MemberDashboardController extends Controller
             ->paginate(15);
 
         return view('dashboard.member.applications', compact('applications'));
+    }
+
+    public function assistant(): View
+    {
+        /** @var User $user */
+        $user = auth()->user();
+
+        $budgetToday = ChatTokenBudget::forToday($user->id);
+
+        $last30 = ChatTokenBudget::where('user_id', $user->id)
+            ->where('date', '>=', now()->subDays(29)->toDateString())
+            ->orderBy('date')
+            ->get();
+
+        $totalPublic    = $last30->sum('public_tokens_used');
+        $totalDashboard = $last30->sum('dashboard_tokens_used');
+        $totalAll       = $totalPublic + $totalDashboard;
+
+        $sessions = ChatSession::where('user_id', $user->id)
+            ->withCount('messages')
+            ->latest('last_message_at')
+            ->take(20)
+            ->get();
+
+        return view('dashboard.member.assistant', compact(
+            'user',
+            'budgetToday',
+            'last30',
+            'totalPublic',
+            'totalDashboard',
+            'totalAll',
+            'sessions',
+        ));
     }
 }

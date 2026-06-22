@@ -4,6 +4,7 @@ use App\Actions\Jobs\ExpireOldOffers;
 use App\Jobs\Events\MarkCompletedEvents;
 use App\Jobs\Events\SendEventReminder;
 use App\Jobs\Notifications\SendJobAlerts;
+use App\Jobs\PlatformDailyStatsJob;
 use App\Models\Event;
 use App\Models\SiteSetting;
 use App\Services\Jobs\JobOfferService;
@@ -66,6 +67,9 @@ Schedule::job(new MarkCompletedEvents)->daily()->name('mark-completed-events')->
 
 /* ── Alertes emploi (fréquence configurable par les admins) ── */
 Schedule::job(new SendJobAlerts)->daily()->name('send-job-alerts')->withoutOverlapping();
+
+/* ── Stats plateforme pré-calculées (toutes les heures) ── */
+Schedule::job(new PlatformDailyStatsJob)->hourly()->name('platform-daily-stats')->withoutOverlapping();
 
 /* ── Recalcul des points et grades de réputation (fréquence configurable) ── */
 $reputationSchedule = Schedule::command('reputation:recalculate')->name('recalculate-reputations')->withoutOverlapping();

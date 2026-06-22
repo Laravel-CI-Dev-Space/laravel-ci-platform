@@ -79,6 +79,12 @@
           <i class="ti ti-user-circle"></i><span class="nav-text">Profil</span>
         </a>
       </li>
+      <li>
+        <a class="nav-link {{ request()->routeIs('dashboard.member.assistant') ? 'active' : '' }}"
+           href="{{ route('dashboard.member.assistant') }}">
+          <i class="ti ti-robot"></i><span class="nav-text">Assistant IA</span>
+        </a>
+      </li>
     @endif
 
     <li class="px-4 pt-4 pb-2"><small class="nav-text">Compte</small></li>

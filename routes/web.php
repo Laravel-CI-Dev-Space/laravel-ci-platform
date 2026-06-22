@@ -192,6 +192,7 @@ Route::middleware(['auth', 'active'])->group(function () {
                 Route::get('/favorites', fn () => view('dashboard.member.favorites'))->name('favorites');
                 Route::get('/profile', fn () => view('dashboard.member.profile'))->name('profile');
                 Route::post('/profile', fn () => back())->name('profile.update');
+                Route::get('/assistant', [MemberDashboardController::class, 'assistant'])->name('assistant');
             });
 
         // ─── MODERATOR DASHBOARD ───────────────────────────
