@@ -1,9 +1,14 @@
-<div id="chat-widget-container">
+<div id="chat-widget-container"
+     x-data="chatDrag()"
+     x-init="init()"
+     :style="`position:fixed; bottom:${bottom}px; right:${right}px; z-index:9997;`">
 
-    {{-- ── Bouton flottant ─────────────────────────────────── --}}
-    <button wire:click="toggle"
-            class="chat-fab {{ $isOpen ? 'chat-fab--open' : '' }}"
-            aria-label="Assistant IA Laravel CI">
+    {{-- ── Bouton flottant (drag handle) ──────────────────── --}}
+    <button class="chat-fab {{ $isOpen ? 'chat-fab--open' : '' }}"
+            aria-label="Assistant IA Laravel CI"
+            @mousedown="startDrag($event)"
+            @touchstart.passive="startDrag($event)"
+            @click="if (!_moved) $wire.toggle()">
         @if ($isOpen)
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none"
                  viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
@@ -159,31 +164,30 @@
 <style>
 /* ── Bouton flottant ─────────────────────────────────── */
 .chat-fab {
-    position: fixed;
-    bottom: 1.5rem;
-    right: 1.5rem;
     width: 54px;
     height: 54px;
     border-radius: 50%;
     background: var(--orange, #e8580a);
     color: #fff;
     border: none;
-    cursor: pointer;
+    cursor: grab;
     display: flex;
     align-items: center;
     justify-content: center;
     box-shadow: 0 4px 16px rgba(232,88,10,.4);
-    z-index: 9998;
     transition: transform .2s, box-shadow .2s;
+    -webkit-user-select: none;
+    user-select: none;
 }
+.chat-fab:active { cursor: grabbing; }
 .chat-fab:hover  { transform: scale(1.08); box-shadow: 0 6px 20px rgba(232,88,10,.5); }
 .chat-fab--open  { background: #555; box-shadow: 0 4px 16px rgba(0,0,0,.2); }
 
 /* ── Fenêtre ─────────────────────────────────────────── */
 .chat-window {
-    position: fixed;
-    bottom: 5rem;
-    right: 1.5rem;
+    position: absolute;
+    bottom: 4.2rem;
+    right: 0;
     width: 360px;
     max-height: 560px;
     background: #fff;
@@ -191,7 +195,6 @@
     box-shadow: 0 8px 40px rgba(0,0,0,.18);
     display: flex;
     flex-direction: column;
-    z-index: 9997;
     overflow: hidden;
     animation: chatSlideUp .2s ease;
 }
@@ -325,3 +328,77 @@
 .chat-send-btn:disabled { opacity: .45; cursor: not-allowed; }
 .chat-send-btn:not(:disabled):hover { background: #c94a06; }
 </style>
+
+<script>
+function chatDrag() {
+    return {
+        bottom: 24,
+        right:  24,
+        _dragging: false,
+        _moved: false,
+        _startX: 0,
+        _startY: 0,
+        _startRight: 0,
+        _startBottom: 0,
+
+        init() {
+            const saved = localStorage.getItem('chat-widget-pos');
+            if (saved) {
+                try {
+                    const p = JSON.parse(saved);
+                    this.bottom = p.bottom ?? 24;
+                    this.right  = p.right  ?? 24;
+                } catch {}
+            }
+            this._clamp();
+
+            const onMove = (e) => this._onMove(e);
+            const onUp   = (e) => this._onUp(e);
+            window.addEventListener('mousemove', onMove);
+            window.addEventListener('mouseup',   onUp);
+            window.addEventListener('touchmove', onMove, { passive: false });
+            window.addEventListener('touchend',  onUp);
+        },
+
+        startDrag(e) {
+            this._dragging = true;
+            this._moved    = false;
+            const touch = e.touches ? e.touches[0] : e;
+            this._startX      = touch.clientX;
+            this._startY      = touch.clientY;
+            this._startRight  = this.right;
+            this._startBottom = this.bottom;
+        },
+
+        _onMove(e) {
+            if (!this._dragging) return;
+            if (e.cancelable) e.preventDefault();
+            const touch = e.touches ? e.touches[0] : e;
+            const dx = touch.clientX - this._startX;
+            const dy = touch.clientY - this._startY;
+            if (Math.abs(dx) > 3 || Math.abs(dy) > 3) this._moved = true;
+            this.right  = this._startRight  - dx;
+            this.bottom = this._startBottom - dy;
+            this._clamp();
+        },
+
+        _onUp() {
+            if (!this._dragging) return;
+            this._dragging = false;
+            if (this._moved) {
+                localStorage.setItem('chat-widget-pos', JSON.stringify({ bottom: this.bottom, right: this.right }));
+                /* bloquer le click qui suit le drag */
+                setTimeout(() => { this._moved = false; }, 50);
+            }
+        },
+
+        _clamp() {
+            const W = window.innerWidth;
+            const H = window.innerHeight;
+            const FAB = 54;
+            this.right  = Math.max(8, Math.min(this.right,  W - FAB - 8));
+            this.bottom = Math.max(8, Math.min(this.bottom, H - FAB - 8));
+        },
+    };
+}
+</script>
