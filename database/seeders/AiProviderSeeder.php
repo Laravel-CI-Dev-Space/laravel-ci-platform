@@ -134,6 +134,21 @@ class AiProviderSeeder extends Seeder
             ]
         );
 
+        // Modèle dédié tool-use (mieux que llama-3.3-70b pour les function calls)
+        AiModel::updateOrCreate(
+            ['provider_id' => $groq->id, 'model_name' => 'llama3-groq-70b-8192-tool-use-preview'],
+            [
+                'display_name'      => 'Llama3 70B Tool-Use (Groq)',
+                'max_tokens'        => 8192,
+                'cost_input_per_1k' => 0.0,
+                'cost_output_per_1k'=> 0.0,
+                'supports_tools'    => true,
+                'supports_streaming'=> true,
+                'is_active'         => true,
+                'is_default'        => false,
+            ]
+        );
+
         $this->command->info('AI providers seeded: Groq (actif), Claude, OpenAI, xAI Grok (inactifs jusqu\'à clé API)');
     }
 }

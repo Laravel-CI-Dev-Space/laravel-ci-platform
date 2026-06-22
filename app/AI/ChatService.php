@@ -279,11 +279,9 @@ class ChatService
 
     private function shouldUseTools(User $user, string $context): bool
     {
-        if ($context !== ChatSession::CONTEXT_DASHBOARD) {
-            return false;
-        }
-
-        return $user->hasAnyRole(['super-admin', 'admin', 'moderator']);
+        // llama-3.3-70b-versatile génère des function calls malformés.
+        // Tools désactivés jusqu'au switch vers un modèle tool-use dédié.
+        return false;
     }
 
     private function assertBudget(User $user, string $context): void
