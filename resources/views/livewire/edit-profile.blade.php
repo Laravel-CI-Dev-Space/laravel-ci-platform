@@ -20,7 +20,7 @@
           <span class="avatar-online"></span>
         </div>
         <div class="user-name mt-2">{{ auth()->user()->name }}</div>
-        <div class="user-handle">@{{ auth()->user()->github_username }}</div>
+        <div class="user-handle">{{ auth()->user()->github_username }}</div>
         <div class="role-badge mt-2">
           <i class="ti ti-shield-check" style="font-size:.8rem"></i> member
         </div>

@@ -129,7 +129,7 @@
            alt="{{ auth()->user()->name }}" />
       <div>
         <div class="name">{{ auth()->user()->name }}</div>
-        <div class="handle">@{{ auth()->user()->github_username }}</div>
+        <div class="handle">{{ auth()->user()->github_username }}</div>
       </div>
     </div>
   </nav>

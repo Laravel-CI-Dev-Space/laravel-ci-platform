@@ -67,35 +67,49 @@
         results = [];
     }
 
-    function getCaretCoords(textarea, pos) {
-        const mirror = document.createElement('div');
-        const style = window.getComputedStyle(textarea);
-        ['boxSizing','width','height','overflowX','overflowY','borderTopWidth','borderRightWidth',
-         'borderBottomWidth','borderLeftWidth','paddingTop','paddingRight','paddingBottom','paddingLeft',
-         'fontStyle','fontVariant','fontWeight','fontStretch','fontSize','fontSizeAdjust','lineHeight',
-         'fontFamily','textAlign','textTransform','textIndent','letterSpacing','wordSpacing',
-         'tabSize','MozTabSize'].forEach(p => mirror.style[p] = style[p]);
-        mirror.style.position = 'absolute';
+    function positionDropdown(textarea) {
+        if (!dropdown) return;
+
+        const taRect  = textarea.getBoundingClientRect();
+        const style   = window.getComputedStyle(textarea);
+        const lineH   = parseFloat(style.lineHeight) || 20;
+
+        // Build a mirror positioned exactly where the textarea is in the document
+        const mirror  = document.createElement('div');
+        ['boxSizing','width','fontStyle','fontVariant','fontWeight','fontStretch','fontSize',
+         'lineHeight','fontFamily','letterSpacing','wordSpacing','textAlign','textTransform',
+         'textIndent','paddingTop','paddingRight','paddingBottom','paddingLeft',
+         'borderTopWidth','borderRightWidth','borderBottomWidth','borderLeftWidth',
+         'overflowWrap','wordWrap'].forEach(p => mirror.style[p] = style[p]);
+
+        mirror.style.position   = 'absolute';
+        // Place mirror at the textarea's document position, offset by textarea's own scroll
+        mirror.style.top        = (taRect.top  + window.scrollY - textarea.scrollTop)  + 'px';
+        mirror.style.left       = (taRect.left + window.scrollX) + 'px';
         mirror.style.visibility = 'hidden';
+        mirror.style.pointerEvents = 'none';
         mirror.style.whiteSpace = 'pre-wrap';
-        mirror.style.wordWrap = 'break-word';
-        mirror.style.top = '0'; mirror.style.left = '0';
+        mirror.style.wordWrap   = 'break-word';
+        mirror.style.overflow   = 'hidden';
+        mirror.style.height     = 'auto';
+
+        // Render text up to the # trigger
+        mirror.textContent = textarea.value.substring(0, triggerPos + 1);
+        const marker = document.createElement('span');
+        marker.textContent = '|';
+        mirror.appendChild(marker);
         document.body.appendChild(mirror);
 
-        const text = textarea.value.substring(0, pos);
-        mirror.textContent = text;
-        const span = document.createElement('span');
-        span.textContent = textarea.value.substring(pos) || '.';
-        mirror.appendChild(span);
-
-        const rect = textarea.getBoundingClientRect();
-        const spanRect = span.getBoundingClientRect();
+        const markerRect = marker.getBoundingClientRect();
         document.body.removeChild(mirror);
 
-        return {
-            top:  rect.top  + window.scrollY + spanRect.top  - mirror.getBoundingClientRect().top  + parseInt(style.paddingTop),
-            left: rect.left + window.scrollX + spanRect.left - mirror.getBoundingClientRect().left + parseInt(style.paddingLeft),
-        };
+        // Clamp horizontally so dropdown stays on screen
+        const dropW = 240;
+        let left = markerRect.left;
+        if (left + dropW > window.innerWidth - 8) left = window.innerWidth - dropW - 8;
+
+        dropdown.style.top  = (markerRect.bottom + window.scrollY + 4) + 'px';
+        dropdown.style.left = Math.max(8, left) + 'px';
     }
 
     function showDropdown(textarea, members) {
@@ -125,14 +139,6 @@
         });
 
         positionDropdown(textarea);
-    }
-
-    function positionDropdown(textarea) {
-        if (!dropdown) return;
-        const coords = getCaretCoords(textarea, triggerPos);
-        const lineH = parseInt(window.getComputedStyle(textarea).lineHeight) || 20;
-        dropdown.style.top  = (coords.top + lineH + 4) + 'px';
-        dropdown.style.left = coords.left + 'px';
     }
 
     function insertMention(textarea, username) {
