@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\AdminDashboard;
+use App\Filament\Resources\Events\Pages\ListEvents;
 use App\Filament\Resources\Newsletter\NewsletterSubscriberResource;
 use App\Http\Middleware\FilamentAdminAccess;
 use Filament\Http\Middleware\Authenticate;
@@ -66,6 +67,12 @@ class AdminPanelProvider extends PanelProvider
             ->renderHook(
                 PanelsRenderHook::TOPBAR_END,
                 fn (): string => view('filament.notification-bell-hook')->render(),
+            )
+
+            ->renderHook(
+                PanelsRenderHook::RESOURCE_PAGES_LIST_RECORDS_TABLE_BEFORE,
+                fn (): string => view('filament.event-calendar-hook')->render(),
+                scopes: ListEvents::class,
             )
 
             ->renderHook(

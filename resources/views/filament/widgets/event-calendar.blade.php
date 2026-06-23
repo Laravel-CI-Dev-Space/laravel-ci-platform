@@ -1,4 +1,4 @@
-<div style="grid-column: 1 / -1" class="fi-section rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10 p-5">
+<div class="rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10 p-5 w-full">
 
     {{-- ── Header ── --}}
     <div class="flex items-center justify-between mb-4">
