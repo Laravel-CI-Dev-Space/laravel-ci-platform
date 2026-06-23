@@ -20,6 +20,8 @@ class MonitoringRequestsPage extends Page
 
     protected static ?int $navigationSort = 3;
 
+    protected static bool $shouldRegisterNavigation = false;
+
     protected string $view = 'filament.pages.monitoring-requests';
 
     /** slow | errors | routes */
@@ -40,7 +42,7 @@ class MonitoringRequestsPage extends Page
 
     public function mount(): void
     {
-        $this->filter = request()->get('filter', 'slow');
+        $this->filter = request()->input('filter', 'slow');
     }
 
     public function setFilter(string $filter): void

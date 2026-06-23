@@ -6,6 +6,7 @@ namespace App\Filament\Pages;
 
 use App\Enums\UserRole;
 use App\Filament\Widgets\LogViewerWidget;
+use App\Filament\Widgets\MonitoringModalsWidget;
 use App\Filament\Widgets\RecentActivityFeedWidget;
 use App\Filament\Widgets\RequestLatencyStatsWidget;
 use App\Filament\Widgets\RequestLatencyWidget;
@@ -41,6 +42,7 @@ class SystemMonitoring extends Page
     protected function getHeaderWidgets(): array
     {
         return [
+            MonitoringModalsWidget::class,
             ServerHealthWidget::class,
             RequestLatencyStatsWidget::class,
             RequestLatencyWidget::class,

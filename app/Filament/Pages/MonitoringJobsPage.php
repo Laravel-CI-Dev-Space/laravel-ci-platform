@@ -9,6 +9,7 @@ use BackedEnum;
 use Carbon\Carbon;
 use Filament\Pages\Page;
 use Filament\Support\Icons\Heroicon;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 
 class MonitoringJobsPage extends Page
@@ -20,6 +21,8 @@ class MonitoringJobsPage extends Page
     protected static ?string $title = 'File d\'attente & Jobs échoués';
 
     protected static ?int $navigationSort = 2;
+
+    protected static bool $shouldRegisterNavigation = false;
 
     protected string $view = 'filament.pages.monitoring-jobs';
 
@@ -83,7 +86,7 @@ class MonitoringJobsPage extends Page
 
     public function retryAll(): void
     {
-        \Artisan::call('queue:retry', ['id' => ['all']]);
+        Artisan::call('queue:retry', ['id' => ['all']]);
         $this->dispatch('$refresh');
     }
 

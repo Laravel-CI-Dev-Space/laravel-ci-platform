@@ -78,7 +78,10 @@ class ServerHealthWidget extends BaseWidget
                 ->description($failedJobs . ' job(s) échoué(s)')
                 ->descriptionIcon('heroicon-m-queue-list')
                 ->color($failedJobs > 0 ? 'danger' : 'success')
-                ->url(route('filament.admin.pages.monitoring-jobs-page')),
+                ->extraAttributes([
+                    'wire:click' => '$dispatch("monitoring-open", { type: "jobs" })',
+                    'style'      => 'cursor:pointer',
+                ]),
 
             Stat::make('PHP / Laravel', PHP_VERSION)
                 ->description('Laravel ' . app()->version())
