@@ -434,7 +434,7 @@
                  wire:click="toggleNotificationPreference('mention')"
                  @checked($notificationPreferences['mention'])>
           <label class="form-check-label" for="pref-mention">
-            Quelqu'un me mentionne avec @@mon-pseudo
+            Quelqu'un me mentionne avec #mon-pseudo
           </label>
         </div>
       </div>
