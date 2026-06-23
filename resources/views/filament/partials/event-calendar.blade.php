@@ -90,11 +90,18 @@
                         </div>
                         <h4 style="font-size:.875rem;font-weight:600;color:#f1f5f9;margin:0 0 8px" x-text="ev.title"></h4>
                         <div style="font-size:.75rem;color:#94a3b8;display:flex;flex-direction:column;gap:4px;margin-bottom:12px">
-                            <div x-text="'🕐 ' + ev.starts_at + (ev.ends_at ? ' — ' + ev.ends_at : '')"></div>
-                            <div x-show="ev.location" x-text="'📍 ' + ev.location"></div>
+                            <div style="display:flex;align-items:center;gap:6px">
+                                <i class="ti ti-clock" style="font-size:.875rem;flex-shrink:0"></i>
+                                <span x-text="ev.starts_at + (ev.ends_at ? ' — ' + ev.ends_at : '')"></span>
+                            </div>
+                            <div x-show="ev.location" style="display:flex;align-items:center;gap:6px">
+                                <i class="ti ti-map-pin" style="font-size:.875rem;flex-shrink:0"></i>
+                                <span x-text="ev.location"></span>
+                            </div>
                             <template x-if="ev.capacity">
                                 <div style="display:flex;align-items:center;gap:8px">
-                                    <span x-text="'👥 ' + ev.registered + ' / ' + ev.capacity + ' inscrits'"></span>
+                                    <i class="ti ti-users" style="font-size:.875rem;flex-shrink:0"></i>
+                                    <span x-text="ev.registered + ' / ' + ev.capacity + ' inscrits'"></span>
                                     <div style="flex:1;max-width:80px;height:4px;background:rgba(255,255,255,.1);border-radius:2px">
                                         <div style="height:4px;border-radius:2px"
                                             :style="'width:' + Math.min(Math.round(ev.registered/ev.capacity*100),100) + '%;background:' + (ev.registered/ev.capacity>=.9?'#ef4444':ev.registered/ev.capacity>=.7?'#f59e0b':'#22c55e')">
@@ -108,10 +115,10 @@
                         </div>
                         <div style="display:flex;gap:8px">
                             <a :href="ev.view_url" style="display:inline-flex;align-items:center;gap:6px;border-radius:8px;padding:6px 12px;font-size:.75rem;font-weight:500;background:rgba(255,255,255,.06);color:#cbd5e1;text-decoration:none">
-                                👁 Voir
+                                <i class="ti ti-eye"></i> Voir
                             </a>
                             <a :href="ev.edit_url" style="display:inline-flex;align-items:center;gap:6px;border-radius:8px;padding:6px 12px;font-size:.75rem;font-weight:500;background:#e8580a;color:#fff;text-decoration:none">
-                                ✏ Modifier
+                                <i class="ti ti-pencil"></i> Modifier
                             </a>
                         </div>
                     </div>
