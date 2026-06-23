@@ -157,7 +157,7 @@ class NotificationService
     }
 
     /**
-     * Notifie un utilisateur qu'il a été mentionné via @username.
+     * Notifie un utilisateur qu'il a été mentionné via #username.
      */
     public function sendMention(User $mentionedUser, User $author, Model $source): void
     {
@@ -260,22 +260,22 @@ class NotificationService
             $source instanceof Question => [
                 'message' => "{$author->name} vous a mentionné dans la question « {$source->title} »",
                 'url'     => route('forum.show', $source->slug),
-                'icon'    => 'fa-solid fa-at',
+                'icon'    => 'fa-solid fa-hashtag',
             ],
             $source instanceof Answer => [
                 'message' => "{$author->name} vous a mentionné dans une réponse à « {$source->question->title} »",
                 'url'     => route('forum.show', $source->question->slug) . '#answer-' . $source->id,
-                'icon'    => 'fa-solid fa-at',
+                'icon'    => 'fa-solid fa-hashtag',
             ],
             $source instanceof Comment => [
                 'message' => "{$author->name} vous a mentionné dans un commentaire",
                 'url'     => $this->resolveCommentUrl($source),
-                'icon'    => 'fa-solid fa-at',
+                'icon'    => 'fa-solid fa-hashtag',
             ],
             default => [
                 'message' => "{$author->name} vous a mentionné",
                 'url'     => route('home'),
-                'icon'    => 'fa-solid fa-at',
+                'icon'    => 'fa-solid fa-hashtag',
             ],
         };
     }

@@ -63,6 +63,10 @@
 
   @stack('scripts')
 
+  @auth
+    <x-mention-autocomplete />
+  @endauth
+
   {{-- ── Chatbot flottant ──────────────────────────────── --}}
   @livewire('chat.chat-widget', ['context' => 'public'])
 </body>

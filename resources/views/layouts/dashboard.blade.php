@@ -46,6 +46,10 @@
 
   @stack('scripts')
 
+  @auth
+    <x-mention-autocomplete />
+  @endauth
+
   {{-- ── Chatbot flottant dashboard ───────────────────── --}}
   @auth
     @livewire('chat.chat-widget', ['context' => 'dashboard'])

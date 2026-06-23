@@ -79,6 +79,7 @@
                                     wire:model.live="body"
                                     class="form-control @error('body') is-invalid @enderror"
                                     rows="14"
+                                    data-mention
                                     placeholder="Décrivez votre problème en détail.&#10;&#10;Incluez :&#10;• Le code concerné&#10;• Les messages d'erreur&#10;• Ce que vous avez déjà essayé…"
                                 ></textarea>
                                 @error('body')

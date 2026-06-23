@@ -85,6 +85,12 @@
           <i class="ti ti-robot"></i><span class="nav-text">Assistant IA</span>
         </a>
       </li>
+      <li>
+        <a class="nav-link {{ request()->routeIs('dashboard.member.mentions') ? 'active' : '' }}"
+           href="{{ route('dashboard.member.mentions') }}">
+          <i class="ti ti-hash"></i><span class="nav-text">Mes mentions</span>
+        </a>
+      </li>
     @endif
 
     <li class="px-4 pt-4 pb-2"><small class="nav-text">Compte</small></li>

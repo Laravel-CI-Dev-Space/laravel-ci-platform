@@ -33,6 +33,7 @@
                         wire:model.live="body"
                         class="form-control mb-2 @error('body') is-invalid @enderror"
                         rows="3"
+                        data-mention
                         placeholder="Laissez un commentaire constructif…"
                         maxlength="500"
                         style="resize:none; border-radius:var(--radius,.75rem)"
@@ -156,6 +157,7 @@
                                 wire:model.live="replyBody"
                                 class="form-control mb-2 @error('replyBody') is-invalid @enderror"
                                 rows="2"
+                                data-mention
                                 placeholder="Votre réponse à {{ $comment->user->name }}…"
                                 maxlength="500"
                                 style="resize:none; border-radius:var(--radius,.75rem); font-size:.88rem"

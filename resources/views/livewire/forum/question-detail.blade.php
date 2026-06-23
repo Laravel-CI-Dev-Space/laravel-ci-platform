@@ -140,6 +140,7 @@
                         name="body"
                         class="form-control @error('body') is-invalid @enderror"
                         rows="8"
+                        data-mention
                         placeholder="Partagez votre solution. Markdown et blocs de code sont supportés…"
                     >{{ old('body') }}</textarea>
                     @error('body')

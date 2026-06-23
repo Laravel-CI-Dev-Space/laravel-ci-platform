@@ -27,6 +27,7 @@ use App\Http\Controllers\Jobs\JobApplicationController;
 use App\Http\Controllers\Jobs\JobOfferController;
 use App\Http\Controllers\Search\SearchController;
 use App\Http\Controllers\ViewAsMemberController;
+use App\Http\Controllers\Api\MemberSearchController;
 use App\Http\Controllers\Web\AboutController;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\MemberProfileController;
@@ -157,6 +158,9 @@ Route::middleware(['auth', 'active', 'profile.complete'])->group(function () {
 // ─── MEMBER PUBLIC PROFILE ─────────────────────────────────
 Route::get('/members/{username}', [MemberProfileController::class, 'show'])->name('members.show');
 
+// ─── MEMBER SEARCH API (mention autocomplete) ──────────────
+Route::get('/api/members/search', MemberSearchController::class)->middleware(['auth', 'active'])->name('api.members.search');
+
 // ─── AUTHENTICATION ────────────────────────────────────────
 Route::get('/login', fn () => view('web.login'))->name('login')->middleware('guest');
 Route::get('/auth/github/redirect', [SocialiteController::class, 'redirect'])->name('auth.github.redirect')->middleware('guest');
@@ -193,6 +197,7 @@ Route::middleware(['auth', 'active'])->group(function () {
                 Route::get('/profile', fn () => view('dashboard.member.profile'))->name('profile');
                 Route::post('/profile', fn () => back())->name('profile.update');
                 Route::get('/assistant', [MemberDashboardController::class, 'assistant'])->name('assistant');
+                Route::get('/mentions', [MemberDashboardController::class, 'mentions'])->name('mentions');
             });
 
         // ─── MODERATOR DASHBOARD ───────────────────────────

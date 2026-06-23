@@ -142,6 +142,19 @@ class MemberDashboardController extends Controller
         return view('dashboard.member.applications', compact('applications'));
     }
 
+    public function mentions(): View
+    {
+        /** @var User $user */
+        $user = auth()->user();
+
+        $mentions = $user->notifications()
+            ->where('type', 'like', '%Mention%')
+            ->latest()
+            ->paginate(20);
+
+        return view('dashboard.member.mentions', compact('mentions'));
+    }
+
     public function assistant(): View
     {
         /** @var User $user */
