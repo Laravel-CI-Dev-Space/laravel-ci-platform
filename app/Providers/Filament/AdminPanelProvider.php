@@ -71,7 +71,59 @@ class AdminPanelProvider extends PanelProvider
 
             ->renderHook(
                 PanelsRenderHook::RESOURCE_PAGES_LIST_RECORDS_TABLE_BEFORE,
-                fn (): string => view('filament.event-calendar-hook')->render(),
+                function (): string {
+                    $raw    = request()->query('cal_month', now()->format('Y-m'));
+                    $parsed = \Carbon\Carbon::createFromFormat('Y-m', $raw) ?? now();
+                    $current = \Carbon\Carbon::create($parsed->year, $parsed->month, 1);
+
+                    $events = \App\Models\Event::whereYear('starts_at', $current->year)
+                        ->whereMonth('starts_at', $current->month)
+                        ->with('registrations')
+                        ->get();
+
+                    $firstDow  = ($current->copy()->startOfMonth()->dayOfWeekIso - 1 + 7) % 7;
+                    $daysInMonth = $current->daysInMonth;
+
+                    $calendarDays = [];
+                    for ($i = 0; $i < $firstDow; $i++) {
+                        $calendarDays[] = ['day' => null, 'date' => '', 'today' => false, 'events' => []];
+                    }
+                    for ($d = 1; $d <= $daysInMonth; $d++) {
+                        $date    = $current->copy()->day($d);
+                        $dayEvts = $events->filter(fn ($e) => $e->starts_at->format('Y-m-d') === $date->format('Y-m-d'));
+                        $calendarDays[] = [
+                            'day'    => $d,
+                            'date'   => $date->format('Y-m-d'),
+                            'today'  => $date->isToday(),
+                            'events' => $dayEvts->map(fn ($e) => [
+                                'id'         => $e->id,
+                                'title'      => $e->title,
+                                'type'       => $e->type->value ?? 'meetup',
+                                'status'     => $e->status->value ?? 'draft',
+                                'starts_at'  => $e->starts_at->format('H:i'),
+                                'ends_at'    => $e->ends_at?->format('H:i'),
+                                'location'   => $e->location,
+                                'is_paid'    => (bool) $e->is_paid,
+                                'price'      => $e->price,
+                                'currency'   => $e->currency,
+                                'capacity'   => $e->capacity,
+                                'registered' => $e->registrations->count(),
+                                'edit_url'   => \App\Filament\Resources\Events\EventResource::getUrl('edit', ['record' => $e]),
+                                'view_url'   => route('events.show', $e->slug),
+                            ])->values()->toArray(),
+                        ];
+                    }
+
+                    $prev = $current->copy()->subMonth();
+                    $next = $current->copy()->addMonth();
+
+                    return view('filament.partials.event-calendar', [
+                        'calendarDays' => $calendarDays,
+                        'currentDate'  => $current,
+                        'prevUrl'      => request()->fullUrlWithQuery(['cal_month' => $prev->format('Y-m')]),
+                        'nextUrl'      => request()->fullUrlWithQuery(['cal_month' => $next->format('Y-m')]),
+                    ])->render();
+                },
                 scopes: ListEvents::class,
             )
 
