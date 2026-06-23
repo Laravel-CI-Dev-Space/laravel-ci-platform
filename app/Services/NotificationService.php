@@ -55,7 +55,7 @@ class NotificationService
         $this->createInAppNotification($user, 'new_answer', [
             'message' => "Nouvelle réponse à votre question : {$answer->question->title}",
             'url'     => route('forum.show', $answer->question->slug),
-            'icon'    => 'fa-solid fa-comment',
+            'icon'    => 'ti ti-message-circle',
         ]);
     }
 
@@ -73,7 +73,7 @@ class NotificationService
         $this->createInAppNotification($user, 'article_published', [
             'message' => "Votre article \"{$article->title}\" a été publié !",
             'url'     => route('blog.show', $article->slug),
-            'icon'    => 'fa-solid fa-book-open',
+            'icon'    => 'ti ti-book',
         ]);
     }
 
@@ -87,7 +87,7 @@ class NotificationService
         $this->createInAppNotification($user, 'event_confirmation', [
             'message' => "Inscription confirmée : {$registration->event->title}",
             'url'     => route('events.show', $registration->event->slug),
-            'icon'    => 'fa-solid fa-calendar-check',
+            'icon'    => 'ti ti-calendar-check',
         ]);
     }
 
@@ -184,7 +184,7 @@ class NotificationService
         $this->createInAppNotification($user, 'event_recap', [
             'message' => "Le récapitulatif de \"{$event->title}\" est disponible !",
             'url'     => route('events.show', $event->slug) . '#recap',
-            'icon'    => 'fa-solid fa-images',
+            'icon'    => 'ti ti-photo',
         ]);
     }
 
@@ -196,7 +196,7 @@ class NotificationService
         $this->notifyAdmins('company_registration', [
             'message' => "Nouvelle demande entreprise : {$request->company_name}",
             'url'     => '/admin/company-registrations',
-            'icon'    => 'fa-solid fa-building',
+            'icon'    => 'ti ti-building',
         ]);
     }
 
@@ -260,22 +260,22 @@ class NotificationService
             $source instanceof Question => [
                 'message' => "{$author->name} vous a mentionné dans la question « {$source->title} »",
                 'url'     => route('forum.show', $source->slug),
-                'icon'    => 'fa-solid fa-hashtag',
+                'icon'    => 'ti ti-hash',
             ],
             $source instanceof Answer => [
                 'message' => "{$author->name} vous a mentionné dans une réponse à « {$source->question->title} »",
                 'url'     => route('forum.show', $source->question->slug) . '#answer-' . $source->id,
-                'icon'    => 'fa-solid fa-hashtag',
+                'icon'    => 'ti ti-hash',
             ],
             $source instanceof Comment => [
                 'message' => "{$author->name} vous a mentionné dans un commentaire",
                 'url'     => $this->resolveCommentUrl($source),
-                'icon'    => 'fa-solid fa-hashtag',
+                'icon'    => 'ti ti-hash',
             ],
             default => [
                 'message' => "{$author->name} vous a mentionné",
                 'url'     => route('home'),
-                'icon'    => 'fa-solid fa-hashtag',
+                'icon'    => 'ti ti-hash',
             ],
         };
     }

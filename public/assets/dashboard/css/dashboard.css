@@ -250,3 +250,5 @@ a:hover { color: var(--lci-primary); }
   color: var(--lci-gray-400);
   padding: 0.5rem 1rem 0.25rem;
 }
+
+[x-cloak] { display: none !important; }

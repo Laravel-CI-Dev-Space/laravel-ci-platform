@@ -2,7 +2,7 @@
 
     {{-- BELL BUTTON --}}
     <button type="button" class="notification-bell-btn" @click="open = ! open; if (open) $wire.loadNotifications()" aria-label="Notifications">
-        <i class="fa-solid fa-bell"></i>
+        <i class="ti ti-bell"></i>
         @if($unreadCount > 0)
             <span class="notification-badge">{{ $unreadCount > 9 ? '9+' : $unreadCount }}</span>
         @endif
@@ -26,7 +26,7 @@
                    wire:click="markAsRead('{{ $notification->id }}')"
                    class="notification-item {{ $notification->read_at === null ? 'is-unread' : '' }}">
                     <span class="notification-item-icon">
-                        <i class="{{ $data['icon'] ?? 'fa-solid fa-bell' }}"></i>
+                        <i class="{{ $data['icon'] ?? 'ti ti-bell' }}"></i>
                     </span>
                     <span class="notification-item-content">
                         <span class="notification-item-message">{{ $data['message'] ?? '' }}</span>
@@ -38,7 +38,7 @@
                 </a>
             @empty
                 <div class="notification-empty">
-                    <i class="fa-regular fa-bell"></i>
+                    <i class="ti ti-bell"></i>
                     <p>Aucune notification</p>
                 </div>
             @endforelse
