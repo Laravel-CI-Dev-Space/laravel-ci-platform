@@ -192,7 +192,7 @@ Route::middleware(['auth', 'active'])->group(function () {
                 Route::get('/questions', [MemberDashboardController::class, 'questions'])->name('questions');
                 Route::get('/articles', [MemberDashboardController::class, 'articles'])->name('articles');
                 Route::get('/applications', [MemberDashboardController::class, 'applications'])->name('applications');
-                Route::get('/events', fn () => view('dashboard.member.events'))->name('events');
+                Route::get('/events', [MemberDashboardController::class, 'events'])->name('events');
                 Route::get('/favorites', fn () => view('dashboard.member.favorites'))->name('favorites');
                 Route::get('/profile', fn () => view('dashboard.member.profile'))->name('profile');
                 Route::post('/profile', fn () => back())->name('profile.update');

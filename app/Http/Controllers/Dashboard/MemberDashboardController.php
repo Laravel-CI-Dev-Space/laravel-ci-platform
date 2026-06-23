@@ -142,6 +142,18 @@ class MemberDashboardController extends Controller
         return view('dashboard.member.applications', compact('applications'));
     }
 
+    public function events(): View
+    {
+        $registrations = auth()->user()
+            ->eventRegistrations()
+            ->with('event')
+            ->whereNotIn('status', ['cancelled'])
+            ->latest('registered_at')
+            ->get();
+
+        return view('dashboard.member.events', compact('registrations'));
+    }
+
     public function mentions(): View
     {
         /** @var User $user */
