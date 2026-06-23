@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Resources\Events\Pages;
 
 use App\Filament\Resources\Events\EventResource;
+use App\Filament\Widgets\EventCalendarWidget;
 use App\Filament\Widgets\EventStatsWidget;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
@@ -22,7 +23,10 @@ class ListEvents extends ListRecords
 
     protected function getHeaderWidgets(): array
     {
-        return [EventStatsWidget::class];
+        return [
+            EventStatsWidget::class,
+            EventCalendarWidget::class,
+        ];
     }
 
     public function getHeaderWidgetsColumns(): int|array
