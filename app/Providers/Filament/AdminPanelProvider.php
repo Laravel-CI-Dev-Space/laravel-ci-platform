@@ -68,6 +68,31 @@ class AdminPanelProvider extends PanelProvider
                 fn (): string => view('filament.notification-bell-hook')->render(),
             )
 
+            ->renderHook(
+                PanelsRenderHook::BODY_END,
+                fn (): string => <<<'HTML'
+                <script>
+                (function () {
+                    function splitBadges() {
+                        document.querySelectorAll('.fi-badge').forEach(function (badge) {
+                            if (badge.dataset.badgeSplit) return;
+                            var text = badge.textContent.trim();
+                            var m = text.match(/^(\d+)\s*\+(\d+)$/);
+                            if (!m) return;
+                            badge.dataset.badgeSplit = '1';
+                            badge.style.cssText = 'background:transparent!important;padding:0!important;display:inline-flex;gap:3px;align-items:center;';
+                            badge.innerHTML =
+                                '<span style="background:rgba(255,255,255,0.12);color:inherit;border-radius:9999px;padding:1px 7px;font-size:inherit;font-weight:inherit;">' + m[1] + '</span>' +
+                                '<span style="background:#e8580a;color:#fff;border-radius:9999px;padding:1px 7px;font-size:inherit;font-weight:inherit;">+' + m[2] + '</span>';
+                        });
+                    }
+                    document.addEventListener('DOMContentLoaded', splitBadges);
+                    new MutationObserver(splitBadges).observe(document.documentElement, { childList: true, subtree: true });
+                })();
+                </script>
+                HTML
+            )
+
             ->navigationGroups([
                 NavigationGroup::make('Forum'),
                 NavigationGroup::make('Blog'),
