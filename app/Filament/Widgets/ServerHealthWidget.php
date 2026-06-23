@@ -79,7 +79,7 @@ class ServerHealthWidget extends BaseWidget
                 ->descriptionIcon('heroicon-m-queue-list')
                 ->color($failedJobs > 0 ? 'danger' : 'success')
                 ->extraAttributes([
-                    'wire:click' => '$dispatch("monitoring-open", { type: "jobs" })',
+                    'wire:click' => "\$dispatch('monitoring-open', { type: 'jobs' })",
                     'style'      => 'cursor:pointer',
                 ]),
 
