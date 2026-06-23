@@ -41,6 +41,16 @@ class EventResource extends Resource
         return 'Événements';
     }
 
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'gray';
+    }
+
     public static function form(Schema $schema): Schema
     {
         return EventForm::configure($schema);

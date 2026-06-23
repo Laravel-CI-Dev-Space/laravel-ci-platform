@@ -40,6 +40,19 @@ class ArticleResource extends Resource
         return 'Blog';
     }
 
+    public static function getNavigationBadge(): ?string
+    {
+        $total   = static::getModel()::count();
+        $pending = static::getModel()::where('status', 'pending')->count();
+        return $pending > 0 ? "{$total} +{$pending}" : (string) $total;
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        $pending = static::getModel()::where('status', 'pending')->count();
+        return $pending > 0 ? 'warning' : 'gray';
+    }
+
     public static function form(Schema $schema): Schema
     {
         return ArticleForm::configure($schema);

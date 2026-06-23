@@ -38,6 +38,19 @@ class GuestRegistrationResource extends Resource
         return 'Événements';
     }
 
+    public static function getNavigationBadge(): ?string
+    {
+        $total = static::getModel()::count();
+        $new   = static::getModel()::where('registered_at', '>=', now()->subDays(7))->count();
+        return $new > 0 ? "{$total} +{$new}" : (string) $total;
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        $new = static::getModel()::where('registered_at', '>=', now()->subDays(7))->count();
+        return $new > 0 ? 'warning' : 'gray';
+    }
+
     public static function table(Table $table): Table
     {
         return $table

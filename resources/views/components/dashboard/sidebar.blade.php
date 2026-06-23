@@ -37,6 +37,9 @@
       </li>
     @else
       {{-- Member nav items --}}
+      @php
+        $sb = $sidebarBadges ?? [];
+      @endphp
       <li>
         <a class="nav-link {{ request()->routeIs('dashboard.member.overview') ? 'active' : '' }}"
            href="{{ route('dashboard.member.overview') }}">
@@ -46,25 +49,50 @@
       <li>
         <a class="nav-link {{ request()->routeIs('dashboard.member.questions') ? 'active' : '' }}"
            href="{{ route('dashboard.member.questions') }}">
-          <i class="ti ti-message-circle-question"></i><span class="nav-text">Mes questions</span>
+          <i class="ti ti-message-circle-question"></i>
+          <span class="nav-text">Mes questions</span>
+          @if(!empty($sb['questions']['total']))
+            <span class="sidebar-badge">{{ $sb['questions']['total'] }}</span>
+          @endif
+          @if(!empty($sb['questions']['new']))
+            <span class="sidebar-badge sidebar-badge--new">+{{ $sb['questions']['new'] }}</span>
+          @endif
         </a>
       </li>
       <li>
         <a class="nav-link {{ request()->routeIs('dashboard.member.articles') ? 'active' : '' }}"
            href="{{ route('dashboard.member.articles') }}">
-          <i class="ti ti-file-text"></i><span class="nav-text">Mes articles</span>
+          <i class="ti ti-file-text"></i>
+          <span class="nav-text">Mes articles</span>
+          @if(!empty($sb['articles']['total']))
+            <span class="sidebar-badge">{{ $sb['articles']['total'] }}</span>
+          @endif
+          @if(!empty($sb['articles']['new']))
+            <span class="sidebar-badge sidebar-badge--new">+{{ $sb['articles']['new'] }}</span>
+          @endif
         </a>
       </li>
       <li>
         <a class="nav-link {{ request()->routeIs('dashboard.member.events') ? 'active' : '' }}"
            href="{{ route('dashboard.member.events') }}">
-          <i class="ti ti-calendar-event"></i><span class="nav-text">Mes événements</span>
+          <i class="ti ti-calendar-event"></i>
+          <span class="nav-text">Mes événements</span>
+          @if(!empty($sb['events']['total']))
+            <span class="sidebar-badge">{{ $sb['events']['total'] }}</span>
+          @endif
         </a>
       </li>
       <li>
         <a class="nav-link {{ request()->routeIs('dashboard.member.applications') ? 'active' : '' }}"
            href="{{ route('dashboard.member.applications') }}">
-          <i class="ti ti-briefcase"></i><span class="nav-text">Candidatures</span>
+          <i class="ti ti-briefcase"></i>
+          <span class="nav-text">Candidatures</span>
+          @if(!empty($sb['applications']['total']))
+            <span class="sidebar-badge">{{ $sb['applications']['total'] }}</span>
+          @endif
+          @if(!empty($sb['applications']['new']))
+            <span class="sidebar-badge sidebar-badge--new">+{{ $sb['applications']['new'] }}</span>
+          @endif
         </a>
       </li>
       <li>
@@ -88,7 +116,14 @@
       <li>
         <a class="nav-link {{ request()->routeIs('dashboard.member.mentions') ? 'active' : '' }}"
            href="{{ route('dashboard.member.mentions') }}">
-          <i class="ti ti-hash"></i><span class="nav-text">Mes mentions</span>
+          <i class="ti ti-hash"></i>
+          <span class="nav-text">Mes mentions</span>
+          @if(!empty($sb['mentions']['total']))
+            <span class="sidebar-badge">{{ $sb['mentions']['total'] }}</span>
+          @endif
+          @if(!empty($sb['mentions']['new']))
+            <span class="sidebar-badge sidebar-badge--new">+{{ $sb['mentions']['new'] }}</span>
+          @endif
         </a>
       </li>
     @endif

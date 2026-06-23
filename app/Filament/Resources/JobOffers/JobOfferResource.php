@@ -40,6 +40,19 @@ class JobOfferResource extends Resource
         return 'Job Board';
     }
 
+    public static function getNavigationBadge(): ?string
+    {
+        $total = static::getModel()::count();
+        $new   = static::getModel()::where('created_at', '>=', now()->subDays(7))->count();
+        return $new > 0 ? "{$total} +{$new}" : (string) $total;
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        $new = static::getModel()::where('created_at', '>=', now()->subDays(7))->count();
+        return $new > 0 ? 'warning' : 'gray';
+    }
+
     public static function form(Schema $schema): Schema
     {
         return JobOfferForm::configure($schema);

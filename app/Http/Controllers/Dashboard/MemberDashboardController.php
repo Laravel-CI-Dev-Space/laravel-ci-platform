@@ -159,6 +159,12 @@ class MemberDashboardController extends Controller
         /** @var User $user */
         $user = auth()->user();
 
+        // Marquer toutes les mentions comme lues
+        $user->notifications()
+            ->where('type', 'like', '%Mention%')
+            ->whereNull('read_at')
+            ->update(['read_at' => now()]);
+
         $mentions = $user->notifications()
             ->where('type', 'like', '%Mention%')
             ->latest()
