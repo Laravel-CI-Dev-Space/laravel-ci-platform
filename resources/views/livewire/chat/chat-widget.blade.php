@@ -53,108 +53,11 @@
                 </div>
             </div>
 
-            {{-- Budget tokens --}}
-            @if (auth()->check() && $budget)
-                <div class="chat-budget">
-                    <div class="d-flex justify-content-between" style="font-size:.72rem;opacity:.7;margin-bottom:3px">
-                        <span>{{ number_format($budget['used']) }} tokens utilisés</span>
-                        <span>{{ number_format($budget['remaining']) }} restants</span>
-                    </div>
-                    <div class="chat-budget-bar">
-                        <div class="chat-budget-fill {{ $budget['percent'] > 80 ? 'chat-budget-fill--danger' : '' }}"
-                             style="width:{{ min($budget['percent'], 100) }}%"></div>
-                    </div>
-                </div>
-            @endif
-
-            {{-- Corps (messages) --}}
-            <div class="chat-body" id="chat-body"
-                 x-data="{}"
-                 x-on:chat-scroll-bottom.window="$el.scrollTop = $el.scrollHeight">
-
-                {{-- Message de bienvenue --}}
-                @if (empty($messages))
-                    <div class="chat-bubble chat-bubble--assistant">
-                        <img src="{{ asset('assets/web/img/mascot.png') }}" alt=""
-                             class="chat-avatar" style="width:24px;height:24px;object-fit:contain">
-                        <div class="chat-bubble-content">
-                            @auth
-                                Bonjour <strong>{{ auth()->user()->name }}</strong> 👋<br>
-                                Je suis l'assistant IA de Laravel CI. Je peux vous aider sur
-                                <strong>Laravel, PHP</strong> et tout ce qui concerne <strong>cette plateforme</strong>.
-                                Que puis-je faire pour vous ?
-                            @else
-                                Bonjour ! Je suis l'assistant Laravel CI. Pour utiliser le chat,
-                                veuillez vous <a href="{{ route('login') }}" class="text-orange">connecter</a>.
-                            @endauth
-                        </div>
-                    </div>
-                @endif
-
-                {{-- Historique --}}
-                @foreach ($messages as $msg)
-                    <div class="chat-bubble chat-bubble--{{ $msg['role'] }}">
-                        @if ($msg['role'] === 'assistant')
-                            <img src="{{ asset('assets/web/img/mascot.png') }}" alt=""
-                                 class="chat-avatar" style="width:24px;height:24px;object-fit:contain">
-                        @endif
-                        <div class="chat-bubble-content">
-                            {!! nl2br(e($msg['content'])) !!}
-                        </div>
-                    </div>
-                @endforeach
-
-                {{-- Loading --}}
-                @if ($loading)
-                    <div class="chat-bubble chat-bubble--assistant">
-                        <img src="{{ asset('assets/web/img/mascot.png') }}" alt=""
-                             class="chat-avatar" style="width:24px;height:24px;object-fit:contain">
-                        <div class="chat-bubble-content">
-                            <span class="chat-typing">
-                                <span></span><span></span><span></span>
-                            </span>
-                        </div>
-                    </div>
-                @endif
-
-                {{-- Erreur --}}
-                @if ($error)
-                    <div class="chat-error">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
-                             viewBox="0 0 16 16" style="flex-shrink:0">
-                            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
-                        </svg>
-                        {{ $error }}
-                    </div>
-                @endif
-            </div>
-
-            {{-- Zone de saisie --}}
-            <div class="chat-footer">
-                @auth
-                    <form wire:submit="sendMessage" class="chat-input-row">
-                        <textarea
-                            wire:model="input"
-                            placeholder="Posez votre question Laravel..."
-                            class="chat-input"
-                            rows="1"
-                            @keydown.enter.prevent="if (!$event.shiftKey) { $wire.sendMessage() }"
-                            @input="$el.style.height='auto'; $el.style.height=Math.min($el.scrollHeight,120)+'px'"
-                            :disabled="$wire.loading"
-                        ></textarea>
-                        <button type="submit" class="chat-send-btn" :disabled="$wire.loading || !$wire.input.trim()">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none"
-                                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                      d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
-                            </svg>
-                        </button>
-                    </form>
-                @else
-                    <a href="{{ route('login') }}" class="btn btn-brand w-100" style="font-size:.85rem">
-                        <i class="fa-brands fa-github me-1"></i> Connectez-vous pour chatter
-                    </a>
-                @endauth
+            {{-- En cours de conception --}}
+            <div class="chat-coming-soon">
+                <img src="{{ asset('assets/web/img/mascot.png') }}" alt="" class="chat-coming-soon__mascot">
+                <p class="chat-coming-soon__title">Bientôt disponible</p>
+                <p class="chat-coming-soon__sub">L'assistant IA est en cours de conception.<br>Revenez bientôt !</p>
             </div>
         </div>
     @endif
@@ -241,14 +144,34 @@
 .chat-budget-fill { height: 100%; background: var(--orange,#e8580a); border-radius:2px; transition: width .3s; }
 .chat-budget-fill--danger { background: #dc3545; }
 
-/* ── Corps (messages) ────────────────────────────────── */
-.chat-body {
+/* ── En cours de conception ──────────────────────────── */
+.chat-coming-soon {
     flex: 1;
-    overflow-y: auto;
-    padding: .75rem;
     display: flex;
     flex-direction: column;
-    gap: .5rem;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    gap: .75rem;
+}
+.chat-coming-soon__mascot {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+    opacity: .5;
+}
+.chat-coming-soon__title {
+    font-weight: 700;
+    font-size: .95rem;
+    color: #1a1a2e;
+    margin: 0;
+}
+.chat-coming-soon__sub {
+    font-size: .82rem;
+    color: #6b7280;
+    margin: 0;
+    line-height: 1.5;
 }
 
 /* ── Bulles ──────────────────────────────────────────── */
