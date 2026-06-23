@@ -45,7 +45,7 @@
                   </span>
                 </div>
                 <h3 class="mb-0 fw-semibold" style="font-size:.95rem;line-height:1.3">
-                  <a href="{{ route('events.show', $event) }}" class="text-dark text-decoration-none">
+                  <a href="{{ route('events.show', $event->slug) }}" class="text-dark text-decoration-none">
                     {{ $event->title }}
                   </a>
                 </h3>
@@ -67,7 +67,7 @@
               @endif
             </div>
 
-            <a href="{{ route('events.show', $event) }}" class="btn btn-outline-primary btn-sm w-100">
+            <a href="{{ route('events.show', $event->slug) }}" class="btn btn-outline-primary btn-sm w-100">
               Voir l'événement
             </a>
           </div>
