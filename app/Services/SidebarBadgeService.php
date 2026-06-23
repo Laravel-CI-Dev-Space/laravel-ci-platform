@@ -6,72 +6,66 @@ namespace App\Services;
 
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class SidebarBadgeService
 {
-    private const TTL_DAYS = 60;
-
-    // ── Last-visit cache ─────────────────────────────────────
-
-    public function markVisited(int $userId, string $section): void
-    {
-        Cache::put(
-            $this->cacheKey($userId, $section),
-            now()->toDateTimeString(),
-            now()->addDays(self::TTL_DAYS)
-        );
-    }
-
-    public function getLastVisit(int $userId, string $section): ?Carbon
-    {
-        $raw = Cache::get($this->cacheKey($userId, $section));
-        return $raw ? Carbon::parse($raw) : null;
-    }
-
-    private function cacheKey(int $userId, string $section): string
-    {
-        return "sidebar_visit.{$userId}.{$section}";
-    }
-
-    // ── Member counts ────────────────────────────────────────
+    private const SECTIONS = [
+        'questions'    => 'dashboard.member.questions',
+        'articles'     => 'dashboard.member.articles',
+        'events'       => 'dashboard.member.events',
+        'applications' => 'dashboard.member.applications',
+        'mentions'     => 'dashboard.member.mentions',
+    ];
 
     public function memberCounts(User $user, string $currentRoute): array
     {
-        $sections = [
-            'questions'    => 'dashboard.member.questions',
-            'articles'     => 'dashboard.member.articles',
-            'events'       => 'dashboard.member.events',
-            'applications' => 'dashboard.member.applications',
-            'mentions'     => 'dashboard.member.mentions',
-        ];
+        $userId = $user->id;
 
-        // Mark current section as visited before computing (so badge = 0 on current page)
-        foreach ($sections as $key => $route) {
+        // Mark the current section as visited now (resets its "new" bubble to 0)
+        foreach (self::SECTIONS as $key => $route) {
             if ($currentRoute === $route) {
-                $this->markVisited($user->id, $key);
+                $this->markVisited($userId, $key);
+                break;
             }
         }
 
-        $userId = $user->id;
+        // Load all last-visit timestamps in one query
+        $visits = DB::table('member_section_visits')
+            ->where('user_id', $userId)
+            ->pluck('visited_at', 'section');
 
         return [
-            'questions' => $this->questionCounts($userId),
-            'articles'  => $this->articleCounts($userId),
-            'events'    => $this->eventCounts($userId),
-            'applications' => $this->applicationCounts($userId, $this->getLastVisit($userId, 'applications')),
-            'mentions'  => $this->mentionCounts($userId),
+            'questions'    => $this->questionCounts($userId, $this->toCarbon($visits['questions'] ?? null)),
+            'articles'     => $this->articleCounts($userId, $this->toCarbon($visits['articles'] ?? null)),
+            'events'       => $this->eventCounts($userId),
+            'applications' => $this->applicationCounts($userId, $this->toCarbon($visits['applications'] ?? null)),
+            'mentions'     => $this->mentionCounts($userId),
         ];
     }
 
-    private function questionCounts(int $userId): array
+    public function markVisited(int $userId, string $section): void
     {
-        $total = DB::table('questions')->where('user_id', $userId)->whereNull('deleted_at')->count();
+        DB::table('member_section_visits')->upsert(
+            [['user_id' => $userId, 'section' => $section, 'visited_at' => now()]],
+            ['user_id', 'section'],
+            ['visited_at']
+        );
+    }
 
-        // New = answers received on user's questions since last visit to Questions page
-        $since = $this->getLastVisit($userId, 'questions');
-        $new   = 0;
+    private function toCarbon(?string $value): ?Carbon
+    {
+        return $value ? Carbon::parse($value) : null;
+    }
+
+    private function questionCounts(int $userId, ?Carbon $since): array
+    {
+        $total = DB::table('questions')
+            ->where('user_id', $userId)
+            ->whereNull('deleted_at')
+            ->count();
+
+        $new = 0;
         if ($since) {
             $questionIds = DB::table('questions')
                 ->where('user_id', $userId)
@@ -89,13 +83,11 @@ class SidebarBadgeService
         return compact('total', 'new');
     }
 
-    private function articleCounts(int $userId): array
+    private function articleCounts(int $userId, ?Carbon $since): array
     {
         $total = DB::table('articles')->where('user_id', $userId)->count();
 
-        // New = article status changed (published/rejected) since last visit
-        $since = $this->getLastVisit($userId, 'articles');
-        $new   = 0;
+        $new = 0;
         if ($since) {
             $new = DB::table('articles')
                 ->where('user_id', $userId)
