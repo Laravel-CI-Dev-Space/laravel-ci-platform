@@ -67,9 +67,33 @@
               @endif
             </div>
 
-            <a href="{{ route('events.show', $event->slug) }}" class="btn btn-outline-primary btn-sm w-100">
-              Voir l'événement
-            </a>
+            {{-- Ticket number --}}
+            @if($registration->ticket_number)
+              <div class="mb-3 rounded-2 text-center px-3 py-2" style="background:#fff7f0;border:1px solid #fde8d8;">
+                <div style="font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#e8580a;margin-bottom:2px">Numéro de ticket</div>
+                <div class="font-monospace fw-bold" style="font-size:.95rem;letter-spacing:.08em;color:#1a1a2e">{{ $registration->ticket_number }}</div>
+              </div>
+            @endif
+
+            {{-- Actions --}}
+            <div class="d-flex gap-2">
+              <a href="{{ route('events.show', $event->slug) }}" class="btn btn-outline-primary btn-sm flex-grow-1">
+                <i class="ti ti-external-link me-1"></i> Voir
+              </a>
+              @if($registration->ticket_number)
+                <a href="{{ route('events.ical', $registration) }}" class="btn btn-outline-secondary btn-sm" title="Télécharger iCal">
+                  <i class="ti ti-calendar-down"></i>
+                </a>
+              @endif
+              @if(!$event->isPast() && $registration->status->value !== 'cancelled')
+                <form method="POST" action="{{ route('events.cancel', $registration) }}" onsubmit="return confirm('Annuler votre inscription ?')">
+                  @csrf @method('DELETE')
+                  <button type="submit" class="btn btn-outline-danger btn-sm" title="Annuler l'inscription">
+                    <i class="ti ti-x"></i>
+                  </button>
+                </form>
+              @endif
+            </div>
           </div>
         </div>
       </div>
