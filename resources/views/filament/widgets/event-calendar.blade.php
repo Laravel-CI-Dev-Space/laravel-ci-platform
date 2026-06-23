@@ -1,5 +1,4 @@
-<x-filament-widgets::widget>
-<div class="fi-section rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10 p-5">
+<div style="grid-column: 1 / -1" class="fi-section rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10 p-5">
 
     {{-- ── Header ── --}}
     <div class="flex items-center justify-between mb-4">
@@ -181,4 +180,3 @@
     </div>
 
 </div>
-</x-filament-widgets::widget>
