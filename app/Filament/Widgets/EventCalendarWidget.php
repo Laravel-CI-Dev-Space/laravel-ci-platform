@@ -19,6 +19,8 @@ class EventCalendarWidget extends Widget
 
     protected static ?int $sort = 2;
 
+    protected int | string | array $columnSpan = 'full';
+
     public int $month;
     public int $year;
 
