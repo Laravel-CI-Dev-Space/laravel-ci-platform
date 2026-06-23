@@ -77,7 +77,8 @@ class ServerHealthWidget extends BaseWidget
             Stat::make('File d\'attente (jobs)', number_format($pendingJobs))
                 ->description($failedJobs . ' job(s) échoué(s)')
                 ->descriptionIcon('heroicon-m-queue-list')
-                ->color($failedJobs > 0 ? 'danger' : 'success'),
+                ->color($failedJobs > 0 ? 'danger' : 'success')
+                ->url(route('filament.admin.pages.monitoring-jobs-page')),
 
             Stat::make('PHP / Laravel', PHP_VERSION)
                 ->description('Laravel ' . app()->version())

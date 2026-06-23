@@ -85,27 +85,32 @@ class RequestLatencyStatsWidget extends BaseWidget
                     $p95_24h <= 300  => 'success',
                     $p95_24h <= 800  => 'warning',
                     default          => 'danger',
-                }),
+                })
+                ->url(route('filament.admin.pages.monitoring-requests-page', ['filter' => 'slow'])),
 
             Stat::make('Max (24h)', $max24h . ' ms')
                 ->description('Requête la plus lente')
                 ->descriptionIcon('heroicon-m-arrow-trending-up')
-                ->color($max24h > 2000 ? 'danger' : ($max24h > 1000 ? 'warning' : 'success')),
+                ->color($max24h > 2000 ? 'danger' : ($max24h > 1000 ? 'warning' : 'success'))
+                ->url(route('filament.admin.pages.monitoring-requests-page', ['filter' => 'slow'])),
 
             Stat::make('Requêtes lentes >500ms', $slow24h)
                 ->description($slowPct . '% du trafic total')
                 ->descriptionIcon('heroicon-m-exclamation-triangle')
-                ->color($slowPct > 10 ? 'danger' : ($slowPct > 5 ? 'warning' : 'success')),
+                ->color($slowPct > 10 ? 'danger' : ($slowPct > 5 ? 'warning' : 'success'))
+                ->url(route('filament.admin.pages.monitoring-requests-page', ['filter' => 'slow'])),
 
             Stat::make('Taux d\'erreur (4xx/5xx)', $errorRate . '%')
                 ->description('Sur les 24 dernières heures')
                 ->descriptionIcon('heroicon-m-x-circle')
-                ->color($errorRate > 5 ? 'danger' : ($errorRate > 1 ? 'warning' : 'success')),
+                ->color($errorRate > 5 ? 'danger' : ($errorRate > 1 ? 'warning' : 'success'))
+                ->url(route('filament.admin.pages.monitoring-requests-page', ['filter' => 'errors'])),
 
             Stat::make('Route la plus lente', $topSlowAvg !== null ? $topSlowAvg . ' ms' : '—')
                 ->description($topSlowLabel ? substr($topSlowLabel, 0, 40) : 'Pas de données')
                 ->descriptionIcon('heroicon-m-map-pin')
-                ->color('gray'),
+                ->color('gray')
+                ->url(route('filament.admin.pages.monitoring-requests-page', ['filter' => 'routes'])),
         ];
     }
 }
