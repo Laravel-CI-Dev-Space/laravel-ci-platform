@@ -58,14 +58,16 @@
   </section>
 
   <!-- VISION -->
-  <section class="section" style="background:var(--light)">
+  <section style="background:var(--light);padding:3rem 0">
     <div class="container">
       <div class="row justify-content-center">
-        <div class="col-lg-8 text-center reveal">
-          <span class="section-eyebrow">Où nous allons</span>
-          <h2 class="section-heading mb-4">Notre vision</h2>
-          <div class="card-soft" style="padding:2.5rem;border-left:4px solid var(--orange)">
-            <p style="font-size:1.1rem;line-height:1.8;color:var(--navy);font-style:italic;margin:0">
+        <div class="col-lg-8 reveal">
+          <div class="text-center mb-3">
+            <span class="section-eyebrow">Où nous allons</span>
+            <h2 class="section-heading mb-0">Notre vision</h2>
+          </div>
+          <div style="border-left:4px solid var(--orange);padding:1.5rem 2rem;background:#fff;border-radius:0 .75rem .75rem 0;box-shadow:0 1px 8px rgba(0,0,0,.06)">
+            <p style="font-size:1.05rem;line-height:1.75;color:var(--navy);font-style:italic;margin:0">
               "{{ $settings->firstWhere('key', 'about_vision')?->value ?? "Faire de Laravel Côte d'Ivoire la communauté de développeurs Laravel la plus active, la plus inclusive et la plus influente d'Afrique de l'Ouest, en contribuant à l'excellence technique et à l'employabilité des développeurs ivoiriens à l'échelle locale et internationale." }}"
             </p>
           </div>
