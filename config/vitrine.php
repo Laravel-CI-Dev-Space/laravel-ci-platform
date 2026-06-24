@@ -13,9 +13,9 @@ return [
     |
     */
 
-    'default_title' => 'Laravel CI — The Laravel Community of Côte d\'Ivoire',
+    'default_title' => "Laravel CI — La communauté Laravel de Côte d'Ivoire",
 
-    'default_description' => 'Join 500+ Ivorian Laravel & PHP developers. Share knowledge, find jobs, attend events, and grow together in Abidjan and across the diaspora.',
+    'default_description' => "Rejoins 900+ développeurs Laravel ivoiriens. Forum technique, blog, événements, offres d'emploi : la communauté tech africaine de référence.",
 
     'og_image' => 'assets/web/img/logo.png',
 

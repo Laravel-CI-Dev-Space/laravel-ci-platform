@@ -43,8 +43,8 @@ class SiteSettingSeeder extends Seeder
             ['key' => 'about_cta_text',      'group' => 'about', 'type' => 'textarea', 'label' => 'About CTA texte',       'value' => "900+ développeurs ivoiriens construisent l'avenir de la tech africaine, un commit à la fois.", 'order' => 6],
 
             // ── SEO ──────────────────────────────────────────────────
-            ['key' => 'seo_home_title',       'group' => 'seo', 'type' => 'text',     'label' => "SEO titre d'accueil",       'value' => "Laravel CI — The Laravel Community of Côte d'Ivoire", 'order' => 1],
-            ['key' => 'seo_home_description', 'group' => 'seo', 'type' => 'textarea', 'label' => "SEO description d'accueil", 'value' => "La première communauté structurée de développeurs Laravel en Côte d'Ivoire.", 'order' => 2],
+            ['key' => 'seo_home_title',       'group' => 'seo', 'type' => 'text',     'label' => "SEO titre d'accueil",       'value' => "Laravel CI — La communauté Laravel de Côte d'Ivoire", 'order' => 1],
+            ['key' => 'seo_home_description', 'group' => 'seo', 'type' => 'textarea', 'label' => "SEO description d'accueil", 'value' => "Rejoins 900+ développeurs Laravel ivoiriens. Forum, blog, événements, emplois : la communauté tech africaine de référence.", 'order' => 2],
             ['key' => 'seo_og_image',         'group' => 'seo', 'type' => 'image',    'label' => 'OG Image (1200x630)',       'value' => '', 'order' => 3],
 
             // ── IDENTITY (logos, brand) ───────────────────────────────

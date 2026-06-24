@@ -78,6 +78,73 @@ Route::get('/robots.txt', function () {
     ]), 200, ['Content-Type' => 'text/plain']);
 });
 
+Route::get('/sitemap.xml', function () {
+    $urls = collect();
+
+    // Pages statiques
+    foreach ([
+        ['loc' => route('home'),         'priority' => '1.0', 'changefreq' => 'daily'],
+        ['loc' => route('about'),        'priority' => '0.8', 'changefreq' => 'monthly'],
+        ['loc' => route('join'),         'priority' => '0.8', 'changefreq' => 'monthly'],
+        ['loc' => route('forum.index'),  'priority' => '0.9', 'changefreq' => 'hourly'],
+        ['loc' => route('blog.index'),   'priority' => '0.8', 'changefreq' => 'daily'],
+        ['loc' => route('events.index'), 'priority' => '0.7', 'changefreq' => 'daily'],
+        ['loc' => route('jobs.index'),   'priority' => '0.7', 'changefreq' => 'daily'],
+    ] as $page) {
+        $urls->push($page);
+    }
+
+    // Questions du forum (publiées)
+    \App\Models\Question::whereNotNull('slug')
+        ->orderByDesc('created_at')
+        ->limit(500)
+        ->get(['slug', 'updated_at'])
+        ->each(fn ($q) => $urls->push([
+            'loc'        => route('forum.show', $q->slug),
+            'lastmod'    => $q->updated_at?->toAtomString(),
+            'priority'   => '0.6',
+            'changefreq' => 'weekly',
+        ]));
+
+    // Articles de blog (publiés)
+    \App\Models\Article::where('status', 'published')
+        ->orderByDesc('published_at')
+        ->limit(500)
+        ->get(['slug', 'updated_at'])
+        ->each(fn ($a) => $urls->push([
+            'loc'        => route('blog.show', $a->slug),
+            'lastmod'    => $a->updated_at?->toAtomString(),
+            'priority'   => '0.6',
+            'changefreq' => 'weekly',
+        ]));
+
+    // Événements
+    \App\Models\Event::whereNotNull('slug')
+        ->orderByDesc('starts_at')
+        ->limit(200)
+        ->get(['slug', 'updated_at'])
+        ->each(fn ($e) => $urls->push([
+            'loc'        => route('events.show', $e->slug),
+            'lastmod'    => $e->updated_at?->toAtomString(),
+            'priority'   => '0.5',
+            'changefreq' => 'weekly',
+        ]));
+
+    $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+    $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+    foreach ($urls as $url) {
+        $xml .= "  <url>\n";
+        $xml .= '    <loc>' . e($url['loc']) . "</loc>\n";
+        if (!empty($url['lastmod']))    $xml .= '    <lastmod>'    . $url['lastmod']    . "</lastmod>\n";
+        if (!empty($url['changefreq'])) $xml .= '    <changefreq>' . $url['changefreq'] . "</changefreq>\n";
+        if (!empty($url['priority']))   $xml .= '    <priority>'   . $url['priority']   . "</priority>\n";
+        $xml .= "  </url>\n";
+    }
+    $xml .= '</urlset>';
+
+    return response($xml, 200, ['Content-Type' => 'application/xml']);
+});
+
 // ─── SEARCH ────────────────────────────────────────────────
 Route::get('/search', [SearchController::class, 'index'])->name('search.index');
 

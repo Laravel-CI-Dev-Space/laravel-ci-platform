@@ -1,7 +1,7 @@
 @extends('layouts.web')
 
-@section('title', $settings->firstWhere('key', 'home_hero_title')?->value ?? "Laravel CI · La communauté Laravel de Côte d'Ivoire")
-@section('description', $settings->firstWhere('key', 'home_hero_subtitle')?->value ?? 'Join 500+ Ivorian Laravel & PHP developers. Share knowledge, find jobs, attend events, and grow together.')
+@section('title', ($settings->firstWhere('key', 'seo_home_title')?->value) ?? "Laravel CI — La communauté Laravel de Côte d'Ivoire")
+@section('description', ($settings->firstWhere('key', 'seo_home_description')?->value) ?? "Rejoins 900+ développeurs Laravel ivoiriens. Forum, blog, événements, emplois : la communauté tech africaine de référence.")
 
 @section('content')
 
