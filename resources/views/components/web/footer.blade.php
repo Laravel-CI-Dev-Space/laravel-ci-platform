@@ -112,26 +112,48 @@
           @endif
         </ul>
 
-        {{-- Newsletter compact --}}
+        {{-- Newsletter compact (AJAX) --}}
         <div style="margin-top:1.5rem">
           <p style="font-size:.78rem;font-weight:700;color:var(--orange);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.6rem">Newsletter</p>
-          @if(session('newsletter_success'))
-            <p style="color:#4ade80;font-size:.82rem;margin:0"><i class="fa-solid fa-circle-check me-1"></i>Inscrit !</p>
-          @else
-            <form action="{{ route('newsletter.subscribe') }}" method="POST">
-              @csrf
-              <div style="display:flex;gap:.4rem">
-                <input type="email" name="email" required placeholder="ton@email.com"
-                       style="flex:1;min-width:0;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:.4rem;padding:.4rem .7rem;color:#fff;font-size:.82rem;outline:none"
-                       onfocus="this.style.borderColor='var(--orange)'" onblur="this.style.borderColor='rgba(255,255,255,.15)'">
-                <button type="submit" style="background:var(--orange);border:none;border-radius:.4rem;padding:.4rem .75rem;color:#fff;font-size:.82rem;white-space:nowrap;cursor:pointer">
-                  <i class="fa-solid fa-paper-plane"></i>
-                </button>
-              </div>
-              @error('email')<p style="color:#f87171;font-size:.75rem;margin:.3rem 0 0">{{ $message }}</p>@enderror
-            </form>
-          @endif
+          <p id="nl-ok" style="display:none;color:#4ade80;font-size:.82rem;margin:0"><i class="fa-solid fa-circle-check me-1"></i>Inscrit !</p>
+          <form id="nl-form" style="display:flex;gap:.4rem">
+            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            <input type="email" name="email" required placeholder="ton@email.com"
+                   style="flex:1;min-width:0;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:.4rem;padding:.4rem .7rem;color:#fff;font-size:.82rem;outline:none"
+                   onfocus="this.style.borderColor='var(--orange)'" onblur="this.style.borderColor='rgba(255,255,255,.15)'">
+            <button type="submit" id="nl-btn" style="background:var(--orange);border:none;border-radius:.4rem;padding:.4rem .75rem;color:#fff;font-size:.82rem;cursor:pointer;transition:opacity .2s">
+              <i class="fa-solid fa-paper-plane"></i>
+            </button>
+          </form>
+          <p id="nl-err" style="display:none;color:#f87171;font-size:.75rem;margin:.35rem 0 0">Adresse invalide ou déjà inscrite.</p>
         </div>
+        <script>
+        (function () {
+          var form = document.getElementById('nl-form');
+          if (!form) return;
+          form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            var btn  = document.getElementById('nl-btn');
+            var ok   = document.getElementById('nl-ok');
+            var err  = document.getElementById('nl-err');
+            var email = form.querySelector('[name=email]').value;
+            var token = form.querySelector('[name=_token]').value;
+            btn.style.opacity = '.5';
+            err.style.display = 'none';
+            fetch('{{ route('newsletter.subscribe') }}', {
+              method : 'POST',
+              headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': token, 'Accept': 'application/json' },
+              body   : JSON.stringify({ email: email }),
+            })
+            .then(function (r) {
+              btn.style.opacity = '1';
+              if (r.ok) { form.style.display = 'none'; ok.style.display = 'block'; }
+              else { err.style.display = 'block'; }
+            })
+            .catch(function () { btn.style.opacity = '1'; err.style.display = 'block'; });
+          });
+        })();
+        </script>
       </div>
 
     </div>
