@@ -147,8 +147,19 @@
             })
             .then(function (r) {
               btn.style.opacity = '1';
-              if (r.ok) { form.style.display = 'none'; ok.style.display = 'block'; }
-              else { err.style.display = 'block'; }
+              if (r.ok) {
+                r.json().then(function (data) {
+                  form.style.display = 'none';
+                  if (data.status === 'already_subscribed') {
+                    ok.innerHTML = '<i class="fa-solid fa-circle-info me-1"></i>Déjà inscrit. <a href="' + data.unsubscribe_url + '" style="color:#f87171;font-weight:600;text-decoration:underline">Se désinscrire</a>';
+                  } else {
+                    ok.innerHTML = '<i class="fa-solid fa-circle-check me-1"></i>Inscrit !';
+                  }
+                  ok.style.display = 'block';
+                });
+              } else {
+                err.style.display = 'block';
+              }
             })
             .catch(function () { btn.style.opacity = '1'; err.style.display = 'block'; });
           });

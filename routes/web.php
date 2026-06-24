@@ -42,9 +42,22 @@ Route::get('/join', fn () => view('web.join'))->name('join');
 Route::post('/newsletter/subscribe', function (\Illuminate\Http\Request $request) {
     $request->validate(['email' => 'required|email|max:255']);
 
-    \App\Models\NewsletterSubscriber::firstOrCreate(['email' => $request->email]);
+    $subscriber = \App\Models\NewsletterSubscriber::firstWhere('email', $request->email);
 
-    return response()->json(['success' => true]);
+    if ($subscriber) {
+        if ($subscriber->isActive()) {
+            return response()->json([
+                'status'          => 'already_subscribed',
+                'unsubscribe_url' => route('newsletter.unsubscribe', $subscriber->token),
+            ]);
+        }
+        $subscriber->update(['unsubscribed_at' => null]);
+        return response()->json(['status' => 'success']);
+    }
+
+    \App\Models\NewsletterSubscriber::create(['email' => $request->email]);
+
+    return response()->json(['status' => 'success']);
 })->name('newsletter.subscribe');
 
 Route::get('/newsletter/unsubscribe/{token}', function (string $token) {
