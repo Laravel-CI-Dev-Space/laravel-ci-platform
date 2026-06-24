@@ -240,19 +240,19 @@
   </section>
 
   <!-- PARTENAIRES -->
-  <section class="section-sm">
+  <section style="padding:3.5rem 0">
     <div class="container">
-      <p class="text-center text-muted-2 mb-4" style="font-weight:500;letter-spacing:.05em">Nos communautés partenaires</p>
-      <div class="row g-3 justify-content-center">
+      <p class="text-center text-muted-2 mb-5" style="font-weight:500;letter-spacing:.05em">Nos communautés partenaires</p>
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:1.25rem">
         @foreach($partners as $partner)
-        <div class="col-6 col-md-3 reveal">
-          <div class="partner-logo">
+        <div class="reveal" style="flex:0 0 auto;width:clamp(160px,18vw,220px)">
+          <div class="partner-logo" style="flex-direction:column;padding:1.75rem 1.25rem;gap:.75rem;min-height:130px;justify-content:center">
             @if($partner->logo)
-              <img src="{{ $partner->logoUrl() }}" alt="{{ $partner->name }}" style="height:56px;object-fit:contain">
+              <img src="{{ $partner->logoUrl() }}" alt="{{ $partner->name }}" style="height:64px;object-fit:contain;max-width:100%">
             @else
-              <i class="{{ $partner->icon ?? 'fa-solid fa-hippo' }}"></i>
+              <i class="{{ $partner->icon ?? 'fa-solid fa-hippo' }}" style="font-size:2rem"></i>
             @endif
-            {{ $partner->name }}
+            <span style="font-size:.82rem;font-weight:600;text-align:center;color:var(--navy)">{{ $partner->name }}</span>
           </div>
         </div>
         @endforeach
