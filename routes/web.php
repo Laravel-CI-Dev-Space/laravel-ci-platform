@@ -39,6 +39,16 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [AboutController::class, 'index'])->name('about');
 Route::get('/join', fn () => view('web.join'))->name('join');
 
+Route::post('/newsletter/subscribe', function (\Illuminate\Http\Request $request) {
+    $request->validate(['email' => 'required|email|max:255']);
+
+    \App\Models\NewsletterSubscriber::firstOrCreate(
+        ['email' => $request->email],
+    );
+
+    return back()->with('newsletter_success', true);
+})->name('newsletter.subscribe');
+
 Route::get('/newsletter/unsubscribe/{token}', function (string $token) {
     $subscriber = \App\Models\NewsletterSubscriber::where('token', $token)->firstOrFail();
     $subscriber->unsubscribe();

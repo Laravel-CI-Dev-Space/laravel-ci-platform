@@ -24,6 +24,33 @@
 
 <footer class="site-footer">
   <div class="container">
+
+    {{-- Bande newsletter --}}
+    <div style="border-bottom:1px solid rgba(255,255,255,.1);padding-bottom:2.5rem;margin-bottom:2.5rem">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-5">
+          <h5 style="font-size:1.05rem;margin-bottom:.35rem">Reste dans la boucle</h5>
+          <p style="color:rgba(255,255,255,.55);font-size:.88rem;margin:0">Articles, événements et offres d'emploi directement dans ta boîte mail.</p>
+        </div>
+        <div class="col-lg-7">
+          @if(session('newsletter_success'))
+            <p style="color:#4ade80;font-size:.9rem;margin:0"><i class="fa-solid fa-circle-check me-2"></i>Inscription confirmée, bienvenue !</p>
+          @else
+            <form action="{{ route('newsletter.subscribe') }}" method="POST" style="display:flex;gap:.5rem;flex-wrap:wrap">
+              @csrf
+              <input type="email" name="email" required placeholder="ton@email.com"
+                     style="flex:1;min-width:200px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:.5rem;padding:.55rem 1rem;color:#fff;font-size:.9rem;outline:none"
+                     onfocus="this.style.borderColor='var(--orange)'" onblur="this.style.borderColor='rgba(255,255,255,.18)'">
+              <button type="submit" class="btn btn-brand" style="white-space:nowrap;padding:.55rem 1.4rem;font-size:.9rem">
+                <i class="fa-solid fa-paper-plane me-1"></i> S'abonner
+              </button>
+            </form>
+            @error('email')<p style="color:#f87171;font-size:.82rem;margin:.4rem 0 0">{{ $message }}</p>@enderror
+          @endif
+        </div>
+      </div>
+    </div>
+
     <div class="row g-4">
 
       {{-- Colonne 1 : Brand + tagline + réseaux sociaux --}}
@@ -70,8 +97,8 @@
         <ul class="footer-links">
           <li><a href="{{ route('forum.index') }}">Forum</a></li>
           <li><a href="{{ route('blog.index') }}">Blog</a></li>
-          <li><a href="{{ route('events.index') }}">Events</a></li>
-          <li><a href="{{ route('jobs.index') }}">Jobs</a></li>
+          <li><a href="{{ route('events.index') }}">Événements</a></li>
+          <li><a href="{{ route('jobs.index') }}">Emplois</a></li>
         </ul>
       </div>
 
@@ -79,9 +106,9 @@
       <div class="col-lg-3 col-md-6 col-6">
         <h5>{{ $col2Title }}</h5>
         <ul class="footer-links">
-          <li><a href="{{ route('about') }}">About us</a></li>
-          <li><a href="{{ route('join') }}">Join us</a></li>
-          <li><a href="{{ $cocUrl }}">Code of conduct</a></li>
+          <li><a href="{{ route('about') }}">À propos</a></li>
+          <li><a href="{{ route('join') }}">Rejoindre</a></li>
+          <li><a href="{{ $cocUrl }}">Code de conduite</a></li>
           @if($github)
             <li><a href="{{ $github }}" target="_blank" rel="noopener noreferrer">{{ $githubLabel }}</a></li>
           @endif
