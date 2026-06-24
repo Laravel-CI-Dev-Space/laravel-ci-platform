@@ -101,20 +101,6 @@
     </div>
   </section>
 
-  <!-- ============ MANIFESTE ============ -->
-  <section style="background:var(--navy);padding:3.5rem 0">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-lg-8 text-center reveal">
-          <p style="font-size:clamp(1.05rem,2vw,1.4rem);line-height:1.65;color:#fff;font-style:italic;margin:0">
-            "La Côte d'Ivoire ne manque pas de développeurs talentueux. Elle manque d'un espace commun pour les réunir, les faire grandir ensemble et les rendre visibles au reste du monde tech."
-          </p>
-          <p style="color:rgba(255,255,255,.45);font-size:.82rem;margin-top:1.1rem;margin-bottom:0;font-weight:600;letter-spacing:.05em;text-transform:uppercase">Manifeste fondateur · Laravel Côte d'Ivoire</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- ============ LATEST FORUM QUESTIONS ============ -->
   <section class="section">
     <div class="container">
