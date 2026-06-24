@@ -21,9 +21,8 @@ class DatabaseSeeder extends Seeder
             CommunityValueSeeder::class,     // 10. Valeurs communautaires
             TimelineEventSeeder::class,      // 11. Timeline Notre histoire
             AboutOriginSectionSeeder::class, // 12. Section Notre naissance
-            EventSeeder::class,              // 13. Événements vitrine
-            GradeSeeder::class,              // 14. Grades de réputation
-            ArticleSeeder::class,            // 15. Articles blog vitrine
+            GradeSeeder::class,              // 13. Grades de réputation
+            ArticleSeeder::class,            // 14. Articles blog vitrine
         ]);
 
         if (config('database.default') === 'sqlite' && str_contains((string) config('database.connections.sqlite.database'), 'e2e')) {
