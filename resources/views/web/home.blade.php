@@ -18,18 +18,18 @@
             @if ($heroTitle = $settings->firstWhere('key', 'home_hero_title')?->value)
               {{ $heroTitle }}
             @else
-              The Laravel Community of <span class="accent">Côte d'Ivoire</span>
+              La communauté Laravel de <span class="accent">Côte d'Ivoire</span>
             @endif
           </h1>
-          <p class="lead">{{ $settings->firstWhere('key', 'home_hero_subtitle')?->value ?? 'Rejoins 900+ développeurs. Partage, apprends et grandis avec la communauté.' }}</p>
+          <p class="lead">{{ $settings->firstWhere('key', 'home_hero_subtitle')?->value ?? 'Rejoins 900+ développeurs ivoiriens — partage, apprends et grandis avec la communauté.' }}</p>
           <div class="d-flex flex-wrap gap-3 mt-4">
             <a href="{{ route('join') }}" class="btn btn-brand btn-lg">
               <i class="fa-solid fa-user-plus"></i>
-              {{ $settings->firstWhere('key', 'home_cta_primary_label')?->value ?? 'Join the Community' }}
+              {{ $settings->firstWhere('key', 'home_cta_primary_label')?->value ?? 'Rejoindre la communauté' }}
             </a>
             <a href="{{ route('forum.index') }}" class="btn btn-outline-navy btn-lg">
               <i class="fa-solid fa-comments"></i>
-              {{ $settings->firstWhere('key', 'home_cta_secondary_label')?->value ?? 'Explore the Forum' }}
+              {{ $settings->firstWhere('key', 'home_cta_secondary_label')?->value ?? 'Accéder au forum' }}
             </a>
           </div>
           <div class="trust-badges">
@@ -101,6 +101,20 @@
     </div>
   </section>
 
+  <!-- ============ MANIFESTE ============ -->
+  <section style="background:var(--navy);padding:3.5rem 0">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8 text-center reveal">
+          <p style="font-size:clamp(1.05rem,2vw,1.4rem);line-height:1.65;color:#fff;font-style:italic;margin:0">
+            "La Côte d'Ivoire ne manque pas de développeurs talentueux. Elle manque d'un espace commun pour les réunir, les faire grandir ensemble et les rendre visibles au reste du monde tech."
+          </p>
+          <p style="color:rgba(255,255,255,.45);font-size:.82rem;margin-top:1.1rem;margin-bottom:0;font-weight:600;letter-spacing:.05em;text-transform:uppercase">Manifeste fondateur · Laravel Côte d'Ivoire</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ LATEST FORUM QUESTIONS ============ -->
   <section class="section">
     <div class="container">
@@ -117,7 +131,7 @@
         <div class="q-stats">
           <div class="q-vote"><span>{{ $question->votes_score ?? 0 }}</span><small>votes</small></div>
           <div class="q-answers {{ $question->accepted_answer_id ? 'accepted' : '' }}">
-            <strong>{{ $question->answers_count }}</strong>answers
+            <strong>{{ $question->answers_count }}</strong>réponses
           </div>
         </div>
         <div class="q-body">
@@ -235,12 +249,12 @@
               </div>
               @if($capacity)
               <div class="spots-label">
-                <span>{{ $spotsUsed }} / {{ $capacity }} spots</span>
-                <span>{{ $spotsLeft }} left</span>
+                <span>{{ $spotsUsed }} / {{ $capacity }} places</span>
+                <span>{{ $spotsLeft }} restantes</span>
               </div>
               <div class="progress-spots mb-3"><div class="bar" style="width:{{ $progress }}%"></div></div>
               @endif
-              <a href="{{ route('events.index') }}" class="btn btn-brand w-100"><i class="fa-solid fa-ticket"></i> Register</a>
+              <a href="{{ route('events.index') }}" class="btn btn-brand w-100"><i class="fa-solid fa-ticket"></i> S'inscrire</a>
             </div>
           </article>
         </div>
@@ -279,9 +293,9 @@
     <div class="container">
       <div class="cta-banner reveal">
         <img src="{{ asset('assets/web/img/mascot.png') }}" class="cta-mascot d-none d-xl-block" alt="" aria-hidden="true" />
-        <h2 class="mb-3">{{ $settings->firstWhere('key', 'home_cta_banner_title')?->value ?? 'Ready to build the future of Ivorian tech?' }}</h2>
+        <h2 class="mb-3">{{ $settings->firstWhere('key', 'home_cta_banner_title')?->value ?? "Prêt à construire l'avenir de la tech ivoirienne ?" }}</h2>
         <p class="lead mb-4" style="color:rgba(255,255,255,.92);max-width:40rem;margin-inline:auto">
-          {{ $settings->firstWhere('key', 'home_cta_banner_text')?->value ?? 'Sign in with GitHub, ask your first question, and meet 500+ developers who have your back.' }}
+          {{ $settings->firstWhere('key', 'home_cta_banner_text')?->value ?? 'Connecte-toi avec GitHub, pose ta première question et rejoins 900+ développeurs qui progressent ensemble.' }}
         </p>
         <div class="cta-cmd"><span class="cta-cmd-prompt">$</span> composer create-project laravel-ci/community <button class="cta-cmd-copy" type="button" aria-label="Copy"><i class="fa-regular fa-copy"></i></button></div>
         <a href="{{ route('join') }}" class="btn btn-light btn-lg"><i class="fa-brands fa-github"></i> Rejoindre la communauté</a>

@@ -63,6 +63,47 @@
     </div>
   </section>
 
+  <!-- POUR QUI -->
+  <section class="section">
+    <div class="container">
+      <div class="text-center mb-5 reveal">
+        <span class="section-eyebrow">Notre public</span>
+        <h2 class="section-heading">Pour qui sommes-nous faits ?</h2>
+        <p class="text-muted" style="max-width:42rem;margin-inline:auto">Laravel CI accueille tous les développeurs qui construisent avec Laravel et PHP — quel que soit ton niveau ou ton parcours.</p>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-3 reveal">
+          <div class="card-soft h-100" style="padding:1.75rem;text-align:center">
+            <div class="value-icon mb-3"><i class="fa-solid fa-seedling"></i></div>
+            <h3 style="font-size:1.1rem">Développeurs juniors</h3>
+            <p class="text-muted mb-0" style="font-size:.9rem">0 à 3 ans d'expérience. Tu apprends, tu poses des questions, tu cherches des mentors. Tu es exactement là où tu dois être.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3 reveal" data-delay="0.08">
+          <div class="card-soft h-100" style="padding:1.75rem;text-align:center">
+            <div class="value-icon mb-3"><i class="fa-solid fa-code"></i></div>
+            <h3 style="font-size:1.1rem">Développeurs expérimentés</h3>
+            <p class="text-muted mb-0" style="font-size:.9rem">3+ ans de pratique. Tu partages ton expertise, tu guides les juniors et tu renforces ton réseau professionnel local et international.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3 reveal" data-delay="0.16">
+          <div class="card-soft h-100" style="padding:1.75rem;text-align:center">
+            <div class="value-icon mb-3"><i class="fa-solid fa-chalkboard-user"></i></div>
+            <h3 style="font-size:1.1rem">Formateurs et enseignants</h3>
+            <p class="text-muted mb-0" style="font-size:.9rem">Professeurs, instructeurs de bootcamp ou mentors. Tu trouves une communauté de pairs et un écosystème pour amplifier ton impact pédagogique.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3 reveal" data-delay="0.24">
+          <div class="card-soft h-100" style="padding:1.75rem;text-align:center">
+            <div class="value-icon mb-3"><i class="fa-solid fa-building"></i></div>
+            <h3 style="font-size:1.1rem">Entreprises et recruteurs</h3>
+            <p class="text-muted mb-0" style="font-size:.9rem">Accède à un vivier de développeurs Laravel qualifiés. Publie tes offres d'emploi et connecte-toi directement avec les talents ivoiriens.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- AVANTAGES MEMBRES -->
   <section class="section">
     <div class="container">

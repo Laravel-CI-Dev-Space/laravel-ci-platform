@@ -1,7 +1,7 @@
 @extends('layouts.web')
 
 @section('title', 'À propos · Laravel CI')
-@section('description', "Découvrez Laravel Côte d'Ivoire : notre mission, notre équipe fondatrice et notre vision pour la communauté ivoirienne de développeurs Laravel et PHP.")
+@section('description', "Découvrez Laravel Côte d'Ivoire : notre mission, notre vision, notre histoire et notre équipe fondatrice. La première communauté structurée de développeurs Laravel en Côte d'Ivoire.")
 
 @section('content')
 
@@ -10,10 +10,10 @@
     <div class="container">
       <div class="row align-items-center g-4">
         <div class="col-lg-7">
-          <span class="badge-pill badge-navy"><i class="fa-brands fa-laravel text-orange"></i> Founded 2026 · Open source</span>
-          <h1 class="my-3">{{ $settings->firstWhere('key', 'about_hero_title')?->value ?? "We're building the home for Ivorian Laravel developers" }}</h1>
-          <p class="lead" style="max-width:42rem">{{ $settings->firstWhere('key', 'about_hero_subtitle')?->value ?? "Laravel Côte d'Ivoire est la première communauté structurée dédiée aux développeurs Laravel et PHP de Côte d'Ivoire et de la diaspora. Fondée sur le partage des connaissances, l'inclusion et la croissance collective." }}</p>
-          <a href="{{ route('join') }}" class="btn btn-brand btn-lg mt-2"><i class="fa-solid fa-user-plus"></i> Join us</a>
+          <span class="badge-pill badge-navy"><i class="fa-brands fa-laravel text-orange"></i> Fondé en 2026 · Open source · Abidjan, CI</span>
+          <h1 class="my-3">{{ $settings->firstWhere('key', 'about_hero_title')?->value ?? "La première communauté structurée de développeurs Laravel en Côte d'Ivoire" }}</h1>
+          <p class="lead" style="max-width:42rem">{{ $settings->firstWhere('key', 'about_hero_subtitle')?->value ?? "Laravel CI est née de la conviction qu'un développeur ivoirien ne devrait pas avancer seul. Fondée sur le partage des connaissances, l'inclusion et la croissance collective." }}</p>
+          <a href="{{ route('join') }}" class="btn btn-brand btn-lg mt-2"><i class="fa-solid fa-user-plus"></i> Nous rejoindre</a>
         </div>
         <div class="col-lg-5 d-none d-lg-block">
           <div class="mascot-art" style="width:clamp(200px,22vw,280px)">
@@ -25,22 +25,49 @@
     </div>
   </section>
 
-  <!-- MISSION & VISION -->
+  <!-- MISSION -->
   <section class="section">
     <div class="container">
+      <div class="text-center mb-5 reveal">
+        <span class="section-eyebrow">Pourquoi nous existons</span>
+        <h2 class="section-heading">Notre mission</h2>
+      </div>
       <div class="row g-4">
-        <div class="col-md-6 reveal">
-          <div class="card-soft" style="padding:2rem;height:100%">
-            <div class="value-icon" style="margin:0 0 1.2rem"><i class="fa-solid fa-bullseye"></i></div>
-            <h2 style="font-size:var(--fs-h3)">Notre mission</h2>
-            <p class="text-muted-2 mb-0">{{ $settings->firstWhere('key', 'about_mission')?->value ?? "Offrir à chaque développeur ivoirien un espace structuré pour maîtriser Laravel et progresser collectivement." }}</p>
+        @php
+        $missions = [
+          ['icon' => 'fa-solid fa-users',        'text' => "Rassembler les développeurs Laravel de Côte d'Ivoire autour d'un espace commun, structuré et inclusif."],
+          ['icon' => 'fa-solid fa-book-open',    'text' => "Produire et partager des contenus pédagogiques adaptés au contexte ivoirien : tutoriels, articles, retours d'expérience."],
+          ['icon' => 'fa-solid fa-calendar-check','text' => "Organiser des événements réguliers — meetups, workshops, hackathons, webinaires — pour dynamiser les échanges."],
+          ['icon' => 'fa-solid fa-briefcase',    'text' => "Faciliter les connexions professionnelles entre développeurs, entreprises et recruteurs du marché local."],
+          ['icon' => 'fa-solid fa-code-branch',  'text' => "Contribuer à l'open source et encourager la participation à l'écosystème Laravel mondial."],
+          ['icon' => 'fa-solid fa-globe',        'text' => "Servir de pont entre les talents locaux et les opportunités professionnelles à l'international."],
+        ];
+        @endphp
+        @foreach($missions as $i => $m)
+        <div class="col-md-6 col-lg-4 reveal" @if($i > 0) data-delay="{{ $i * 0.06 }}" @endif>
+          <div class="card-soft h-100" style="padding:1.75rem;display:flex;gap:1.25rem;align-items:flex-start">
+            <div class="value-icon" style="margin:0;flex-shrink:0;width:2.5rem;height:2.5rem;font-size:1rem">
+              <i class="{{ $m['icon'] }}"></i>
+            </div>
+            <p class="mb-0" style="color:var(--muted);line-height:1.65;font-size:.93rem">{{ $m['text'] }}</p>
           </div>
         </div>
-        <div class="col-md-6 reveal" data-delay="0.08">
-          <div class="card-soft" style="padding:2rem;height:100%">
-            <div class="value-icon" style="margin:0 0 1.2rem"><i class="fa-solid fa-eye"></i></div>
-            <h2 style="font-size:var(--fs-h3)">Notre vision</h2>
-            <p class="text-muted-2 mb-0">{{ $settings->firstWhere('key', 'about_vision')?->value ?? "Une Afrique de l'Ouest où des logiciels de classe mondiale sont construits par des talents locaux." }}</p>
+        @endforeach
+      </div>
+    </div>
+  </section>
+
+  <!-- VISION -->
+  <section class="section" style="background:var(--light)">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8 text-center reveal">
+          <span class="section-eyebrow">Où nous allons</span>
+          <h2 class="section-heading mb-4">Notre vision</h2>
+          <div class="card-soft" style="padding:2.5rem;border-left:4px solid var(--orange)">
+            <p style="font-size:1.1rem;line-height:1.8;color:var(--navy);font-style:italic;margin:0">
+              "{{ $settings->firstWhere('key', 'about_vision')?->value ?? "Faire de Laravel Côte d'Ivoire la communauté de développeurs Laravel la plus active, la plus inclusive et la plus influente d'Afrique de l'Ouest, en contribuant à l'excellence technique et à l'employabilité des développeurs ivoiriens à l'échelle locale et internationale." }}"
+            </p>
           </div>
         </div>
       </div>
@@ -48,51 +75,78 @@
   </section>
 
   <!-- NOTRE NAISSANCE -->
-  @if($origin && $origin->is_active)
-  <section class="section">
-    <div class="container">
-      <div class="row align-items-center g-5 {{ $origin->media_position === 'left' ? 'flex-row-reverse' : '' }}">
+  <section style="background:linear-gradient(160deg,#0b1629 0%,#12233e 55%,#0f1e38 100%);padding:5rem 0;position:relative;overflow:hidden">
+    <div aria-hidden="true" style="position:absolute;top:-8rem;right:-8rem;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(232,89,12,.08) 0%,transparent 70%);pointer-events:none"></div>
+    <div aria-hidden="true" style="position:absolute;bottom:-6rem;left:-6rem;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(232,89,12,.06) 0%,transparent 70%);pointer-events:none"></div>
 
-        {{-- Colonne texte --}}
-        <div class="col-lg-{{ $origin->media_type === \App\Enums\MediaType::None ? '12' : '6' }} reveal">
-          @if($origin->eyebrow)
-            <span class="section-eyebrow">{{ $origin->eyebrow }}</span>
-          @endif
-          <h2>{{ $origin->title }}</h2>
-          <div class="text-muted-2">{!! clean($origin->content) !!}</div>
+    <div class="container position-relative" style="z-index:1">
+
+      <!-- Grande citation -->
+      <div class="text-center mb-5 reveal">
+        <span class="section-eyebrow" style="color:rgba(255,255,255,.5)">Notre naissance</span>
+        <blockquote style="margin:1.25rem auto 0;max-width:48rem">
+          <p style="font-size:clamp(1.1rem,2.2vw,1.55rem);line-height:1.6;color:#fff;font-style:italic;font-weight:500">
+            "La Côte d'Ivoire ne manque pas de développeurs talentueux. Elle manque d'un espace commun pour les réunir, les faire grandir ensemble et les rendre visibles au reste du monde tech."
+          </p>
+          <footer style="color:rgba(255,255,255,.4);font-size:.82rem;font-style:normal;margin-top:1rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase">Manifeste fondateur · Laravel Côte d'Ivoire</footer>
+        </blockquote>
+      </div>
+
+      <!-- Histoire + Faits -->
+      <div class="row g-5 align-items-start mt-2">
+
+        <!-- Colonne gauche : récit -->
+        <div class="col-lg-6 reveal">
+          <h3 style="color:#fff;font-size:1.3rem;margin-bottom:1.25rem">D'une conviction à une communauté</h3>
+          <div style="display:flex;flex-direction:column;gap:.9rem">
+            <p style="color:rgba(255,255,255,.78);line-height:1.8;margin:0">En 2025, cherchant une communauté Laravel en Côte d'Ivoire, Wilson Kouassi et Mahamadou Diaby font le même constat : rien n'existe. Ni sur LinkedIn, ni sur Facebook, ni sur GitHub. Des centaines de développeurs ivoiriens avancent en silo, sans espace commun pour se retrouver et grandir ensemble.</p>
+            <p style="color:rgba(255,255,255,.78);line-height:1.8;margin:0">L'inspiration vient des communautés francophones voisines — Laravel Cameroun, Laravel France, Laravel Sénégal. La conviction s'impose : si ça existe ailleurs, ça doit exister en Côte d'Ivoire. Avec la même énergie, la même qualité, mais ancrée dans notre réalité locale.</p>
+            <p style="color:rgba(255,255,255,.78);line-height:1.8;margin:0">Un groupe WhatsApp est créé. Les développeurs sortent de l'isolement. Les discussions s'enchaînent, les collaborations émergent, les premiers événements se tiennent. En quelques semaines, la dynamique est irréversible — <strong style="color:#e8590c">Laravel CI</strong> est née.</p>
+          </div>
         </div>
 
-        {{-- Colonne média --}}
-        @if($origin->media_type !== \App\Enums\MediaType::None)
-        <div class="col-lg-6 reveal" data-delay="0.08">
-          @if($origin->isImage())
-            <img src="{{ $origin->mediaUrl() }}"
-                 alt="{{ $origin->caption ?? $origin->title }}"
-                 class="img-fluid rounded-3 shadow"
-                 style="width:100%;object-fit:cover;max-height:420px">
-          @elseif($origin->isVideo())
-            <video controls class="w-100 rounded-3 shadow" style="max-height:420px">
-              <source src="{{ $origin->mediaUrl() }}">
-            </video>
-          @elseif($origin->isYoutube())
-            <div class="ratio ratio-16x9 rounded-3 overflow-hidden shadow">
-              <iframe src="{{ $origin->youtube_url }}"
-                      title="{{ $origin->title }}"
-                      allowfullscreen></iframe>
+        <!-- Colonne droite : cartes visuelles -->
+        <div class="col-lg-6 reveal" data-delay="0.1">
+          <div class="row g-3">
+            <div class="col-6">
+              <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:1rem;padding:1.5rem;text-align:center">
+                <div style="font-size:2.8rem;font-weight:800;color:#e8590c;line-height:1">0</div>
+                <div style="color:rgba(255,255,255,.6);font-size:.82rem;margin-top:.5rem;line-height:1.4">Communauté Laravel structurée en CI avant nous</div>
+              </div>
             </div>
-          @endif
-          @if($origin->caption)
-            <p class="text-muted-2 text-center mt-2" style="font-size:.88rem">{{ $origin->caption }}</p>
-          @endif
+            <div class="col-6">
+              <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:1rem;padding:1.5rem;text-align:center">
+                <div style="font-size:2.8rem;font-weight:800;color:#e8590c;line-height:1">900+</div>
+                <div style="color:rgba(255,255,255,.6);font-size:.82rem;margin-top:.5rem;line-height:1.4">Membres sur LinkedIn aujourd'hui</div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div style="background:rgba(232,89,12,.12);border:1px solid rgba(232,89,12,.25);border-radius:1rem;padding:1.25rem 1.5rem">
+                <div style="color:#e8590c;font-weight:700;font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.75rem">Communautés qui nous ont inspirés</div>
+                <div style="display:flex;flex-wrap:wrap;gap:.5rem">
+                  <span style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.85);border-radius:2rem;padding:.3rem .9rem;font-size:.84rem">Laravel Cameroun</span>
+                  <span style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.85);border-radius:2rem;padding:.3rem .9rem;font-size:.84rem">Laravel France</span>
+                  <span style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.85);border-radius:2rem;padding:.3rem .9rem;font-size:.84rem">Laravel Sénégal</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:1rem;padding:1.25rem 1.5rem;display:flex;align-items:flex-start;gap:.75rem">
+                <i class="fa-brands fa-whatsapp" style="color:#25d366;font-size:1.5rem;flex-shrink:0;margin-top:.15rem"></i>
+                <div>
+                  <div style="color:rgba(255,255,255,.45);font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.35rem">Point de départ</div>
+                  <div style="color:rgba(255,255,255,.8);font-size:.9rem;line-height:1.55">Un groupe WhatsApp, quelques développeurs passionnés et une conviction partagée. Le reste, c'est votre histoire aussi.</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        @endif
 
       </div>
     </div>
   </section>
-  @endif
 
-  <!-- STORY TIMELINE -->
+  <!-- TIMELINE -->
   <section class="section bg-light-2">
     <div class="container">
       <div class="text-center mb-5">
@@ -114,7 +168,7 @@
     </div>
   </section>
 
-  <!-- VALUES -->
+  <!-- VALEURS -->
   <section class="section">
     <div class="container">
       <div class="text-center mb-5">
@@ -123,7 +177,7 @@
       </div>
       <div class="row g-4">
         @foreach($values as $value)
-        <div class="col-6 col-lg-3 reveal">
+        <div class="col-6 col-lg-4 reveal">
           <div class="card-soft value-card">
             <div class="value-icon"><i class="{{ $value->icon }}"></i></div>
             <h3 style="font-size:1.1rem">{{ $value->title }}</h3>
@@ -135,7 +189,7 @@
     </div>
   </section>
 
-  <!-- TEAM -->
+  <!-- ÉQUIPE FONDATRICE -->
   <section class="section bg-light-2">
     <div class="container">
       <div class="text-center mb-5">
@@ -183,7 +237,7 @@
     </div>
   </section>
 
-  <!-- PARTNERS -->
+  <!-- PARTENAIRES -->
   <section class="section-sm">
     <div class="container">
       <p class="text-center text-muted-2 mb-4" style="font-weight:500;letter-spacing:.05em">Nos communautés partenaires</p>
@@ -208,9 +262,9 @@
   <section class="section pt-0">
     <div class="container">
       <div class="cta-banner reveal">
-        <h2 class="mb-3">{{ $settings->firstWhere('key', 'about_cta_title')?->value ?? 'Ta place dans la communauté t\'attend' }}</h2>
+        <h2 class="mb-3">{{ $settings->firstWhere('key', 'about_cta_title')?->value ?? "Ta place dans la communauté t'attend" }}</h2>
         <p class="lead mb-4" style="color:rgba(255,255,255,.9);max-width:38rem;margin-inline:auto">
-          {{ $settings->firstWhere('key', 'about_cta_text')?->value ?? '900+ développeurs ivoiriens construisent l\'avenir de la tech africaine, un commit à la fois.' }}
+          {{ $settings->firstWhere('key', 'about_cta_text')?->value ?? "900+ développeurs ivoiriens construisent l'avenir de la tech africaine, un commit à la fois." }}
         </p>
         <a href="{{ route('join') }}" class="btn btn-light btn-lg"><i class="fa-brands fa-github"></i> Rejoindre la communauté</a>
       </div>
