@@ -12,26 +12,26 @@ class TimelineEventSeeder extends Seeder
         $events = [
             [
                 'period'      => 'Jan 2026',
-                'title'       => 'Le premier message',
-                'description' => 'Une poignée de développeurs abidjanais lancent un groupe WhatsApp pour échanger des conseils Laravel. En une semaine, ils sont 40.',
+                'title'       => 'Le constat fondateur',
+                'description' => "Wilson Kouassi et Mahamadou Diaby cherchent une communauté Laravel en Côte d'Ivoire. Résultat : rien sur LinkedIn, rien sur Facebook, rien sur GitHub. Des centaines de développeurs ivoiriens avancent en silo.",
                 'order'       => 1,
             ],
             [
                 'period'      => 'Fév 2026',
-                'title'       => 'Launch Hack',
-                'description' => 'Notre premier hackathon réunit 72 développeurs pour un week-end de construction. La communauté a un rythme cardiaque.',
+                'title'       => 'Le premier groupe WhatsApp',
+                'description' => "Un groupe WhatsApp est créé. Les développeurs sortent de l'isolement. En un mois, plus de 200 membres rejoignent et les échanges ne s'arrêtent plus.",
                 'order'       => 2,
             ],
             [
-                'period'      => 'Mar 2026',
-                'title'       => 'Passage à l\'open source',
-                'description' => 'Nous construisons cette plateforme en public sous licence MIT — faite avec Laravel, pour les développeurs Laravel.',
+                'period'      => 'Avr 2026',
+                'title'       => 'Construction de la plateforme',
+                'description' => "La décision est prise : construire une plateforme open source faite avec Laravel, pour les développeurs Laravel. Forum, blog, événements, emplois : tout ce qu'une communauté sérieuse mérite.",
                 'order'       => 3,
             ],
             [
-                'period'      => 'Mai 2026',
-                'title'       => '500 membres',
-                'description' => "Sur WhatsApp, LinkedIn et GitHub, nous franchissons les 500 membres — et ce n'est que le début.",
+                'period'      => 'Juin 2026',
+                'title'       => 'Laravel CI en ligne',
+                'description' => "La plateforme est lancée publiquement. 900 membres sur LinkedIn, 340 sur WhatsApp, 5 communautés partenaires. Laravel CI est le point de départ, pas l'arrivée.",
                 'order'       => 4,
             ],
         ];

@@ -12,7 +12,7 @@
         <div class="col-lg-7">
           <span class="badge-pill badge-navy"><i class="fa-solid fa-user-plus text-orange"></i> Gratuit · Ouvert à tous</span>
           <h1 class="my-3">Rejoins la communauté Laravel ivoirienne</h1>
-          <p class="lead" style="max-width:42rem">Que tu sois à Abidjan, Bouaké, ou dans la diaspora — connecte-toi avec des développeurs qui partagent ta stack, tes défis et tes ambitions.</p>
+          <p class="lead" style="max-width:42rem">Que tu sois à Abidjan, à Bouaké ou dans la diaspora : connecte-toi avec des développeurs qui partagent ta stack, tes défis et tes ambitions.</p>
           <a href="{{ route('auth.github.redirect') }}" class="btn btn-brand btn-lg mt-2">
             <i class="fa-brands fa-github"></i> Continuer avec GitHub
           </a>
@@ -69,7 +69,7 @@
       <div class="text-center mb-5 reveal">
         <span class="section-eyebrow">Notre public</span>
         <h2 class="section-heading">Pour qui sommes-nous faits ?</h2>
-        <p class="text-muted" style="max-width:42rem;margin-inline:auto">Laravel CI accueille tous les développeurs qui construisent avec Laravel et PHP — quel que soit ton niveau ou ton parcours.</p>
+        <p class="text-muted" style="max-width:42rem;margin-inline:auto">Laravel CI accueille tous les développeurs qui construisent avec Laravel et PHP, quel que soit ton niveau ou ton parcours.</p>
       </div>
       <div class="row g-4">
         <div class="col-md-6 col-lg-3 reveal">

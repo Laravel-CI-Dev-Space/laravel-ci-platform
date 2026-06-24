@@ -13,7 +13,7 @@ class CommunityValueSeeder extends Seeder
             [
                 'icon'        => 'fa-solid fa-hands-holding-circle',
                 'title'       => 'Partage',
-                'description' => "La connaissance grandit quand on la partage. Ici, pas de rétention — chaque expérience partagée élève toute la communauté.",
+                'description' => "La connaissance grandit quand on la partage. Ici, pas de rétention : chaque expérience partagée élève toute la communauté.",
                 'order'       => 1,
             ],
             [
@@ -25,7 +25,7 @@ class CommunityValueSeeder extends Seeder
             [
                 'icon'        => 'fa-solid fa-award',
                 'title'       => 'Excellence',
-                'description' => "Nous nous tenons mutuellement à un niveau élevé — du code propre, des pratiques solides, un vrai artisanat du développement.",
+                'description' => "Nous nous tenons mutuellement à un niveau élevé : du code propre, des pratiques solides, un vrai artisanat du développement.",
                 'order'       => 3,
             ],
             [

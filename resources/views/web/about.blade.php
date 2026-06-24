@@ -37,7 +37,7 @@
         $missions = [
           ['icon' => 'fa-solid fa-users',        'text' => "Rassembler les développeurs Laravel de Côte d'Ivoire autour d'un espace commun, structuré et inclusif."],
           ['icon' => 'fa-solid fa-book-open',    'text' => "Produire et partager des contenus pédagogiques adaptés au contexte ivoirien : tutoriels, articles, retours d'expérience."],
-          ['icon' => 'fa-solid fa-calendar-check','text' => "Organiser des événements réguliers — meetups, workshops, hackathons, webinaires — pour dynamiser les échanges."],
+          ['icon' => 'fa-solid fa-calendar-check','text' => "Organiser des événements réguliers : meetups, workshops, hackathons et webinaires pour dynamiser les échanges."],
           ['icon' => 'fa-solid fa-briefcase',    'text' => "Faciliter les connexions professionnelles entre développeurs, entreprises et recruteurs du marché local."],
           ['icon' => 'fa-solid fa-code-branch',  'text' => "Contribuer à l'open source et encourager la participation à l'écosystème Laravel mondial."],
           ['icon' => 'fa-solid fa-globe',        'text' => "Servir de pont entre les talents locaux et les opportunités professionnelles à l'international."],
@@ -100,8 +100,8 @@
           <h3 style="color:#fff;font-size:1.3rem;margin-bottom:1.25rem">D'une conviction à une communauté</h3>
           <div style="display:flex;flex-direction:column;gap:.9rem">
             <p style="color:rgba(255,255,255,.78);line-height:1.8;margin:0">En 2025, cherchant une communauté Laravel en Côte d'Ivoire, Wilson Kouassi et Mahamadou Diaby font le même constat : rien n'existe. Ni sur LinkedIn, ni sur Facebook, ni sur GitHub. Des centaines de développeurs ivoiriens avancent en silo, sans espace commun pour se retrouver et grandir ensemble.</p>
-            <p style="color:rgba(255,255,255,.78);line-height:1.8;margin:0">L'inspiration vient des communautés francophones voisines — Laravel Cameroun, Laravel France, Laravel Sénégal. La conviction s'impose : si ça existe ailleurs, ça doit exister en Côte d'Ivoire. Avec la même énergie, la même qualité, mais ancrée dans notre réalité locale.</p>
-            <p style="color:rgba(255,255,255,.78);line-height:1.8;margin:0">Un groupe WhatsApp est créé. Les développeurs sortent de l'isolement. Les discussions s'enchaînent, les collaborations émergent, les premiers événements se tiennent. En quelques semaines, la dynamique est irréversible — <strong style="color:#e8590c">Laravel CI</strong> est née.</p>
+            <p style="color:rgba(255,255,255,.78);line-height:1.8;margin:0">L'inspiration vient des communautés francophones voisines : Laravel Cameroun, Laravel France, Laravel Sénégal. La conviction s'impose : si ça existe ailleurs, ça doit exister en Côte d'Ivoire. Avec la même énergie, la même qualité, mais ancrée dans notre réalité locale.</p>
+            <p style="color:rgba(255,255,255,.78);line-height:1.8;margin:0">Un groupe WhatsApp est créé. Les développeurs sortent de l'isolement. Les discussions s'enchaînent, les collaborations émergent, les premiers événements se tiennent. En quelques semaines, la dynamique est irréversible. <strong style="color:#e8590c">Laravel CI</strong> est née.</p>
           </div>
         </div>
 
@@ -246,7 +246,7 @@
         <div class="col-6 col-md-3 reveal">
           <div class="partner-logo">
             @if($partner->logo)
-              <img src="{{ $partner->logoUrl() }}" alt="{{ $partner->name }}" style="height:32px">
+              <img src="{{ $partner->logoUrl() }}" alt="{{ $partner->name }}" style="height:56px;object-fit:contain">
             @else
               <i class="{{ $partner->icon ?? 'fa-solid fa-hippo' }}"></i>
             @endif

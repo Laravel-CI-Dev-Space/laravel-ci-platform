@@ -21,7 +21,7 @@
               La communauté Laravel de <span class="accent">Côte d'Ivoire</span>
             @endif
           </h1>
-          <p class="lead">{{ $settings->firstWhere('key', 'home_hero_subtitle')?->value ?? 'Rejoins 900+ développeurs ivoiriens — partage, apprends et grandis avec la communauté.' }}</p>
+          <p class="lead">{{ $settings->firstWhere('key', 'home_hero_subtitle')?->value ?? 'Rejoins 900+ développeurs ivoiriens, partage, apprends et grandis avec la communauté.' }}</p>
           <div class="d-flex flex-wrap gap-3 mt-4">
             <a href="{{ route('join') }}" class="btn btn-brand btn-lg">
               <i class="fa-solid fa-user-plus"></i>
@@ -276,7 +276,7 @@
         <div class="col-6 col-md-3 reveal">
           <div class="partner-logo">
             @if($partner->logo)
-              <img src="{{ $partner->logoUrl() }}" alt="{{ $partner->name }}" style="height:32px">
+              <img src="{{ $partner->logoUrl() }}" alt="{{ $partner->name }}" style="height:56px;object-fit:contain">
             @else
               <i class="{{ $partner->icon ?? 'fa-solid fa-hippo' }}"></i>
             @endif
