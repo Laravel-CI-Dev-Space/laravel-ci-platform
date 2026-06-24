@@ -1,7 +1,7 @@
 @extends('layouts.web')
 
-@section('title', 'About — Laravel CI')
-@section('description', 'Learn about Laravel Côte d\'Ivoire — our mission, founding team, and vision for the Ivorian PHP & Laravel developer community.')
+@section('title', 'À propos · Laravel CI')
+@section('description', "Découvrez Laravel Côte d'Ivoire : notre mission, notre équipe fondatrice et notre vision pour la communauté ivoirienne de développeurs Laravel et PHP.")
 
 @section('content')
 
@@ -12,7 +12,7 @@
         <div class="col-lg-7">
           <span class="badge-pill badge-navy"><i class="fa-brands fa-laravel text-orange"></i> Founded 2026 · Open source</span>
           <h1 class="my-3">{{ $settings->firstWhere('key', 'about_hero_title')?->value ?? "We're building the home for Ivorian Laravel developers" }}</h1>
-          <p class="lead" style="max-width:42rem">{{ $settings->firstWhere('key', 'about_hero_subtitle')?->value ?? "Laravel Côte d'Ivoire is the first structured developer community dedicated to Laravel & PHP in Côte d'Ivoire and the diaspora — built on knowledge sharing, inclusion, and collective growth." }}</p>
+          <p class="lead" style="max-width:42rem">{{ $settings->firstWhere('key', 'about_hero_subtitle')?->value ?? "Laravel Côte d'Ivoire est la première communauté structurée dédiée aux développeurs Laravel et PHP de Côte d'Ivoire et de la diaspora. Fondée sur le partage des connaissances, l'inclusion et la croissance collective." }}</p>
           <a href="{{ route('join') }}" class="btn btn-brand btn-lg mt-2"><i class="fa-solid fa-user-plus"></i> Join us</a>
         </div>
         <div class="col-lg-5 d-none d-lg-block">
@@ -32,15 +32,15 @@
         <div class="col-md-6 reveal">
           <div class="card-soft" style="padding:2rem;height:100%">
             <div class="value-icon" style="margin:0 0 1.2rem"><i class="fa-solid fa-bullseye"></i></div>
-            <h2 style="font-size:var(--fs-h3)">Our mission</h2>
-            <p class="text-muted-2 mb-0">{{ $settings->firstWhere('key', 'about_mission')?->value ?? 'Give every Ivorian developer a structured place to learn Laravel properly.' }}</p>
+            <h2 style="font-size:var(--fs-h3)">Notre mission</h2>
+            <p class="text-muted-2 mb-0">{{ $settings->firstWhere('key', 'about_mission')?->value ?? "Offrir à chaque développeur ivoirien un espace structuré pour maîtriser Laravel et progresser collectivement." }}</p>
           </div>
         </div>
         <div class="col-md-6 reveal" data-delay="0.08">
           <div class="card-soft" style="padding:2rem;height:100%">
             <div class="value-icon" style="margin:0 0 1.2rem"><i class="fa-solid fa-eye"></i></div>
-            <h2 style="font-size:var(--fs-h3)">Our vision</h2>
-            <p class="text-muted-2 mb-0">{{ $settings->firstWhere('key', 'about_vision')?->value ?? 'A West Africa where world-class software is built by local talent.' }}</p>
+            <h2 style="font-size:var(--fs-h3)">Notre vision</h2>
+            <p class="text-muted-2 mb-0">{{ $settings->firstWhere('key', 'about_vision')?->value ?? "Une Afrique de l'Ouest où des logiciels de classe mondiale sont construits par des talents locaux." }}</p>
           </div>
         </div>
       </div>
@@ -96,8 +96,8 @@
   <section class="section bg-light-2">
     <div class="container">
       <div class="text-center mb-5">
-        <span class="section-eyebrow">Our story</span>
-        <h2>From a WhatsApp group to a movement</h2>
+        <span class="section-eyebrow">Notre histoire</span>
+        <h2>D'un groupe WhatsApp à un mouvement</h2>
       </div>
       <div class="timeline">
         @foreach($timeline as $event)
@@ -118,8 +118,8 @@
   <section class="section">
     <div class="container">
       <div class="text-center mb-5">
-        <span class="section-eyebrow">What we stand for</span>
-        <h2>Community values</h2>
+        <span class="section-eyebrow">Ce en quoi nous croyons</span>
+        <h2>Nos valeurs</h2>
       </div>
       <div class="row g-4">
         @foreach($values as $value)
@@ -139,38 +139,42 @@
   <section class="section bg-light-2">
     <div class="container">
       <div class="text-center mb-5">
-        <span class="section-eyebrow">The people</span>
-        <h2>Founding team</h2>
+        <span class="section-eyebrow">Les fondateurs</span>
+        <h2>L'équipe fondatrice</h2>
       </div>
       <div class="row g-4 justify-content-center">
         @foreach($team as $member)
-        <div class="col-6 col-md-4 col-lg-3 reveal">
-          <div class="card-soft team-card">
+        <div class="col-12 col-md-6 col-lg-5 reveal">
+          <div class="card-soft" style="padding:2rem;display:flex;gap:1.5rem;align-items:flex-start">
             @if($member->avatarUrl())
               <img src="{{ $member->avatarUrl() }}"
                    alt="{{ $member->fullName() }}"
-                   class="avatar avatar-xl mx-auto mb-3"
-                   style="object-fit:cover">
+                   style="width:80px;height:80px;border-radius:50%;object-fit:cover;flex-shrink:0;border:3px solid var(--orange-100,#fde8d8)">
             @else
-              <span class="avatar avatar-xl {{ $member->avatar_color }} mx-auto mb-3">
+              <span class="avatar avatar-xl {{ $member->avatar_color }}" style="flex-shrink:0">
                 {{ $member->initials() }}
               </span>
             @endif
-            <h3 style="font-size:1.05rem;margin-bottom:.1rem">{{ $member->fullName() }}</h3>
-            <div class="role mb-2">{{ $member->role }}</div>
-            <div class="d-flex gap-2 justify-content-center">
-              @if($member->github_url)
-                <a href="{{ $member->github_url }}" class="social-icon" target="_blank"
-                   style="background:var(--light);color:var(--navy)" aria-label="GitHub">
-                  <i class="fa-brands fa-github"></i>
-                </a>
+            <div>
+              <h3 style="font-size:1.1rem;margin-bottom:.15rem">{{ $member->fullName() }}</h3>
+              <div class="role mb-2" style="color:var(--orange,#e8590c);font-weight:600;font-size:.85rem">{{ $member->role }}</div>
+              @if($member->bio)
+                <p class="text-muted-2 mb-3" style="font-size:.88rem;line-height:1.65">{{ $member->bio }}</p>
               @endif
-              @if($member->linkedin_url)
-                <a href="{{ $member->linkedin_url }}" class="social-icon" target="_blank"
-                   style="background:#e8f0fe;color:#0a66c2" aria-label="LinkedIn">
-                  <i class="fa-brands fa-linkedin-in"></i>
-                </a>
-              @endif
+              <div class="d-flex gap-2">
+                @if($member->github_url)
+                  <a href="{{ $member->github_url }}" class="social-icon" target="_blank"
+                     style="background:var(--light);color:var(--navy)" aria-label="GitHub">
+                    <i class="fa-brands fa-github"></i>
+                  </a>
+                @endif
+                @if($member->linkedin_url)
+                  <a href="{{ $member->linkedin_url }}" class="social-icon" target="_blank"
+                     style="background:#e8f0fe;color:#0a66c2" aria-label="LinkedIn">
+                    <i class="fa-brands fa-linkedin-in"></i>
+                  </a>
+                @endif
+              </div>
             </div>
           </div>
         </div>
@@ -182,7 +186,7 @@
   <!-- PARTNERS -->
   <section class="section-sm">
     <div class="container">
-      <p class="text-center text-muted-2 mb-4" style="font-weight:500;letter-spacing:.05em">Our partner communities</p>
+      <p class="text-center text-muted-2 mb-4" style="font-weight:500;letter-spacing:.05em">Nos communautés partenaires</p>
       <div class="row g-3 justify-content-center">
         @foreach($partners as $partner)
         <div class="col-6 col-md-3 reveal">
@@ -204,11 +208,11 @@
   <section class="section pt-0">
     <div class="container">
       <div class="cta-banner reveal">
-        <h2 class="mb-3">{{ $settings->firstWhere('key', 'about_cta_title')?->value ?? 'Your seat at the table is ready' }}</h2>
+        <h2 class="mb-3">{{ $settings->firstWhere('key', 'about_cta_title')?->value ?? 'Ta place dans la communauté t\'attend' }}</h2>
         <p class="lead mb-4" style="color:rgba(255,255,255,.9);max-width:38rem;margin-inline:auto">
-          {{ $settings->firstWhere('key', 'about_cta_text')?->value ?? 'Join 500+ Ivorian developers building the future of African tech, one commit at a time.' }}
+          {{ $settings->firstWhere('key', 'about_cta_text')?->value ?? '900+ développeurs ivoiriens construisent l\'avenir de la tech africaine, un commit à la fois.' }}
         </p>
-        <a href="{{ route('join') }}" class="btn btn-light btn-lg"><i class="fa-brands fa-github"></i> Join the Community</a>
+        <a href="{{ route('join') }}" class="btn btn-light btn-lg"><i class="fa-brands fa-github"></i> Rejoindre la communauté</a>
       </div>
     </div>
   </section>

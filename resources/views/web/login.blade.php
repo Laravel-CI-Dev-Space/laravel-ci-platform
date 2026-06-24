@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Connexion — Laravel CI</title>
+  <title>Connexion · Laravel CI</title>
   <meta name="robots" content="noindex, nofollow" />
   <link rel="icon" href="{{ asset('assets/web/img/mascot.png') }}" />
   <meta name="csrf-token" content="{{ csrf_token() }}" />
@@ -161,7 +161,7 @@
           <span>Laravel CI</span>
         </a>
 
-        <h1 style="font-size:1.8rem; font-weight:800; color:#0f1b35; margin-bottom:.5rem">Bon retour 👋</h1>
+        <h1 style="font-size:1.8rem; font-weight:800; color:#0f1b35; margin-bottom:.5rem">Bon retour</h1>
         <p style="color:#6c757d; margin-bottom:2rem; font-size:.95rem">Connectez-vous à la communauté Laravel CI.</p>
 
         @if (session('error'))
@@ -226,12 +226,12 @@
         </div>
 
         <h2>Construis avec la communauté Laravel ivoirienne</h2>
-        <p>500+ développeurs partageant connaissances, opportunités et amitié — à Abidjan et dans la diaspora.</p>
+        <p>900+ développeurs partageant connaissances, opportunités et amitié. À Abidjan et dans la diaspora.</p>
 
         <div class="auth-stats">
-          <div><div class="n">500+</div><div class="l">Membres</div></div>
-          <div><div class="n">1.2k+</div><div class="l">Questions</div></div>
-          <div><div class="n">24+</div><div class="l">Événements</div></div>
+          <div><div class="n">900+</div><div class="l">LinkedIn</div></div>
+          <div><div class="n">340+</div><div class="l">WhatsApp</div></div>
+          <div><div class="n">10+</div><div class="l">Événements</div></div>
         </div>
 
         <div class="testimonial-box">

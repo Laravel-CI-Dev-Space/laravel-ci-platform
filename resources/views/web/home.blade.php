@@ -1,6 +1,6 @@
 @extends('layouts.web')
 
-@section('title', $settings->firstWhere('key', 'home_hero_title')?->value ?? "Laravel CI — The Laravel Community of Côte d'Ivoire")
+@section('title', $settings->firstWhere('key', 'home_hero_title')?->value ?? "Laravel CI · La communauté Laravel de Côte d'Ivoire")
 @section('description', $settings->firstWhere('key', 'home_hero_subtitle')?->value ?? 'Join 500+ Ivorian Laravel & PHP developers. Share knowledge, find jobs, attend events, and grow together.')
 
 @section('content')
@@ -21,7 +21,7 @@
               The Laravel Community of <span class="accent">Côte d'Ivoire</span>
             @endif
           </h1>
-          <p class="lead">{{ $settings->firstWhere('key', 'home_hero_subtitle')?->value ?? 'Join 500+ developers — share, learn, and grow together.' }}</p>
+          <p class="lead">{{ $settings->firstWhere('key', 'home_hero_subtitle')?->value ?? 'Rejoins 900+ développeurs. Partage, apprends et grandis avec la communauté.' }}</p>
           <div class="d-flex flex-wrap gap-3 mt-4">
             <a href="{{ route('join') }}" class="btn btn-brand btn-lg">
               <i class="fa-solid fa-user-plus"></i>
@@ -33,9 +33,9 @@
             </a>
           </div>
           <div class="trust-badges">
-            <div class="trust-badge"><i class="fa-solid fa-people-group"></i> <span><strong>500+</strong> members</span></div>
+            <div class="trust-badge"><i class="fa-brands fa-linkedin"></i> <span><strong>900+</strong> sur LinkedIn</span></div>
+            <div class="trust-badge"><i class="fa-brands fa-whatsapp"></i> <span><strong>340+</strong> sur WhatsApp</span></div>
             <div class="trust-badge"><i class="fa-solid fa-location-dot"></i> <span>Abidjan, <strong>Côte d'Ivoire</strong></span></div>
-            <div class="trust-badge"><i class="fa-brands fa-github"></i> <span>Built on <strong>Laravel</strong></span></div>
           </div>
         </div>
         <div class="col-lg-6">
@@ -106,10 +106,10 @@
     <div class="container">
       <div class="d-flex align-items-end justify-content-between flex-wrap gap-3 mb-4">
         <div>
-          <span class="section-eyebrow">Community Q&amp;A</span>
-          <h2 class="section-heading mb-0">Latest forum questions</h2>
+          <span class="section-eyebrow">Entraide communautaire</span>
+          <h2 class="section-heading mb-0">Dernières questions du forum</h2>
         </div>
-        <a href="{{ route('forum.index') }}" class="view-all-link">View all questions <i class="fa-solid fa-arrow-right"></i></a>
+        <a href="{{ route('forum.index') }}" class="view-all-link">Toutes les questions <i class="fa-solid fa-arrow-right"></i></a>
       </div>
 
       @forelse($questions as $question)
@@ -156,10 +156,10 @@
     <div class="container">
       <div class="d-flex align-items-end justify-content-between flex-wrap gap-3 mb-4">
         <div>
-          <span class="section-eyebrow">Knowledge base</span>
-          <h2 class="section-heading mb-0">Latest articles</h2>
+          <span class="section-eyebrow">Base de connaissances</span>
+          <h2 class="section-heading mb-0">Derniers articles</h2>
         </div>
-        <a href="{{ route('blog.index') }}" class="view-all-link">Read the blog <i class="fa-solid fa-arrow-right"></i></a>
+        <a href="{{ route('blog.index') }}" class="view-all-link">Lire le blog <i class="fa-solid fa-arrow-right"></i></a>
       </div>
 
       <div class="row g-4">
@@ -203,10 +203,10 @@
     <div class="container">
       <div class="d-flex align-items-end justify-content-between flex-wrap gap-3 mb-4">
         <div>
-          <span class="section-eyebrow">Meet in person &amp; online</span>
-          <h2 class="section-heading mb-0">Upcoming events</h2>
+          <span class="section-eyebrow">En présentiel et en ligne</span>
+          <h2 class="section-heading mb-0">Prochains événements</h2>
         </div>
-        <a href="{{ route('events.index') }}" class="view-all-link">All events <i class="fa-solid fa-arrow-right"></i></a>
+        <a href="{{ route('events.index') }}" class="view-all-link">Tous les événements <i class="fa-solid fa-arrow-right"></i></a>
       </div>
 
       <div class="row g-4">
@@ -256,7 +256,7 @@
   <!-- ============ PARTNERS ============ -->
   <section class="section-sm">
     <div class="container">
-      <p class="text-center text-muted-2 mb-4" style="font-weight:500;letter-spacing:.05em">Part of the global Laravel community</p>
+      <p class="text-center text-muted-2 mb-4" style="font-weight:500;letter-spacing:.05em">Membre de la communauté Laravel mondiale</p>
       <div class="row g-3 justify-content-center">
         @foreach($partners as $partner)
         <div class="col-6 col-md-3 reveal">
@@ -284,7 +284,7 @@
           {{ $settings->firstWhere('key', 'home_cta_banner_text')?->value ?? 'Sign in with GitHub, ask your first question, and meet 500+ developers who have your back.' }}
         </p>
         <div class="cta-cmd"><span class="cta-cmd-prompt">$</span> composer create-project laravel-ci/community <button class="cta-cmd-copy" type="button" aria-label="Copy"><i class="fa-regular fa-copy"></i></button></div>
-        <a href="{{ route('join') }}" class="btn btn-light btn-lg"><i class="fa-brands fa-github"></i> Join the Community</a>
+        <a href="{{ route('join') }}" class="btn btn-light btn-lg"><i class="fa-brands fa-github"></i> Rejoindre la communauté</a>
       </div>
     </div>
   </section>

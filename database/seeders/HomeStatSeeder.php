@@ -10,10 +10,10 @@ class HomeStatSeeder extends Seeder
     public function run(): void
     {
         $stats = [
-            ['icon' => 'fa-solid fa-users',           'label' => 'Members',   'value' => 500,  'suffix' => '+', 'auto_count' => true, 'model' => 'App\\Models\\User',     'order' => 1],
-            ['icon' => 'fa-solid fa-circle-question', 'label' => 'Questions', 'value' => 1200, 'suffix' => '+', 'auto_count' => true, 'model' => 'App\\Models\\Question', 'order' => 2],
-            ['icon' => 'fa-solid fa-calendar-check',  'label' => 'Events',    'value' => 24,   'suffix' => '+', 'auto_count' => true, 'model' => 'App\\Models\\Event',    'order' => 3],
-            ['icon' => 'fa-solid fa-book-open',       'label' => 'Articles',  'value' => 80,   'suffix' => '+', 'auto_count' => true, 'model' => 'App\\Models\\Article',  'order' => 4],
+            ['icon' => 'fa-brands fa-linkedin',       'label' => 'Membres LinkedIn', 'value' => 900,  'suffix' => '+', 'auto_count' => false, 'model' => null,                    'order' => 1],
+            ['icon' => 'fa-brands fa-whatsapp',       'label' => 'Membres WhatsApp', 'value' => 340,  'suffix' => '+', 'auto_count' => false, 'model' => null,                    'order' => 2],
+            ['icon' => 'fa-solid fa-calendar-check',  'label' => 'Événements',       'value' => 10,   'suffix' => '+', 'auto_count' => true,  'model' => 'App\\Models\\Event',    'order' => 3],
+            ['icon' => 'fa-solid fa-book-open',       'label' => 'Articles',         'value' => 2,    'suffix' => '+', 'auto_count' => true,  'model' => 'App\\Models\\Article',  'order' => 4],
         ];
 
         foreach ($stats as $stat) {

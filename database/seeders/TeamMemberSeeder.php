@@ -11,59 +11,39 @@ class TeamMemberSeeder extends Seeder
     {
         $members = [
             [
-                'first_name'      => 'Serge',
-                'last_name'       => 'Brou',
-                'role'            => 'Founder & Architect',
-                'avatar_initials' => 'SB',
+                'first_name'      => 'Wilson',
+                'last_name'       => 'Kouassi',
+                'role'            => 'Lead & Co-fondateur',
+                'avatar'          => 'fondateurs/wilson.jpeg',
+                'avatar_initials' => 'WK',
                 'avatar_color'    => 'av-1',
-                'github_url'      => 'https://github.com/',
+                'github_url'      => 'https://github.com/Ky-Wilson',
                 'linkedin_url'    => null,
                 'twitter_url'     => null,
-                'bio'             => 'Fondateur de Laravel CI et architecte de la plateforme. Passionné de Laravel depuis la version 5, il a lancé la communauté avec la conviction que les développeurs ivoiriens méritent un espace structuré.',
+                'bio'             => "Co-fondateur de Laravel CI et architecte de la plateforme. Développeur passionné, il a posé les bases techniques de la communauté avec la conviction que les développeurs ivoiriens méritent un espace de premier plan.",
                 'order'           => 1,
+                'is_active'       => true,
             ],
             [
-                'first_name'      => 'Fatou',
-                'last_name'       => 'Diallo',
-                'role'            => 'Community Lead',
-                'avatar_initials' => 'FD',
-                'avatar_color'    => 'av-3',
+                'first_name'      => 'Mahamadou',
+                'last_name'       => 'Diaby',
+                'role'            => 'Lead & Co-fondateur',
+                'avatar'          => 'fondateurs/Mahamadou.jpeg',
+                'avatar_initials' => 'MD',
+                'avatar_color'    => 'av-2',
                 'github_url'      => 'https://github.com/',
                 'linkedin_url'    => null,
                 'twitter_url'     => null,
-                'bio'             => "Responsable communauté, elle coordonne les événements, les partenariats et l'animation du forum.",
+                'bio'             => "Co-fondateur de Laravel CI et pilier de la communauté. Fort de son expertise en développement Laravel, il co-dirige la vision de la plateforme et anime les échanges au sein de l'écosystème ivoirien.",
                 'order'           => 2,
-            ],
-            [
-                'first_name'      => 'Aïcha',
-                'last_name'       => 'Doumbia',
-                'role'            => 'Content & Events',
-                'avatar_initials' => 'AD',
-                'avatar_color'    => 'av-5',
-                'github_url'      => 'https://github.com/',
-                'linkedin_url'    => null,
-                'twitter_url'     => null,
-                'bio'             => 'Responsable contenu et événements, elle produit les articles, organise les meetups et webinaires.',
-                'order'           => 3,
-            ],
-            [
-                'first_name'      => 'Yao',
-                'last_name'       => 'Térence',
-                'role'            => 'Open Source Maintainer',
-                'avatar_initials' => 'YT',
-                'avatar_color'    => 'av-4',
-                'github_url'      => 'https://github.com/',
-                'linkedin_url'    => null,
-                'twitter_url'     => null,
-                'bio'             => 'Mainteneur open source, il supervise les contributions, les pull requests et la qualité du code de la plateforme.',
-                'order'           => 4,
+                'is_active'       => true,
             ],
         ];
 
         foreach ($members as $member) {
             TeamMember::updateOrCreate(
                 ['first_name' => $member['first_name'], 'last_name' => $member['last_name']],
-                array_merge($member, ['avatar' => null, 'is_active' => true])
+                $member
             );
         }
     }

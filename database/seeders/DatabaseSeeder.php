@@ -9,21 +9,21 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            RoleSeeder::class,              // 1. Roles + permissions
-            TagSeeder::class,               // 2. Tags forum/blog
-            JobOfferCategorySeeder::class,  // 3. Job categories
-            JobSkillSeeder::class,          // 4. Job skills
-            UserSeeder::class,              // 5. Users (après roles)
-            SiteSettingSeeder::class,       // 6. Paramètres du site
-            HomeStatSeeder::class,          // 7. Statistiques page accueil
-            PartnerSeeder::class,           // 8. Partenaires
-            TeamMemberSeeder::class,        // 9. Membres fondateurs
-            CommunityValueSeeder::class,    // 10. Valeurs communautaires
-            TimelineEventSeeder::class,     // 11. Timeline Notre histoire
+            RoleSeeder::class,               // 1. Roles + permissions
+            TagSeeder::class,                // 2. Tags forum/blog
+            JobOfferCategorySeeder::class,   // 3. Job categories
+            JobSkillSeeder::class,           // 4. Job skills
+            UserSeeder::class,               // 5. Users (après roles)
+            SiteSettingSeeder::class,        // 6. Paramètres du site
+            HomeStatSeeder::class,           // 7. Statistiques page accueil
+            PartnerSeeder::class,            // 8. Partenaires
+            TeamMemberSeeder::class,         // 9. Co-fondateurs
+            CommunityValueSeeder::class,     // 10. Valeurs communautaires
+            TimelineEventSeeder::class,      // 11. Timeline Notre histoire
             AboutOriginSectionSeeder::class, // 12. Section Notre naissance
-            EventSeeder::class,              // 13. Événements (meetup gratuit + workshop payant)
-            GradeSeeder::class,               // 14. Grades de réputation
-            DemoSeeder::class,               // 15. Données démo (membres, articles, questions, events, entreprises)
+            EventSeeder::class,              // 13. Événements vitrine
+            GradeSeeder::class,              // 14. Grades de réputation
+            ArticleSeeder::class,            // 15. Articles blog vitrine
         ]);
 
         if (config('database.default') === 'sqlite' && str_contains((string) config('database.connections.sqlite.database'), 'e2e')) {
@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
         }
 
         $this->command->info('');
-        $this->command->info('🇨🇮 Laravel CI — Database seeded successfully!');
+        $this->command->info('Laravel CI - Database seeded successfully!');
         $this->command->info('');
         // $this->command->table(
         //     ['Role', 'Email', 'Password'],
