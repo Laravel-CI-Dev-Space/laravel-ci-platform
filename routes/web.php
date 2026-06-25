@@ -292,6 +292,7 @@ Route::middleware(['auth', 'active'])->group(function () {
                 Route::post('/profile', fn () => back())->name('profile.update');
                 Route::get('/assistant', [MemberDashboardController::class, 'assistant'])->name('assistant');
                 Route::get('/mentions', [MemberDashboardController::class, 'mentions'])->name('mentions');
+                Route::get('/carte', [MemberDashboardController::class, 'card'])->name('card');
             });
 
         // ─── MODERATOR DASHBOARD ───────────────────────────

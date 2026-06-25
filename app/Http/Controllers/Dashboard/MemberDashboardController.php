@@ -7,6 +7,8 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Chat\ChatSession;
 use App\Models\Chat\ChatTokenBudget;
+use App\Models\MemberCard;
+use App\Models\SiteSetting;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -171,6 +173,27 @@ class MemberDashboardController extends Controller
             ->paginate(20);
 
         return view('dashboard.member.mentions', compact('mentions'));
+    }
+
+    public function card(): View
+    {
+        /** @var User $me */
+        $me = auth()->user();
+
+        $cards = $me->memberCards()
+            ->with(['user.profile.grade', 'user'])
+            ->orderByDesc('level')
+            ->get();
+
+        $thresholds = [
+            1 => (int) (SiteSetting::firstWhere('key', 'card_level_1_points')?->value ?? 300),
+            2 => (int) (SiteSetting::firstWhere('key', 'card_level_2_points')?->value ?? 600),
+            3 => (int) (SiteSetting::firstWhere('key', 'card_level_3_points')?->value ?? 900),
+        ];
+
+        $points = (int) ($me->profile?->points ?? 0);
+
+        return view('dashboard.member.card', compact('me', 'cards', 'thresholds', 'points'));
     }
 
     public function assistant(): View
