@@ -81,6 +81,11 @@ class SiteSettingSeeder extends Seeder
             ['key' => 'reputation_points_seniority_month',   'group' => 'reputation', 'type' => 'number',    'label' => 'Points par mois d\'ancienneté',        'value' => '2',  'order' => 8],
             ['key' => 'reputation_max_seniority_months',     'group' => 'reputation', 'type' => 'number',    'label' => 'Plafond ancienneté (mois)',            'value' => '25', 'order' => 9],
             ['key' => 'reputation_recalculate_frequency',    'group' => 'reputation', 'type' => 'frequency', 'label' => 'Fréquence de recalcul des grades',     'value' => 'monthly', 'order' => 10],
+
+            // ── CARTES MEMBRE ────────────────────────────────────────
+            ['key' => 'card_level_1_points', 'group' => 'member_cards', 'type' => 'number', 'label' => 'Réputation min. — Carte Initié (niveau 1)',       'value' => '300', 'order' => 1],
+            ['key' => 'card_level_2_points', 'group' => 'member_cards', 'type' => 'number', 'label' => 'Réputation min. — Carte Bâtisseur (niveau 2)',    'value' => '600', 'order' => 2],
+            ['key' => 'card_level_3_points', 'group' => 'member_cards', 'type' => 'number', 'label' => 'Réputation min. — Carte Maître Artisan (niveau 3)', 'value' => '900', 'order' => 3],
         ];
 
         foreach ($settings as $setting) {
