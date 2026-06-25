@@ -5,11 +5,15 @@ namespace App\Providers;
 use App\Models\Answer;
 use App\Models\Article;
 use App\Models\Comment;
+use App\Models\Profile;
 use App\Models\Question;
+use App\Models\User;
 use App\Observers\AnswerObserver;
 use App\Observers\ArticleObserver;
 use App\Observers\CommentObserver;
+use App\Observers\ProfileObserver;
 use App\Observers\QuestionObserver;
+use App\Observers\UserObserver;
 use App\View\Composers\GlobalSettingsComposer;
 use App\View\Composers\SidebarBadgeComposer;
 use Illuminate\Support\Facades\View;
@@ -35,5 +39,7 @@ class AppServiceProvider extends ServiceProvider
         Question::observe(QuestionObserver::class);
         Answer::observe(AnswerObserver::class);
         Comment::observe(CommentObserver::class);
+        User::observe(UserObserver::class);
+        Profile::observe(ProfileObserver::class);
     }
 }
