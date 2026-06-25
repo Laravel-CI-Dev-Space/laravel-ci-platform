@@ -179,4 +179,15 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->profile !== null;
     }
+
+    public function memberCards(): HasMany
+    {
+        return $this->hasMany(MemberCard::class);
+    }
+
+    /** Carte active du niveau le plus élevé débloqué. */
+    public function activeCard(): ?MemberCard
+    {
+        return $this->memberCards()->active()->orderByDesc('level')->first();
+    }
 }
