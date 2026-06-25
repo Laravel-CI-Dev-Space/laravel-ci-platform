@@ -29,6 +29,7 @@ use Spatie\Permission\Traits\HasRoles;
     'avatar',
     'github_id',
     'github_username',
+    'matricule',
     'is_active',
     'suspended_until',
     'last_login_at',
