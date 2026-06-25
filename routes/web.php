@@ -30,6 +30,7 @@ use App\Http\Controllers\ViewAsMemberController;
 use App\Http\Controllers\Api\MemberSearchController;
 use App\Http\Controllers\Web\AboutController;
 use App\Http\Controllers\Web\HomeController;
+use App\Http\Controllers\Web\MemberCardController;
 use App\Http\Controllers\Web\MemberProfileController;
 use App\Livewire\EditProfile;
 use Illuminate\Support\Facades\Route;
@@ -245,6 +246,11 @@ Route::middleware(['auth', 'active', 'profile.complete'])->group(function () {
 
 // ─── MEMBER PUBLIC PROFILE ─────────────────────────────────
 Route::get('/members/{username}', [MemberProfileController::class, 'show'])->name('members.show');
+
+// ─── MEMBER CARD ────────────────────────────────────────────
+Route::get('/members/{username}/card/{level?}', [MemberCardController::class, 'preview'])->name('member-card.preview');
+Route::get('/members/{username}/card/{level?}/download', [MemberCardController::class, 'download'])->name('member-card.download');
+Route::patch('/dashboard/member/card/{card}', [MemberCardController::class, 'update'])->name('member-card.update')->middleware(['auth', 'active']);
 
 // ─── MEMBER SEARCH API (mention autocomplete) ──────────────
 Route::get('/api/members/search', MemberSearchController::class)->middleware(['auth', 'active'])->name('api.members.search');
