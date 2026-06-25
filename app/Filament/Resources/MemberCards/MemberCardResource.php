@@ -21,7 +21,10 @@ class MemberCardResource extends Resource
 
     protected static ?string $navigationLabel = 'Cartes membres';
 
-    protected static ?string $navigationGroup = 'Communauté';
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Communauté';
+    }
 
     protected static ?int $navigationSort = 5;
 
