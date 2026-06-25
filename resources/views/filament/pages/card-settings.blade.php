@@ -20,18 +20,21 @@
             </p>
             <h4>Après modification des seuils</h4>
             <p>
-                Utiliser le bouton <strong>"Synchroniser toutes les cartes"</strong> pour appliquer
-                les nouveaux seuils aux membres existants. Les nouveaux membres sont traités automatiquement.
+                Utiliser le bouton <strong>"Synchroniser toutes les cartes"</strong> (en haut à droite)
+                pour appliquer les nouveaux seuils aux membres existants. Les nouveaux membres sont traités automatiquement.
             </p>
         </div>
     </x-filament::section>
 
-    <x-filament-panels::form wire:submit="save">
-        {{ $this->form }}
+    <x-filament::section heading="Configuration" description="Modifiez les seuils ci-dessous puis cliquez sur Enregistrer.">
+        <form wire:submit="save">
+            {{ $this->form }}
 
-        <x-filament-panels::form.actions
-            :actions="$this->getCachedFormActions()"
-            :full-width="$this->hasFullWidthFormActions()"
-        />
-    </x-filament-panels::form>
+            <div class="mt-6">
+                <x-filament::button type="submit">
+                    Enregistrer
+                </x-filament::button>
+            </div>
+        </form>
+    </x-filament::section>
 </x-filament-panels::page>
