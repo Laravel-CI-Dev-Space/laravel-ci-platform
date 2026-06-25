@@ -5,12 +5,14 @@ namespace App\Providers;
 use App\Models\Answer;
 use App\Models\Article;
 use App\Models\Comment;
+use App\Models\MemberCard;
 use App\Models\Profile;
 use App\Models\Question;
 use App\Models\User;
 use App\Observers\AnswerObserver;
 use App\Observers\ArticleObserver;
 use App\Observers\CommentObserver;
+use App\Observers\MemberCardObserver;
 use App\Observers\ProfileObserver;
 use App\Observers\QuestionObserver;
 use App\Observers\UserObserver;
@@ -41,5 +43,6 @@ class AppServiceProvider extends ServiceProvider
         Comment::observe(CommentObserver::class);
         User::observe(UserObserver::class);
         Profile::observe(ProfileObserver::class);
+        MemberCard::observe(MemberCardObserver::class);
     }
 }
