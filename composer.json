@@ -21,6 +21,7 @@
         "meilisearch/meilisearch-php": "^1.16",
         "mews/purifier": "*",
         "openai-php/client": "^0.20.0",
+        "spatie/browsershot": "^5.4",
         "spatie/laravel-activitylog": "^5.0",
         "spatie/laravel-permission": "^6.0",
         "spatie/laravel-sitemap": "^8.1"
