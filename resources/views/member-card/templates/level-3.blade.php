@@ -146,7 +146,7 @@
       </div>
       <div class="identity">
         <div class="name">{{ $card->user->name }}</div>
-        <div class="github">@{{ $card->user->github_username }}</div>
+        <div class="github">{{ '@' . $card->user->github_username }}</div>
         @if($card->poste)
           <div class="poste">{{ $card->poste }}</div>
         @endif
@@ -173,7 +173,7 @@
         <div class="meta">
           <div class="since">Membre depuis {{ $card->user->created_at->translatedFormat('M Y') }}</div>
           <div class="matricule">{{ $card->user->matricule }}</div>
-          <div class="profile-url">laravel.ci/@{{ $card->user->github_username }}</div>
+          <div class="profile-url">laravel.ci/{{ $card->user->github_username }}</div>
         </div>
       </div>
 

@@ -139,7 +139,7 @@
       @endif
       <div class="identity">
         <div class="name">{{ $card->user->name }}</div>
-        <div class="github">@{{ $card->user->github_username }}</div>
+        <div class="github">{{ '@' . $card->user->github_username }}</div>
         @if($card->poste)
           <div class="poste">{{ $card->poste }}</div>
         @endif
