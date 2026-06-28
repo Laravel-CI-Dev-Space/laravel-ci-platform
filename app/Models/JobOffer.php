@@ -18,7 +18,9 @@ use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
 
 #[Fillable([
-    'company_id', 'posted_by', 'title', 'slug', 'description',
+    'company_id', 'company_name', 'posted_by', 'title', 'slug', 'description',
+    'profile_description', 'tech_stack', 'benefits',
+    'apply_email', 'apply_url', 'education_levels', 'domains', 'experience_years',
     'contract_type', 'level', 'location', 'country', 'is_remote',
     'is_hybrid', 'salary_min', 'salary_max', 'currency', 'salary_visible',
     'status', 'rejection_reason', 'is_urgent', 'cover_image',
@@ -51,10 +53,25 @@ class JobOffer extends Model
             'applications_count' => 'integer',
             'salary_min'         => 'integer',
             'salary_max'         => 'integer',
+            'experience_years'   => 'integer',
+            'education_levels'   => 'array',
+            'domains'            => 'array',
             'contract_type'      => JobContractType::class,
             'level'              => JobLevel::class,
             'status'             => JobOfferStatus::class,
         ];
+    }
+
+    /** Nom d'entreprise : société liée en priorité, sinon champ libre. */
+    public function resolvedCompanyName(): ?string
+    {
+        return $this->company?->name ?? $this->company_name;
+    }
+
+    /** Indique si l'offre a été postée directement par un admin (sans société liée). */
+    public function isAdminPosted(): bool
+    {
+        return $this->company_id === null;
     }
 
     public function company(): BelongsTo

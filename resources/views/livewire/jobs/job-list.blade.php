@@ -167,7 +167,7 @@
                                         <img src="{{ $offer->company->logoUrl() }}" alt="{{ $offer->company->name }}"
                                              style="width:100%;height:100%;object-fit:cover;border-radius:inherit" />
                                     @else
-                                        {{ strtoupper(substr($offer->company?->name ?? $offer->title, 0, 2)) }}
+                                        {{ strtoupper(substr($offer->resolvedCompanyName() ?? $offer->title, 0, 2)) }}
                                     @endif
                                 </div>
 
@@ -191,7 +191,7 @@
                                                 @endif
                                             </div>
                                             <div class="text-muted-2" style="font-size:.88rem">
-                                                <strong>{{ $offer->company?->name ?? 'Entreprise' }}</strong>
+                                                <strong>{{ $offer->resolvedCompanyName() ?? 'Entreprise' }}</strong>
                                                 @if ($offer->location)
                                                     · <i class="fa-solid fa-location-dot me-1"></i>{{ $offer->location }}
                                                 @endif

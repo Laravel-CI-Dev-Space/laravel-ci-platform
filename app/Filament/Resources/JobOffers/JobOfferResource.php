@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Resources\JobOffers;
 
 use App\Filament\Resources\Concerns\AuthorizesViaPermission;
+use App\Filament\Resources\JobOffers\Pages\CreateJobOffer;
 use App\Filament\Resources\JobOffers\Pages\EditJobOffer;
 use App\Filament\Resources\JobOffers\Pages\ListJobOffers;
 use App\Filament\Resources\JobOffers\Pages\ViewJobOffer;
@@ -81,9 +82,10 @@ class JobOfferResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ListJobOffers::route('/'),
-            'view'  => ViewJobOffer::route('/{record}'),
-            'edit'  => EditJobOffer::route('/{record}/edit'),
+            'index'  => ListJobOffers::route('/'),
+            'create' => CreateJobOffer::route('/create'),
+            'view'   => ViewJobOffer::route('/{record}'),
+            'edit'   => EditJobOffer::route('/{record}/edit'),
         ];
     }
 }

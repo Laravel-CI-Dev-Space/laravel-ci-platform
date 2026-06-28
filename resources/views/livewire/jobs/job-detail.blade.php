@@ -19,7 +19,7 @@
                                 <img src="{{ $offer->company->logoUrl() }}" alt="{{ $offer->company->name }}"
                                      style="width:100%;height:100%;object-fit:cover;border-radius:inherit" />
                             @else
-                                {{ strtoupper(substr($offer->company?->name ?? $offer->title, 0, 2)) }}
+                                {{ strtoupper(substr($offer->resolvedCompanyName() ?? $offer->title, 0, 2)) }}
                             @endif
                         </div>
 
@@ -32,10 +32,15 @@
                                 @if ($offer->isNew())
                                     <span class="badge-pill badge-green">NOUVEAU</span>
                                 @endif
+                                @if ($offer->isAdminPosted())
+                                    <span class="badge-pill" style="background:#eef2ff;color:#4f46e5">
+                                        <i class="fa-solid fa-shield-halved me-1"></i>Publiée par l'équipe
+                                    </span>
+                                @endif
                             </div>
                             <div class="d-flex flex-wrap gap-3" style="color:var(--muted);font-size:.95rem">
-                                @if ($offer->company)
-                                    <span><i class="fa-solid fa-building me-1 text-orange"></i>{{ $offer->company->name }}</span>
+                                @if ($offer->resolvedCompanyName())
+                                    <span><i class="fa-solid fa-building me-1 text-orange"></i>{{ $offer->resolvedCompanyName() }}</span>
                                 @endif
                                 @if ($offer->location)
                                     <span><i class="fa-solid fa-location-dot me-1 text-orange"></i>{{ $offer->location }}</span>
@@ -65,16 +70,40 @@
                 {{-- ===== CORPS ===== --}}
                 <div class="col-lg-8">
 
-                    {{-- Flash success --}}
                     @if (session('success'))
                         <div class="alert alert-success mb-4">
                             <i class="fa-solid fa-circle-check me-2"></i>{{ session('success') }}
                         </div>
                     @endif
 
+                    {{-- Description du poste --}}
                     <div class="prose article-body">
                         {!! $offer->description !!}
                     </div>
+
+                    {{-- Profil du poste --}}
+                    @if ($offer->profile_description)
+                        <h2 class="section-heading mt-5 mb-3" style="font-size:1.25rem">Profil du poste</h2>
+                        <div class="prose article-body">
+                            {!! $offer->profile_description !!}
+                        </div>
+                    @endif
+
+                    {{-- Environnement technique --}}
+                    @if ($offer->tech_stack)
+                        <h2 class="section-heading mt-5 mb-3" style="font-size:1.25rem">Environnement technique &amp; stack</h2>
+                        <div class="prose article-body">
+                            {!! $offer->tech_stack !!}
+                        </div>
+                    @endif
+
+                    {{-- Ce que l'entreprise offre --}}
+                    @if ($offer->benefits)
+                        <h2 class="section-heading mt-5 mb-3" style="font-size:1.25rem">Ce que nous offrons</h2>
+                        <div class="prose article-body">
+                            {!! $offer->benefits !!}
+                        </div>
+                    @endif
 
                     {{-- Skills & tags --}}
                     <div class="d-flex flex-wrap gap-2 mt-4">
@@ -83,28 +112,54 @@
                         @foreach ($offer->skills as $skill)
                             <span class="tag">{{ $skill->name }}</span>
                         @endforeach
+                        @foreach ($offer->domains ?? [] as $domain)
+                            <span class="tag">{{ $domain }}</span>
+                        @endforeach
                     </div>
 
-                    {{-- Formulaire de candidature --}}
-                    @auth
-                        @if ($hasApplied)
-                            <div class="card-soft p-4 mt-5 text-center">
-                                <i class="fa-solid fa-circle-check fa-2x text-success mb-2"></i>
-                                <p class="mb-0 fw-semibold">Vous avez déjà postulé à cette offre.</p>
-                            </div>
-                        @elseif ($offer->status === \App\Enums\JobOfferStatus::Active)
-                            <div class="mt-5">
-                                @livewire('jobs.job-application-form', ['offer' => $offer], key('apply-'.$offer->id))
-                            </div>
-                        @endif
-                    @else
-                        <div class="card-soft p-4 mt-5 text-center">
-                            <p class="mb-3">Connectez-vous pour postuler à cette offre.</p>
-                            <a href="{{ route('login') }}" class="btn btn-brand">
-                                <i class="fa-brands fa-github me-1"></i>Se connecter
-                            </a>
+                    {{-- Comment postuler (offre admin / externe) --}}
+                    @if ($offer->isAdminPosted() && ($offer->apply_email || $offer->apply_url))
+                        <div class="card-soft p-4 mt-5">
+                            <h3 class="mb-3" style="font-size:1.05rem">
+                                <i class="fa-solid fa-paper-plane text-orange me-2"></i>Comment postuler
+                            </h3>
+                            @if ($offer->apply_email)
+                                <p class="mb-2" style="font-size:.95rem">
+                                    Envoyez votre CV à :
+                                    <a href="mailto:{{ $offer->apply_email }}" class="text-orange fw-semibold">
+                                        {{ $offer->apply_email }}
+                                    </a>
+                                </p>
+                            @endif
+                            @if ($offer->apply_url)
+                                <a href="{{ $offer->apply_url }}" target="_blank" rel="noopener" class="btn btn-brand mt-2">
+                                    <i class="fa-solid fa-arrow-up-right-from-square me-1"></i>Postuler sur le site de l'entreprise
+                                </a>
+                            @endif
                         </div>
-                    @endauth
+
+                    {{-- Formulaire de candidature en ligne (offre entreprise plateforme) --}}
+                    @elseif (! $offer->isAdminPosted())
+                        @auth
+                            @if ($hasApplied)
+                                <div class="card-soft p-4 mt-5 text-center">
+                                    <i class="fa-solid fa-circle-check fa-2x text-success mb-2"></i>
+                                    <p class="mb-0 fw-semibold">Vous avez déjà postulé à cette offre.</p>
+                                </div>
+                            @elseif ($offer->status === \App\Enums\JobOfferStatus::Active)
+                                <div class="mt-5">
+                                    @livewire('jobs.job-application-form', ['offer' => $offer], key('apply-'.$offer->id))
+                                </div>
+                            @endif
+                        @else
+                            <div class="card-soft p-4 mt-5 text-center">
+                                <p class="mb-3">Connectez-vous pour postuler à cette offre.</p>
+                                <a href="{{ route('login') }}" class="btn btn-brand">
+                                    <i class="fa-brands fa-github me-1"></i>Se connecter
+                                </a>
+                            </div>
+                        @endauth
+                    @endif
                 </div>
 
                 {{-- ===== SIDEBAR ===== --}}
@@ -131,21 +186,33 @@
                                     </button>
                                 </div>
 
-                                @auth
-                                    @if ($hasApplied)
-                                        <button class="btn btn-success w-100" disabled>
-                                            <i class="fa-solid fa-circle-check me-1"></i>Déjà postulé
-                                        </button>
-                                    @elseif ($offer->status === \App\Enums\JobOfferStatus::Active)
-                                        <a href="#apply-form" class="btn btn-brand w-100">
-                                            <i class="fa-solid fa-paper-plane me-1"></i>Postuler maintenant
+                                @if ($offer->isAdminPosted())
+                                    @if ($offer->apply_url)
+                                        <a href="{{ $offer->apply_url }}" target="_blank" rel="noopener" class="btn btn-brand w-100">
+                                            <i class="fa-solid fa-arrow-up-right-from-square me-1"></i>Postuler
+                                        </a>
+                                    @elseif ($offer->apply_email)
+                                        <a href="mailto:{{ $offer->apply_email }}" class="btn btn-brand w-100">
+                                            <i class="fa-solid fa-envelope me-1"></i>Postuler par email
                                         </a>
                                     @endif
                                 @else
-                                    <a href="{{ route('login') }}" class="btn btn-brand w-100">
-                                        <i class="fa-solid fa-paper-plane me-1"></i>Postuler
-                                    </a>
-                                @endauth
+                                    @auth
+                                        @if ($hasApplied)
+                                            <button class="btn btn-success w-100" disabled>
+                                                <i class="fa-solid fa-circle-check me-1"></i>Déjà postulé
+                                            </button>
+                                        @elseif ($offer->status === \App\Enums\JobOfferStatus::Active)
+                                            <a href="#apply-form" class="btn btn-brand w-100">
+                                                <i class="fa-solid fa-paper-plane me-1"></i>Postuler maintenant
+                                            </a>
+                                        @endif
+                                    @else
+                                        <a href="{{ route('login') }}" class="btn btn-brand w-100">
+                                            <i class="fa-solid fa-paper-plane me-1"></i>Postuler
+                                        </a>
+                                    @endauth
+                                @endif
                             </div>
 
                             <div class="info-card">
@@ -158,6 +225,30 @@
                                     <div class="ic"><i class="fa-solid fa-layer-group"></i></div>
                                     <div><div class="lbl">Niveau</div><div class="val">{{ $offer->level->label() }}</div></div>
                                 </div>
+                                @if ($offer->experience_years)
+                                    <div class="info-row">
+                                        <div class="ic"><i class="fa-solid fa-hourglass-half"></i></div>
+                                        <div><div class="lbl">Expérience</div><div class="val">{{ $offer->experience_years }} an{{ $offer->experience_years > 1 ? 's' : '' }} minimum</div></div>
+                                    </div>
+                                @endif
+                                @if (! empty($offer->education_levels))
+                                    <div class="info-row">
+                                        <div class="ic"><i class="fa-solid fa-graduation-cap"></i></div>
+                                        <div>
+                                            <div class="lbl">Niveau académique</div>
+                                            <div class="val">{{ implode(', ', $offer->education_levels) }}</div>
+                                        </div>
+                                    </div>
+                                @endif
+                                @if (! empty($offer->domains))
+                                    <div class="info-row">
+                                        <div class="ic"><i class="fa-solid fa-tag"></i></div>
+                                        <div>
+                                            <div class="lbl">Domaine(s)</div>
+                                            <div class="val">{{ implode(', ', $offer->domains) }}</div>
+                                        </div>
+                                    </div>
+                                @endif
                                 @if ($offer->location)
                                     <div class="info-row">
                                         <div class="ic"><i class="fa-solid fa-location-dot"></i></div>
@@ -167,16 +258,18 @@
                                 @if ($offer->expires_at)
                                     <div class="info-row">
                                         <div class="ic"><i class="fa-regular fa-clock"></i></div>
-                                        <div><div class="lbl">Expire</div><div class="val">{{ $offer->expires_at->format('d M Y') }}</div></div>
+                                        <div><div class="lbl">Date limite</div><div class="val">{{ $offer->expires_at->format('d/m/Y') }}</div></div>
                                     </div>
                                 @endif
-                                <div class="info-row">
-                                    <div class="ic"><i class="fa-solid fa-users"></i></div>
-                                    <div>
-                                        <div class="lbl">Candidatures</div>
-                                        <div class="val">{{ $offer->applications_count }} reçue{{ $offer->applications_count !== 1 ? 's' : '' }}</div>
+                                @if (! $offer->isAdminPosted())
+                                    <div class="info-row">
+                                        <div class="ic"><i class="fa-solid fa-users"></i></div>
+                                        <div>
+                                            <div class="lbl">Candidatures</div>
+                                            <div class="val">{{ $offer->applications_count }} reçue{{ $offer->applications_count !== 1 ? 's' : '' }}</div>
+                                        </div>
                                     </div>
-                                </div>
+                                @endif
                             </div>
 
                             @if ($offer->company)
@@ -193,6 +286,13 @@
                                         </a>
                                     @endif
                                 </div>
+                            @elseif ($offer->company_name)
+                                <div class="info-card">
+                                    <div class="sidebar-title">À propos de {{ $offer->company_name }}</div>
+                                    <p class="text-muted-2" style="font-size:.88rem">
+                                        Cette entreprise n'est pas encore sur la plateforme Laravel CI.
+                                    </p>
+                                </div>
                             @endif
                         </div>
                     </div>
@@ -207,7 +307,7 @@
                         <div class="job-card">
                             <div class="d-flex gap-3">
                                 <div class="company-logo cl-{{ ($similar->id % 6) + 1 }}">
-                                    {{ strtoupper(substr($similar->company?->name ?? $similar->title, 0, 2)) }}
+                                    {{ strtoupper(substr($similar->resolvedCompanyName() ?? $similar->title, 0, 2)) }}
                                 </div>
                                 <div class="flex-grow-1 min-w-0">
                                     <div class="d-flex justify-content-between gap-2">
@@ -218,7 +318,7 @@
                                                 </a>
                                             </h3>
                                             <div class="text-muted-2" style="font-size:.85rem">
-                                                {{ $similar->company?->name ?? '' }}
+                                                {{ $similar->resolvedCompanyName() ?? '' }}
                                             </div>
                                         </div>
                                         @if ($similar->salaryRange())
