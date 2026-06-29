@@ -3,9 +3,9 @@
 it('renders the join page with benefits and faq', function () {
     $this->get(route('join'))
         ->assertOk()
-        ->assertSee('Join the Ivorian Laravel community')
-        ->assertSee('Continue with GitHub')
-        ->assertSee('Is membership free?');
+        ->assertSee('Rejoins la communauté Laravel ivoirienne')
+        ->assertSee('Continuer avec GitHub')
+        ->assertSee("L'adhésion est-elle gratuite", false);
 });
 
 it('exposes seo meta tags on the home page', function () {

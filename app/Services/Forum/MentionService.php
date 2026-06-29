@@ -13,10 +13,10 @@ class MentionService
 {
     private const MAX_MENTIONS = 10;
 
-    private const MENTION_PATTERN = '/#([a-zA-Z0-9_-]{2,39})/';
+    private const MENTION_PATTERN = '/@([a-zA-Z0-9_-]{2,39})/';
 
     /**
-     * Extrait les pseudonymes mentionnés (#username) depuis un texte, dédupliqués et limités.
+     * Extrait les pseudonymes mentionnés (@username) depuis un texte, dédupliqués et limités.
      */
     public function extractUsernames(string $text): Collection
     {
@@ -65,7 +65,7 @@ class MentionService
     }
 
     /**
-     * Remplace les #username valides par des liens vers le profil du membre, dans un contenu HTML.
+     * Remplace les @username valides par des liens vers le profil du membre, dans un contenu HTML.
      */
     public function renderMentions(string $html): string
     {
@@ -83,7 +83,7 @@ class MentionService
 
             $url = route('members.show', $username);
 
-            return '<a href="' . $url . '" class="mention">#' . $username . '</a>';
+            return '<a href="' . $url . '" class="mention">@' . $username . '</a>';
         }, $html);
     }
 }

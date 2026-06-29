@@ -18,6 +18,6 @@ it('renders the about page with cached origin, timeline, team and values', funct
     $response = $this->get('/about');
 
     $response->assertOk();
-    $response->assertSee('Comment tout a commencé');
+    $response->assertSee("D'une conviction à une communauté", false);
     $response->assertSee(TeamMember::active()->first()->fullName());
 });
