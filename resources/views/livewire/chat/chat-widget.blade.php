@@ -95,18 +95,20 @@
                         </div>
                     @endforeach
 
-                    {{-- Indicateur de frappe --}}
-                    @if ($loading)
-                        <div class="chat-bubble chat-bubble--assistant">
+                    {{-- Indicateur de frappe — wire:loading fonctionne côté client --}}
+                    <div class="chat-bubble chat-bubble--assistant chat-bubble--typing"
+                         wire:loading.flex
+                         wire:target="sendMessage">
+                        <div class="chat-typing-avatar-wrap">
                             <img src="{{ asset('assets/web/img/mascot.png') }}" alt=""
-                                 class="chat-bubble-avatar">
-                            <div class="chat-bubble-content">
-                                <div class="chat-typing">
-                                    <span></span><span></span><span></span>
-                                </div>
+                                 class="chat-bubble-avatar chat-bubble-avatar--typing">
+                        </div>
+                        <div class="chat-bubble-content chat-bubble-content--typing">
+                            <div class="chat-typing">
+                                <span></span><span></span><span></span>
                             </div>
                         </div>
-                    @endif
+                    </div>
 
                     {{-- Message d'erreur --}}
                     @if ($error)
@@ -333,14 +335,43 @@
 .chat-bubble-content strong { font-weight: 700; }
 
 /* ── Typing animation ────────────────────────────────── */
-.chat-typing { display:inline-flex; gap:3px; align-items:center; padding:.1rem 0; }
-.chat-typing span {
-    width:6px; height:6px; background:#999; border-radius:50%;
-    animation: chatBounce 1.2s infinite ease-in-out both;
+.chat-bubble--typing { align-items: center; }
+
+.chat-typing-avatar-wrap {
+    position: relative;
+    flex-shrink: 0;
 }
-.chat-typing span:nth-child(2) { animation-delay:.16s; }
-.chat-typing span:nth-child(3) { animation-delay:.32s; }
-@keyframes chatBounce { 0%,80%,100%{transform:scale(0)} 40%{transform:scale(1)} }
+.chat-bubble-avatar--typing {
+    width: 32px;
+    height: 32px;
+    animation: mascotBob 1.8s ease-in-out infinite;
+}
+@keyframes mascotBob {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-4px); }
+}
+
+.chat-bubble-content--typing {
+    padding: .6rem .9rem;
+    min-width: 56px;
+}
+
+.chat-typing { display: inline-flex; gap: 5px; align-items: center; }
+.chat-typing span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--orange, #e8580a);
+    opacity: .45;
+    animation: chatDotBounce 1.4s infinite ease-in-out;
+}
+.chat-typing span:nth-child(1) { animation-delay: 0s; }
+.chat-typing span:nth-child(2) { animation-delay: .18s; }
+.chat-typing span:nth-child(3) { animation-delay: .36s; }
+@keyframes chatDotBounce {
+    0%, 60%, 100% { transform: translateY(0);    opacity: .45; }
+    30%           { transform: translateY(-7px); opacity: 1;   }
+}
 
 /* ── Erreur ──────────────────────────────────────────── */
 .chat-error {
