@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\AI;
 
 use App\AI\Contracts\AIProviderContract;
-use App\AI\Providers\ClaudeProvider;
+use App\AI\Providers\DeepSeekProvider;
 use App\AI\Providers\GrokProvider;
 use App\AI\Providers\OpenAIProvider;
 use App\Models\Chat\AiModel;
@@ -92,9 +92,9 @@ class AIRouter
     public function makeProvider(AiModel $model): AIProviderContract
     {
         return match ($model->provider->name) {
-            'claude' => new ClaudeProvider($model),
-            'grok'   => new GrokProvider($model),
-            default  => new OpenAIProvider($model),   // openai + tout futur provider compatible
+            'grok'      => new GrokProvider($model),
+            'deepseek'  => new DeepSeekProvider($model),
+            default     => new OpenAIProvider($model),
         };
     }
 }

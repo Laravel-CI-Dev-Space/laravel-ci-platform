@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\AI;
 
+use App\AI\Contracts\AIProviderContract;
 use App\AI\DTOs\ChatPayload;
 use App\AI\DTOs\ChatResponse;
 use App\AI\Tools\ChatToolRegistry;
@@ -36,18 +37,13 @@ class ChatService
         // Sauvegarder le message utilisateur
         $this->saveMessage($session, ChatMessage::ROLE_USER, $message);
 
-        // DB tools uniquement pour les admins/mods en dashboard.
-        // llama-3.3-70b-versatile génère des noms de tool malformés pour les membres non-admins,
-        // et leur résumé d'activité est déjà injecté dans le system prompt.
-        $tools = $this->shouldUseTools($user, $context) ? $registry->definitions() : [];
-
         // Construire le payload
         $messages = $this->buildMessageHistory($session);
         $payload  = ChatPayload::make(
             systemPrompt: $this->promptBuilder->build($user, $context),
             messages:     $messages,
-            tools:        $tools,
-            maxTokens:    600,
+            tools:        [],
+            maxTokens:    1024,
             context:      $context,
             stream:       false,
         );
@@ -59,7 +55,7 @@ class ChatService
         ChatTokenBudget::consume($user->id, $context, $response->totalTokens());
 
         // Sauvegarder la réponse finale
-        $assistantMsg = $this->saveMessage(
+        $this->saveMessage(
             $session,
             ChatMessage::ROLE_ASSISTANT,
             $response->content,
@@ -87,7 +83,6 @@ class ChatService
 
         $session  = $this->resolveSession($user, $context, $sessionId);
         $provider = $this->router->resolveForUser($user);
-        $registry = new ChatToolRegistry($user);
 
         $this->saveMessage($session, ChatMessage::ROLE_USER, $message);
 
@@ -95,8 +90,8 @@ class ChatService
         $payload  = ChatPayload::make(
             systemPrompt: $this->promptBuilder->build($user, $context),
             messages:     $messages,
-            tools:        $registry->definitions(),
-            maxTokens:    600,
+            tools:        [],
+            maxTokens:    1024,
             context:      $context,
             stream:       true,
         );
@@ -159,7 +154,7 @@ class ChatService
     // ── Privé ────────────────────────────────────────────────
 
     private function runWithTools(
-        $provider,
+        AIProviderContract $provider,
         ChatPayload $payload,
         ChatToolRegistry $registry,
         ChatSession $session,
@@ -275,13 +270,6 @@ class ChatService
             'tool_result'  => is_array($result) ? $result : ['value' => $result],
             'tool_call_id' => $response->toolCallId,
         ]);
-    }
-
-    private function shouldUseTools(User $user, string $context): bool
-    {
-        // llama-3.3-70b-versatile génère des function calls malformés.
-        // Tools désactivés jusqu'au switch vers un modèle tool-use dédié.
-        return false;
     }
 
     private function assertBudget(User $user, string $context): void

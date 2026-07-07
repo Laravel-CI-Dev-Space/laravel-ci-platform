@@ -6,85 +6,101 @@ namespace Database\Seeders;
 
 use App\Models\Chat\AiModel;
 use App\Models\Chat\AiProvider;
+use App\Models\Chat\AiUserAssignment;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class AiProviderSeeder extends Seeder
 {
     public function run(): void
     {
-        // ── Groq (inference rapide, compatible OpenAI) ───────────────────────
-        $groq = AiProvider::updateOrCreate(
-            ['name' => 'groq'],
+        // ── Grok (xAI) ───────────────────────────────────────────────────────
+        $grok = AiProvider::updateOrCreate(
+            ['name' => 'grok'],
             [
-                'display_name' => 'Groq',
-                'base_url'     => 'https://api.groq.com/openai/v1',
-                'api_key'      => env('GROQ_API_KEY'),
+                'display_name' => 'Grok (xAI)',
+                'base_url'     => 'https://api.x.ai/v1',
+                'api_key'      => env('XAI_API_KEY'),
                 'priority'     => 1,
-                'is_active'    => filled(env('GROQ_API_KEY')),
+                'is_active'    => filled(env('XAI_API_KEY')),
                 'extra_config' => null,
             ]
         );
 
-        AiModel::updateOrCreate(
-            ['provider_id' => $groq->id, 'model_name' => 'openai/gpt-oss-20b'],
+        $grok3 = AiModel::updateOrCreate(
+            ['provider_id' => $grok->id, 'model_name' => 'grok-3'],
             [
-                'display_name'      => 'GPT OSS 20B (Groq)',
-                'max_tokens'        => 4096,
-                'cost_input_per_1k' => 0.0,
-                'cost_output_per_1k'=> 0.0,
-                'supports_tools'    => true,
-                'supports_streaming'=> true,
-                'is_active'         => true,
-                'is_default'        => false, // 8k TPM limit — trop bas pour les knowledge files
+                'display_name'       => 'Grok 3',
+                'max_tokens'         => 8192,
+                'cost_input_per_1k'  => 0.005,
+                'cost_output_per_1k' => 0.015,
+                'supports_tools'     => true,
+                'supports_streaming' => true,
+                'is_active'          => filled(env('XAI_API_KEY')),
+                'is_default'         => true,
             ]
         );
 
         AiModel::updateOrCreate(
-            ['provider_id' => $groq->id, 'model_name' => 'llama-3.3-70b-versatile'],
+            ['provider_id' => $grok->id, 'model_name' => 'grok-3-mini'],
             [
-                'display_name'      => 'Llama 3.3 70B (Groq)',
-                'max_tokens'        => 8192,
-                'cost_input_per_1k' => 0.0,
-                'cost_output_per_1k'=> 0.0,
-                'supports_tools'    => true,
-                'supports_streaming'=> true,
-                'is_active'         => true,
-                'is_default'        => true, // 131k TPM — modèle par défaut
+                'display_name'       => 'Grok 3 Mini',
+                'max_tokens'         => 8192,
+                'cost_input_per_1k'  => 0.0003,
+                'cost_output_per_1k' => 0.0005,
+                'supports_tools'     => true,
+                'supports_streaming' => true,
+                'is_active'          => filled(env('XAI_API_KEY')),
+                'is_default'         => false,
             ]
         );
 
-        // ── Claude (Anthropic) ───────────────────────────────────────────────
-        $claude = AiProvider::updateOrCreate(
-            ['name' => 'claude'],
+        // ── DeepSeek ─────────────────────────────────────────────────────────
+        $deepseek = AiProvider::updateOrCreate(
+            ['name' => 'deepseek'],
             [
-                'display_name' => 'Claude (Anthropic)',
-                'base_url'     => 'https://api.anthropic.com',
-                'api_key'      => env('ANTHROPIC_API_KEY'),
+                'display_name' => 'DeepSeek',
+                'base_url'     => 'https://api.deepseek.com',
+                'api_key'      => env('DEEPSEEK_API_KEY'),
                 'priority'     => 2,
-                'is_active'    => filled(env('ANTHROPIC_API_KEY')),
+                'is_active'    => filled(env('DEEPSEEK_API_KEY')),
                 'extra_config' => null,
             ]
         );
 
         AiModel::updateOrCreate(
-            ['provider_id' => $claude->id, 'model_name' => 'claude-sonnet-4-6'],
+            ['provider_id' => $deepseek->id, 'model_name' => 'deepseek-chat'],
             [
-                'display_name'      => 'Claude Sonnet 4.6',
-                'max_tokens'        => 8096,
-                'cost_input_per_1k' => 0.003,
-                'cost_output_per_1k'=> 0.015,
-                'supports_tools'    => true,
-                'supports_streaming'=> true,
-                'is_active'         => filled(env('ANTHROPIC_API_KEY')),
-                'is_default'        => false,
+                'display_name'       => 'DeepSeek V3 (Chat)',
+                'max_tokens'         => 8192,
+                'cost_input_per_1k'  => 0.00014,
+                'cost_output_per_1k' => 0.00028,
+                'supports_tools'     => true,
+                'supports_streaming' => true,
+                'is_active'          => filled(env('DEEPSEEK_API_KEY')),
+                'is_default'         => false,
             ]
         );
 
-        // ── OpenAI ───────────────────────────────────────────────────────────
+        AiModel::updateOrCreate(
+            ['provider_id' => $deepseek->id, 'model_name' => 'deepseek-reasoner'],
+            [
+                'display_name'       => 'DeepSeek R1 (Reasoner)',
+                'max_tokens'         => 8192,
+                'cost_input_per_1k'  => 0.00055,
+                'cost_output_per_1k' => 0.00219,
+                'supports_tools'     => false, // R1 ne supporte pas les function calls
+                'supports_streaming' => true,
+                'is_active'          => filled(env('DEEPSEEK_API_KEY')),
+                'is_default'         => false,
+            ]
+        );
+
+        // ── OpenAI (ChatGPT) ─────────────────────────────────────────────────
         $openai = AiProvider::updateOrCreate(
             ['name' => 'openai'],
             [
-                'display_name' => 'OpenAI',
+                'display_name' => 'OpenAI (ChatGPT)',
                 'base_url'     => 'https://api.openai.com/v1',
                 'api_key'      => env('OPENAI_API_KEY'),
                 'priority'     => 3,
@@ -96,59 +112,43 @@ class AiProviderSeeder extends Seeder
         AiModel::updateOrCreate(
             ['provider_id' => $openai->id, 'model_name' => 'gpt-4o'],
             [
-                'display_name'      => 'GPT-4o',
-                'max_tokens'        => 4096,
-                'cost_input_per_1k' => 0.005,
-                'cost_output_per_1k'=> 0.015,
-                'supports_tools'    => true,
-                'supports_streaming'=> true,
-                'is_active'         => filled(env('OPENAI_API_KEY')),
-                'is_default'        => false,
-            ]
-        );
-
-        // ── xAI Grok ─────────────────────────────────────────────────────────
-        $xai = AiProvider::updateOrCreate(
-            ['name' => 'grok'],
-            [
-                'display_name' => 'Grok (xAI)',
-                'base_url'     => 'https://api.x.ai/v1',
-                'api_key'      => env('XAI_API_KEY'),
-                'priority'     => 4,
-                'is_active'    => filled(env('XAI_API_KEY')),
-                'extra_config' => null,
+                'display_name'       => 'GPT-4o',
+                'max_tokens'         => 4096,
+                'cost_input_per_1k'  => 0.005,
+                'cost_output_per_1k' => 0.015,
+                'supports_tools'     => true,
+                'supports_streaming' => true,
+                'is_active'          => filled(env('OPENAI_API_KEY')),
+                'is_default'         => false,
             ]
         );
 
         AiModel::updateOrCreate(
-            ['provider_id' => $xai->id, 'model_name' => 'grok-3'],
+            ['provider_id' => $openai->id, 'model_name' => 'gpt-4o-mini'],
             [
-                'display_name'      => 'Grok 3',
-                'max_tokens'        => 8192,
-                'cost_input_per_1k' => 0.005,
-                'cost_output_per_1k'=> 0.015,
-                'supports_tools'    => true,
-                'supports_streaming'=> true,
-                'is_active'         => filled(env('XAI_API_KEY')),
-                'is_default'        => false,
+                'display_name'       => 'GPT-4o Mini',
+                'max_tokens'         => 4096,
+                'cost_input_per_1k'  => 0.00015,
+                'cost_output_per_1k' => 0.0006,
+                'supports_tools'     => true,
+                'supports_streaming' => true,
+                'is_active'          => filled(env('OPENAI_API_KEY')),
+                'is_default'         => false,
             ]
         );
 
-        // Modèle dédié tool-use (mieux que llama-3.3-70b pour les function calls)
-        AiModel::updateOrCreate(
-            ['provider_id' => $groq->id, 'model_name' => 'llama3-groq-70b-8192-tool-use-preview'],
-            [
-                'display_name'      => 'Llama3 70B Tool-Use (Groq)',
-                'max_tokens'        => 8192,
-                'cost_input_per_1k' => 0.0,
-                'cost_output_per_1k'=> 0.0,
-                'supports_tools'    => true,
-                'supports_streaming'=> true,
-                'is_active'         => true,
-                'is_default'        => false,
-            ]
-        );
+        // ── Assignment global par défaut → Grok 3 ────────────────────────────
+        $adminId = User::role('admin')->value('id') ?? User::first()?->id;
 
-        $this->command->info('AI providers seeded: Groq (actif), Claude, OpenAI, xAI Grok (inactifs jusqu\'à clé API)');
+        if ($adminId) {
+            AiUserAssignment::updateOrCreate(
+                ['user_id' => null, 'role' => null],
+                ['model_id' => $grok3->id, 'assigned_by' => $adminId]
+            );
+        } else {
+            $this->command->warn('Aucun utilisateur trouvé — assignment global ignoré.');
+        }
+
+        $this->command->info('AI providers seeded: Grok (xAI), DeepSeek, OpenAI — défaut global: Grok 3');
     }
 }
