@@ -1,176 +1,171 @@
-{{--
-  CARTE MEMBRE — Niveau 1 : Initié (300 pts)
-  Style : blanc lumineux, bande orange, hard shadow brutaliste
-  Variables : $card (MemberCard avec user, user.profile.grade chargés)
---}}
+{{--  CARTE MEMBRE — Niveau 1 : Initié  --}}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { width: 800px; height: 450px; overflow: hidden; font-family: 'Outfit', system-ui, sans-serif; background: #fff; }
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:800px;height:450px;background:#0e1829;font-family:'Outfit',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
 
-  .card {
-    position: relative;
-    width: 800px; height: 450px;
-    background: #FFFFFF;
-    border: 2.5px solid #1C1C2E;
-    border-radius: 22px;
-    overflow: hidden;
-    box-shadow: 7px 7px 0 #1C1C2E;
-  }
+.card{
+  width:800px;height:450px;position:relative;border-radius:22px;overflow:hidden;
+  background:linear-gradient(150deg,#0d1726 0%,#162340 50%,#0d1726 100%);
+  box-shadow:0 40px 80px rgba(0,0,0,.7),0 0 0 1px rgba(232,89,12,.18);
+}
 
-  /* Grille de fond subtile */
-  .card::before {
-    content: "";
-    position: absolute; inset: 0;
-    background-image: linear-gradient(#E9ECEF 1px, transparent 1px), linear-gradient(90deg, #E9ECEF 1px, transparent 1px);
-    background-size: 36px 36px;
-    opacity: 0.4;
-    pointer-events: none;
-  }
+/* Noise */
+.card::before{
+  content:'';position:absolute;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.045'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:1;
+}
+/* Diagonal shimmer */
+.card::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(118deg,transparent 38%,rgba(232,89,12,.04) 43%,rgba(255,180,80,.07) 48%,rgba(232,89,12,.04) 53%,transparent 58%);
+  pointer-events:none;z-index:2;
+}
 
-  /* Bande orange gauche */
-  .stripe {
-    position: absolute; left: 0; top: 0; bottom: 0;
-    width: 10px;
-    background: linear-gradient(180deg, #FF6600, #E65C00);
-    border-radius: 22px 0 0 22px;
-  }
+/* Left accent stripe */
+.stripe{position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(180deg,#e8590c,#ff9f1c 60%,#e8590c);z-index:5;border-radius:22px 0 0 22px}
 
-  .inner { position: relative; z-index: 1; padding: 36px 36px 28px 52px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
+/* Subtle dot pattern upper-right */
+.dots{
+  position:absolute;top:0;right:0;width:220px;height:220px;
+  background-image:radial-gradient(circle,rgba(255,255,255,.06) 1px,transparent 1px);
+  background-size:18px 18px;
+  opacity:.6;pointer-events:none;z-index:3;
+}
 
-  /* Header */
-  .header { display: flex; align-items: center; gap: 20px; }
-  .avatar {
-    width: 72px; height: 72px; border-radius: 50%;
-    border: 3px solid #1C1C2E;
-    object-fit: cover; flex-shrink: 0;
-    background: #F8F9FA;
-  }
-  .avatar-placeholder {
-    width: 72px; height: 72px; border-radius: 50%;
-    border: 3px solid #1C1C2E;
-    background: #F8F9FA;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 28px; color: #6C757D; flex-shrink: 0;
-  }
-  .identity { flex: 1; }
-  .name { font-size: 22px; font-weight: 700; color: #1C1C2E; letter-spacing: -0.02em; line-height: 1.1; }
-  .github { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #FF6600; margin-top: 3px; }
-  .poste { font-size: 13px; color: #6C757D; margin-top: 5px; font-weight: 500; }
+.inner{position:relative;z-index:10;padding:32px 40px 28px 44px;height:100%;display:flex;flex-direction:column;justify-content:space-between}
 
-  /* Badge niveau */
-  .badge-level {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: #FFF1E6; border: 1.5px solid #FF6600;
-    border-radius: 999px; padding: 6px 14px;
-    font-size: 12px; font-weight: 700; color: #FF6600;
-    letter-spacing: 0.06em; text-transform: uppercase;
-  }
+/* ── TOP ── */
+.top{display:flex;align-items:flex-start;justify-content:space-between}
 
-  /* Divider */
-  .divider { height: 2px; background: linear-gradient(90deg, #FF6600 60%, transparent); margin: 0 0; border-radius: 2px; }
+/* Chip */
+.chip{
+  width:52px;height:40px;border-radius:6px;
+  background:linear-gradient(145deg,#b8891a 0%,#e8c050 22%,#d4941e 42%,#f9e090 62%,#c9a227 82%,#f5d76e 100%);
+  position:relative;flex-shrink:0;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -1px 0 rgba(0,0,0,.3),0 3px 8px rgba(0,0,0,.5);
+}
+.chip::before{content:'';position:absolute;inset:6px;border:1.5px solid rgba(140,90,8,.55);border-radius:3px}
+.chip::after{content:'';position:absolute;top:50%;left:6px;right:6px;height:1.5px;background:rgba(140,90,8,.4);transform:translateY(-50%)}
+.chip-v{position:absolute;left:50%;top:6px;bottom:6px;width:1.5px;background:rgba(140,90,8,.4);transform:translateX(-50%)}
 
-  /* Infos grille */
-  .info-row { display: flex; align-items: flex-end; justify-content: space-between; }
+.brand{text-align:right}
+.brand-name{font-size:11px;font-weight:800;color:rgba(255,255,255,.5);letter-spacing:.22em;text-transform:uppercase;margin-bottom:7px}
+.brand-name b{color:#e8590c;font-weight:900}
+.level-pill{
+  display:inline-block;background:rgba(232,89,12,.16);border:1px solid rgba(232,89,12,.4);
+  border-radius:30px;padding:4px 13px;font-size:10px;font-weight:700;color:#ff8c42;
+  letter-spacing:.12em;text-transform:uppercase;
+}
 
-  .info-left {}
-  .grade-label { font-size: 11px; font-weight: 600; color: #6C757D; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
-  .grade-name { font-size: 17px; font-weight: 700; color: #1C1C2E; }
-  .since { font-size: 11px; color: #6C757D; margin-top: 6px; }
-  .matricule { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #9CA3AF; margin-top: 3px; letter-spacing: 0.04em; }
+/* ── MID ── */
+.mid{display:flex;align-items:center;gap:20px;justify-content:space-between}
 
-  .info-right { display: flex; align-items: flex-end; gap: 20px; }
+.avatar{
+  width:72px;height:72px;border-radius:50%;flex-shrink:0;overflow:hidden;
+  border:2.5px solid rgba(232,89,12,.65);
+  box-shadow:0 0 0 5px rgba(232,89,12,.1),0 4px 18px rgba(0,0,0,.5);
+}
+.avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.avatar-init{
+  width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+  font-size:26px;font-weight:800;color:#e8590c;
+  background:linear-gradient(135deg,#172240,#1e2d4a);
+}
 
-  /* Points + barre */
-  .points-block { text-align: right; }
-  .points-value { font-size: 28px; font-weight: 700; color: #FF6600; line-height: 1; letter-spacing: -0.03em; }
-  .points-label { font-size: 10px; color: #6C757D; text-transform: uppercase; letter-spacing: 0.08em; }
-  .progress-bar { width: 120px; height: 5px; background: #FFE8D6; border-radius: 3px; margin-top: 6px; overflow: hidden; }
-  .progress-fill { height: 100%; background: linear-gradient(90deg, #FF6600, #FF9F1C); border-radius: 3px; }
+.info{flex:1;min-width:0}
+.info-name{font-size:21px;font-weight:700;color:#fff;line-height:1.1;letter-spacing:-.02em;margin-bottom:5px;text-shadow:0 2px 12px rgba(0,0,0,.6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.info-gh{font-family:'JetBrains Mono',monospace;font-size:12px;color:#ff8c42;letter-spacing:.02em;margin-bottom:8px}
+.info-poste{font-size:11px;color:rgba(255,255,255,.38);margin-bottom:7px;font-style:italic}
+.info-grade{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+  border-radius:6px;padding:4px 10px;
+  font-size:10px;font-weight:600;color:rgba(255,255,255,.55);
+  letter-spacing:.08em;text-transform:uppercase;
+}
+.grade-dot{width:5px;height:5px;border-radius:50%;background:#e8590c;flex-shrink:0}
 
-  /* QR code */
-  .qr-wrap {
-    width: 72px; height: 72px;
-    border: 2px solid #1C1C2E;
-    border-radius: 8px;
-    overflow: hidden;
-    background: #fff;
-    flex-shrink: 0;
-  }
-  .qr-wrap svg { width: 72px !important; height: 72px !important; }
+.pts{text-align:right;flex-shrink:0}
+.pts-num{font-size:48px;font-weight:900;color:#fff;line-height:1;letter-spacing:-.05em;text-shadow:0 0 32px rgba(232,89,12,.55),0 2px 8px rgba(0,0,0,.6);font-variant-numeric:tabular-nums}
+.pts-lbl{font-size:10px;font-weight:700;color:#ff8c42;letter-spacing:.15em;text-transform:uppercase;margin-top:3px}
 
-  /* Logo CI */
-  .logo-ci {
-    display: flex; align-items: center; gap: 8px;
-    font-size: 13px; font-weight: 700; color: #1C1C2E;
-  }
-  .logo-ci img { height: 24px; }
+/* ── MATRICULE ── */
+.mat{
+  font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:500;
+  color:rgba(255,255,255,.18);letter-spacing:.2em;text-transform:uppercase;
+  text-shadow:0 1px 0 rgba(255,255,255,.06);
+}
 
-  /* Coin badge niveau en haut à droite */
-  .top-right { position: absolute; top: 24px; right: 28px; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+/* ── BOTTOM ── */
+.bot{display:flex;align-items:flex-end;justify-content:space-between}
+
+.since{}
+.since-lbl{font-size:9px;font-weight:600;color:rgba(255,255,255,.28);letter-spacing:.12em;text-transform:uppercase;margin-bottom:3px}
+.since-val{font-size:13px;font-weight:600;color:rgba(255,255,255,.5);margin-bottom:3px}
+.since-url{font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(232,89,12,.45)}
+
+.qr{
+  width:72px;height:72px;border-radius:8px;overflow:hidden;background:#fff;flex-shrink:0;
+  border:1.5px solid rgba(232,89,12,.3);box-shadow:0 4px 16px rgba(0,0,0,.45);
+}
+.qr svg{width:72px!important;height:72px!important;display:block}
 </style>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
 </head>
 <body>
 <div class="card">
   <div class="stripe"></div>
-
-  <div class="top-right">
-    <div class="badge-level">
-      <span>⬡</span> {{ $card->levelName() }}
-    </div>
-    <div class="logo-ci">
-      <img src="{{ public_path('assets/web/img/logo-mark.png') }}" alt="Laravel CI" />
-      Laravel CI
-    </div>
-  </div>
-
+  <div class="dots"></div>
   <div class="inner">
-    {{-- Header --}}
-    <div class="header">
-      @if($card->resolvedAvatar())
-        <img class="avatar" src="{{ $card->resolvedAvatar() }}" alt="{{ $card->user->name }}" />
-      @else
-        <div class="avatar-placeholder">{{ mb_strtoupper(mb_substr($card->user->name, 0, 1)) }}</div>
+
+    <div class="top">
+      <div class="chip"><div class="chip-v"></div></div>
+      <div class="brand">
+        <div class="brand-name">LARAVEL<b>CI</b></div>
+        <div class="level-pill">★ Initié</div>
+      </div>
+    </div>
+
+    <div class="mid">
+      <div class="avatar">
+        @if($card->resolvedAvatar())
+          <img src="{{ $card->resolvedAvatar() }}" alt="{{ $card->user->name }}"/>
+        @else
+          <div class="avatar-init">{{ mb_strtoupper(mb_substr($card->user->name, 0, 1)) }}</div>
+        @endif
+      </div>
+      <div class="info">
+        <div class="info-name">{{ $card->user->name }}</div>
+        <div class="info-gh">{{ '@' . $card->user->github_username }}</div>
+        @if($card->poste)<div class="info-poste">{{ $card->poste }}</div>@endif
+        <div class="info-grade"><span class="grade-dot"></span>{{ $card->gradeName() }}</div>
+      </div>
+      @php $points = $card->user->profile?->points ?? 0; @endphp
+      <div class="pts">
+        <div class="pts-num">{{ number_format($points) }}</div>
+        <div class="pts-lbl">points</div>
+      </div>
+    </div>
+
+    <div class="mat">{{ $card->user->matricule ?? 'LARAVELCI-••-••-••••-••••' }}</div>
+
+    <div class="bot">
+      <div class="since">
+        <div class="since-lbl">Membre depuis</div>
+        <div class="since-val">{{ $card->user->created_at->translatedFormat('F Y') }}</div>
+        <div class="since-url">laravel.ci/{{ $card->user->github_username }}</div>
+      </div>
+      @if($card->qr_code_svg)
+        <div class="qr">{!! $card->qr_code_svg !!}</div>
       @endif
-      <div class="identity">
-        <div class="name">{{ $card->user->name }}</div>
-        <div class="github">{{ '@' . $card->user->github_username }}</div>
-        @if($card->poste)
-          <div class="poste">{{ $card->poste }}</div>
-        @endif
-      </div>
     </div>
 
-    {{-- Divider --}}
-    <div class="divider"></div>
-
-    {{-- Infos bas --}}
-    <div class="info-row">
-      <div class="info-left">
-        <div class="grade-label">Grade communauté</div>
-        <div class="grade-name">{{ $card->gradeName() }}</div>
-        <div class="since">Membre depuis {{ $card->user->created_at->translatedFormat('M Y') }}</div>
-        <div class="matricule">{{ $card->user->matricule }}</div>
-      </div>
-
-      <div class="info-right">
-        @php $points = $card->user->profile?->points ?? 0; $max = config('member-card.thresholds.3', 900); $pct = min(100, round($points / $max * 100)); @endphp
-        <div class="points-block">
-          <div class="points-value">{{ number_format($points) }}</div>
-          <div class="points-label">points</div>
-          <div class="progress-bar"><div class="progress-fill" style="width:{{ $pct }}%"></div></div>
-        </div>
-
-        @if($card->qr_code_svg)
-          <div class="qr-wrap">{!! $card->qr_code_svg !!}</div>
-        @endif
-      </div>
-    </div>
   </div>
 </div>
 </body>
