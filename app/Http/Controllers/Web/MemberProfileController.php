@@ -13,7 +13,7 @@ class MemberProfileController extends Controller
     public function show(string $username): View
     {
         $member = User::where('github_username', $username)
-            ->with('profile.grade')
+            ->with(['profile.grade', 'memberCards' => fn ($q) => $q->active()->orderByDesc('level')])
             ->withCount(['questions', 'answers', 'articles'])
             ->firstOrFail();
 

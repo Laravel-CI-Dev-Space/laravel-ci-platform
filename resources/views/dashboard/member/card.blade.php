@@ -82,7 +82,7 @@
 
         {{-- Aperçu iframe de la carte --}}
         <div class="mb-3 rounded overflow-hidden border" style="aspect-ratio:16/9">
-          <iframe src="{{ route('member-card.preview', [$me->github_username, $card->level]) }}"
+          <iframe src="{{ route('member-card.embed', [$me->github_username, $card->level]) }}"
                   style="width:800px;height:450px;border:none;transform:scale(0.5);transform-origin:top left;pointer-events:none"
                   loading="lazy"></iframe>
         </div>

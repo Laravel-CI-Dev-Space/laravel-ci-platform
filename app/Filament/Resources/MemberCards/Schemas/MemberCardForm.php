@@ -2,10 +2,13 @@
 
 namespace App\Filament\Resources\MemberCards\Schemas;
 
+use App\Models\User;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Get;
 use Filament\Schemas\Schema;
 
 class MemberCardForm
@@ -13,6 +16,7 @@ class MemberCardForm
     public static function configure(Schema $schema): Schema
     {
         $levelNames = config('member-card.level_names', [1 => 'Initié', 2 => 'Bâtisseur', 3 => 'Maître Artisan']);
+        $thresholds = config('member-card.thresholds', [1 => 300, 2 => 600, 3 => 900]);
 
         return $schema
             ->components([
@@ -21,7 +25,30 @@ class MemberCardForm
                     ->relationship('user', 'name')
                     ->searchable()
                     ->preload()
-                    ->required(),
+                    ->required()
+                    ->live(),
+
+                Placeholder::make('member_points_info')
+                    ->label('Points actuels')
+                    ->content(function (Get $get) use ($thresholds): string {
+                        $userId = $get('user_id');
+                        if (! $userId) {
+                            return '— sélectionnez un membre';
+                        }
+                        $user   = User::with('profile')->find($userId);
+                        $points = $user?->profile?->points ?? 0;
+                        $hints  = collect($thresholds)
+                            ->map(fn ($pts, $lvl) => "N{$lvl} ≥ {$pts} pts")
+                            ->join(' · ');
+
+                        $ok = collect($thresholds)
+                            ->filter(fn ($pts) => $points >= $pts)
+                            ->count();
+
+                        $badge = $ok > 0 ? "✅ éligible niveau {$ok}" : '⚠️ aucun niveau atteint';
+
+                        return "{$points} pts — {$badge} ({$hints})";
+                    }),
 
                 Select::make('level')
                     ->label('Niveau')

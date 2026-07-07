@@ -44,7 +44,7 @@ body{width:800px;height:450px;background:#0a4d2a;font-family:'Outfit',system-ui,
 .level-pill{display:inline-block;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4);border-radius:30px;padding:4px 13px;font-size:10px;font-weight:700;color:#fff;letter-spacing:.12em;text-transform:uppercase}
 
 /* ── MID ── */
-.mid{display:flex;align-items:center;gap:18px;padding-right:210px}
+.mid{display:flex;align-items:center;gap:18px;padding-right:160px}
 
 .avatar-wrap{flex-shrink:0}
 .avatar{width:78px;height:78px;border-radius:50%;overflow:hidden;border:2.5px solid rgba(255,255,255,.7);box-shadow:0 0 0 5px rgba(255,255,255,.12),0 4px 18px rgba(0,0,0,.3)}
@@ -52,7 +52,7 @@ body{width:800px;height:450px;background:#0a4d2a;font-family:'Outfit',system-ui,
 .avatar-init{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;color:#16a34a;background:rgba(255,255,255,.95)}
 
 .info{flex:1;min-width:0}
-.info-name{font-size:20px;font-weight:700;color:#fff;line-height:1.1;letter-spacing:-.02em;margin-bottom:5px;text-shadow:0 2px 8px rgba(0,0,0,.2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.info-name{font-size:18px;font-weight:700;color:#fff;line-height:1.2;letter-spacing:-.02em;margin-bottom:5px;text-shadow:0 2px 8px rgba(0,0,0,.2)}
 .info-gh{font-family:'JetBrains Mono',monospace;font-size:12px;color:rgba(255,255,255,.8);letter-spacing:.02em;margin-bottom:8px}
 .info-poste{font-size:11px;color:rgba(255,255,255,.65);margin-bottom:7px;font-style:italic}
 .info-grade{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:4px 10px;font-size:10px;font-weight:600;color:rgba(255,255,255,.9);letter-spacing:.08em;text-transform:uppercase}
@@ -111,8 +111,7 @@ body{width:800px;height:450px;background:#0a4d2a;font-family:'Outfit',system-ui,
       <div class="info">
         <div class="info-name">{{ $card->user->name }}</div>
         <div class="info-gh">{{ '@' . $card->user->github_username }}</div>
-        @if($card->poste)<div class="info-poste">{{ $card->poste }}</div>@endif
-        <div class="info-grade"><span class="grade-dot"></span>{{ $card->gradeName() }}</div>
+        <div class="info-grade"><span class="grade-dot"></span>{{ $card->poste ?: $card->gradeName() }}</div>
       </div>
       @php $points = $card->user->profile?->points ?? 0; @endphp
       <div class="pts">

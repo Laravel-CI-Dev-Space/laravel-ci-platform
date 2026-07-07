@@ -148,7 +148,7 @@
       @endif
       <div>
         <p class="card-member-name">{{ $user->name }}</p>
-        <p class="card-member-gh">@{{ $user->github_username }}</p>
+        <p class="card-member-gh">{{ '@' . $user->github_username }}</p>
       </div>
     </div>
 

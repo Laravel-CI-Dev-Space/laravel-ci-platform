@@ -2,6 +2,24 @@
 
 @section('title', ($member->name ?? 'Member') . ' — Laravel CI')
 
+@push('scripts')
+<script>
+  (function () {
+    function scaleProfileCard() {
+      var wrap   = document.querySelector('.member-card-preview-wrap');
+      var scaler = document.getElementById('profileCardScaler');
+      if (!wrap || !scaler) return;
+      var w     = wrap.offsetWidth;
+      var scale = w / 800;
+      scaler.style.transform = 'scale(' + scale + ')';
+      wrap.style.height = (450 * scale) + 'px';
+    }
+    scaleProfileCard();
+    window.addEventListener('resize', scaleProfileCard);
+  })();
+</script>
+@endpush
+
 @section('content')
 
   <section class="page-hero">
@@ -121,6 +139,37 @@
 
         <!-- SIDEBAR -->
         <div class="col-lg-4">
+
+          {{-- Carte membre --}}
+          @php $memberCard = $member->memberCards->first(); @endphp
+          @if($memberCard)
+          <div class="sidebar-card p-0 overflow-hidden mb-4" style="border-radius:16px">
+            {{-- Aperçu carte scalable --}}
+            <div class="member-card-preview-wrap" style="position:relative;width:100%;overflow:hidden;border-radius:16px 16px 0 0">
+              <div id="profileCardScaler" style="width:800px;height:450px;transform-origin:top left">
+                <iframe
+                  src="{{ route('member-card.embed', [$member->github_username, $memberCard->level]) }}"
+                  style="width:800px;height:450px;border:0;display:block"
+                  scrolling="no"
+                  loading="lazy"
+                  title="Carte de {{ $member->name }}">
+                </iframe>
+              </div>
+            </div>
+            {{-- Boutons --}}
+            <div class="d-flex gap-2 p-3" style="background:#fff;border-top:1px solid rgba(0,0,0,.06)">
+              <a href="{{ route('member-card.preview', [$member->github_username, $memberCard->level]) }}"
+                 class="btn btn-sm btn-brand flex-fill text-center">
+                <i class="fa-solid fa-id-card me-1"></i> Voir la carte
+              </a>
+              <a href="{{ route('member-card.download', [$member->github_username, $memberCard->level]) }}"
+                 class="btn btn-sm btn-outline-secondary">
+                <i class="fa-solid fa-download"></i>
+              </a>
+            </div>
+          </div>
+          @endif
+
           <div class="sidebar-card">
             <div class="sidebar-title">Recent articles</div>
             @forelse($recentArticles as $article)
