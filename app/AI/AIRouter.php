@@ -8,6 +8,7 @@ use App\AI\Contracts\AIProviderContract;
 use App\AI\Providers\DeepSeekProvider;
 use App\AI\Providers\GrokProvider;
 use App\AI\Providers\OpenAIProvider;
+use App\AI\Providers\OpenRouterProvider;
 use App\Models\Chat\AiModel;
 use App\Models\Chat\AiUserAssignment;
 use App\Models\User;
@@ -92,9 +93,10 @@ class AIRouter
     public function makeProvider(AiModel $model): AIProviderContract
     {
         return match ($model->provider->name) {
-            'grok'      => new GrokProvider($model),
-            'deepseek'  => new DeepSeekProvider($model),
-            default     => new OpenAIProvider($model),
+            'grok'         => new GrokProvider($model),
+            'deepseek'     => new DeepSeekProvider($model),
+            'openrouter'   => new OpenRouterProvider($model),
+            default        => new OpenAIProvider($model),
         };
     }
 }

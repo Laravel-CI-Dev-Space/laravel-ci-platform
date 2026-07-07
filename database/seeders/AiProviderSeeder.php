@@ -21,13 +21,13 @@ class AiProviderSeeder extends Seeder
                 'display_name' => 'Grok (xAI)',
                 'base_url'     => 'https://api.x.ai/v1',
                 'api_key'      => env('XAI_API_KEY'),
-                'priority'     => 1,
+                'priority'     => 2,
                 'is_active'    => filled(env('XAI_API_KEY')),
                 'extra_config' => null,
             ]
         );
 
-        $grok3 = AiModel::updateOrCreate(
+        AiModel::updateOrCreate(
             ['provider_id' => $grok->id, 'model_name' => 'grok-3'],
             [
                 'display_name'       => 'Grok 3',
@@ -37,7 +37,7 @@ class AiProviderSeeder extends Seeder
                 'supports_tools'     => true,
                 'supports_streaming' => true,
                 'is_active'          => filled(env('XAI_API_KEY')),
-                'is_default'         => true,
+                'is_default'         => false,
             ]
         );
 
@@ -62,7 +62,7 @@ class AiProviderSeeder extends Seeder
                 'display_name' => 'DeepSeek',
                 'base_url'     => 'https://api.deepseek.com',
                 'api_key'      => env('DEEPSEEK_API_KEY'),
-                'priority'     => 2,
+                'priority'     => 3,
                 'is_active'    => filled(env('DEEPSEEK_API_KEY')),
                 'extra_config' => null,
             ]
@@ -89,7 +89,7 @@ class AiProviderSeeder extends Seeder
                 'max_tokens'         => 8192,
                 'cost_input_per_1k'  => 0.00055,
                 'cost_output_per_1k' => 0.00219,
-                'supports_tools'     => false, // R1 ne supporte pas les function calls
+                'supports_tools'     => false,
                 'supports_streaming' => true,
                 'is_active'          => filled(env('DEEPSEEK_API_KEY')),
                 'is_default'         => false,
@@ -103,7 +103,7 @@ class AiProviderSeeder extends Seeder
                 'display_name' => 'OpenAI (ChatGPT)',
                 'base_url'     => 'https://api.openai.com/v1',
                 'api_key'      => env('OPENAI_API_KEY'),
-                'priority'     => 3,
+                'priority'     => 4,
                 'is_active'    => filled(env('OPENAI_API_KEY')),
                 'extra_config' => null,
             ]
@@ -137,18 +137,109 @@ class AiProviderSeeder extends Seeder
             ]
         );
 
-        // ── Assignment global par défaut → Grok 3 ────────────────────────────
+        // ── OpenRouter (passerelle 400+ modèles) ─────────────────────────────
+        $hasOrKey = filled(env('OPENROUTER_API_KEY'));
+
+        $openrouter = AiProvider::updateOrCreate(
+            ['name' => 'openrouter'],
+            [
+                'display_name' => 'OpenRouter',
+                'base_url'     => 'https://openrouter.ai/api/v1',
+                'api_key'      => env('OPENROUTER_API_KEY'),
+                'priority'     => 1,
+                'is_active'    => $hasOrKey,
+                'extra_config' => [
+                    'site_url'  => env('APP_URL', 'https://laravel.ci'),
+                    'site_name' => env('APP_NAME', 'Laravel CI'),
+                ],
+            ]
+        );
+
+        // Modèles gratuits — disponibles sans solde
+        $defaultModel = AiModel::updateOrCreate(
+            ['provider_id' => $openrouter->id, 'model_name' => 'deepseek/deepseek-chat-v3-0324:free'],
+            [
+                'display_name'       => 'DeepSeek V3 0324 (Gratuit)',
+                'max_tokens'         => 8192,
+                'cost_input_per_1k'  => 0.0,
+                'cost_output_per_1k' => 0.0,
+                'supports_tools'     => true,
+                'supports_streaming' => true,
+                'is_active'          => $hasOrKey,
+                'is_default'         => true,
+            ]
+        );
+
+        AiModel::updateOrCreate(
+            ['provider_id' => $openrouter->id, 'model_name' => 'meta-llama/llama-3.3-70b-instruct:free'],
+            [
+                'display_name'       => 'Llama 3.3 70B (Gratuit)',
+                'max_tokens'         => 8192,
+                'cost_input_per_1k'  => 0.0,
+                'cost_output_per_1k' => 0.0,
+                'supports_tools'     => true,
+                'supports_streaming' => true,
+                'is_active'          => $hasOrKey,
+                'is_default'         => false,
+            ]
+        );
+
+        AiModel::updateOrCreate(
+            ['provider_id' => $openrouter->id, 'model_name' => 'google/gemma-3-27b-it:free'],
+            [
+                'display_name'       => 'Gemma 3 27B (Gratuit)',
+                'max_tokens'         => 8192,
+                'cost_input_per_1k'  => 0.0,
+                'cost_output_per_1k' => 0.0,
+                'supports_tools'     => false,
+                'supports_streaming' => true,
+                'is_active'          => $hasOrKey,
+                'is_default'         => false,
+            ]
+        );
+
+        // Modèles payants — qualité supérieure
+        AiModel::updateOrCreate(
+            ['provider_id' => $openrouter->id, 'model_name' => 'openai/gpt-4o'],
+            [
+                'display_name'       => 'GPT-4o via OpenRouter',
+                'max_tokens'         => 4096,
+                'cost_input_per_1k'  => 0.0055,
+                'cost_output_per_1k' => 0.0165,
+                'supports_tools'     => true,
+                'supports_streaming' => true,
+                'is_active'          => $hasOrKey,
+                'is_default'         => false,
+            ]
+        );
+
+        AiModel::updateOrCreate(
+            ['provider_id' => $openrouter->id, 'model_name' => 'anthropic/claude-3.5-haiku'],
+            [
+                'display_name'       => 'Claude 3.5 Haiku via OpenRouter',
+                'max_tokens'         => 4096,
+                'cost_input_per_1k'  => 0.001,
+                'cost_output_per_1k' => 0.005,
+                'supports_tools'     => true,
+                'supports_streaming' => true,
+                'is_active'          => $hasOrKey,
+                'is_default'         => false,
+            ]
+        );
+
+        // ── Assignment global → OpenRouter DeepSeek V3 (gratuit) ─────────────
         $adminId = User::role('admin')->value('id') ?? User::first()?->id;
 
         if ($adminId) {
             AiUserAssignment::updateOrCreate(
                 ['user_id' => null, 'role' => null],
-                ['model_id' => $grok3->id, 'assigned_by' => $adminId]
+                ['model_id' => $defaultModel->id, 'assigned_by' => $adminId]
             );
         } else {
             $this->command->warn('Aucun utilisateur trouvé — assignment global ignoré.');
         }
 
-        $this->command->info('AI providers seeded: Grok (xAI), DeepSeek, OpenAI — défaut global: Grok 3');
+        $this->command->info('AI providers seeded: OpenRouter (défaut), Grok, DeepSeek, OpenAI');
+        $this->command->info('Défaut global → DeepSeek V3 0324 via OpenRouter (gratuit, tools activés)');
     }
 }

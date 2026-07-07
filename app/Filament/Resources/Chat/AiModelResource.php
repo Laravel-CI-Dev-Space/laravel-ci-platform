@@ -95,10 +95,11 @@ class AiModelResource extends Resource
                     ->badge()
                     ->sortable()
                     ->color(fn ($record) => match($record->provider->name) {
-                        'grok'     => 'warning',
-                        'deepseek' => 'info',
-                        'openai'   => 'success',
-                        default    => 'gray',
+                        'grok'       => 'warning',
+                        'deepseek'   => 'info',
+                        'openai'     => 'success',
+                        'openrouter' => 'primary',
+                        default      => 'gray',
                     }),
                 TextColumn::make('display_name')
                     ->label('Modèle')
