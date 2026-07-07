@@ -164,6 +164,10 @@ class OpenAIProvider implements AIProviderContract
     {
         $lower = strtolower($raw);
 
+        if (str_contains($lower, 'unavailable for free') || str_contains($lower, 'use this slug instead')) {
+            return "Ce modèle n'est plus disponible en version gratuite. L'administrateur doit changer le modèle par défaut dans «Assistant IA → Modèles».";
+        }
+
         if (str_contains($lower, 'insufficient balance') || str_contains($lower, 'insufficient_quota')) {
             $name = $this->model->provider->display_name;
             return "Solde insuffisant sur le compte {$name}. L'administrateur doit recharger le compte API.";

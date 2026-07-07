@@ -157,20 +157,6 @@ class AiProviderSeeder extends Seeder
 
         // Modèles gratuits — disponibles sans solde
         $defaultModel = AiModel::updateOrCreate(
-            ['provider_id' => $openrouter->id, 'model_name' => 'deepseek/deepseek-chat-v3-0324:free'],
-            [
-                'display_name'       => 'DeepSeek V3 0324 (Gratuit)',
-                'max_tokens'         => 8192,
-                'cost_input_per_1k'  => 0.0,
-                'cost_output_per_1k' => 0.0,
-                'supports_tools'     => true,
-                'supports_streaming' => true,
-                'is_active'          => $hasOrKey,
-                'is_default'         => true,
-            ]
-        );
-
-        AiModel::updateOrCreate(
             ['provider_id' => $openrouter->id, 'model_name' => 'meta-llama/llama-3.3-70b-instruct:free'],
             [
                 'display_name'       => 'Llama 3.3 70B (Gratuit)',
@@ -180,7 +166,7 @@ class AiProviderSeeder extends Seeder
                 'supports_tools'     => true,
                 'supports_streaming' => true,
                 'is_active'          => $hasOrKey,
-                'is_default'         => false,
+                'is_default'         => true,
             ]
         );
 
@@ -198,7 +184,35 @@ class AiProviderSeeder extends Seeder
             ]
         );
 
+        AiModel::updateOrCreate(
+            ['provider_id' => $openrouter->id, 'model_name' => 'mistralai/mistral-7b-instruct:free'],
+            [
+                'display_name'       => 'Mistral 7B (Gratuit)',
+                'max_tokens'         => 4096,
+                'cost_input_per_1k'  => 0.0,
+                'cost_output_per_1k' => 0.0,
+                'supports_tools'     => false,
+                'supports_streaming' => true,
+                'is_active'          => $hasOrKey,
+                'is_default'         => false,
+            ]
+        );
+
         // Modèles payants — qualité supérieure
+        AiModel::updateOrCreate(
+            ['provider_id' => $openrouter->id, 'model_name' => 'deepseek/deepseek-chat-v3-0324'],
+            [
+                'display_name'       => 'DeepSeek V3 0324',
+                'max_tokens'         => 8192,
+                'cost_input_per_1k'  => 0.00028,
+                'cost_output_per_1k' => 0.00088,
+                'supports_tools'     => true,
+                'supports_streaming' => true,
+                'is_active'          => $hasOrKey,
+                'is_default'         => false,
+            ]
+        );
+
         AiModel::updateOrCreate(
             ['provider_id' => $openrouter->id, 'model_name' => 'openai/gpt-4o'],
             [
