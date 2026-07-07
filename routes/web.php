@@ -249,6 +249,7 @@ Route::get('/members/{username}', [MemberProfileController::class, 'show'])->nam
 
 // ─── MEMBER CARD ────────────────────────────────────────────
 Route::get('/members/{username}/card/{level?}', [MemberCardController::class, 'preview'])->name('member-card.preview');
+Route::get('/members/{username}/card/{level?}/embed', [MemberCardController::class, 'embed'])->name('member-card.embed');
 Route::get('/members/{username}/card/{level?}/download', [MemberCardController::class, 'download'])->name('member-card.download');
 Route::patch('/dashboard/member/card/{card}', [MemberCardController::class, 'update'])->name('member-card.update')->middleware(['auth', 'active']);
 

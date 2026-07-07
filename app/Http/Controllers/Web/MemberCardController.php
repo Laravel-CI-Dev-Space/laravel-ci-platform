@@ -16,10 +16,27 @@ class MemberCardController extends Controller
     public function __construct(private MemberCardExporter $exporter) {}
 
     /**
-     * Prévisualise la carte en HTML (navigateur).
+     * Page de prévisualisation intégrée au layout du site.
      * GET /members/{username}/card/{level?}
      */
-    public function preview(string $username, int $level = 0): Response
+    public function preview(string $username, int $level = 0): \Illuminate\View\View
+    {
+        $user = User::where('github_username', $username)->firstOrFail();
+
+        $card = $this->resolveCard($user, $level);
+
+        abort_if(! $card, 404, 'Aucune carte active pour ce membre.');
+
+        $allCards = $user->memberCards()->active()->orderBy('level')->get();
+
+        return view('web.member-card.preview', compact('user', 'card', 'level', 'allCards'));
+    }
+
+    /**
+     * HTML brut de la carte (utilisé par l'iframe + Puppeteer).
+     * GET /members/{username}/card/{level?}/embed
+     */
+    public function embed(string $username, int $level = 0): Response
     {
         $user = User::where('github_username', $username)->firstOrFail();
 
