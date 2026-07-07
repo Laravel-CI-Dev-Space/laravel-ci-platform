@@ -7,13 +7,11 @@ namespace App\Filament\Resources\Chat;
 use App\Filament\Resources\Chat\AiProviderResource\Pages;
 use App\Models\Chat\AiProvider;
 use BackedEnum;
-use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -116,7 +114,7 @@ class AiProviderResource extends Resource
                     ->label('Actif'),
             ])
             ->defaultSort('priority')
-            ->actions([
+            ->recordActions([
                 EditAction::make(),
                 DeleteAction::make()
                     ->requiresConfirmation(),

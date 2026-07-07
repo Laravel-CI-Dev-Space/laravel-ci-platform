@@ -75,7 +75,7 @@ class AiUserAssignmentResource extends Resource
                 TextColumn::make('assignedBy.name')->label('Assigné par'),
                 TextColumn::make('created_at')->label('Date')->since()->sortable(),
             ])
-            ->actions([
+            ->recordActions([
                 EditAction::make(),
                 DeleteAction::make(),
             ]);

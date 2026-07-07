@@ -8,6 +8,7 @@ use App\Filament\Resources\Chat\AiModelResource\Pages;
 use App\Models\Chat\AiModel;
 use App\Models\Chat\AiProvider;
 use BackedEnum;
+use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\Select;
@@ -17,7 +18,6 @@ use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
-use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
@@ -135,7 +135,7 @@ class AiModelResource extends Resource
                     ->label('Provider')
                     ->options(AiProvider::pluck('display_name', 'id')),
             ])
-            ->actions([
+            ->recordActions([
                 Action::make('set_default')
                     ->label('Défaut global')
                     ->icon(Heroicon::OutlinedStar)
