@@ -122,22 +122,23 @@
                 </div>
 
                 {{-- Footer : saisie --}}
-                <div class="chat-footer">
+                <div class="chat-footer" x-data="{ localInput: '' }">
                     <div class="chat-input-row">
                         <textarea
                             wire:model="input"
+                            x-model="localInput"
                             class="chat-input"
                             placeholder="Votre question…"
                             rows="1"
-                            @keydown.enter.prevent="if (!$event.shiftKey) { $wire.sendMessage() }"
+                            @keydown.enter.prevent="if (!$event.shiftKey && localInput.trim()) { $wire.sendMessage(); localInput = ''; $el.style.height = 'auto'; }"
                             @input="$el.style.height='auto'; $el.style.height=Math.min($el.scrollHeight,120)+'px'"
-                            :disabled="{{ $loading ? 'true' : 'false' }}"
                             wire:loading.attr="disabled"
                         ></textarea>
                         <button class="chat-send-btn"
                                 wire:click="sendMessage"
                                 wire:loading.attr="disabled"
-                                :disabled="{{ empty(trim($input)) || $loading ? 'true' : 'false' }}"
+                                @click="localInput = ''; $el.closest('.chat-input-row').querySelector('textarea').style.height = 'auto';"
+                                :disabled="!localInput.trim()"
                                 title="Envoyer">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"
                                  viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
