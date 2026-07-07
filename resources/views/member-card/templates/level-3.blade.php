@@ -1,4 +1,8 @@
 {{--  CARTE MEMBRE — Niveau 3 : Maître Artisan  --}}
+@php
+  $logoData   = 'data:image/png;base64,' . base64_encode(file_get_contents(public_path('assets/web/img/logo.png')));
+  $mascotData = 'data:image/png;base64,' . base64_encode(file_get_contents(public_path('assets/web/img/mascot.png')));
+@endphp
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -7,226 +11,105 @@
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{width:800px;height:450px;background:#0a0807;font-family:'Outfit',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+body{width:800px;height:450px;background:#b84208;font-family:'Outfit',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
 
+/* Orange → Vert — combinaison premium */
 .card{
   width:800px;height:450px;position:relative;border-radius:22px;overflow:hidden;
-  background:linear-gradient(150deg,#0a0807 0%,#160e07 35%,#1a1209 65%,#0a0807 100%);
-  box-shadow:
-    0 40px 80px rgba(0,0,0,.9),
-    0 0 0 1.5px rgba(212,175,55,.28),
-    inset 0 1px 0 rgba(255,215,0,.06);
+  background:linear-gradient(140deg,#b84208 0%,#e8590c 25%,#e8590c 45%,#16a34a 70%,#0a6632 100%);
+  box-shadow:0 40px 80px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.2);
 }
+.card::before{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1}
+.card::after{content:'';position:absolute;inset:0;background:linear-gradient(118deg,transparent 22%,rgba(255,255,255,.03) 30%,rgba(255,255,255,.12) 40%,rgba(255,255,255,.05) 50%,rgba(255,255,255,.12) 60%,rgba(255,255,255,.03) 70%,transparent 78%);pointer-events:none;z-index:2}
 
-/* Noise */
-.card::before{
-  content:'';position:absolute;inset:0;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
-  pointer-events:none;z-index:1;
-}
-/* Gold shimmer sweep */
-.card::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(118deg,transparent 20%,rgba(212,175,55,.03) 30%,rgba(255,223,0,.07) 42%,rgba(255,159,28,.05) 52%,rgba(212,175,55,.03) 62%,transparent 72%);
-  pointer-events:none;z-index:2;
-}
+.topbar{position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55) 30%,rgba(255,255,255,.9) 50%,rgba(255,255,255,.55) 70%,transparent);z-index:5}
+.botbar{position:absolute;bottom:0;left:0;right:0;height:1.5px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.25) 40%,rgba(255,255,255,.25) 60%,transparent);z-index:5}
+.dots{position:absolute;top:0;right:0;width:220px;height:220px;background-image:radial-gradient(circle,rgba(255,255,255,.14) 1px,transparent 1px);background-size:18px 18px;pointer-events:none;z-index:3}
 
-/* Gold top border */
-.topbar{
-  position:absolute;top:0;left:0;right:0;height:3px;
-  background:linear-gradient(90deg,transparent 0%,#b8891a 10%,#e8c050 30%,#ffd700 50%,#ff9f1c 70%,#d4941e 85%,transparent 100%);
-  z-index:5;
-}
-/* Gold bottom border */
-.botbar{
-  position:absolute;bottom:0;left:0;right:0;height:1.5px;
-  background:linear-gradient(90deg,transparent,rgba(212,175,55,.35) 40%,rgba(212,175,55,.35) 60%,transparent);
-  z-index:5;
-}
+/* Mascotte ancrée bas-droite — légèrement plus grande pour le niveau premium */
+.mascot{position:absolute;bottom:-8px;right:18px;height:215px;width:auto;object-fit:contain;z-index:6;filter:drop-shadow(0 10px 26px rgba(0,0,0,.5)) drop-shadow(0 0 1.5px rgba(255,255,255,.25));pointer-events:none}
 
-/* Radial gold aura center */
-.aura{
-  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  width:500px;height:300px;
-  background:radial-gradient(ellipse,rgba(212,175,55,.06) 0%,transparent 70%);
-  pointer-events:none;z-index:3;
-}
-/* Corner orb top-right */
-.orb{
-  position:absolute;top:-60px;right:-60px;width:250px;height:250px;border-radius:50%;
-  background:radial-gradient(circle,rgba(255,159,28,.1) 0%,transparent 68%);
-  pointer-events:none;z-index:3;
-}
-/* Corner orb bottom-left */
-.orb2{
-  position:absolute;bottom:-50px;left:-50px;width:200px;height:200px;border-radius:50%;
-  background:radial-gradient(circle,rgba(212,175,55,.07) 0%,transparent 68%);
-  pointer-events:none;z-index:3;
-}
-
-/* Fine dot grid */
-.dots{
-  position:absolute;inset:0;
-  background-image:radial-gradient(circle,rgba(212,175,55,.07) 1px,transparent 1px);
-  background-size:22px 22px;
-  pointer-events:none;z-index:4;
-}
-
-.inner{position:relative;z-index:10;padding:28px 38px 26px 38px;height:100%;display:flex;flex-direction:column;justify-content:space-between}
+.inner{position:relative;z-index:10;padding:30px 40px 24px 40px;height:100%;display:flex;flex-direction:column;justify-content:space-between}
 
 /* ── TOP ── */
 .top{display:flex;align-items:flex-start;justify-content:space-between}
 
-.chip{
-  width:56px;height:44px;border-radius:7px;position:relative;flex-shrink:0;
-  background:linear-gradient(145deg,#a07010 0%,#d4af37 18%,#f5d76e 32%,#b8891a 48%,#ffd700 62%,#c9a227 78%,#ffe066 92%,#b8891a 100%);
-  box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.55),
-    inset 0 -1.5px 0 rgba(0,0,0,.35),
-    0 4px 14px rgba(0,0,0,.7),
-    0 0 0 .5px rgba(212,175,55,.4);
-}
-.chip::before{content:'';position:absolute;inset:7px;border:1.5px solid rgba(130,80,5,.6);border-radius:4px}
-.chip::after{content:'';position:absolute;top:50%;left:7px;right:7px;height:1.5px;background:rgba(130,80,5,.45);transform:translateY(-50%)}
-.chip-v{position:absolute;left:50%;top:7px;bottom:7px;width:1.5px;background:rgba(130,80,5,.45);transform:translateX(-50%)}
+/* QR stylisé — double ring orange + vert */
+.qr-chip{position:relative;width:58px;height:58px;border-radius:9px;background:#fff;overflow:hidden;flex-shrink:0;box-shadow:0 0 0 2.5px rgba(255,255,255,.95),0 0 0 5px rgba(232,89,12,.5),0 0 0 7px rgba(22,163,74,.3),0 5px 16px rgba(0,0,0,.4)}
+.qr-chip svg{width:58px!important;height:58px!important;display:block}
+.qr-chip-empty{width:100%;height:100%;background:repeating-linear-gradient(0deg,#e8590c 0,#e8590c 3px,transparent 3px,transparent 8px),repeating-linear-gradient(90deg,#16a34a 0,#16a34a 3px,transparent 3px,transparent 8px);opacity:.2}
 
-.brand{text-align:right}
-.brand-name{
-  font-size:11px;font-weight:800;letter-spacing:.24em;text-transform:uppercase;margin-bottom:8px;
-  background:linear-gradient(135deg,rgba(255,255,255,.4) 0%,#ffd700 50%,rgba(255,255,255,.35) 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-.brand-name b{
-  font-weight:900;
-  background:linear-gradient(135deg,#ffd700,#ff9f1c);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-.level-pill{
-  display:inline-block;
-  background:linear-gradient(135deg,rgba(212,175,55,.2),rgba(255,159,28,.14));
-  border:1px solid rgba(212,175,55,.5);
-  border-radius:30px;padding:4px 16px;font-size:10px;font-weight:700;
-  letter-spacing:.12em;text-transform:uppercase;
-  color:#ffd700;text-shadow:0 0 14px rgba(255,215,0,.4);
-}
-
-/* ── DIVIDER TOP ── */
-.divider-top{
-  height:1px;
-  background:linear-gradient(90deg,transparent,rgba(212,175,55,.3) 25%,rgba(212,175,55,.18) 75%,transparent);
-}
+/* Logo + pill */
+.brand{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.brand-logo-wrap{background:#fff;border-radius:8px;padding:5px 8px;display:inline-flex;align-items:center}
+.brand-logo{height:34px;width:auto;display:block}
+.level-pill{display:inline-block;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.45);border-radius:30px;padding:4px 13px;font-size:10px;font-weight:700;color:#fff;letter-spacing:.12em;text-transform:uppercase}
 
 /* ── MID ── */
-.mid{display:flex;align-items:center;gap:22px;justify-content:space-between}
+.mid{display:flex;align-items:center;gap:18px;padding-right:225px}
 
-.avatar{
-  width:76px;height:76px;border-radius:50%;flex-shrink:0;overflow:hidden;
-  border:2.5px solid rgba(212,175,55,.6);
-  box-shadow:
-    0 0 0 5px rgba(212,175,55,.07),
-    0 0 28px rgba(212,175,55,.28),
-    0 0 60px rgba(255,159,28,.1),
-    0 6px 20px rgba(0,0,0,.7);
-}
+.avatar-wrap{flex-shrink:0}
+.avatar{width:78px;height:78px;border-radius:50%;overflow:hidden;border:2.5px solid rgba(255,255,255,.75);box-shadow:0 0 0 5px rgba(255,255,255,.12),0 4px 18px rgba(0,0,0,.3),0 0 24px rgba(255,255,255,.15)}
 .avatar img{width:100%;height:100%;object-fit:cover;display:block}
-.avatar-init{
-  width:100%;height:100%;display:flex;align-items:center;justify-content:center;
-  font-size:28px;font-weight:800;
-  background:linear-gradient(135deg,#160e07,#211407);
-  color:#ffd700;
-}
+.avatar-init{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;color:#e8590c;background:rgba(255,255,255,.95)}
 
 .info{flex:1;min-width:0}
-.info-name{
-  font-size:22px;font-weight:700;line-height:1.1;letter-spacing:-.02em;margin-bottom:5px;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-  background:linear-gradient(135deg,#fff 0%,rgba(255,215,0,.85) 60%,#fff 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-.info-gh{
-  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.02em;margin-bottom:8px;
-  color:#ffd700;text-shadow:0 0 10px rgba(255,215,0,.35);
-}
-.info-poste{font-size:11px;color:rgba(255,255,255,.3);margin-bottom:7px;font-style:italic}
-.info-grade{
-  display:inline-flex;align-items:center;gap:6px;
-  background:rgba(212,175,55,.07);border:1px solid rgba(212,175,55,.2);
-  border-radius:6px;padding:4px 10px;
-  font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,215,0,.55);
-}
-.grade-dot{
-  width:5px;height:5px;border-radius:50%;flex-shrink:0;
-  background:linear-gradient(135deg,#ffd700,#ff9f1c);
-  box-shadow:0 0 6px rgba(255,215,0,.6);
-}
+.info-name{font-size:20px;font-weight:700;color:#fff;line-height:1.1;letter-spacing:-.02em;margin-bottom:5px;text-shadow:0 2px 10px rgba(0,0,0,.25);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.info-gh{font-family:'JetBrains Mono',monospace;font-size:12px;color:rgba(255,255,255,.8);letter-spacing:.02em;margin-bottom:8px}
+.info-poste{font-size:11px;color:rgba(255,255,255,.65);margin-bottom:7px;font-style:italic}
+.info-grade{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:4px 10px;font-size:10px;font-weight:600;color:rgba(255,255,255,.92);letter-spacing:.08em;text-transform:uppercase}
+.grade-dot{width:5px;height:5px;border-radius:50%;background:#fff;flex-shrink:0}
 
 .pts{text-align:right;flex-shrink:0}
-.pts-num{
-  font-size:52px;font-weight:900;line-height:1;letter-spacing:-.05em;
-  font-variant-numeric:tabular-nums;
-  background:linear-gradient(170deg,#fff 0%,#ffd700 40%,#ff9f1c 75%,#ffd700 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  filter:drop-shadow(0 0 18px rgba(255,215,0,.45)) drop-shadow(0 2px 6px rgba(0,0,0,.6));
-}
-.pts-lbl{
-  font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;margin-top:3px;
-  color:#ffd700;text-shadow:0 0 12px rgba(255,215,0,.35);
-}
+.pts-num{font-size:46px;font-weight:900;color:#fff;line-height:1;letter-spacing:-.05em;text-shadow:0 2px 24px rgba(0,0,0,.35),0 0 50px rgba(255,255,255,.25);font-variant-numeric:tabular-nums}
+.pts-lbl{font-size:10px;font-weight:700;color:rgba(255,255,255,.7);letter-spacing:.15em;text-transform:uppercase;margin-top:3px}
 
-/* ── DIVIDER BOTTOM ── */
-.divider-bot{
-  height:1px;
-  background:linear-gradient(90deg,transparent,rgba(212,175,55,.25) 20%,rgba(212,175,55,.18) 80%,transparent);
-}
+/* ── DIVIDER ── */
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3) 30%,rgba(255,255,255,.3) 70%,transparent)}
 
 /* ── MATRICULE ── */
-.mat{
-  font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:500;
-  color:rgba(212,175,55,.18);letter-spacing:.22em;text-transform:uppercase;
-}
+.mat{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:500;color:rgba(255,255,255,.28);letter-spacing:.2em;text-transform:uppercase}
 
 /* ── BOTTOM ── */
-.bot{display:flex;align-items:flex-end;justify-content:space-between}
-
-.since-lbl{font-size:9px;font-weight:600;color:rgba(212,175,55,.32);letter-spacing:.12em;text-transform:uppercase;margin-bottom:3px}
-.since-val{font-size:13px;font-weight:600;color:rgba(255,255,255,.42);margin-bottom:3px}
-.since-url{font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,215,0,.35)}
-
-.qr{
-  width:72px;height:72px;border-radius:8px;overflow:hidden;background:#fff;flex-shrink:0;
-  border:1.5px solid rgba(212,175,55,.4);
-  box-shadow:0 4px 16px rgba(0,0,0,.6),0 0 16px rgba(212,175,55,.15);
-}
-.qr svg{width:72px!important;height:72px!important;display:block}
+.bot{display:flex;align-items:flex-end;padding-right:230px}
+.since-lbl{font-size:9px;font-weight:600;color:rgba(255,255,255,.55);letter-spacing:.12em;text-transform:uppercase;margin-bottom:3px}
+.since-val{font-size:13px;font-weight:600;color:rgba(255,255,255,.88);margin-bottom:3px}
+.since-url{font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,255,255,.6)}
 </style>
 </head>
 <body>
 <div class="card">
   <div class="topbar"></div>
   <div class="botbar"></div>
-  <div class="aura"></div>
-  <div class="orb"></div>
-  <div class="orb2"></div>
   <div class="dots"></div>
+  <img class="mascot" src="{{ $mascotData }}" alt=""/>
   <div class="inner">
 
     <div class="top">
-      <div class="chip"><div class="chip-v"></div></div>
+      <div class="qr-chip">
+        @if($card->qr_code_svg)
+          {!! $card->qr_code_svg !!}
+        @else
+          <div class="qr-chip-empty"></div>
+        @endif
+      </div>
       <div class="brand">
-        <div class="brand-name">LARAVEL<b>CI</b></div>
+        <div class="brand-logo-wrap">
+          <img class="brand-logo" src="{{ $logoData }}" alt="Laravel CI"/>
+        </div>
         <div class="level-pill">★★★ Maître Artisan</div>
       </div>
     </div>
 
-    <div class="divider-top"></div>
-
     <div class="mid">
-      <div class="avatar">
-        @if($card->resolvedAvatar())
-          <img src="{{ $card->resolvedAvatar() }}" alt="{{ $card->user->name }}"/>
-        @else
-          <div class="avatar-init">{{ mb_strtoupper(mb_substr($card->user->name, 0, 1)) }}</div>
-        @endif
+      <div class="avatar-wrap">
+        <div class="avatar">
+          @if($card->resolvedAvatar())
+            <img src="{{ $card->resolvedAvatar() }}" alt="{{ $card->user->name }}"/>
+          @else
+            <div class="avatar-init">{{ mb_strtoupper(mb_substr($card->user->name, 0, 1)) }}</div>
+          @endif
+        </div>
       </div>
       <div class="info">
         <div class="info-name">{{ $card->user->name }}</div>
@@ -241,7 +124,7 @@ body{width:800px;height:450px;background:#0a0807;font-family:'Outfit',system-ui,
       </div>
     </div>
 
-    <div class="divider-bot"></div>
+    <div class="divider"></div>
     <div class="mat">{{ $card->user->matricule ?? 'LARAVELCI-••-••-••••-••••' }}</div>
 
     <div class="bot">
@@ -250,9 +133,6 @@ body{width:800px;height:450px;background:#0a0807;font-family:'Outfit',system-ui,
         <div class="since-val">{{ $card->user->created_at->translatedFormat('F Y') }}</div>
         <div class="since-url">laravel.ci/{{ $card->user->github_username }}</div>
       </div>
-      @if($card->qr_code_svg)
-        <div class="qr">{!! $card->qr_code_svg !!}</div>
-      @endif
     </div>
 
   </div>
