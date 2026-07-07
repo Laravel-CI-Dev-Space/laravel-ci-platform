@@ -8,6 +8,7 @@ use App\Models\Chat\AiKnowledgeFile;
 use App\Models\Chat\ChatSession;
 use App\Models\User;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class SystemPromptBuilder
 {
@@ -83,7 +84,7 @@ TEXT;
 
         // Résumé rapide de l'activité du membre (requêtes légères)
         $questionCount   = $user->questions()->count();
-        $answerCount     = \DB::table('answers')->where('user_id', $user->id)->count();
+        $answerCount     = DB::table('answers')->where('user_id', $user->id)->count();
         $articleCount    = $user->articles()->count();
         $applicationCount = $user->jobApplications()->count();
 
