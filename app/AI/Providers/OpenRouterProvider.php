@@ -23,8 +23,8 @@ class OpenRouterProvider extends OpenAIProvider
         $this->client = \OpenAI::factory()
             ->withApiKey($model->provider->api_key)
             ->withBaseUri($this->resolveBaseUrl())
-            ->withHeader('HTTP-Referer', $extra['site_url'] ?? config('app.url', 'https://laravel.ci'))
-            ->withHeader('X-Title', $extra['site_name'] ?? config('app.name', 'Laravel CI'))
+            ->withHttpHeader('HTTP-Referer', $extra['site_url'] ?? config('app.url', 'https://laravel.ci'))
+            ->withHttpHeader('X-Title', $extra['site_name'] ?? config('app.name', 'Laravel CI'))
             ->make();
     }
 
