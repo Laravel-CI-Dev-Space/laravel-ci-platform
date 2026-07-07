@@ -30,19 +30,25 @@ class ChatService
     {
         $this->assertBudget($user, $context);
 
-        $session  = $this->resolveSession($user, $context, $sessionId);
-        $provider = $this->router->resolveForUser($user);
+        $model    = $this->router->resolveModelForUser($user);
+        $provider = $this->router->makeProvider($model);
+        $session  = $this->resolveSession($user, $context, $sessionId, $model);
         $registry = new ChatToolRegistry($user);
 
         // Sauvegarder le message utilisateur
         $this->saveMessage($session, ChatMessage::ROLE_USER, $message);
+
+        // Activer les tools uniquement si le modèle ET le provider le supportent
+        $tools = ($model?->supports_tools && $provider->supports('tools'))
+            ? $registry->definitions()
+            : [];
 
         // Construire le payload
         $messages = $this->buildMessageHistory($session);
         $payload  = ChatPayload::make(
             systemPrompt: $this->promptBuilder->build($user, $context),
             messages:     $messages,
-            tools:        [],
+            tools:        $tools,
             maxTokens:    1024,
             context:      $context,
             stream:       false,
@@ -200,22 +206,20 @@ class ChatService
         );
     }
 
-    private function resolveSession(User $user, string $context, ?int $sessionId): ChatSession
+    private function resolveSession(User $user, string $context, ?int $sessionId, ?\App\Models\Chat\AiModel $model = null): ChatSession
     {
         if ($sessionId) {
-            $session = ChatSession::where('id', $sessionId)
+            return ChatSession::where('id', $sessionId)
                 ->where('user_id', $user->id)
                 ->firstOrFail();
-
-            return $session;
         }
 
-        $model = $this->router->resolveModelForUser($user);
+        $model ??= $this->router->resolveModelForUser($user);
 
         return ChatSession::create([
-            'user_id'    => $user->id,
-            'model_id'   => $model->id,
-            'context'    => $context,
+            'user_id'  => $user->id,
+            'model_id' => $model->id,
+            'context'  => $context,
         ]);
     }
 
