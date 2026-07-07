@@ -198,6 +198,21 @@ class AiProviderSeeder extends Seeder
             ]
         );
 
+        // Modèles gratuits — raisonnement (reasoning tokens)
+        AiModel::updateOrCreate(
+            ['provider_id' => $openrouter->id, 'model_name' => 'tencent/hy3:free'],
+            [
+                'display_name'       => 'Hunyuan A13B Instruct (Gratuit)',
+                'max_tokens'         => 8192,
+                'cost_input_per_1k'  => 0.0,
+                'cost_output_per_1k' => 0.0,
+                'supports_tools'     => false,
+                'supports_streaming' => true,
+                'is_active'          => $hasOrKey,
+                'is_default'         => false,
+            ]
+        );
+
         // Modèles payants — qualité supérieure
         AiModel::updateOrCreate(
             ['provider_id' => $openrouter->id, 'model_name' => 'deepseek/deepseek-chat-v3-0324'],
