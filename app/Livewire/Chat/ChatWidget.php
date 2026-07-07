@@ -26,15 +26,34 @@ class ChatWidget extends Component
     {
         $this->context = $context;
 
-        if (auth()->check()) {
-            $b = ChatTokenBudget::forToday(auth()->id());
-            $this->budget = [
-                'used'      => $b->totalUsed(),
-                'limit'     => $b->daily_limit,
-                'remaining' => $b->remaining(),
-                'percent'   => $b->usagePercent(),
-            ];
+        if (! auth()->check()) {
+            return;
         }
+
+        $userId = auth()->id();
+
+        // Recharger la session la plus récente pour ce contexte
+        $session = ChatSession::forUser($userId)
+            ->where('context', $context)
+            ->latest('last_activity_at')
+            ->first();
+
+        if ($session) {
+            $this->sessionId = $session->id;
+            $this->messages  = $session->messages()
+                ->whereIn('role', ['user', 'assistant'])
+                ->get()
+                ->map(fn ($m) => ['role' => $m->role, 'content' => $m->content])
+                ->toArray();
+        }
+
+        $b = ChatTokenBudget::forToday($userId);
+        $this->budget = [
+            'used'      => $b->totalUsed(),
+            'limit'     => $b->daily_limit,
+            'remaining' => $b->remaining(),
+            'percent'   => $b->usagePercent(),
+        ];
     }
 
     public function toggle(): void
