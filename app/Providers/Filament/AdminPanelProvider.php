@@ -116,6 +116,11 @@ class AdminPanelProvider extends PanelProvider
 
             ->renderHook(
                 PanelsRenderHook::BODY_END,
+                fn (): \Illuminate\Contracts\View\View => view('filament.partials.chat-widget'),
+            )
+
+            ->renderHook(
+                PanelsRenderHook::BODY_END,
                 fn (): string => <<<'HTML'
                 <script>
                 (function () {
