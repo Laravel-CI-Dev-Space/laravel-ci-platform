@@ -25,9 +25,15 @@ class OpenAIProvider implements AIProviderContract
 
     public function chat(ChatPayload $payload): ChatResponse
     {
-        $params   = $this->buildParams($payload);
-        $response = $this->client->chat()->create($params);
-        $choice   = $response->choices[0];
+        $params = $this->buildParams($payload);
+
+        try {
+            $response = $this->client->chat()->create($params);
+        } catch (\Throwable $e) {
+            throw new \RuntimeException($this->friendlyError($e->getMessage()), 0, $e);
+        }
+
+        $choice = $response->choices[0];
 
         $inputTokens  = $response->usage->promptTokens ?? 0;
         $outputTokens = $response->usage->completionTokens ?? 0;
@@ -57,8 +63,13 @@ class OpenAIProvider implements AIProviderContract
 
     public function stream(ChatPayload $payload): Generator
     {
-        $params         = $this->buildParams($payload, stream: true);
-        $stream         = $this->client->chat()->createStreamed($params);
+        $params = $this->buildParams($payload, stream: true);
+
+        try {
+            $stream = $this->client->chat()->createStreamed($params);
+        } catch (\Throwable $e) {
+            throw new \RuntimeException($this->friendlyError($e->getMessage()), 0, $e);
+        }
         $fullContent    = '';
         $inputTokens    = 0;
         $outputTokens   = 0;
@@ -147,6 +158,39 @@ class OpenAIProvider implements AIProviderContract
     public function isConfigured(): bool
     {
         return ! empty($this->model->provider->api_key);
+    }
+
+    protected function friendlyError(string $raw): string
+    {
+        $lower = strtolower($raw);
+
+        if (str_contains($lower, 'insufficient balance') || str_contains($lower, 'insufficient_quota')) {
+            $name = $this->model->provider->display_name;
+            return "Solde insuffisant sur le compte {$name}. L'administrateur doit recharger le compte API.";
+        }
+
+        if (str_contains($lower, 'invalid api key') || str_contains($lower, 'incorrect api key') || str_contains($lower, 'unauthorized')) {
+            return "Clé API invalide ou expirée. Vérifiez la configuration du provider dans l'administration.";
+        }
+
+        if (str_contains($lower, 'rate limit') || str_contains($lower, 'too many requests') || str_contains($lower, '429')) {
+            return "Limite de requêtes atteinte. Réessayez dans quelques instants.";
+        }
+
+        if (str_contains($lower, 'context length') || str_contains($lower, 'maximum context') || str_contains($lower, 'token')) {
+            return "Message trop long pour ce modèle. Essayez de démarrer une nouvelle conversation.";
+        }
+
+        if (str_contains($lower, 'model not found') || str_contains($lower, 'does not exist')) {
+            return "Modèle «{$this->model->model_name}» introuvable. Vérifiez la configuration.";
+        }
+
+        if (str_contains($lower, 'connection') || str_contains($lower, 'timeout') || str_contains($lower, 'curl')) {
+            return "Impossible de joindre le service IA. Vérifiez votre connexion et réessayez.";
+        }
+
+        // Message brut en dernier recours
+        return "Erreur du service IA : {$raw}";
     }
 
     protected function resolveBaseUrl(): string
