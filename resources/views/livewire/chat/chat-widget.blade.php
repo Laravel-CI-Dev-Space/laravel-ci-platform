@@ -95,10 +95,15 @@
                         </div>
                     @endforeach
 
-                    {{-- Indicateur de frappe — wire:loading fonctionne côté client --}}
+                    {{--
+                        Indicateur de frappe.
+                        Toujours dans le DOM, visible quand $loading=true (entre les 2 requêtes)
+                        OU quand wire:loading est actif (pendant sendMessage / processAI).
+                    --}}
                     <div class="chat-bubble chat-bubble--assistant chat-bubble--typing"
+                         style="{{ $loading ? 'display:flex' : 'display:none' }}"
                          wire:loading.flex
-                         wire:target="sendMessage">
+                         wire:target="sendMessage,processAI">
                         <div class="chat-typing-avatar-wrap">
                             <img src="{{ asset('assets/web/img/mascot.png') }}" alt=""
                                  class="chat-bubble-avatar chat-bubble-avatar--typing">

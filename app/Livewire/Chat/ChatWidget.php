@@ -12,14 +12,15 @@ use Livewire\Component;
 
 class ChatWidget extends Component
 {
-    public bool   $isOpen     = false;
-    public string $input      = '';
-    public string $context    = ChatSession::CONTEXT_PUBLIC;
-    public ?int   $sessionId  = null;
-    public array  $messages   = [];
-    public bool   $loading    = false;
-    public ?array $budget     = null;
-    public string $error      = '';
+    public bool   $isOpen         = false;
+    public string $input          = '';
+    public string $pendingMessage = '';
+    public string $context        = ChatSession::CONTEXT_PUBLIC;
+    public ?int   $sessionId      = null;
+    public array  $messages       = [];
+    public bool   $loading        = false;
+    public ?array $budget         = null;
+    public string $error          = '';
 
     public function mount(string $context = ChatSession::CONTEXT_PUBLIC): void
     {
@@ -42,6 +43,10 @@ class ChatWidget extends Component
         $this->error  = '';
     }
 
+    /**
+     * Requête 1 — rapide : affiche le message utilisateur + indicateur de frappe,
+     * puis déclenche processAI() via un événement browser.
+     */
     public function sendMessage(): void
     {
         if (! auth()->check()) {
@@ -54,16 +59,27 @@ class ChatWidget extends Component
             return;
         }
 
-        $this->messages[] = [
-            'role'    => 'user',
-            'content' => $message,
-        ];
-
-        $this->input   = '';
-        $this->loading = true;
-        $this->error   = '';
+        $this->pendingMessage = $message;
+        $this->messages[]     = ['role' => 'user', 'content' => $message];
+        $this->input          = '';
+        $this->loading        = true;
+        $this->error          = '';
 
         $this->dispatch('chat-scroll-bottom');
+        $this->dispatch('chat-ai-process');
+    }
+
+    /**
+     * Requête 2 — lente : appelle l'IA et ajoute la réponse.
+     * Déclenchée par l'événement browser 'chat-ai-process' après sendMessage().
+     */
+    #[On('chat-ai-process')]
+    public function processAI(): void
+    {
+        if (! auth()->check() || empty($this->pendingMessage)) {
+            $this->loading = false;
+            return;
+        }
 
         try {
             /** @var ChatService $service */
@@ -71,16 +87,14 @@ class ChatWidget extends Component
 
             $result = $service->send(
                 user:      auth()->user(),
-                message:   $message,
+                message:   $this->pendingMessage,
                 context:   $this->context,
                 sessionId: $this->sessionId,
             );
 
-            $this->sessionId  = $result['session_id'];
-            $this->messages[] = [
-                'role'    => 'assistant',
-                'content' => $result['message'],
-            ];
+            $this->sessionId      = $result['session_id'];
+            $this->pendingMessage = '';
+            $this->messages[]     = ['role' => 'assistant', 'content' => $result['message']];
 
             $b = $result['budget'];
             $this->budget = [
@@ -102,9 +116,11 @@ class ChatWidget extends Component
 
     public function newSession(): void
     {
-        $this->sessionId = null;
-        $this->messages  = [];
-        $this->error     = '';
+        $this->sessionId      = null;
+        $this->pendingMessage = '';
+        $this->messages       = [];
+        $this->error          = '';
+        $this->loading        = false;
     }
 
     public function render()
