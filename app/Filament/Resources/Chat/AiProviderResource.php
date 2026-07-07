@@ -13,11 +13,13 @@ use Filament\Actions\EditAction;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 
 class AiProviderResource extends Resource
@@ -38,7 +40,7 @@ class AiProviderResource extends Resource
                 ->label('Identifiant')
                 ->required()
                 ->unique(ignoreRecord: true)
-                ->placeholder('claude | openai | grok')
+                ->placeholder('grok | deepseek | openai')
                 ->helperText('Utilisé en interne pour sélectionner le provider. Ne pas modifier après création.'),
 
             TextInput::make('display_name')
@@ -49,7 +51,7 @@ class AiProviderResource extends Resource
                 ->label('URL de base API')
                 ->required()
                 ->url()
-                ->placeholder('https://api.anthropic.com'),
+                ->placeholder('https://api.x.ai/v1'),
 
             TextInput::make('api_key')
                 ->label('Clé API')
@@ -81,20 +83,43 @@ class AiProviderResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('display_name')->label('Provider')->searchable()->sortable(),
-                TextColumn::make('name')->label('Identifiant')->badge()->color('gray'),
-                TextColumn::make('base_url')->label('URL')->limit(40)->color('gray'),
-                IconColumn::make('is_active')->label('Actif')->boolean(),
-                IconColumn::make('api_key')
+                TextColumn::make('display_name')
+                    ->label('Provider')
+                    ->searchable()
+                    ->sortable()
+                    ->weight('semibold'),
+                TextColumn::make('name')
+                    ->label('Identifiant')
+                    ->badge()
+                    ->color('gray'),
+                TextColumn::make('base_url')
+                    ->label('URL')
+                    ->limit(38)
+                    ->color('gray')
+                    ->size('sm'),
+                TextColumn::make('priority')
+                    ->label('Priorité')
+                    ->sortable()
+                    ->badge()
+                    ->color('info'),
+                IconColumn::make('api_key_set')
                     ->label('Clé API')
-                    ->icon(fn ($record) => $record->hasKey() ? Heroicon::OutlinedCheckCircle : Heroicon::OutlinedXCircle)
-                    ->color(fn ($record) => $record->hasKey() ? 'success' : 'danger'),
-                TextColumn::make('models_count')->counts('models')->label('Modèles'),
-                TextColumn::make('priority')->label('Priorité')->sortable(),
+                    ->state(fn ($record) => $record->hasKey())
+                    ->icon(fn ($state) => $state ? Heroicon::OutlinedCheckCircle : Heroicon::OutlinedXCircle)
+                    ->color(fn ($state) => $state ? 'success' : 'danger'),
+                TextColumn::make('models_count')
+                    ->counts('models')
+                    ->label('Modèles')
+                    ->badge()
+                    ->color('gray'),
+                ToggleColumn::make('is_active')
+                    ->label('Actif'),
             ])
+            ->defaultSort('priority')
             ->actions([
                 EditAction::make(),
-                DeleteAction::make(),
+                DeleteAction::make()
+                    ->requiresConfirmation(),
             ]);
     }
 

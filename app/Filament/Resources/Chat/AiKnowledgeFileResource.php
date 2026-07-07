@@ -7,7 +7,6 @@ namespace App\Filament\Resources\Chat;
 use App\Filament\Resources\Chat\AiKnowledgeFileResource\Pages;
 use App\Models\Chat\AiKnowledgeFile;
 use BackedEnum;
-use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\FileUpload;
@@ -20,6 +19,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
@@ -41,11 +41,11 @@ class AiKnowledgeFileResource extends Resource
                 ->label('Type')
                 ->required()
                 ->options([
-                    AiKnowledgeFile::TYPE_BEHAVIOR => 'Comportement (style, limites, ton)',
-                    AiKnowledgeFile::TYPE_PLATFORM => 'Plateforme Laravel CI',
-                    AiKnowledgeFile::TYPE_LARAVEL  => 'Connaissance Laravel / PHP',
+                    AiKnowledgeFile::TYPE_BEHAVIOR => 'Comportement — style, limites, ton',
+                    AiKnowledgeFile::TYPE_PLATFORM => 'Plateforme Laravel CI — fonctionnalités, règles',
+                    AiKnowledgeFile::TYPE_LARAVEL  => 'Connaissance Laravel / PHP — framework, bonnes pratiques',
                 ])
-                ->helperText('Détermine quand ce fichier est injecté dans le system prompt.'),
+                ->helperText('Détermine dans quelle section du system prompt ce fichier est injecté.'),
 
             TextInput::make('label')
                 ->label('Nom affiché')
@@ -58,7 +58,7 @@ class AiKnowledgeFileResource extends Resource
                 ->directory('ai-knowledge')
                 ->acceptedFileTypes(['text/plain', 'text/markdown', 'text/x-markdown', 'application/json', 'application/octet-stream'])
                 ->maxSize(1024)
-                ->helperText('Fichier .md, .txt ou .json, max 1 Mo.')
+                ->helperText('Fichier .md, .txt ou .json, max 1 Mo. Optionnel si vous saisissez le contenu directement.')
                 ->afterStateUpdated(function ($state, callable $set) {
                     if ($state instanceof \Livewire\Features\SupportFileUploads\TemporaryUploadedFile) {
                         $set('filename', $state->getClientOriginalName());
@@ -73,13 +73,13 @@ class AiKnowledgeFileResource extends Resource
                 ->dehydrated(),
 
             Textarea::make('content')
-                ->label('Contenu (éditable directement)')
-                ->rows(12)
+                ->label('Contenu (Markdown)')
+                ->rows(15)
                 ->helperText('Vous pouvez éditer le contenu directement ici sans uploader un fichier.')
                 ->required(),
 
             Toggle::make('is_active')
-                ->label('Actif (injecté dans le system prompt)')
+                ->label('Actif — injecté dans le system prompt')
                 ->default(true),
         ]);
     }
@@ -91,18 +91,41 @@ class AiKnowledgeFileResource extends Resource
                 TextColumn::make('type')
                     ->label('Type')
                     ->badge()
+                    ->formatStateUsing(fn ($state) => match($state) {
+                        'behavior' => 'Comportement',
+                        'platform' => 'Plateforme',
+                        'laravel'  => 'Laravel / PHP',
+                        default    => $state,
+                    })
                     ->color(fn ($state) => match($state) {
                         'behavior' => 'warning',
                         'platform' => 'info',
                         'laravel'  => 'success',
                         default    => 'gray',
                     }),
-                TextColumn::make('label')->label('Nom')->searchable()->sortable(),
-                TextColumn::make('filename')->label('Fichier')->color('gray')->size('sm'),
-                TextColumn::make('content')->label('Aperçu')->limit(60)->color('gray'),
-                IconColumn::make('is_active')->label('Actif')->boolean(),
-                TextColumn::make('uploader.name')->label('Uploadé par')->sortable(),
-                TextColumn::make('updated_at')->label('Mis à jour')->since()->sortable(),
+                TextColumn::make('label')
+                    ->label('Nom')
+                    ->searchable()
+                    ->sortable()
+                    ->weight('semibold'),
+                TextColumn::make('filename')
+                    ->label('Fichier')
+                    ->color('gray')
+                    ->size('sm'),
+                TextColumn::make('content')
+                    ->label('Aperçu')
+                    ->limit(55)
+                    ->color('gray'),
+                ToggleColumn::make('is_active')
+                    ->label('Actif'),
+                TextColumn::make('uploader.name')
+                    ->label('Uploadé par')
+                    ->sortable()
+                    ->default('—'),
+                TextColumn::make('updated_at')
+                    ->label('Mis à jour')
+                    ->since()
+                    ->sortable(),
             ])
             ->filters([
                 SelectFilter::make('type')
@@ -115,8 +138,10 @@ class AiKnowledgeFileResource extends Resource
             ])
             ->actions([
                 EditAction::make(),
-                DeleteAction::make(),
-            ]);
+                DeleteAction::make()
+                    ->requiresConfirmation(),
+            ])
+            ->defaultSort('type');
     }
 
     public static function getPages(): array
