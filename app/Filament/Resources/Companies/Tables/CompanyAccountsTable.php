@@ -25,7 +25,7 @@ class CompanyAccountsTable
                     ->label('Entreprise')
                     ->searchable()
                     ->sortable()
-                    ->placeholder('—'),
+                    ->placeholder('-'),
 
                 TextColumn::make('email')
                     ->label('Email')

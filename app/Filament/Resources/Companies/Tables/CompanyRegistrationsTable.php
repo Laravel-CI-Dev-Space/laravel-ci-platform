@@ -41,7 +41,7 @@ class CompanyRegistrationsTable
 
                 TextColumn::make('country')
                     ->label('Pays')
-                    ->placeholder('—'),
+                    ->placeholder('-'),
 
                 TextColumn::make('status')
                     ->label('Statut')
@@ -92,7 +92,7 @@ class CompanyRegistrationsTable
                         app(CompanyAccountService::class)->approveRegistrationRequest($admin, $record);
 
                         Notification::make()
-                            ->title('Demande approuvée — accès envoyés par email')
+                            ->title('Demande approuvée - accès envoyés par email')
                             ->success()
                             ->send();
                     }),

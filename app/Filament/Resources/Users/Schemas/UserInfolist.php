@@ -76,21 +76,21 @@ class UserInfolist
                 ->schema([
                     TextEntry::make('profile.country')
                         ->label('Pays')
-                        ->placeholder('—'),
+                        ->placeholder('-'),
 
                     TextEntry::make('profile.city')
                         ->label('Ville')
-                        ->placeholder('—'),
+                        ->placeholder('-'),
 
                     TextEntry::make('profile.laravel_level')
                         ->label('Niveau Laravel')
-                        ->formatStateUsing(fn ($state) => LaravelLevel::tryFrom($state ?? '')?->label() ?? '—')
-                        ->placeholder('—'),
+                        ->formatStateUsing(fn ($state) => LaravelLevel::tryFrom($state ?? '')?->label() ?? '-')
+                        ->placeholder('-'),
 
                     TextEntry::make('profile.job_status')
                         ->label('Situation')
-                        ->formatStateUsing(fn ($state) => JobStatus::tryFrom($state ?? '')?->label() ?? '—')
-                        ->placeholder('—'),
+                        ->formatStateUsing(fn ($state) => JobStatus::tryFrom($state ?? '')?->label() ?? '-')
+                        ->placeholder('-'),
                 ]),
         ]);
     }

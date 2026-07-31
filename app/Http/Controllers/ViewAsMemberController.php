@@ -24,8 +24,7 @@ class ViewAsMemberController extends Controller
         abort_unless(
             $user !== null && $user->hasAnyRole([
                 UserRole::SuperAdmin->value,
-                UserRole::Admin->value,
-                UserRole::Moderator->value,
+                UserRole::SuperAdmin->value,
             ]),
             403
         );
@@ -48,8 +47,7 @@ class ViewAsMemberController extends Controller
         if (
             $user !== null && $user->hasAnyRole([
                 UserRole::SuperAdmin->value,
-                UserRole::Admin->value,
-                UserRole::Moderator->value,
+                UserRole::SuperAdmin->value,
             ])
         ) {
             return redirect('/admin')

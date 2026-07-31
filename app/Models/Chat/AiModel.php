@@ -67,6 +67,6 @@ class AiModel extends Model
 
     public function fullName(): string
     {
-        return "{$this->provider->display_name} — {$this->display_name}";
+        return "{$this->provider->display_name} - {$this->display_name}";
     }
 }

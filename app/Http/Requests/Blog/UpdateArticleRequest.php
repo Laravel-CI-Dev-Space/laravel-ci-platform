@@ -25,8 +25,7 @@ class UpdateArticleRequest extends FormRequest
 
         return $article->isOwnedBy($user)
             || $user->hasAnyRole([
-                UserRole::Admin->value,
-                UserRole::Moderator->value,
+                UserRole::SuperAdmin->value,
                 UserRole::SuperAdmin->value,
             ]);
     }

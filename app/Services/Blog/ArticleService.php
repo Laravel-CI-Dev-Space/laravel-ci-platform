@@ -24,9 +24,9 @@ class ArticleService
     /**
      * Récupère les articles publiés avec filtres et pagination.
      *
-     * @param  string  $level  — all/beginner/intermediate/advanced
-     * @param  int|null  $tagId  — filtre par tag
-     * @param  string  $sort  — recent/popular/most-viewed
+     * @param  string  $level  - all/beginner/intermediate/advanced
+     * @param  int|null  $tagId  - filtre par tag
+     * @param  string  $sort  - recent/popular/most-viewed
      */
     public function getArticles(
         string $level = 'all',

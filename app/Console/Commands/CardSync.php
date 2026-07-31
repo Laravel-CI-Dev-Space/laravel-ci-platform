@@ -57,7 +57,7 @@ class CardSync extends Command
         $matriculeQuery->chunkById(100, function ($users) use ($dry, &$matriculesCreated) {
             foreach ($users as $user) {
                 if (! $user->matricule) {
-                    $this->line("  · [{$user->id}] {$user->name} — matricule manquant");
+                    $this->line("  · [{$user->id}] {$user->name} - matricule manquant");
                     if (! $dry) {
                         $this->matriculeGenerator->assignIfMissing($user->refresh());
                     }
@@ -78,7 +78,7 @@ class CardSync extends Command
                     if ($user->memberCards->isNotEmpty()) {
                         continue;
                     }
-                    $this->line("  · [{$user->id}] {$user->name} — carte niveau 1 forcée");
+                    $this->line("  · [{$user->id}] {$user->name} - carte niveau 1 forcée");
                     if (! $dry) {
                         $card = MemberCard::create([
                             'user_id'          => $user->id,
@@ -115,7 +115,7 @@ class CardSync extends Command
                     $existing = $user->memberCards->firstWhere('level', $level);
 
                     if (! $existing) {
-                        $this->line("  · [{$user->id}] {$user->name} — carte niveau {$level} à créer ({$points} pts >= {$required})");
+                        $this->line("  · [{$user->id}] {$user->name} - carte niveau {$level} à créer ({$points} pts >= {$required})");
                         if (! $dry) {
                             $card = MemberCard::create([
                                 'user_id'   => $user->id,
@@ -132,7 +132,7 @@ class CardSync extends Command
                         $cardsCreated++;
                     } elseif ($existing && ! $existing->qr_code_svg) {
                         // QR manquant sur une carte existante
-                        $this->line("  · [{$user->id}] {$user->name} — QR manquant sur carte niv.{$level}");
+                        $this->line("  · [{$user->id}] {$user->name} - QR manquant sur carte niv.{$level}");
                         if (! $dry) {
                             $existing->update(['qr_code_svg' => $this->qrCodeGenerator->forMember($user->github_username)]);
                         }
@@ -144,7 +144,7 @@ class CardSync extends Command
 
         $this->newLine();
         $suffix = $dry ? ' (dry-run)' : '';
-        $this->info("Terminé{$suffix} — Matricules : {$matriculesCreated}, Cartes : {$cardsCreated}, QR : {$qrsCreated}");
+        $this->info("Terminé{$suffix} - Matricules : {$matriculesCreated}, Cartes : {$cardsCreated}, QR : {$qrsCreated}");
 
         return self::SUCCESS;
     }

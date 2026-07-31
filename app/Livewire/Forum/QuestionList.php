@@ -15,6 +15,8 @@ class QuestionList extends Component
 {
     use WithPagination;
 
+    protected string $paginationTheme = 'bootstrap';
+
     #[Url]
     public string $sort = 'recent';
 
@@ -45,6 +47,7 @@ class QuestionList extends Component
             sort: $this->sort,
             tagId: $this->tagId,
             search: $this->search,
+            perPage: 10,
         );
 
         $tags = Tag::whereIn('scope', ['forum', 'both'])

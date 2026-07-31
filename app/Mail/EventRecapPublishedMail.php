@@ -23,7 +23,7 @@ class EventRecapPublishedMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: "Récapitulatif disponible : {$this->event->title} — Laravel CI",
+            subject: "Récapitulatif disponible : {$this->event->title} - Laravel CI",
         );
     }
 

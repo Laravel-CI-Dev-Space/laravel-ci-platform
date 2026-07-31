@@ -21,8 +21,7 @@ class AdminRecentUsersWidget extends BaseWidget
     {
         return auth()->user()?->hasAnyRole([
             UserRole::SuperAdmin->value,
-            UserRole::Admin->value,
-            UserRole::Moderator->value,
+            UserRole::SuperAdmin->value,
         ]) ?? false;
     }
 
@@ -48,7 +47,7 @@ class AdminRecentUsersWidget extends BaseWidget
 
                 TextColumn::make('github_username')
                     ->label('GitHub')
-                    ->formatStateUsing(fn ($state) => $state ? "@{$state}" : '—')
+                    ->formatStateUsing(fn ($state) => $state ? "@{$state}" : '-')
                     ->color('gray')
                     ->url(fn (User $u) => $u->github_username ? "https://github.com/{$u->github_username}" : null)
                     ->openUrlInNewTab(),

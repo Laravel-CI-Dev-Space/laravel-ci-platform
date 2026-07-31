@@ -23,7 +23,7 @@ class NewAnswerMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Nouvelle réponse à votre question — Laravel CI',
+            subject: 'Nouvelle réponse à votre question - Laravel CI',
         );
     }
 

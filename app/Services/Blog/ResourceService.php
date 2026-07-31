@@ -16,7 +16,7 @@ class ResourceService
     /**
      * Récupère les ressources publiques avec filtres.
      *
-     * @param  string  $type  — all/boilerplate/cheatsheet/guide/pdf/other
+     * @param  string  $type  - all/boilerplate/cheatsheet/guide/pdf/other
      */
     public function getResources(string $type = 'all', int $perPage = 12): LengthAwarePaginator
     {

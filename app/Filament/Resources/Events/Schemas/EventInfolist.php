@@ -45,7 +45,7 @@ class EventInfolist
 
                     TextEntry::make('creator.name')
                         ->label('Créé par')
-                        ->placeholder('—'),
+                        ->placeholder('-'),
 
                     TextEntry::make('slug')
                         ->label('Slug')
@@ -65,11 +65,11 @@ class EventInfolist
 
                     TextEntry::make('location')
                         ->label('Lieu physique')
-                        ->placeholder('—'),
+                        ->placeholder('-'),
 
                     TextEntry::make('online_url')
                         ->label('Lien en ligne')
-                        ->placeholder('—'),
+                        ->placeholder('-'),
                 ]),
 
             Section::make('Tarification')
@@ -83,11 +83,11 @@ class EventInfolist
 
                     TextEntry::make('price')
                         ->label('Prix')
-                        ->placeholder('—')
+                        ->placeholder('-')
                         ->visible(fn (Event $record): bool => $record->is_paid)
                         ->formatStateUsing(fn (Event $record): string => $record->price !== null
                             ? number_format((float) $record->price, 0, ',', ' ') . ' ' . ($record->currency ?? 'XOF')
-                            : '—'),
+                            : '-'),
 
                     TextEntry::make('promo_code')
                         ->label('Code promo')
@@ -97,13 +97,13 @@ class EventInfolist
 
                     TextEntry::make('promo_discount_value')
                         ->label('Réduction')
-                        ->placeholder('—')
+                        ->placeholder('-')
                         ->visible(fn (Event $record): bool => $record->is_paid && $record->promo_code !== null)
                         ->formatStateUsing(fn (Event $record): string => $record->promo_discount_value !== null
                             ? ($record->promo_discount_type === 'percent'
                                 ? $record->promo_discount_value . '%'
                                 : number_format((float) $record->promo_discount_value, 0, ',', ' ') . ' ' . ($record->currency ?? 'XOF'))
-                            : '—'),
+                            : '-'),
 
                     TextEntry::make('promo_expires_at')
                         ->label('Expiration du code')

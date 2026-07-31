@@ -76,7 +76,7 @@ class ChatTokenStatsWidget extends BaseWidget
 
         return [
             Stat::make('Tokens aujourd\'hui', number_format($todayTotal))
-                ->description("Public : " . number_format($todayPublic) . " — Dashboard : " . number_format($todayDashboard))
+                ->description("Public : " . number_format($todayPublic) . " - Dashboard : " . number_format($todayDashboard))
                 ->descriptionIcon('heroicon-m-chat-bubble-left-right')
                 ->color('primary')
                 ->chart($this->last7DaysTotals()),

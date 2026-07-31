@@ -68,8 +68,8 @@ class AiUserAssignmentResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('user.name')->label('Utilisateur')->default('— Tous —')->searchable(),
-                TextColumn::make('role')->label('Rôle')->default('— Global —')->badge()->color('info'),
+                TextColumn::make('user.name')->label('Utilisateur')->default('- Tous -')->searchable(),
+                TextColumn::make('role')->label('Rôle')->default('- Global -')->badge()->color('info'),
                 TextColumn::make('model.display_name')->label('Modèle assigné'),
                 TextColumn::make('model.provider.display_name')->label('Provider')->badge(),
                 TextColumn::make('assignedBy.name')->label('Assigné par'),

@@ -11,7 +11,7 @@ use Illuminate\Support\Carbon;
 
 class AdminUserGrowthChart extends ChartWidget
 {
-    protected ?string $heading = 'Croissance des membres — 12 derniers mois';
+    protected ?string $heading = 'Croissance des membres - 12 derniers mois';
 
     protected static ?int $sort = 2;
 
@@ -21,7 +21,7 @@ class AdminUserGrowthChart extends ChartWidget
     {
         return auth()->user()?->hasAnyRole([
             UserRole::SuperAdmin->value,
-            UserRole::Admin->value,
+            UserRole::SuperAdmin->value,
         ]) ?? false;
     }
 

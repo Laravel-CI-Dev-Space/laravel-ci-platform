@@ -29,8 +29,8 @@ class EventReminderMail extends Mailable implements ShouldQueue
         $title = $this->registration->event->title;
 
         $subject = $this->type === '7d'
-            ? "Dans 7 jours : {$title} — Laravel CI"
-            : "Demain : {$title} — Laravel CI";
+            ? "Dans 7 jours : {$title} - Laravel CI"
+            : "Demain : {$title} - Laravel CI";
 
         return new Envelope(subject: $subject);
     }

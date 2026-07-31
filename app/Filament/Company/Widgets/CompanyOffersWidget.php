@@ -74,7 +74,7 @@ class CompanyOffersWidget extends BaseWidget
                     ->label('Expire le')
                     ->dateTime('d/m/Y')
                     ->color('gray')
-                    ->placeholder('—'),
+                    ->placeholder('-'),
             ])
             ->actions([
                 Action::make('applications')

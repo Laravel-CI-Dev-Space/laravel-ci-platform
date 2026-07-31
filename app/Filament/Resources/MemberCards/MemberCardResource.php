@@ -26,7 +26,7 @@ class MemberCardResource extends Resource
         return 'Communauté';
     }
 
-    protected static ?int $navigationSort = 5;
+    protected static ?int $navigationSort = 4;
 
     protected static ?string $modelLabel = 'Carte membre';
 

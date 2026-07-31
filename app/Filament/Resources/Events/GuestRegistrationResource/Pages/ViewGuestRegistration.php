@@ -44,7 +44,7 @@ class ViewGuestRegistration extends ViewRecord
 
                     TextEntry::make('whatsapp')
                         ->label('WhatsApp')
-                        ->placeholder('—')
+                        ->placeholder('-')
                         ->icon('heroicon-o-phone'),
                 ]),
 
@@ -92,14 +92,14 @@ class ViewGuestRegistration extends ViewRecord
 
                     TextEntry::make('amount_paid')
                         ->label('Montant payé')
-                        ->placeholder('—')
+                        ->placeholder('-')
                         ->formatStateUsing(fn (GuestRegistration $record): string => $record->amount_paid !== null
                             ? number_format((float) $record->amount_paid, 0, ',', ' ') . ' ' . ($record->event->currency ?? 'XOF')
-                            : '—'),
+                            : '-'),
 
                     TextEntry::make('promo_code_used')
                         ->label('Code promo utilisé')
-                        ->placeholder('—')
+                        ->placeholder('-')
                         ->fontFamily('mono'),
                 ]),
 
@@ -116,7 +116,7 @@ class ViewGuestRegistration extends ViewRecord
                         ->label('URL de vérification')
                         ->state(fn (GuestRegistration $record): string => $record->ticket_qr_token !== null
                             ? route('events.ticket.verify', ['token' => $record->ticket_qr_token])
-                            : '—')
+                            : '-')
                         ->copyable(),
                 ]),
         ]);

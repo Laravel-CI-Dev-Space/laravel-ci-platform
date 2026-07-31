@@ -110,7 +110,7 @@ class EventForm
                             'bold', 'italic', 'h2', 'h3',
                             'bulletList', 'orderedList', 'link',
                         ])
-                        ->helperText('Optionnel — détail du déroulement.')
+                        ->helperText('Optionnel - détail du déroulement.')
                         ->columnSpanFull(),
 
                     FileUpload::make('cover_image')
@@ -198,7 +198,7 @@ class EventForm
                     Section::make('Code promotionnel')
                         ->columnSpanFull()
                         ->visible(fn (callable $get): bool => (bool) $get('is_paid'))
-                        ->description('Le code promo n\'est jamais affiché publiquement — il doit être communiqué manuellement aux participants.')
+                        ->description('Le code promo n\'est jamais affiché publiquement - il doit être communiqué manuellement aux participants.')
                         ->columns(2)
                         ->schema([
                             TextInput::make('promo_code')

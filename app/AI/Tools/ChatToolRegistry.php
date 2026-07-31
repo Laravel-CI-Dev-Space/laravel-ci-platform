@@ -69,7 +69,7 @@ class ChatToolRegistry
                     'properties' => [
                         'username' => [
                             'type'        => 'string',
-                            'description' => 'Nom d\'utilisateur GitHub (ex: Ky-Wilson). Optionnel — défaut: utilisateur connecté.',
+                            'description' => 'Nom d\'utilisateur GitHub (ex: Ky-Wilson). Optionnel - défaut: utilisateur connecté.',
                         ],
                     ],
                     'required' => [],

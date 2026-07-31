@@ -98,7 +98,7 @@ Voici les données actuelles de l'utilisateur (réponses directement depuis ces 
 - Articles soumis : {$articleCount}
 - Candidatures envoyées : {$applicationCount}
 
-Réponds directement à partir de ces données. Tu n'as pas accès à la base de données directement — utilise ces chiffres fournis.
+Réponds directement à partir de ces données. Tu n'as pas accès à la base de données directement - utilise ces chiffres fournis.
 TEXT;
     }
 
@@ -109,7 +109,7 @@ TEXT;
         }
 
         return mb_substr($content, 0, self::KNOWLEDGE_MAX_CHARS)
-            . "\n\n[contenu tronqué — limite système]";
+            . "\n\n[contenu tronqué - limite système]";
     }
 
     private function defaultBehavior(): string

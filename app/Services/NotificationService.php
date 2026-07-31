@@ -206,7 +206,7 @@ class NotificationService
      */
     public function notifyAdmins(string $type, array $data): void
     {
-        $adminIds = User::role([UserRole::Admin->value, UserRole::SuperAdmin->value])->pluck('id');
+        $adminIds = User::role([UserRole::SuperAdmin->value, UserRole::SuperAdmin->value])->pluck('id');
 
         if ($adminIds->isEmpty()) {
             return;

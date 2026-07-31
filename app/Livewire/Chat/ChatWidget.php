@@ -63,7 +63,7 @@ class ChatWidget extends Component
     }
 
     /**
-     * Requête 1 — rapide : affiche le message utilisateur + indicateur de frappe,
+     * Requête 1 - rapide : affiche le message utilisateur + indicateur de frappe,
      * puis déclenche processAI() via un événement browser.
      */
     public function sendMessage(): void
@@ -89,7 +89,7 @@ class ChatWidget extends Component
     }
 
     /**
-     * Requête 2 — lente : appelle l'IA et ajoute la réponse.
+     * Requête 2 - lente : appelle l'IA et ajoute la réponse.
      * Déclenchée par l'événement browser 'chat-ai-process' après sendMessage().
      */
     #[On('chat-ai-process')]

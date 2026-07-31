@@ -19,6 +19,8 @@ class CommentSection extends Component
 {
     use RateLimited, WithPagination;
 
+    protected string $paginationTheme = 'bootstrap';
+
     public int $articleId;
 
     public string $body = '';
@@ -141,8 +143,7 @@ class CommentSection extends Component
 
         abort_unless(
             $comment->isOwnedBy($user) || $user->hasAnyRole([
-                UserRole::Admin->value,
-                UserRole::Moderator->value,
+                UserRole::SuperAdmin->value,
                 UserRole::SuperAdmin->value,
             ]),
             403,

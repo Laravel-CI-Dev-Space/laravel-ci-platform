@@ -37,14 +37,14 @@ class ReputationSettings extends Page implements HasForms
 
     public static function getNavigationGroup(): ?string
     {
-        return 'Membres';
+        return 'Communauté';
     }
 
     public static function canAccess(): bool
     {
         return auth()->user()?->hasAnyRole([
             UserRole::SuperAdmin->value,
-            UserRole::Admin->value,
+            UserRole::SuperAdmin->value,
         ]) ?? false;
     }
 

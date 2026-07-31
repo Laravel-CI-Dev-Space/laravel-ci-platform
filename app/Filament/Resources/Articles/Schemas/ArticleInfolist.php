@@ -28,7 +28,7 @@ class ArticleInfolist
 
                     TextEntry::make('reviewer.name')
                         ->label('Révisé par')
-                        ->placeholder('—'),
+                        ->placeholder('-'),
 
                     TextEntry::make('level')
                         ->label('Niveau')
@@ -51,12 +51,12 @@ class ArticleInfolist
                     TextEntry::make('published_at')
                         ->label('Publié le')
                         ->dateTime('d/m/Y H:i')
-                        ->placeholder('—'),
+                        ->placeholder('-'),
 
                     TextEntry::make('reviewed_at')
                         ->label('Révisé le')
                         ->dateTime('d/m/Y H:i')
-                        ->placeholder('—'),
+                        ->placeholder('-'),
 
                     TextEntry::make('created_at')
                         ->label('Créé le')

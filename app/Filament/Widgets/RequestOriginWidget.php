@@ -26,7 +26,7 @@ class RequestOriginWidget extends BaseWidget
     {
         return auth()->user()?->hasAnyRole([
             UserRole::SuperAdmin->value,
-            UserRole::Admin->value,
+            UserRole::SuperAdmin->value,
         ]) ?? false;
     }
 
@@ -36,7 +36,7 @@ class RequestOriginWidget extends BaseWidget
 
         $appHost = parse_url(config('app.url'), PHP_URL_HOST) ?? '127.0.0.1';
 
-        // CHAR(63) = '?' — évite l'interprétation PDO du caractère '?' comme paramètre lié
+        // CHAR(63) = '?' - évite l'interprétation PDO du caractère '?' comme paramètre lié
         return PageView::query()
             ->select(
                 DB::raw("MD5(CONCAT(COALESCE(referrer,''), COALESCE(route_name,''), path, method)) as id"),

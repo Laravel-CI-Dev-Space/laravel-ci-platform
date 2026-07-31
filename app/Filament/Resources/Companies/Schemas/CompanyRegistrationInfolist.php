@@ -19,7 +19,7 @@ class CompanyRegistrationInfolist
                     TextEntry::make('first_name')->label('Prénom'),
                     TextEntry::make('last_name')->label('Nom'),
                     TextEntry::make('position')->label('Poste'),
-                    TextEntry::make('phone')->label('Téléphone')->placeholder('—'),
+                    TextEntry::make('phone')->label('Téléphone')->placeholder('-'),
                     TextEntry::make('email')->label('Email'),
                 ]),
 
@@ -28,9 +28,9 @@ class CompanyRegistrationInfolist
                 ->schema([
                     TextEntry::make('company_name')->label('Entreprise'),
                     TextEntry::make('business_domain')->label("Domaine d'activité"),
-                    TextEntry::make('country')->label('Pays')->placeholder('—'),
-                    TextEntry::make('city')->label('Ville')->placeholder('—'),
-                    TextEntry::make('website')->label('Site web')->placeholder('—'),
+                    TextEntry::make('country')->label('Pays')->placeholder('-'),
+                    TextEntry::make('city')->label('Ville')->placeholder('-'),
+                    TextEntry::make('website')->label('Site web')->placeholder('-'),
                 ]),
 
             Section::make('Message de présentation')
@@ -56,9 +56,9 @@ class CompanyRegistrationInfolist
                             'rejected' => 'Refusée',
                             default    => $state,
                         }),
-                    TextEntry::make('reviewer.name')->label('Révisé par')->placeholder('—'),
-                    TextEntry::make('reviewed_at')->label('Révisé le')->dateTime('d/m/Y H:i')->placeholder('—'),
-                    TextEntry::make('rejection_reason')->label('Raison du refus')->placeholder('—')->columnSpanFull(),
+                    TextEntry::make('reviewer.name')->label('Révisé par')->placeholder('-'),
+                    TextEntry::make('reviewed_at')->label('Révisé le')->dateTime('d/m/Y H:i')->placeholder('-'),
+                    TextEntry::make('rejection_reason')->label('Raison du refus')->placeholder('-')->columnSpanFull(),
                 ]),
         ]);
     }

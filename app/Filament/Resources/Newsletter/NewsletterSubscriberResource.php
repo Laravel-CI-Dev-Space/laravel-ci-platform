@@ -35,7 +35,7 @@ class NewsletterSubscriberResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return 'Communication';
+        return 'Blog';
     }
 
     protected static ?string $modelLabel = 'Abonné';
@@ -64,7 +64,7 @@ class NewsletterSubscriberResource extends Resource
             ->columns([
                 TextColumn::make('name')
                     ->label('Prénom')
-                    ->placeholder('—')
+                    ->placeholder('-')
                     ->searchable()
                     ->sortable(),
 
@@ -90,7 +90,7 @@ class NewsletterSubscriberResource extends Resource
                 TextColumn::make('unsubscribed_at')
                     ->label('Désabonné le')
                     ->dateTime('d/m/Y H:i')
-                    ->placeholder('—')
+                    ->placeholder('-')
                     ->sortable(),
             ])
             ->filters([

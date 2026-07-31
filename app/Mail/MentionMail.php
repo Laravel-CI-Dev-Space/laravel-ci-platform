@@ -29,7 +29,7 @@ class MentionMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: "{$this->author->name} vous a mentionné — Laravel CI",
+            subject: "{$this->author->name} vous a mentionné - Laravel CI",
         );
     }
 

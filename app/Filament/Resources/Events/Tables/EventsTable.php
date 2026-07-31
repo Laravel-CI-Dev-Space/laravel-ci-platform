@@ -73,10 +73,10 @@ class EventsTable
 
                 TextColumn::make('price')
                     ->label('Prix')
-                    ->placeholder('—')
+                    ->placeholder('-')
                     ->formatStateUsing(fn (Event $record): string => $record->is_paid && $record->price !== null
                         ? number_format((float) $record->price, 0, ',', ' ') . ' ' . ($record->currency ?? 'XOF')
-                        : '—')
+                        : '-')
                     ->sortable(),
 
                 TextColumn::make('is_full')

@@ -24,8 +24,7 @@ class PendingNotificationsWidget extends BaseWidget
     {
         return auth()->user()?->hasAnyRole([
             UserRole::SuperAdmin->value,
-            UserRole::Admin->value,
-            UserRole::Moderator->value,
+            UserRole::SuperAdmin->value,
         ]) ?? false;
     }
 

@@ -56,7 +56,7 @@ class UsersTable
                     ->label('Grade')
                     ->badge()
                     ->color('warning')
-                    ->placeholder('—'),
+                    ->placeholder('-'),
 
                 TextColumn::make('profile.points')
                     ->label('Points')
@@ -72,7 +72,7 @@ class UsersTable
                 TextColumn::make('suspended_until')
                     ->label('Suspendu jusqu\'au')
                     ->dateTime('d/m/Y H:i')
-                    ->placeholder('—')
+                    ->placeholder('-')
                     ->color('warning'),
 
                 TextColumn::make('last_login_at')

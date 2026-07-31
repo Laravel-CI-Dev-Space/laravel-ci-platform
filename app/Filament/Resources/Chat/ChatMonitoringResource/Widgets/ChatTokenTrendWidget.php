@@ -12,7 +12,7 @@ class ChatTokenTrendWidget extends ChartWidget
 {
     protected static ?int $sort = 1;
 
-    protected ?string $heading = 'Consommation de tokens — 14 derniers jours';
+    protected ?string $heading = 'Consommation de tokens - 14 derniers jours';
 
     protected ?string $description = 'Public vs Dashboard par jour';
 

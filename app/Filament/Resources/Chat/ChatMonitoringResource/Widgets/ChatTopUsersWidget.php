@@ -12,7 +12,7 @@ class ChatTopUsersWidget extends ChartWidget
 {
     protected static ?int $sort = 2;
 
-    protected ?string $heading = 'Top utilisateurs — 30 derniers jours';
+    protected ?string $heading = 'Top utilisateurs - 30 derniers jours';
 
     protected ?string $description = 'Tokens consommés par utilisateur';
 

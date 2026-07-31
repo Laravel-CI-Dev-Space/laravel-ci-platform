@@ -26,8 +26,7 @@ class EnsureMemberDashboardAccess
 
         if (session('viewing_as_member') && $user?->hasAnyRole([
             UserRole::SuperAdmin->value,
-            UserRole::Admin->value,
-            UserRole::Moderator->value,
+            UserRole::SuperAdmin->value,
         ])) {
             return $next($request);
         }

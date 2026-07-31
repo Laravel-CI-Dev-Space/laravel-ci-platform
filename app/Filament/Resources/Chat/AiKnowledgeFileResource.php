@@ -40,9 +40,9 @@ class AiKnowledgeFileResource extends Resource
                 ->label('Type')
                 ->required()
                 ->options([
-                    AiKnowledgeFile::TYPE_BEHAVIOR => 'Comportement — style, limites, ton',
-                    AiKnowledgeFile::TYPE_PLATFORM => 'Plateforme Laravel CI — fonctionnalités, règles',
-                    AiKnowledgeFile::TYPE_LARAVEL  => 'Connaissance Laravel / PHP — framework, bonnes pratiques',
+                    AiKnowledgeFile::TYPE_BEHAVIOR => 'Comportement - style, limites, ton',
+                    AiKnowledgeFile::TYPE_PLATFORM => 'Plateforme Laravel CI - fonctionnalités, règles',
+                    AiKnowledgeFile::TYPE_LARAVEL  => 'Connaissance Laravel / PHP - framework, bonnes pratiques',
                 ])
                 ->helperText('Détermine dans quelle section du system prompt ce fichier est injecté.'),
 
@@ -78,7 +78,7 @@ class AiKnowledgeFileResource extends Resource
                 ->required(),
 
             Toggle::make('is_active')
-                ->label('Actif — injecté dans le system prompt')
+                ->label('Actif - injecté dans le system prompt')
                 ->default(true),
         ]);
     }
@@ -120,7 +120,7 @@ class AiKnowledgeFileResource extends Resource
                 TextColumn::make('uploader.name')
                     ->label('Uploadé par')
                     ->sortable()
-                    ->default('—'),
+                    ->default('-'),
                 TextColumn::make('updated_at')
                     ->label('Mis à jour')
                     ->since()

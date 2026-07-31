@@ -26,7 +26,7 @@ class CardSettings extends Page implements HasForms
 
     protected static BackedEnum|string|null $navigationIcon = Heroicon::OutlinedIdentification;
 
-    protected static ?string $navigationLabel = 'Cartes membres — Seuils';
+    protected static ?string $navigationLabel = 'Cartes membres - Seuils';
 
     protected static ?string $title = 'Paramètres des cartes membres';
 
@@ -36,14 +36,19 @@ class CardSettings extends Page implements HasForms
 
     public static function getNavigationGroup(): ?string
     {
-        return 'Communauté';
+        return 'Configuration';
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
     }
 
     public static function canAccess(): bool
     {
         return auth()->user()?->hasAnyRole([
             UserRole::SuperAdmin->value,
-            UserRole::Admin->value,
+            UserRole::SuperAdmin->value,
         ]) ?? false;
     }
 
@@ -69,21 +74,21 @@ class CardSettings extends Page implements HasForms
                     ->columns(3)
                     ->schema([
                         TextInput::make('card_level_1_points')
-                            ->label("Niveau 1 — {$levelNames[1]}")
+                            ->label("Niveau 1 - {$levelNames[1]}")
                             ->helperText('Points pour débloquer la carte Initié')
                             ->numeric()
                             ->minValue(1)
                             ->required(),
 
                         TextInput::make('card_level_2_points')
-                            ->label("Niveau 2 — {$levelNames[2]}")
+                            ->label("Niveau 2 - {$levelNames[2]}")
                             ->helperText('Points pour débloquer la carte Bâtisseur')
                             ->numeric()
                             ->minValue(1)
                             ->required(),
 
                         TextInput::make('card_level_3_points')
-                            ->label("Niveau 3 — {$levelNames[3]}")
+                            ->label("Niveau 3 - {$levelNames[3]}")
                             ->helperText('Points pour débloquer la carte Maître Artisan')
                             ->numeric()
                             ->minValue(1)

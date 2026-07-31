@@ -40,7 +40,7 @@ class CompanyRegistrationResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return 'Recruteurs';
+        return 'Job Board';
     }
 
     public static function form(Schema $schema): Schema

@@ -22,7 +22,7 @@ class CvController extends Controller
 
         abort_unless(
             $viewer->id === $userId || $viewer->hasAnyRole([
-                UserRole::Admin->value,
+                UserRole::SuperAdmin->value,
                 UserRole::SuperAdmin->value,
             ]),
             403,

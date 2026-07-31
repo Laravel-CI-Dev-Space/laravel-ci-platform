@@ -37,7 +37,7 @@ class JobOfferForm
                         ->preload()
                         ->nullable()
                         ->live()
-                        ->placeholder('Aucune — saisir le nom ci-dessous'),
+                        ->placeholder('Aucune - saisir le nom ci-dessous'),
 
                     TextInput::make('company_name')
                         ->label('Nom de l\'entreprise externe')
@@ -112,12 +112,12 @@ class JobOfferForm
             Section::make('Contenu de l\'offre')
                 ->schema([
                     RichEditor::make('description')
-                        ->label('Description du poste — missions')
+                        ->label('Description du poste - missions')
                         ->required()
                         ->toolbarButtons(['bold', 'italic', 'bulletList', 'orderedList', 'h3', 'undo', 'redo']),
 
                     RichEditor::make('profile_description')
-                        ->label('Profil du poste — compétences requises')
+                        ->label('Profil du poste - compétences requises')
                         ->toolbarButtons(['bold', 'italic', 'bulletList', 'orderedList', 'h3', 'undo', 'redo']),
 
                     RichEditor::make('tech_stack')

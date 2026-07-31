@@ -7,7 +7,7 @@ namespace App\AI\Providers;
 use App\Models\Chat\AiModel;
 
 /**
- * OpenRouter — passerelle unifiée vers 400+ modèles IA.
+ * OpenRouter - passerelle unifiée vers 400+ modèles IA.
  * Entièrement compatible OpenAI. Le base_url est https://openrouter.ai/api/v1.
  * Les headers HTTP-Referer et X-Title sont optionnels (attribution uniquement).
  */

@@ -23,7 +23,7 @@ class NewJobApplicationMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: "Nouvelle candidature pour {$this->application->jobOffer->title} — Laravel CI",
+            subject: "Nouvelle candidature pour {$this->application->jobOffer->title} - Laravel CI",
         );
     }
 

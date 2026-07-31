@@ -16,8 +16,8 @@ class VoteService
      * Si l'user a voté différemment, change le vote.
      * Met à jour votes_score sur le modèle votable.
      *
-     * @param  Model  $votable  — Question or Answer instance
-     * @param  int  $value  — 1 (upvote) or -1 (downvote)
+     * @param  Model  $votable  - Question or Answer instance
+     * @param  int  $value  - 1 (upvote) or -1 (downvote)
      * @return array{score: int, userVote: int|null}
      */
     public function vote(User $user, Model $votable, int $value): array
@@ -65,7 +65,7 @@ class VoteService
     /**
      * Retourne le vote actuel de l'user sur une entité.
      *
-     * @return int|null — 1, -1, or null
+     * @return int|null - 1, -1, or null
      */
     public function getUserVote(User $user, Model $votable): ?int
     {

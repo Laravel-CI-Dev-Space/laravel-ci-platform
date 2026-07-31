@@ -5,6 +5,7 @@ namespace App\Providers\Filament;
 use App\Filament\Pages\AdminDashboard;
 use App\Filament\Resources\Events\Pages\ListEvents;
 use App\Filament\Resources\Newsletter\NewsletterSubscriberResource;
+use App\Filament\Resources\Poles\PoleResource;
 use App\Http\Middleware\FilamentAdminAccess;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -38,17 +39,17 @@ class AdminPanelProvider extends PanelProvider
                 'gray'    => Color::Slate,
             ])
 
-            ->brandName('Laravel CI — Admin')
+            ->brandName('Laravel CI - Admin')
             ->brandLogo(asset('assets/logo.jpeg'))
             ->brandLogoHeight('2rem')
             ->favicon(asset('assets/logo.jpeg'))
 
-            // No Filament login page — authentication is handled via GitHub OAuth
+            // No Filament login page - authentication is handled via GitHub OAuth
             ->login(false)
             ->authGuard('web')
 
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
-            ->resources([NewsletterSubscriberResource::class])
+            ->resources([NewsletterSubscriberResource::class, PoleResource::class])
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
 
@@ -89,7 +90,7 @@ class AdminPanelProvider extends PanelProvider
                         'view_url'   => route('events.show', $e->slug),
                     ];
 
-                    // Load 3 months: prev, current, next — indexed by 'YYYY-MM-DD'
+                    // Load 3 months: prev, current, next - indexed by 'YYYY-MM-DD'
                     $now    = now();
                     $start  = $now->copy()->subMonth()->startOfMonth();
                     $end    = $now->copy()->addMonth()->endOfMonth();
@@ -145,15 +146,14 @@ class AdminPanelProvider extends PanelProvider
             )
 
             ->navigationGroups([
+                NavigationGroup::make('Communauté'),
+                NavigationGroup::make('Événements'),
                 NavigationGroup::make('Forum'),
                 NavigationGroup::make('Blog'),
-                NavigationGroup::make('Événements'),
                 NavigationGroup::make('Job Board'),
-                NavigationGroup::make('Recruteurs'),
-                NavigationGroup::make('Membres'),
-                NavigationGroup::make('Communication'),
-                NavigationGroup::make('Vitrine')->collapsed(),
+                NavigationGroup::make('Assistant IA')->collapsed(),
                 NavigationGroup::make('Monitoring')->collapsed(),
+                NavigationGroup::make('Vitrine')->collapsed(),
             ])
 
             ->middleware([

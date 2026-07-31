@@ -50,8 +50,7 @@ class ResourceController extends Controller
     {
         abort_unless(
             $resource->is_public || request()->user()?->hasAnyRole([
-                UserRole::Admin->value,
-                UserRole::Moderator->value,
+                UserRole::SuperAdmin->value,
                 UserRole::SuperAdmin->value,
             ]),
             403,

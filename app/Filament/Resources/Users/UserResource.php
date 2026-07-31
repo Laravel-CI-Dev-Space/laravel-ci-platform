@@ -36,7 +36,7 @@ class UserResource extends Resource
     // Defined as a method to avoid a Filament type conflict with the string|BackedEnum property
     public static function getNavigationGroup(): ?string
     {
-        return 'Membres';
+        return 'Communauté';
     }
 
     public static function form(Schema $schema): Schema

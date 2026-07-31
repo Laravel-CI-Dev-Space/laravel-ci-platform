@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Users\Pages;
 
+use App\Filament\Pages\CardSettings;
 use App\Filament\Resources\Users\UserResource;
 use App\Filament\Widgets\UserStatsWidget;
 use Filament\Actions\Action;
@@ -18,6 +19,12 @@ class ListUsers extends ListRecords
     {
         return [
             CreateAction::make(),
+
+            Action::make('card_settings')
+                ->label('Configuration')
+                ->icon('heroicon-o-cog-6-tooth')
+                ->color('gray')
+                ->url(fn (): string => CardSettings::getUrl()),
 
             Action::make('export_excel')
                 ->label('Exporter Excel')

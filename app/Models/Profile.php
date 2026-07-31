@@ -126,7 +126,7 @@ class Profile extends Model
     // ─── HELPERS ─────────────────────────────────────────
 
     /**
-     * URL avatar — uploadé (public/assets/avatars) ou GitHub par défaut.
+     * URL avatar - uploadé (public/assets/avatars) ou GitHub par défaut.
      */
     public function avatarUrl(?string $fallback = null): string
     {
@@ -150,21 +150,21 @@ class Profile extends Model
 
     public function laravelLevelLabel(): string
     {
-        return LaravelLevel::tryFrom($this->laravel_level ?? '')?->label() ?? '—';
+        return LaravelLevel::tryFrom($this->laravel_level ?? '')?->label() ?? '-';
     }
 
     public function yearsExperienceLabel(): string
     {
-        return YearsExperience::tryFrom($this->years_experience ?? '')?->label() ?? '—';
+        return YearsExperience::tryFrom($this->years_experience ?? '')?->label() ?? '-';
     }
 
     public function academicLevelLabel(): string
     {
-        return AcademicLevel::tryFrom($this->academic_level ?? '')?->label() ?? '—';
+        return AcademicLevel::tryFrom($this->academic_level ?? '')?->label() ?? '-';
     }
 
     public function jobStatusLabel(): string
     {
-        return JobStatus::tryFrom($this->job_status ?? '')?->label() ?? '—';
+        return JobStatus::tryFrom($this->job_status ?? '')?->label() ?? '-';
     }
 }

@@ -41,7 +41,7 @@ class GradeResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return 'Membres';
+        return 'Communauté';
     }
 
     public static function form(Schema $schema): Schema

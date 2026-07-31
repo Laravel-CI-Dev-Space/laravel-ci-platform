@@ -22,7 +22,7 @@ class CompanyRegistrationRejectedMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: "Votre demande d'inscription — Laravel CI",
+            subject: "Votre demande d'inscription - Laravel CI",
         );
     }
 

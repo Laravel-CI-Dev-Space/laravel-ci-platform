@@ -5,6 +5,7 @@ namespace App\Services\Web;
 use App\Models\AboutOriginSection;
 use App\Models\CommunityValue;
 use App\Models\Partner;
+use App\Models\Pole;
 use App\Models\SiteSetting;
 use App\Models\TeamMember;
 use App\Models\TimelineEvent;
@@ -20,6 +21,7 @@ class AboutService
             'timeline' => TimelineEvent::cachedActive(),
             'team'     => TeamMember::cachedActive(),
             'values'   => CommunityValue::cachedActive(),
+            'poles'    => Pole::active()->with('activeMembers')->get(),
             'partners' => Partner::cachedActive(),
         ];
     }

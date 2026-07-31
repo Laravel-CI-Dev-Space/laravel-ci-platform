@@ -23,7 +23,7 @@ class JobAlertMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Nouvelles offres correspondant à votre profil — Laravel CI',
+            subject: 'Nouvelles offres correspondant à votre profil - Laravel CI',
         );
     }
 

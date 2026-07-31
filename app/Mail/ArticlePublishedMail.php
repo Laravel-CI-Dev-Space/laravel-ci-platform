@@ -23,7 +23,7 @@ class ArticlePublishedMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Votre article a été publié — Laravel CI',
+            subject: 'Votre article a été publié - Laravel CI',
         );
     }
 

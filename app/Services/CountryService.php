@@ -25,7 +25,7 @@ class CountryService
 
         try {
             if ($lock->get()) {
-                // Re-check after acquiring the lock — another request may have populated it
+                // Re-check after acquiring the lock - another request may have populated it
                 if ($cached = Cache::get(self::CACHE_KEY)) {
                     return $cached;
                 }
@@ -39,7 +39,7 @@ class CountryService
             $lock->release();
         }
 
-        // Could not acquire lock within timeout — return fallback without blocking
+        // Could not acquire lock within timeout - return fallback without blocking
         return $this->fallback();
     }
 

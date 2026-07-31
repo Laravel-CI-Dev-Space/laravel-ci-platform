@@ -19,7 +19,7 @@ class JobOfferService
     /**
      * Récupère les offres actives avec filtres et pagination.
      *
-     * @param  array  $filters  — contract_type, level, is_remote, location, category_id, skill_id, search, sort
+     * @param  array  $filters  - contract_type, level, is_remote, location, category_id, skill_id, search, sort
      */
     public function getOffers(array $filters = [], int $perPage = 15): LengthAwarePaginator
     {
@@ -78,12 +78,12 @@ class JobOfferService
     }
 
     /**
-     * Crée une offre d'emploi (status: pending — attend validation admin).
+     * Crée une offre d'emploi (status: pending - attend validation admin).
      * Attache les catégories et les compétences.
      * Définit expires_at à now() + 30 jours.
      */
     /**
-     * Crée une offre d'emploi (status: pending — attend validation admin).
+     * Crée une offre d'emploi (status: pending - attend validation admin).
      * Attache les catégories et les compétences.
      * Définit expires_at à now() + 30 jours.
      * Gère l'upload de l'image de couverture et du document joint.
@@ -123,7 +123,7 @@ class JobOfferService
 
         $offer = JobOffer::create([
             'company_id'      => $company?->id,
-            'posted_by'       => $user?->id,   // nullable — les comptes entreprise n'ont pas de user lié
+            'posted_by'       => $user?->id,   // nullable - les comptes entreprise n'ont pas de user lié
             'title'           => $data['title'],
             'slug'            => $this->generateUniqueSlug($data['title']),
             'description'     => $data['description'],
@@ -172,7 +172,7 @@ class JobOfferService
     /**
      * Toggle favori pour un membre.
      *
-     * @return bool — true si ajouté, false si retiré
+     * @return bool - true si ajouté, false si retiré
      */
     public function toggleFavorite(User $user, JobOffer $offer): bool
     {

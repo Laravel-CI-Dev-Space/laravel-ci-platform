@@ -28,7 +28,7 @@ class MonitoringModalsWidget extends Widget
     {
         return auth()->user()?->hasAnyRole([
             UserRole::SuperAdmin->value,
-            UserRole::Admin->value,
+            UserRole::SuperAdmin->value,
         ]) ?? false;
     }
 
@@ -59,9 +59,9 @@ class MonitoringModalsWidget extends Widget
     {
         return match ($this->type) {
             'jobs'   => 'File d\'attente & Jobs échoués',
-            'slow'   => 'Requêtes lentes (>500ms) — 24h',
-            'errors' => 'Erreurs 4xx/5xx — 24h',
-            'routes' => 'Performance par route — 24h',
+            'slow'   => 'Requêtes lentes (>500ms) - 24h',
+            'errors' => 'Erreurs 4xx/5xx - 24h',
+            'routes' => 'Performance par route - 24h',
             default  => 'Détail',
         };
     }
@@ -77,7 +77,7 @@ class MonitoringModalsWidget extends Widget
                 'attempts'     => $j->attempts,
                 'available_at' => $j->available_at
                     ? Carbon::createFromTimestamp($j->available_at)->diffForHumans()
-                    : '—',
+                    : '-',
                 'created_at'   => Carbon::createFromTimestamp($j->created_at)->diffForHumans(),
             ])->toArray();
 

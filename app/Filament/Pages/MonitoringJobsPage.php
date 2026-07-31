@@ -35,7 +35,7 @@ class MonitoringJobsPage extends Page
     {
         return auth()->user()?->hasAnyRole([
             UserRole::SuperAdmin->value,
-            UserRole::Admin->value,
+            UserRole::SuperAdmin->value,
         ]) ?? false;
     }
 
@@ -55,7 +55,7 @@ class MonitoringJobsPage extends Page
                     'created_at'   => Carbon::createFromTimestamp($job->created_at)->diffForHumans(),
                     'available_at' => $job->available_at
                         ? Carbon::createFromTimestamp($job->available_at)->diffForHumans()
-                        : '—',
+                        : '-',
                 ];
             })
             ->toArray();

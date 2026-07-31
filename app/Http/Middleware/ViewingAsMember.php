@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Permet à un admin/super-admin/modérateur de naviguer le site
  * en simulant l'expérience d'un membre, pour tester les fonctionnalités.
- * Le flag est stocké en session et n'altère pas les permissions réelles —
+ * Le flag est stocké en session et n'altère pas les permissions réelles -
  * il sert uniquement à l'affichage du bandeau et à la redirection du dashboard.
  */
 class ViewingAsMember
@@ -28,8 +28,7 @@ class ViewingAsMember
         if (
             session('viewing_as_member') && $user && ! $user->hasAnyRole([
                 UserRole::SuperAdmin->value,
-                UserRole::Admin->value,
-                UserRole::Moderator->value,
+                UserRole::SuperAdmin->value,
             ])
         ) {
             session()->forget('viewing_as_member');

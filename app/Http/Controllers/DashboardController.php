@@ -19,11 +19,8 @@ class DashboardController extends Controller
         if ($user->hasRole(UserRole::SuperAdmin->value)) {
             return redirect()->route('dashboard.super-admin');
         }
-        if ($user->hasRole(UserRole::Admin->value)) {
-            return redirect()->route('dashboard.admin');
-        }
-        if ($user->hasRole(UserRole::Moderator->value)) {
-            return redirect()->route('dashboard.moderator.overview');
+        if ($user->activePoleMember() !== null) {
+            return redirect('/espace-pole');
         }
         if ($user->hasRole(UserRole::Member->value)) {
             return redirect()->route('dashboard.member.overview');

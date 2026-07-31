@@ -23,7 +23,7 @@ class CheckMemberActive
 
         $user = auth()->user();
 
-        // Permanently banned — log out immediately
+        // Permanently banned - log out immediately
         if ($user->isBanned()) {
             auth()->logout();
 
@@ -31,13 +31,13 @@ class CheckMemberActive
                 ->with('error', 'Votre compte a été banni. Contactez un administrateur.');
         }
 
-        // Suspension expired — lift it automatically and let the user through
+        // Suspension expired - lift it automatically and let the user through
         if ($user->suspended_until !== null && $user->suspended_until->isPast()) {
             $user->update(['suspended_until' => null]);
             return $next($request);
         }
 
-        // Temporarily suspended — log out and show the suspension end date
+        // Temporarily suspended - log out and show the suspension end date
         if ($user->isSuspended()) {
             auth()->logout();
             $request->session()->invalidate();

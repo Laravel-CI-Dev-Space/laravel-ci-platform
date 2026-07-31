@@ -23,7 +23,7 @@ class EventConfirmationMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: "Inscription confirmée : {$this->registration->event->title} — Laravel CI",
+            subject: "Inscription confirmée : {$this->registration->event->title} - Laravel CI",
         );
     }
 

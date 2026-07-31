@@ -27,7 +27,7 @@ class GlobalSettingsComposer
                 ->get()
                 ->keyBy('key');
         } catch (\Throwable) {
-            // Table absente (avant migration) — on renvoie une collection vide
+            // Table absente (avant migration) - on renvoie une collection vide
             self::$cache = collect();
         }
 

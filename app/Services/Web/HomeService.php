@@ -15,7 +15,7 @@ class HomeService
     public function getHomeData(): array
     {
         // getGroup() charge toutes les clés 'home.*' en 1 seule requête mise en cache.
-        // On réutilise la collection pour extraire les limites — évite 3 get() individuels.
+        // On réutilise la collection pour extraire les limites - évite 3 get() individuels.
         $homeSettings = SiteSetting::getGroup('home');
 
         $previewQuestions = (int) ($homeSettings['home_questions_preview'] ?? 3);

@@ -20,7 +20,7 @@ class RequestLatencyStatsWidget extends BaseWidget
     {
         return auth()->user()?->hasAnyRole([
             UserRole::SuperAdmin->value,
-            UserRole::Admin->value,
+            UserRole::SuperAdmin->value,
         ]) ?? false;
     }
 
@@ -51,7 +51,7 @@ class RequestLatencyStatsWidget extends BaseWidget
                         ->value('duration_ms') ?? 0);
                 }
 
-                // Route la plus lente (avg) — on extrait les scalaires pour éviter
+                // Route la plus lente (avg) - on extrait les scalaires pour éviter
                 // de sérialiser un objet Eloquent dans le cache
                 $topSlowRow = (clone $base)
                     ->selectRaw('COALESCE(route_name, path) as label, ROUND(AVG(duration_ms)) as avg_ms')
@@ -106,7 +106,7 @@ class RequestLatencyStatsWidget extends BaseWidget
                 ->color($errorRate > 5 ? 'danger' : ($errorRate > 1 ? 'warning' : 'success'))
                 ->extraAttributes(['wire:click' => "\$dispatch('monitoring-open', { type: 'errors' })", 'style' => 'cursor:pointer']),
 
-            Stat::make('Route la plus lente', $topSlowAvg !== null ? $topSlowAvg . ' ms' : '—')
+            Stat::make('Route la plus lente', $topSlowAvg !== null ? $topSlowAvg . ' ms' : '-')
                 ->description($topSlowLabel ? substr($topSlowLabel, 0, 40) : 'Pas de données')
                 ->descriptionIcon('heroicon-m-map-pin')
                 ->color('gray')

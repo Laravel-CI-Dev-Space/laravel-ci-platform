@@ -16,7 +16,7 @@ class AnalyticsDashboard extends Page
 
     protected static ?string $title = 'Analytics';
 
-    protected static ?int $navigationSort = -1;
+    protected static ?int $navigationSort = 1;
 
     protected string $view = 'filament.pages.analytics-dashboard';
 
@@ -24,7 +24,7 @@ class AnalyticsDashboard extends Page
 
     public static function getNavigationGroup(): ?string
     {
-        return null;
+        return 'Monitoring';
     }
 
     /** @return array<string, mixed> */

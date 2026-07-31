@@ -14,6 +14,8 @@ class ResourceList extends Component
 {
     use WithPagination;
 
+    protected string $paginationTheme = 'bootstrap';
+
     #[Url]
     public string $type = 'all';
 

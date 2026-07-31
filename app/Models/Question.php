@@ -63,7 +63,7 @@ class Question extends Model
     /** Vérifie si l'utilisateur a le droit d'éditer (propriétaire dans les 48h ou admin). */
     public function canEditBy(User $user): bool
     {
-        if ($user->hasAnyRole([UserRole::Admin->value, UserRole::Moderator->value, UserRole::SuperAdmin->value])) {
+        if ($user->hasAnyRole([UserRole::SuperAdmin->value, UserRole::SuperAdmin->value])) {
             return true;
         }
 

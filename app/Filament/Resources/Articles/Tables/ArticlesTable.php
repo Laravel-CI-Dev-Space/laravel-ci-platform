@@ -72,7 +72,7 @@ class ArticlesTable
                     ->label('Publié le')
                     ->dateTime('d/m/Y')
                     ->sortable()
-                    ->placeholder('—'),
+                    ->placeholder('-'),
 
                 TextColumn::make('created_at')
                     ->label('Créé le')

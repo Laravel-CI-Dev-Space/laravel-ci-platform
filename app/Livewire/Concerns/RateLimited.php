@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\RateLimiter;
  * Limite la fréquence d'une action Livewire (par utilisateur connecté ou
  * par IP pour les invités). Les routes web sont throttlées, mais les
  * composants Livewire sont appelés via /livewire/update et contournent
- * ce throttling — d'où ce limiteur applicatif.
+ * ce throttling - d'où ce limiteur applicatif.
  */
 trait RateLimited
 {

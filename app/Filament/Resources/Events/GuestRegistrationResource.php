@@ -86,7 +86,7 @@ class GuestRegistrationResource extends Resource
 
                 TextColumn::make('whatsapp')
                     ->label('WhatsApp')
-                    ->placeholder('—')
+                    ->placeholder('-')
                     ->icon('heroicon-o-phone')
                     ->toggleable(isToggledHiddenByDefault: true),
 
@@ -132,15 +132,15 @@ class GuestRegistrationResource extends Resource
 
                 TextColumn::make('amount_paid')
                     ->label('Montant')
-                    ->placeholder('—')
+                    ->placeholder('-')
                     ->formatStateUsing(fn (?string $state, AllEventRegistration $record): string => $state !== null && (float) $state > 0
                         ? number_format((float) $state, 0, ',', ' ') . ' ' . ($record->event?->currency ?? 'XOF')
-                        : '—')
+                        : '-')
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('ticket_number')
                     ->label('Ticket')
-                    ->placeholder('—')
+                    ->placeholder('-')
                     ->fontFamily('mono')
                     ->copyable()
                     ->toggleable(isToggledHiddenByDefault: true),

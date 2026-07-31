@@ -72,10 +72,10 @@ class CompanyApplicationResource extends Resource
                         ->copyable(),
                     TextEntry::make('user.github_username')
                         ->label('GitHub')
-                        ->formatStateUsing(fn ($state) => $state ? "@{$state}" : '—')
+                        ->formatStateUsing(fn ($state) => $state ? "@{$state}" : '-')
                         ->url(fn ($state) => $state ? "https://github.com/{$state}" : null)
                         ->openUrlInNewTab()
-                        ->placeholder('—'),
+                        ->placeholder('-'),
                     TextEntry::make('created_at')
                         ->label('Candidature soumise le')
                         ->dateTime('d/m/Y à H:i'),

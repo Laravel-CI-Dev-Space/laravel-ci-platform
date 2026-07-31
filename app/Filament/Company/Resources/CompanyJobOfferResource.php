@@ -123,7 +123,7 @@ class CompanyJobOfferResource extends Resource
                         ->directory('job-covers')
                         ->visibility('public')
                         ->nullable()
-                        ->helperText('JPG, PNG, WebP — max 2 Mo'),
+                        ->helperText('JPG, PNG, WebP - max 2 Mo'),
 
                     FileUpload::make('attachment_path')
                         ->label('Fiche de poste (document)')
@@ -138,7 +138,7 @@ class CompanyJobOfferResource extends Resource
                         ->visibility('public')
                         ->nullable()
                         ->storeFileNamesIn('attachment_name')
-                        ->helperText('PDF, DOC, DOCX — max 10 Mo'),
+                        ->helperText('PDF, DOC, DOCX - max 10 Mo'),
                 ]),
         ]);
     }
@@ -180,7 +180,7 @@ class CompanyJobOfferResource extends Resource
                 TextColumn::make('expires_at')
                     ->label('Expire le')
                     ->dateTime('d/m/Y')
-                    ->placeholder('—'),
+                    ->placeholder('-'),
 
                 TextColumn::make('created_at')
                     ->label('Créée le')

@@ -52,7 +52,7 @@ class MemberCardsTable
 
                 TextColumn::make('poste')
                     ->label('Poste')
-                    ->default('—')
+                    ->default('-')
                     ->searchable(),
 
                 IconColumn::make('is_active')

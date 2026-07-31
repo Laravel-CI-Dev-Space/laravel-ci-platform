@@ -37,7 +37,7 @@ class JobOffersTable
                     ->label('Entreprise')
                     ->sortable()
                     ->searchable()
-                    ->placeholder('—'),
+                    ->placeholder('-'),
 
                 TextColumn::make('contract_type')
                     ->label('Contrat')
@@ -72,7 +72,7 @@ class JobOffersTable
                     ->label('Expire le')
                     ->dateTime('d/m/Y')
                     ->sortable()
-                    ->placeholder('—'),
+                    ->placeholder('-'),
 
                 TextColumn::make('created_at')
                     ->label('Créée le')

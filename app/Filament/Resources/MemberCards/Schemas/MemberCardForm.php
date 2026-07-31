@@ -33,7 +33,7 @@ class MemberCardForm
                     ->content(function (Get $get) use ($thresholds): string {
                         $userId = $get('user_id');
                         if (! $userId) {
-                            return '— sélectionnez un membre';
+                            return '- sélectionnez un membre';
                         }
                         $user   = User::with('profile')->find($userId);
                         $points = $user?->profile?->points ?? 0;
@@ -47,7 +47,7 @@ class MemberCardForm
 
                         $badge = $ok > 0 ? "✅ éligible niveau {$ok}" : '⚠️ aucun niveau atteint';
 
-                        return "{$points} pts — {$badge} ({$hints})";
+                        return "{$points} pts - {$badge} ({$hints})";
                     }),
 
                 Select::make('level')

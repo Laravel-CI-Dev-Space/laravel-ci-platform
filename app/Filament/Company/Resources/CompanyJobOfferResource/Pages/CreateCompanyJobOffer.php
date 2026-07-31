@@ -22,7 +22,7 @@ class CreateCompanyJobOffer extends CreateRecord
 
     /**
      * Filament FileUpload retourne 'job-covers/filename.jpg' (path relatif au disk).
-     * On normalise en stockant uniquement 'filename.jpg' — cohérent avec AssetService.
+     * On normalise en stockant uniquement 'filename.jpg' - cohérent avec AssetService.
      */
     protected function mutateFormDataBeforeCreate(array $data): array
     {
@@ -50,6 +50,6 @@ class CreateCompanyJobOffer extends CreateRecord
 
     protected function getCreatedNotificationTitle(): ?string
     {
-        return 'Offre soumise pour validation — vous serez notifié après examen.';
+        return 'Offre soumise pour validation - vous serez notifié après examen.';
     }
 }

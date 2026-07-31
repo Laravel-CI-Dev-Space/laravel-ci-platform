@@ -15,6 +15,8 @@ class ArticleList extends Component
 {
     use WithPagination;
 
+    protected string $paginationTheme = 'bootstrap';
+
     #[Url]
     public string $level = 'all';
 

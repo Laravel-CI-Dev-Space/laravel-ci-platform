@@ -18,7 +18,7 @@ class RequestLatencyWidget extends BaseWidget
 {
     protected static ?int $sort = 2;
 
-    protected static ?string $heading = 'Latence des requêtes — Top 20 routes les plus lentes (24h)';
+    protected static ?string $heading = 'Latence des requêtes - Top 20 routes les plus lentes (24h)';
 
     protected int | string | array $columnSpan = 'full';
 
@@ -28,7 +28,7 @@ class RequestLatencyWidget extends BaseWidget
     {
         return auth()->user()?->hasAnyRole([
             UserRole::SuperAdmin->value,
-            UserRole::Admin->value,
+            UserRole::SuperAdmin->value,
         ]) ?? false;
     }
 
@@ -44,7 +44,7 @@ class RequestLatencyWidget extends BaseWidget
             $max   = (int) ((clone $base)->max('duration_ms') ?? 0);
             $total = (clone $base)->count();
 
-            // P95 — order by duration_ms, skip to 95th percentile row
+            // P95 - order by duration_ms, skip to 95th percentile row
             $p95Index = max(0, (int) ceil($total * 0.95) - 1);
             $p95      = (int) ((clone $base)
                 ->orderBy('duration_ms')
@@ -135,7 +135,7 @@ class RequestLatencyWidget extends BaseWidget
 
             TextColumn::make('p95_display')
                 ->label('P95')
-                ->getStateUsing(fn ($record) => '—')
+                ->getStateUsing(fn ($record) => '-')
                 ->alignCenter()
                 ->color('gray'),
 

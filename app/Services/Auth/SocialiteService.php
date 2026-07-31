@@ -89,7 +89,7 @@ class SocialiteService
     /**
      * Updates GitHub data for a returning user.
      * Only a permanent ban (is_active = false) blocks login.
-     * Temporary suspension passes through — dashboard access is limited instead.
+     * Temporary suspension passes through - dashboard access is limited instead.
      */
     private function updateUser(User $user, GithubUser $githubUser): User
     {

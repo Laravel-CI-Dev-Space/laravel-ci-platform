@@ -13,7 +13,7 @@ use Illuminate\Support\Carbon;
 
 class AdminContentChart extends ChartWidget
 {
-    protected ?string $heading = 'Activité du contenu — 6 derniers mois';
+    protected ?string $heading = 'Activité du contenu - 6 derniers mois';
 
     protected static ?int $sort = 3;
 
@@ -23,8 +23,7 @@ class AdminContentChart extends ChartWidget
     {
         return auth()->user()?->hasAnyRole([
             UserRole::SuperAdmin->value,
-            UserRole::Admin->value,
-            UserRole::Moderator->value,
+            UserRole::SuperAdmin->value,
         ]) ?? false;
     }
 

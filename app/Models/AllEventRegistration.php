@@ -11,7 +11,7 @@ class AllEventRegistration extends Model
 {
     protected $table = 'all_event_registrations';
 
-    /** View is read-only — no inserts/updates allowed. */
+    /** View is read-only - no inserts/updates allowed. */
     public $timestamps = false;
 
     protected function casts(): array

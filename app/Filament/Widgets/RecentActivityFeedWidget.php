@@ -26,7 +26,7 @@ class RecentActivityFeedWidget extends BaseWidget
     {
         return auth()->user()?->hasAnyRole([
             UserRole::SuperAdmin->value,
-            UserRole::Admin->value,
+            UserRole::SuperAdmin->value,
         ]) ?? false;
     }
 
@@ -67,7 +67,7 @@ class RecentActivityFeedWidget extends BaseWidget
 
                 TextColumn::make('subject_type')
                     ->label('Sur')
-                    ->formatStateUsing(fn (?string $state): string => $state ? class_basename($state) : '—'),
+                    ->formatStateUsing(fn (?string $state): string => $state ? class_basename($state) : '-'),
 
                 TextColumn::make('description')
                     ->label('Description')
@@ -81,7 +81,7 @@ class RecentActivityFeedWidget extends BaseWidget
                         $attributes = $state->get('attributes', []);
 
                         if (empty($attributes)) {
-                            return '—';
+                            return '-';
                         }
 
                         return collect($attributes)

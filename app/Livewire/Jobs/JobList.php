@@ -16,6 +16,8 @@ class JobList extends Component
 {
     use WithPagination;
 
+    protected string $paginationTheme = 'bootstrap';
+
     #[Url]
     public string $contractType = 'all';
 

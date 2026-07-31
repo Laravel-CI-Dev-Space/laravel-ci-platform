@@ -50,7 +50,7 @@ class JobOfferController extends Controller
     }
 
     /**
-     * Enregistre une nouvelle offre (status: pending — attend validation admin).
+     * Enregistre une nouvelle offre (status: pending - attend validation admin).
      */
     public function store(Request $request): RedirectResponse
     {

@@ -35,7 +35,7 @@ class CompanyPanelProvider extends PanelProvider
                 'gray'    => Color::Slate,
             ])
 
-            ->brandName('Espace Entreprise — Laravel CI')
+            ->brandName('Espace Entreprise - Laravel CI')
             ->brandLogo(asset('assets/logo.jpeg'))
             ->brandLogoHeight('2rem')
             ->favicon(asset('assets/logo.jpeg'))

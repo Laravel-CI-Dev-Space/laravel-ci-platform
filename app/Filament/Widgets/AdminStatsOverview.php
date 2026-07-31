@@ -21,17 +21,13 @@ class AdminStatsOverview extends BaseWidget
 
     public static function canView(): bool
     {
-        return auth()->user()?->hasAnyRole([
-            UserRole::SuperAdmin->value,
-            UserRole::Admin->value,
-            UserRole::Moderator->value,
-        ]) ?? false;
+        return auth()->user()?->hasRole(UserRole::SuperAdmin->value) ?? false;
     }
 
     protected function getStats(): array
     {
         $user        = auth()->user();
-        $isModerator = $user?->hasRole(UserRole::Moderator->value) && ! $user?->hasAnyRole([UserRole::Admin->value, UserRole::SuperAdmin->value]);
+        $isModerator = false;
 
         // Membres
         $totalMembers = User::count();

@@ -21,8 +21,8 @@ class JobOfferInfolist
                 ->columns(2)
                 ->schema([
                     TextEntry::make('title')->label('Intitulé')->columnSpanFull(),
-                    TextEntry::make('company.name')->label('Entreprise')->placeholder('—'),
-                    TextEntry::make('poster.name')->label('Publié par')->placeholder('—'),
+                    TextEntry::make('company.name')->label('Entreprise')->placeholder('-'),
+                    TextEntry::make('poster.name')->label('Publié par')->placeholder('-'),
                     TextEntry::make('contract_type')->label('Contrat')
                         ->formatStateUsing(fn (JobContractType $state): string => $state->label()),
                     TextEntry::make('level')->label('Niveau')
@@ -30,14 +30,14 @@ class JobOfferInfolist
                     TextEntry::make('status')->label('Statut')->badge()
                         ->color(fn (JobOfferStatus $state): string => $state->color())
                         ->formatStateUsing(fn (JobOfferStatus $state): string => $state->label()),
-                    TextEntry::make('location')->label('Lieu')->placeholder('—'),
-                    TextEntry::make('country')->label('Pays')->placeholder('—'),
+                    TextEntry::make('location')->label('Lieu')->placeholder('-'),
+                    TextEntry::make('country')->label('Pays')->placeholder('-'),
                     IconEntry::make('is_remote')->label('Télétravail')->boolean(),
                     IconEntry::make('is_urgent')->label('Urgente')->boolean(),
                     TextEntry::make('views_count')->label('Vues'),
                     TextEntry::make('applications_count')->label('Candidatures'),
-                    TextEntry::make('published_at')->label('Publiée le')->dateTime('d/m/Y H:i')->placeholder('—'),
-                    TextEntry::make('expires_at')->label('Expire le')->dateTime('d/m/Y')->placeholder('—'),
+                    TextEntry::make('published_at')->label('Publiée le')->dateTime('d/m/Y H:i')->placeholder('-'),
+                    TextEntry::make('expires_at')->label('Expire le')->dateTime('d/m/Y')->placeholder('-'),
                 ]),
 
             Section::make('Description')
