@@ -14,7 +14,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // ══════════════════════════════════════════════════════════
-        //  SUPER-ADMIN UNIQUE — yanne.kouassi@epitech.eu
+        //  SUPER-ADMIN UNIQUE - yanne.kouassi@epitech.eu
         //  syncRoles() garantit qu'il est le SEUL super-admin seedé
         //  et qu'un re-seed ne duplique pas le rôle.
         // ══════════════════════════════════════════════════════════
@@ -40,7 +40,7 @@ class UserSeeder extends Seeder
                 'country'          => "Côte d'Ivoire",
                 'city'             => 'Abidjan',
                 'district'         => 'Cocody',
-                'bio'              => "Lead Developer — Laravel Côte d'Ivoire. Passionné de PHP et Laravel.",
+                'bio'              => "Lead Developer - Laravel Côte d'Ivoire. Passionné de PHP et Laravel.",
                 'laravel_level'    => 'expert',
                 'years_experience' => '5_10_ans',
                 'tech_stack'       => ['Laravel', 'PHP', 'Livewire', 'Filament', 'Vue.js', 'MySQL', 'Docker'],
@@ -66,7 +66,7 @@ class UserSeeder extends Seeder
                 'last_login_at'     => now(),
             ]
         );
-        $admin->syncRoles([UserRole::Admin->value]);
+        $admin->syncRoles([UserRole::Member->value]);
 
         $moderator = User::firstOrCreate(
             ['email' => 'moderator@laravelci.com'],
@@ -80,7 +80,7 @@ class UserSeeder extends Seeder
                 'last_login_at'     => now(),
             ]
         );
-        $moderator->syncRoles([UserRole::Moderator->value]);
+        $moderator->syncRoles([UserRole::Member->value]);
 
         $member = User::firstOrCreate(
             ['email' => 'member@laravelci.com'],

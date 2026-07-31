@@ -43,7 +43,7 @@ class SiteSettingSeeder extends Seeder
             ['key' => 'about_cta_text',      'group' => 'about', 'type' => 'textarea', 'label' => 'About CTA texte',       'value' => "900+ développeurs ivoiriens construisent l'avenir de la tech africaine, un commit à la fois.", 'order' => 6],
 
             // ── SEO ──────────────────────────────────────────────────
-            ['key' => 'seo_home_title',       'group' => 'seo', 'type' => 'text',     'label' => "SEO titre d'accueil",       'value' => "Laravel CI — La communauté Laravel de Côte d'Ivoire", 'order' => 1],
+            ['key' => 'seo_home_title',       'group' => 'seo', 'type' => 'text',     'label' => "SEO titre d'accueil",       'value' => "Laravel CI - La communauté Laravel de Côte d'Ivoire", 'order' => 1],
             ['key' => 'seo_home_description', 'group' => 'seo', 'type' => 'textarea', 'label' => "SEO description d'accueil", 'value' => "Rejoins 900+ développeurs Laravel ivoiriens. Forum, blog, événements, emplois : la communauté tech africaine de référence.", 'order' => 2],
             ['key' => 'seo_og_image',         'group' => 'seo', 'type' => 'image',    'label' => 'OG Image (1200x630)',       'value' => '', 'order' => 3],
 
@@ -56,9 +56,9 @@ class SiteSettingSeeder extends Seeder
 
             // ── FOOTER ───────────────────────────────────────────────
             ['key' => 'footer_tagline',              'group' => 'footer', 'type' => 'textarea', 'label' => 'Description / tagline',        'value' => "La première communauté structurée de développeurs Laravel en Côte d'Ivoire et dans la diaspora ivoirienne. Excellence technique africaine, ensemble.", 'order' => 1],
-            ['key' => 'footer_col1_title',           'group' => 'footer', 'type' => 'text',     'label' => 'Colonne 2 — titre',            'value' => 'Navigation',                       'order' => 2],
-            ['key' => 'footer_col2_title',           'group' => 'footer', 'type' => 'text',     'label' => 'Colonne 3 — titre',            'value' => 'Communauté',                       'order' => 3],
-            ['key' => 'footer_col3_title',           'group' => 'footer', 'type' => 'text',     'label' => 'Colonne 4 — titre',            'value' => 'Contact',                          'order' => 4],
+            ['key' => 'footer_col1_title',           'group' => 'footer', 'type' => 'text',     'label' => 'Colonne 2 - titre',            'value' => 'Navigation',                       'order' => 2],
+            ['key' => 'footer_col2_title',           'group' => 'footer', 'type' => 'text',     'label' => 'Colonne 3 - titre',            'value' => 'Communauté',                       'order' => 3],
+            ['key' => 'footer_col3_title',           'group' => 'footer', 'type' => 'text',     'label' => 'Colonne 4 - titre',            'value' => 'Contact',                          'order' => 4],
             ['key' => 'footer_contact_location',     'group' => 'footer', 'type' => 'text',     'label' => 'Localisation',                 'value' => "Abidjan, Côte d'Ivoire",            'order' => 5],
             ['key' => 'footer_contact_email',        'group' => 'footer', 'type' => 'text',     'label' => 'Email de contact',             'value' => 'hello@laravel.ci',                 'order' => 6],
             ['key' => 'footer_whatsapp_label',       'group' => 'footer', 'type' => 'text',     'label' => 'Label lien WhatsApp',          'value' => 'Rejoindre le groupe WhatsApp',     'order' => 7],
@@ -83,9 +83,9 @@ class SiteSettingSeeder extends Seeder
             ['key' => 'reputation_recalculate_frequency',    'group' => 'reputation', 'type' => 'frequency', 'label' => 'Fréquence de recalcul des grades',     'value' => 'monthly', 'order' => 10],
 
             // ── CARTES MEMBRE ────────────────────────────────────────
-            ['key' => 'card_level_1_points', 'group' => 'member_cards', 'type' => 'number', 'label' => 'Réputation min. — Carte Initié (niveau 1)',       'value' => '300', 'order' => 1],
-            ['key' => 'card_level_2_points', 'group' => 'member_cards', 'type' => 'number', 'label' => 'Réputation min. — Carte Bâtisseur (niveau 2)',    'value' => '600', 'order' => 2],
-            ['key' => 'card_level_3_points', 'group' => 'member_cards', 'type' => 'number', 'label' => 'Réputation min. — Carte Maître Artisan (niveau 3)', 'value' => '900', 'order' => 3],
+            ['key' => 'card_level_1_points', 'group' => 'member_cards', 'type' => 'number', 'label' => 'Réputation min. - Carte Initié (niveau 1)',       'value' => '300', 'order' => 1],
+            ['key' => 'card_level_2_points', 'group' => 'member_cards', 'type' => 'number', 'label' => 'Réputation min. - Carte Bâtisseur (niveau 2)',    'value' => '600', 'order' => 2],
+            ['key' => 'card_level_3_points', 'group' => 'member_cards', 'type' => 'number', 'label' => 'Réputation min. - Carte Maître Artisan (niveau 3)', 'value' => '900', 'order' => 3],
         ];
 
         foreach ($settings as $setting) {

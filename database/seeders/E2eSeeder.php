@@ -32,7 +32,7 @@ class E2eSeeder extends Seeder
             'is_active'         => true,
             'email_verified_at' => now(),
         ]);
-        $admin->syncRoles([UserRole::Admin->value]);
+        $admin->syncRoles([UserRole::Member->value]);
         Profile::firstOrCreate(['user_id' => $admin->id]);
 
         $member = User::factory()->create([
@@ -82,7 +82,7 @@ class E2eSeeder extends Seeder
 
         JobOffer::factory()->active()->create([
             'company_id' => $company->id,
-            'title'      => 'Développeur Laravel — Offre E2E',
+            'title'      => 'Développeur Laravel - Offre E2E',
         ]);
 
         $this->command->info('✅ Données E2E seedées (admin, membre, entreprise, contenus).');

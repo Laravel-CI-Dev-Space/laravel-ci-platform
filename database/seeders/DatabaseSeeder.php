@@ -14,7 +14,8 @@ class DatabaseSeeder extends Seeder
             JobOfferCategorySeeder::class,   // 3. Job categories
             JobSkillSeeder::class,           // 4. Job skills
             UserSeeder::class,               // 5. Users (après roles)
-            SiteSettingSeeder::class,        // 6. Paramètres du site
+            PoleSeeder::class,               // 6. Pôles + membres (après users pour user_id)
+            SiteSettingSeeder::class,        // 7. Paramètres du site
             HomeStatSeeder::class,           // 7. Statistiques page accueil
             PartnerSeeder::class,            // 8. Partenaires
             TeamMemberSeeder::class,         // 9. Co-fondateurs

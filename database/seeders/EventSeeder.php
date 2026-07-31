@@ -26,7 +26,7 @@ class EventSeeder extends Seeder
             ['slug' => 'meetup-laravel-ci-abidjan-juillet-2026'],
             [
                 'created_by'  => $creator->id,
-                'title'       => 'Meetup Laravel CI — Abidjan Juillet 2026',
+                'title'       => 'Meetup Laravel CI - Abidjan Juillet 2026',
                 'description' => <<<'HTML'
                     <h2>Rejoignez-nous pour notre meetup mensuel !</h2>
                     <p>
@@ -36,20 +36,20 @@ class EventSeeder extends Seeder
                     <h3>Au programme</h3>
                     <ul>
                         <li>Tour de table des participants</li>
-                        <li>Présentation : <strong>Laravel 13 — ce qui change vraiment</strong></li>
+                        <li>Présentation : <strong>Laravel 13 - ce qui change vraiment</strong></li>
                         <li>Retour d'expérience : déploiement Laravel sur infrastructure africaine</li>
                         <li>Open discussion et networking</li>
                     </ul>
-                    <p>Entrée <strong>gratuite</strong> — places limitées, inscription obligatoire.</p>
+                    <p>Entrée <strong>gratuite</strong> - places limitées, inscription obligatoire.</p>
                     HTML,
                 'program' => <<<'HTML'
                     <ul>
-                        <li><strong>18h00</strong> — Accueil des participants</li>
-                        <li><strong>18h30</strong> — Présentation principale (45 min)</li>
-                        <li><strong>19h15</strong> — Retour d'expérience (20 min)</li>
-                        <li><strong>19h35</strong> — Questions / Réponses</li>
-                        <li><strong>20h00</strong> — Networking & Rafraîchissements</li>
-                        <li><strong>21h00</strong> — Fin de soirée</li>
+                        <li><strong>18h00</strong> - Accueil des participants</li>
+                        <li><strong>18h30</strong> - Présentation principale (45 min)</li>
+                        <li><strong>19h15</strong> - Retour d'expérience (20 min)</li>
+                        <li><strong>19h35</strong> - Questions / Réponses</li>
+                        <li><strong>20h00</strong> - Networking & Rafraîchissements</li>
+                        <li><strong>21h00</strong> - Fin de soirée</li>
                     </ul>
                     HTML,
                 'type'                       => 'meetup',
@@ -83,9 +83,9 @@ class EventSeeder extends Seeder
             ['slug' => 'workshop-filament-5-abidjan-aout-2026'],
             [
                 'created_by'  => $creator->id,
-                'title'       => 'Workshop Filament 5 — Abidjan Août 2026',
+                'title'       => 'Workshop Filament 5 - Abidjan Août 2026',
                 'description' => <<<'HTML'
-                    <h2>Workshop intensif — Filament 5 de A à Z</h2>
+                    <h2>Workshop intensif - Filament 5 de A à Z</h2>
                     <p>
                         Une journée complète pour maîtriser <strong>Filament 5</strong> :
                         ressources, schémas, infolists, actions personnalisées et déploiement en production.
@@ -105,15 +105,15 @@ class EventSeeder extends Seeder
                     HTML,
                 'program' => <<<'HTML'
                     <ul>
-                        <li><strong>08h30</strong> — Accueil & café</li>
-                        <li><strong>09h00</strong> — Introduction à Filament 5 (architecture, nouveautés)</li>
-                        <li><strong>10h30</strong> — Pause</li>
-                        <li><strong>10h45</strong> — Atelier : construire une ressource complète</li>
-                        <li><strong>13h00</strong> — Déjeuner (inclus)</li>
-                        <li><strong>14h00</strong> — Plugins, actions avancées & relation managers</li>
-                        <li><strong>16h00</strong> — Pause</li>
-                        <li><strong>16h15</strong> — Tests & mise en production</li>
-                        <li><strong>17h30</strong> — Q&R et clôture</li>
+                        <li><strong>08h30</strong> - Accueil & café</li>
+                        <li><strong>09h00</strong> - Introduction à Filament 5 (architecture, nouveautés)</li>
+                        <li><strong>10h30</strong> - Pause</li>
+                        <li><strong>10h45</strong> - Atelier : construire une ressource complète</li>
+                        <li><strong>13h00</strong> - Déjeuner (inclus)</li>
+                        <li><strong>14h00</strong> - Plugins, actions avancées & relation managers</li>
+                        <li><strong>16h00</strong> - Pause</li>
+                        <li><strong>16h15</strong> - Tests & mise en production</li>
+                        <li><strong>17h30</strong> - Q&R et clôture</li>
                     </ul>
                     HTML,
                 'type'                       => 'workshop',

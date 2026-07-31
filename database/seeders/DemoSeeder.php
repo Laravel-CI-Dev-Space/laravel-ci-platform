@@ -132,7 +132,7 @@ class DemoSeeder extends Seeder
                 'days'    => 30,
             ],
             [
-                'title'   => "Filament 5 — Guide complet pour les débutants",
+                'title'   => "Filament 5 - Guide complet pour les débutants",
                 'excerpt' => "Filament 5 révolutionne la création de panneaux d'administration. Voici comment démarrer rapidement.",
                 'body'    => "<h2>Qu'est-ce que Filament ?</h2><p>Filament est un framework d'administration full-stack pour Laravel. La version 5 apporte des performances améliorées et une nouvelle architecture basée sur les Schemas.</p><h2>Installation</h2><pre><code>composer require filament/filament\nphp artisan filament:install --panels</code></pre><h2>Créer votre premier Resource</h2><p>Un Resource Filament génère automatiquement les pages de liste, création et édition pour votre modèle Eloquent.</p><h2>Personnalisation</h2><p>Filament offre une personnalisation poussée via les Schemas, Tables et Forms. Vous pouvez créer des champs personnalisés et des actions complexes.</p>",
                 'level'   => ArticleLevel::Beginner,
@@ -142,7 +142,7 @@ class DemoSeeder extends Seeder
             [
                 'title'   => "Livewire 4 et les Composants temps réel",
                 'excerpt' => "Livewire 4 simplifie le développement d'interfaces dynamiques sans JavaScript. Un tour d'horizon des nouvelles fonctionnalités.",
-                'body'    => "<h2>Livewire 4 — Quoi de neuf ?</h2><p>Livewire 4 introduit une nouvelle architecture avec les Volt functional components et une meilleure intégration avec Alpine.js.</p><h2>Volt — Composants fonctionnels</h2><p>Volt permet d'écrire des composants Livewire en utilisant une syntaxe fonctionnelle, similaire à Vue 3 Composition API.</p><pre><code>&lt;?php\nuse function Livewire\\Volt\\{state, computed};\n\nstate(['count' => 0]);\n\n\$increment = fn() => \$this->count++;\n?&gt;</code></pre><h2>Performance</h2><p>Livewire 4 est significativement plus rapide grâce à une nouvelle implémentation du système de morphing DOM.</p>",
+                'body'    => "<h2>Livewire 4 - Quoi de neuf ?</h2><p>Livewire 4 introduit une nouvelle architecture avec les Volt functional components et une meilleure intégration avec Alpine.js.</p><h2>Volt - Composants fonctionnels</h2><p>Volt permet d'écrire des composants Livewire en utilisant une syntaxe fonctionnelle, similaire à Vue 3 Composition API.</p><pre><code>&lt;?php\nuse function Livewire\\Volt\\{state, computed};\n\nstate(['count' => 0]);\n\n\$increment = fn() => \$this->count++;\n?&gt;</code></pre><h2>Performance</h2><p>Livewire 4 est significativement plus rapide grâce à une nouvelle implémentation du système de morphing DOM.</p>",
                 'level'   => ArticleLevel::Intermediate,
                 'tags'    => ['laravel', 'livewire'],
                 'days'    => 15,
@@ -259,7 +259,7 @@ class DemoSeeder extends Seeder
                 ],
             ],
             [
-                'title' => "Filament — Comment créer un champ personnalisé ?",
+                'title' => "Filament - Comment créer un champ personnalisé ?",
                 'body'  => "<p>J'ai besoin d'un champ de formulaire Filament qui affiche une carte interactive pour sélectionner une adresse géographique.</p><p>J'ai regardé la documentation mais je ne trouve pas d'exemple complet de création d'un champ personnalisé avec des interactions JavaScript.</p><p>Quelqu'un a déjà créé un custom field Filament avec Alpine.js ?</p>",
                 'tags'  => ['laravel', 'php'],
                 'answers' => [
@@ -271,7 +271,7 @@ class DemoSeeder extends Seeder
                 'body'  => "<p>Mon application commence à avoir du trafic et je ne peux plus me permettre d'exécuter des migrations qui lockent les tables.</p><p>J'utilise MySQL 8. Comment éviter les locks lors des migrations qui ajoutent des colonnes à des tables volumineuses (>1M lignes) ?</p>",
                 'tags'  => ['mysql', 'deployment'],
                 'answers' => [
-                    "Utilise <code>ALGORITHM=INSTANT</code> pour MySQL 8 — beaucoup d'opérations (ajout de colonne, valeur par défaut) sont instantanées. Pour les opérations non-INSTANT, utilise gh-ost ou pt-online-schema-change qui copient la table en arrière-plan.",
+                    "Utilise <code>ALGORITHM=INSTANT</code> pour MySQL 8 - beaucoup d'opérations (ajout de colonne, valeur par défaut) sont instantanées. Pour les opérations non-INSTANT, utilise gh-ost ou pt-online-schema-change qui copient la table en arrière-plan.",
                     "Une autre stratégie : utilise des migrations en plusieurs étapes. D'abord ajoute la colonne nullable (INSTANT), puis backfill les données, puis ajoute la contrainte NOT NULL si nécessaire.",
                 ],
             ],
@@ -488,7 +488,7 @@ class DemoSeeder extends Seeder
 
         // Offres InnoveCI
         $this->createJobOffer($company2, $account2, [
-            'title'         => "Ingénieur Backend PHP / Laravel — Fintech",
+            'title'         => "Ingénieur Backend PHP / Laravel - Fintech",
             'slug'          => 'ingenieur-backend-php-innoveci',
             'description'   => "<h2>InnoveCI recrute</h2><p>Rejoignez l'équipe technique d'InnoveCI pour construire les solutions de paiement de demain en Afrique de l'Ouest.</p><h2>Vos missions</h2><ul><li>Développement des APIs de paiement</li><li>Intégration avec les opérateurs mobile money (MTN, Orange, Moov)</li><li>Gestion des webhooks et transactions</li><li>Sécurité et conformité PCI-DSS</li></ul><h2>Stack technique</h2><p>Laravel 13, PostgreSQL, Redis, Docker, AWS, Queues Laravel.</p>",
             'contract_type' => JobContractType::Cdi,
@@ -503,7 +503,7 @@ class DemoSeeder extends Seeder
         ]);
 
         $this->createJobOffer($company2, $account2, [
-            'title'         => "Stage — Développeur Laravel Junior",
+            'title'         => "Stage - Développeur Laravel Junior",
             'slug'          => 'stage-dev-laravel-junior-innoveci',
             'description'   => "<h2>Stage de 6 mois</h2><p>InnoveCI ouvre ses portes aux jeunes développeurs Laravel motivés pour un stage de 6 mois avec possibilité d'embauche.</p><h2>Ce que vous apprendrez</h2><ul><li>Développement en environnement production réel</li><li>Pratiques DevOps (CI/CD, Docker)</li><li>APIs de paiement africaines</li></ul><h2>Profil</h2><ul><li>Étudiant en informatique (Bac+3 minimum)</li><li>Bases en PHP et Laravel</li><li>Motivé et curieux</li></ul>",
             'contract_type' => JobContractType::Internship,

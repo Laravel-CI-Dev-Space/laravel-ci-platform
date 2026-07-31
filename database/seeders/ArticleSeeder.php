@@ -37,7 +37,7 @@ class ArticleSeeder extends Seeder
             [
                 'title'        => "Laravel : naissance et évolution du framework PHP qui a tout changé",
                 'slug'         => 'laravel-naissance-evolution-framework-php',
-                'excerpt'      => "De la frustration d'un développeur face aux outils existants à la création d'un framework qui a révolutionné le développement PHP — l'histoire de Laravel racontée depuis Abidjan.",
+                'excerpt'      => "De la frustration d'un développeur face aux outils existants à la création d'un framework qui a révolutionné le développement PHP - l'histoire de Laravel racontée depuis Abidjan.",
                 'cover_image'  => 'laravel-logo.png',
                 'level'        => ArticleLevel::Beginner,
                 'status'       => ArticleStatus::Published,
@@ -63,13 +63,13 @@ class ArticleSeeder extends Seeder
     private function articleCommunity(): string
     {
         return <<<'HTML'
-<p>En janvier 2026, deux développeurs abidjanais partagent un constat simple : il n'existe pas encore d'espace structuré, en français et ancré dans la réalité locale, pour les passionnés de Laravel en Côte d'Ivoire. Les ressources existent — la documentation officielle, les tutoriels YouTube, les forums anglophones — mais rien qui ressemble à une vraie communauté locale, avec des visages connus, des meetups accessibles et des échanges au rythme africain.</p>
+<p>En janvier 2026, deux développeurs abidjanais partagent un constat simple : il n'existe pas encore d'espace structuré, en français et ancré dans la réalité locale, pour les passionnés de Laravel en Côte d'Ivoire. Les ressources existent - la documentation officielle, les tutoriels YouTube, les forums anglophones - mais rien qui ressemble à une vraie communauté locale, avec des visages connus, des meetups accessibles et des échanges au rythme africain.</p>
 
 <p>C'est de cette conviction que naît <strong>Laravel CI</strong>.</p>
 
 <h2>Un groupe WhatsApp comme point de départ</h2>
 
-<p>Tout commence modestement : un groupe WhatsApp nommé <em>Laravel Abidjan</em>, créé par Wilson Kouassi et Mahamadou Diaby. En quelques jours, les invitations se propagent de terminal en terminal, de bureau en bureau. Des développeurs solo qui galèrent en silence, des freelances qui jonglent entre projets clients, des étudiants en quête de mentors — tous trouvent dans ce groupe un espace où poser des questions sans craindre le jugement.</p>
+<p>Tout commence modestement : un groupe WhatsApp nommé <em>Laravel Abidjan</em>, créé par Wilson Kouassi et Mahamadou Diaby. En quelques jours, les invitations se propagent de terminal en terminal, de bureau en bureau. Des développeurs solo qui galèrent en silence, des freelances qui jonglent entre projets clients, des étudiants en quête de mentors - tous trouvent dans ce groupe un espace où poser des questions sans craindre le jugement.</p>
 
 <p>En deux semaines, le groupe compte plus de 80 membres. En un mois, 200. La dynamique est là.</p>
 
@@ -83,7 +83,7 @@ class ArticleSeeder extends Seeder
 
 <p>Très vite, les limites de WhatsApp apparaissent. Les discussions disparaissent, les ressources se perdent, les nouveaux membres peinent à retrouver les échanges passés. Il faut quelque chose de plus solide.</p>
 
-<p>La décision est prise : construire une plateforme communautaire open source, faite avec Laravel, pour les développeurs Laravel. Un forum structuré, un blog, un agenda d'événements, un espace emploi — tout ce dont une communauté tech sérieuse a besoin.</p>
+<p>La décision est prise : construire une plateforme communautaire open source, faite avec Laravel, pour les développeurs Laravel. Un forum structuré, un blog, un agenda d'événements, un espace emploi - tout ce dont une communauté tech sérieuse a besoin.</p>
 
 <h2>Aujourd'hui : près de 1 200 membres</h2>
 
@@ -93,20 +93,20 @@ class ArticleSeeder extends Seeder
 
 <h2>La suite</h2>
 
-<p>Laravel CI n'est pas qu'une plateforme — c'est un mouvement. Celui de développeurs ivoiriens qui décident de prendre leur place dans l'écosystème mondial du logiciel, avec leurs outils, leur culture et leurs ambitions. Rejoins-nous.</p>
+<p>Laravel CI n'est pas qu'une plateforme - c'est un mouvement. Celui de développeurs ivoiriens qui décident de prendre leur place dans l'écosystème mondial du logiciel, avec leurs outils, leur culture et leurs ambitions. Rejoins-nous.</p>
 HTML;
     }
 
     private function articleLaravel(): string
     {
         return <<<'HTML'
-<p>En 2011, un développeur américain nommé <strong>Taylor Otwell</strong> travaille sur un framework PHP personnel pour ses propres projets. Insatisfait des solutions existantes — CodeIgniter en tête — il publie discrètement la première version publique de Laravel sur GitHub. Personne ne se doute que cette sortie discothèque va transformer radicalement l'écosystème PHP mondial.</p>
+<p>En 2011, un développeur américain nommé <strong>Taylor Otwell</strong> travaille sur un framework PHP personnel pour ses propres projets. Insatisfait des solutions existantes - CodeIgniter en tête - il publie discrètement la première version publique de Laravel sur GitHub. Personne ne se doute que cette sortie discothèque va transformer radicalement l'écosystème PHP mondial.</p>
 
 <h2>Les origines : frustration et pragmatisme</h2>
 
 <p>À l'époque, CodeIgniter est le framework PHP dominant. Il est simple, bien documenté, mais il manque de fonctionnalités modernes : pas d'injection de dépendances native, pas d'ORM élégant, pas de système d'authentification intégré. Taylor Otwell veut quelque chose de plus expressif, plus agréable à utiliser au quotidien.</p>
 
-<p>Sa philosophie de départ est simple : <em>le code devrait être beau à lire</em>. Un développeur ne devrait pas se battre contre son framework — il devrait le ressentir comme un allié.</p>
+<p>Sa philosophie de départ est simple : <em>le code devrait être beau à lire</em>. Un développeur ne devrait pas se battre contre son framework - il devrait le ressentir comme un allié.</p>
 
 <h2>Laravel 1 et 2 (2011) : les premières briques</h2>
 
@@ -122,11 +122,11 @@ HTML;
 
 <h2>Laravel 5 à 8 (2015-2021) : maturité et écosystème</h2>
 
-<p>Ces versions consolident Laravel comme le framework PHP numéro un dans le monde. Des outils compagnons voient le jour : <strong>Forge</strong> (déploiement), <strong>Envoyer</strong> (zero-downtime deploys), <strong>Nova</strong> (admin panel), <strong>Vapor</strong> (serverless sur AWS). Chaque version apporte des améliorations majeures — middleware, broadcasting, task scheduling, Telescope, Sanctum, Breeze.</p>
+<p>Ces versions consolident Laravel comme le framework PHP numéro un dans le monde. Des outils compagnons voient le jour : <strong>Forge</strong> (déploiement), <strong>Envoyer</strong> (zero-downtime deploys), <strong>Nova</strong> (admin panel), <strong>Vapor</strong> (serverless sur AWS). Chaque version apporte des améliorations majeures - middleware, broadcasting, task scheduling, Telescope, Sanctum, Breeze.</p>
 
 <h2>Laravel 9 à 11 (2022-2024) : modernisation PHP</h2>
 
-<p>Laravel suit de près l'évolution de PHP. PHP 8 apporte les types union, les enums natifs, les attributs — Laravel les adopte rapidement. L'architecture s'affine, le code devient plus typé, plus expressif. Livewire et Filament émergent comme standards de facto pour les interfaces dynamiques et les panneaux d'administration.</p>
+<p>Laravel suit de près l'évolution de PHP. PHP 8 apporte les types union, les enums natifs, les attributs - Laravel les adopte rapidement. L'architecture s'affine, le code devient plus typé, plus expressif. Livewire et Filament émergent comme standards de facto pour les interfaces dynamiques et les panneaux d'administration.</p>
 
 <h2>Laravel 12 et 13 (2025-2026) : la génération IA</h2>
 
@@ -134,7 +134,7 @@ HTML;
 
 <h2>Laravel vu depuis Abidjan</h2>
 
-<p>Pour nous, développeurs ivoiriens, Laravel n'est pas qu'un framework — c'est la porte d'entrée vers le développement web professionnel. Son approche pédagogique, sa documentation exemplaire et son écosystème riche en font l'outil idéal pour apprendre à construire des applications sérieuses.</p>
+<p>Pour nous, développeurs ivoiriens, Laravel n'est pas qu'un framework - c'est la porte d'entrée vers le développement web professionnel. Son approche pédagogique, sa documentation exemplaire et son écosystème riche en font l'outil idéal pour apprendre à construire des applications sérieuses.</p>
 
 <p>C'est pourquoi Laravel CI existe : pour que chaque développeur ivoirien puisse maîtriser cet outil, trouver du travail grâce à lui, et contribuer à l'écosystème mondial depuis notre continent.</p>
 

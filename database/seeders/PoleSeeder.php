@@ -180,5 +180,21 @@ class PoleSeeder extends Seeder
         foreach ($members as $data) {
             PoleMember::create(array_merge($data, ['status' => 'actif']));
         }
+
+        // ── Lien compte réel : Wilson Kouassi → Pôle Événements ──────────────
+        $wilson = \App\Models\User::where('github_id', '167759591')->first();
+        if ($wilson) {
+            PoleMember::create([
+                'pole_id'    => $p('Événements'),
+                'user_id'    => $wilson->id,
+                'first_name' => 'Wilson',
+                'last_name'  => 'Kouassi',
+                'email'      => 'yanne.kouassi@epitech.eu',
+                'poste'      => 'Lead Developer',
+                'role'       => 'membre',
+                'status'     => 'actif',
+                'order'      => 4,
+            ]);
+        }
     }
 }

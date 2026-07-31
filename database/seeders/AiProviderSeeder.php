@@ -155,7 +155,7 @@ class AiProviderSeeder extends Seeder
             ]
         );
 
-        // Modèles gratuits — disponibles sans solde
+        // Modèles gratuits - disponibles sans solde
         $defaultModel = AiModel::updateOrCreate(
             ['provider_id' => $openrouter->id, 'model_name' => 'meta-llama/llama-3.3-70b-instruct:free'],
             [
@@ -198,7 +198,7 @@ class AiProviderSeeder extends Seeder
             ]
         );
 
-        // Modèles gratuits — raisonnement (reasoning tokens)
+        // Modèles gratuits - raisonnement (reasoning tokens)
         AiModel::updateOrCreate(
             ['provider_id' => $openrouter->id, 'model_name' => 'tencent/hy3:free'],
             [
@@ -213,7 +213,7 @@ class AiProviderSeeder extends Seeder
             ]
         );
 
-        // Modèles payants — qualité supérieure
+        // Modèles payants - qualité supérieure
         AiModel::updateOrCreate(
             ['provider_id' => $openrouter->id, 'model_name' => 'deepseek/deepseek-chat-v3-0324'],
             [
@@ -265,7 +265,7 @@ class AiProviderSeeder extends Seeder
                 ['model_id' => $defaultModel->id, 'assigned_by' => $adminId]
             );
         } else {
-            $this->command->warn('Aucun utilisateur trouvé — assignment global ignoré.');
+            $this->command->warn('Aucun utilisateur trouvé - assignment global ignoré.');
         }
 
         $this->command->info('AI providers seeded: OpenRouter (défaut), Grok, DeepSeek, OpenAI');
