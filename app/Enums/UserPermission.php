@@ -50,6 +50,8 @@ enum UserPermission: string
     case CompanyOfferManage    = 'company.offer.manage';
     case CompanyViewApplicants = 'company.view.applicants';
     case CompanyDownloadCv     = 'company.download.cv';
+    case CompanyView           = 'company.view';
+    case CompanyExport         = 'company.export';
 
     // ── Modération ────────────────────────────────────
     case ModerationReportHandle = 'moderation.report.handle';
@@ -72,29 +74,6 @@ enum UserPermission: string
     {
         return match ($role) {
             UserRole::SuperAdmin => self::values(),
-
-            UserRole::Admin => array_values(array_filter(
-                self::values(),
-                fn (string $p) => $p !== self::AdminSettings->value,
-            )),
-
-            UserRole::Moderator => array_unique(array_merge(
-                [
-                    self::ForumQuestionPin->value,
-                    self::ForumQuestionDelete->value,
-                    self::ForumAnswerDelete->value,
-                    self::ForumCommentDelete->value,
-                    self::BlogArticlePublish->value,
-                    self::BlogArticleUnpublish->value,
-                    self::BlogCommentDelete->value,
-                    self::BlogResourceDelete->value,
-                    self::ModerationReportHandle->value,
-                    self::ModerationContentHide->value,
-                    self::ModerationUserSuspend->value,
-                    self::AdminAccess->value,
-                ],
-                self::forRole(UserRole::Member) // hérite de toutes les permissions membre
-            )),
 
             UserRole::Member => [
                 self::ForumQuestionCreate->value,
@@ -128,6 +107,53 @@ enum UserPermission: string
                 self::CompanyOfferManage->value,
                 self::CompanyViewApplicants->value,
                 self::CompanyDownloadCv->value,
+            ],
+
+            UserRole::PoleCommunication => array_unique(array_merge(
+                self::forRole(UserRole::Member),
+                [
+                    self::AdminAccess->value,
+                    self::BlogArticlePublish->value,
+                    self::BlogArticleUnpublish->value,
+                    self::ModerationContentHide->value,
+                ]
+            )),
+
+            UserRole::PoleEvenements => array_unique(array_merge(
+                self::forRole(UserRole::Member),
+                [
+                    self::AdminAccess->value,
+                    self::EventCreate->value,
+                    self::EventManage->value,
+                ]
+            )),
+
+            UserRole::PoleTechFormation => array_unique(array_merge(
+                self::forRole(UserRole::Member),
+                [
+                    self::AdminAccess->value,
+                    self::ForumQuestionPin->value,
+                    self::ModerationReportHandle->value,
+                    self::ModerationContentHide->value,
+                    self::BlogResourceUpload->value,
+                    self::BlogResourceDownload->value,
+                    self::BlogResourceDelete->value,
+                ]
+            )),
+
+            UserRole::PoleEmployabilite => array_unique(array_merge(
+                self::forRole(UserRole::Member),
+                [
+                    self::AdminAccess->value,
+                    self::JobOfferManage->value,
+                    self::JobOfferPublish->value,
+                ]
+            )),
+
+            UserRole::PolePartenariat => [
+                self::AdminAccess->value,
+                self::CompanyView->value,
+                self::CompanyExport->value,
             ],
         };
     }

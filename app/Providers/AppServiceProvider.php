@@ -6,6 +6,7 @@ use App\Models\Answer;
 use App\Models\Article;
 use App\Models\Comment;
 use App\Models\MemberCard;
+use App\Models\PoleMember;
 use App\Models\Profile;
 use App\Models\Question;
 use App\Models\User;
@@ -13,6 +14,7 @@ use App\Observers\AnswerObserver;
 use App\Observers\ArticleObserver;
 use App\Observers\CommentObserver;
 use App\Observers\MemberCardObserver;
+use App\Observers\PoleMemberObserver;
 use App\Observers\ProfileObserver;
 use App\Observers\QuestionObserver;
 use App\Observers\UserObserver;
@@ -44,5 +46,6 @@ class AppServiceProvider extends ServiceProvider
         User::observe(UserObserver::class);
         Profile::observe(ProfileObserver::class);
         MemberCard::observe(MemberCardObserver::class);
+        PoleMember::observe(PoleMemberObserver::class);
     }
 }

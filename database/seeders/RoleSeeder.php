@@ -17,8 +17,22 @@ class RoleSeeder extends Seeder
     {
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // ── 1. Crée toutes les permissions depuis l'enum ──────────
-        // firstOrCreate = safe sur re-seed : ne crée que les nouvelles.
+        // ── 1. Supprime les rôles obsolètes (ex: admin, moderator) ───────
+        $validRoleValues = UserRole::values();
+        Role::whereNotIn('name', $validRoleValues)->get()->each(function (Role $role) {
+            $role->users()->detach();
+            $role->permissions()->detach();
+            $role->delete();
+        });
+
+        // ── 2. Supprime les permissions obsolètes ────────────────────────
+        $validPermissionValues = UserPermission::values();
+        Permission::whereNotIn('name', $validPermissionValues)->get()->each(function (Permission $permission) {
+            $permission->roles()->detach();
+            $permission->delete();
+        });
+
+        // ── 3. Crée toutes les permissions depuis l'enum ─────────────────
         foreach (UserPermission::cases() as $permission) {
             Permission::firstOrCreate([
                 'name'       => $permission->value,
@@ -26,9 +40,7 @@ class RoleSeeder extends Seeder
             ]);
         }
 
-        // ── 2. Crée les rôles et synchronise leurs permissions ─────
-        // syncPermissions() = idempotent : ajoute les nouvelles,
-        // retire celles supprimées du tableau, ne touche pas aux autres rôles.
+        // ── 4. Crée les rôles et synchronise leurs permissions ───────────
         foreach (UserRole::cases() as $role) {
             $roleModel = Role::firstOrCreate([
                 'name'       => $role->value,
@@ -40,6 +52,8 @@ class RoleSeeder extends Seeder
             );
         }
 
-        $this->command->info('✅ Rôles et permissions seedés via les enums.');
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
+
+        $this->command->info('Roles et permissions seedés via les enums.');
     }
 }

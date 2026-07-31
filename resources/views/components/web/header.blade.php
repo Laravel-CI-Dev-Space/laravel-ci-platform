@@ -33,6 +33,11 @@
           <a href="{{ route('dashboard') }}" class="btn btn-github mt-2 mt-lg-0">
             <i class="fa-solid fa-gauge"></i> Dashboard
           </a>
+          @if(auth()->user()->activePoleMember())
+            <a href="{{ url('/espace-pole') }}" class="btn btn-outline-warning mt-2 mt-lg-0 ms-2">
+              <i class="fa-solid fa-layer-group"></i> Espace pôle
+            </a>
+          @endif
         @else
           <a href="{{ route('login') }}" class="btn btn-github mt-2 mt-lg-0">
             <i class="fa-brands fa-github"></i> {{ $headerCta }}

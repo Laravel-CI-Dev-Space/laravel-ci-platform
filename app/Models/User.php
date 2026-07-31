@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\UserPermission;
 use App\Enums\UserRole;
 use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
@@ -43,10 +42,16 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this->hasAnyRole([
-            UserRole::SuperAdmin->value,
-            UserRole::Admin->value,
-        ]) || $this->can(UserPermission::AdminAccess->value);
+        return match ($panel->getId()) {
+            'admin'     => $this->hasRole(UserRole::SuperAdmin->value),
+            'espace-pole' => $this->activePoleMember() !== null,
+            default     => false,
+        };
+    }
+
+    public function activePoleMember(): ?PoleMember
+    {
+        return $this->poleMember?->isActif() ? $this->poleMember : null;
     }
 
     protected function casts(): array
@@ -179,6 +184,11 @@ class User extends Authenticatable implements FilamentUser
     public function hasCompletedProfile(): bool
     {
         return $this->profile !== null;
+    }
+
+    public function poleMember(): HasOne
+    {
+        return $this->hasOne(PoleMember::class);
     }
 
     public function memberCards(): HasMany
