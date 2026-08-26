@@ -21,7 +21,7 @@ class AiProviderSeeder extends Seeder
                 'display_name' => 'Grok (xAI)',
                 'base_url'     => 'https://api.x.ai/v1',
                 'api_key'      => env('XAI_API_KEY'),
-                'priority'     => 2,
+                'priority'     => 3,
                 'is_active'    => filled(env('XAI_API_KEY')),
                 'extra_config' => null,
             ]
@@ -62,13 +62,13 @@ class AiProviderSeeder extends Seeder
                 'display_name' => 'DeepSeek',
                 'base_url'     => 'https://api.deepseek.com',
                 'api_key'      => env('DEEPSEEK_API_KEY'),
-                'priority'     => 3,
+                'priority'     => 1,
                 'is_active'    => filled(env('DEEPSEEK_API_KEY')),
                 'extra_config' => null,
             ]
         );
 
-        AiModel::updateOrCreate(
+        $defaultModel = AiModel::updateOrCreate(
             ['provider_id' => $deepseek->id, 'model_name' => 'deepseek-chat'],
             [
                 'display_name'       => 'DeepSeek V3 (Chat)',
@@ -78,7 +78,7 @@ class AiProviderSeeder extends Seeder
                 'supports_tools'     => true,
                 'supports_streaming' => true,
                 'is_active'          => filled(env('DEEPSEEK_API_KEY')),
-                'is_default'         => false,
+                'is_default'         => true,
             ]
         );
 
@@ -146,7 +146,7 @@ class AiProviderSeeder extends Seeder
                 'display_name' => 'OpenRouter',
                 'base_url'     => 'https://openrouter.ai/api/v1',
                 'api_key'      => env('OPENROUTER_API_KEY'),
-                'priority'     => 1,
+                'priority'     => 2,
                 'is_active'    => $hasOrKey,
                 'extra_config' => [
                     'site_url'  => env('APP_URL', 'https://laravel.ci'),
@@ -156,7 +156,7 @@ class AiProviderSeeder extends Seeder
         );
 
         // Modèles gratuits - disponibles sans solde
-        $defaultModel = AiModel::updateOrCreate(
+        AiModel::updateOrCreate(
             ['provider_id' => $openrouter->id, 'model_name' => 'meta-llama/llama-3.3-70b-instruct:free'],
             [
                 'display_name'       => 'Llama 3.3 70B (Gratuit)',
@@ -268,7 +268,7 @@ class AiProviderSeeder extends Seeder
             $this->command->warn('Aucun utilisateur trouvé - assignment global ignoré.');
         }
 
-        $this->command->info('AI providers seeded: OpenRouter (défaut), Grok, DeepSeek, OpenAI');
-        $this->command->info('Défaut global → DeepSeek V3 0324 via OpenRouter (gratuit, tools activés)');
+        $this->command->info('AI providers seeded: DeepSeek (défaut), OpenRouter, Grok, OpenAI');
+        $this->command->info('Défaut global → DeepSeek V3 Chat (priorité 1, tools activés)');
     }
 }
