@@ -33,23 +33,23 @@
       <div class="row justify-content-center">
         <div class="col-6 col-md-3 reveal">
           <div class="stat-item">
-            <div class="stat-icon"><i class="fa-brands fa-linkedin"></i></div>
-            <div class="stat-num"><span>900</span><span class="plus">+</span></div>
-            <div class="stat-label">Membres LinkedIn</div>
+            <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+            <div class="stat-num"><span>1 100</span><span class="plus">+</span></div>
+            <div class="stat-label">Membres</div>
           </div>
         </div>
         <div class="col-6 col-md-3 reveal" data-delay="0.08">
           <div class="stat-item">
-            <div class="stat-icon"><i class="fa-brands fa-whatsapp"></i></div>
-            <div class="stat-num"><span>340</span><span class="plus">+</span></div>
-            <div class="stat-label">Membres WhatsApp</div>
+            <div class="stat-icon"><i class="fa-solid fa-calendar-check"></i></div>
+            <div class="stat-num"><span>12</span><span class="plus">+</span></div>
+            <div class="stat-label">Événements organisés</div>
           </div>
         </div>
         <div class="col-6 col-md-3 reveal" data-delay="0.16">
           <div class="stat-item">
-            <div class="stat-icon"><i class="fa-solid fa-calendar-check"></i></div>
-            <div class="stat-num"><span>10</span><span class="plus">+</span></div>
-            <div class="stat-label">Événements organisés</div>
+            <div class="stat-icon"><i class="fa-solid fa-code-branch"></i></div>
+            <div class="stat-num"><span>3</span><span class="plus"></span></div>
+            <div class="stat-label">Années d'existence</div>
           </div>
         </div>
         <div class="col-6 col-md-3 reveal" data-delay="0.24">
@@ -261,7 +261,7 @@
         <div class="row align-items-center position-relative" style="z-index:2">
           <div class="col-lg-8">
             <h2 style="color:#fff;font-size:var(--fs-h2)">Ta place dans la communauté t'attend</h2>
-            <p style="color:rgba(255,255,255,.88);margin-bottom:0">900+ développeurs sont déjà là. Viens construire avec nous.</p>
+            <p style="color:rgba(255,255,255,.88);margin-bottom:0">1 100+ développeurs sont déjà là. Viens construire avec nous.</p>
           </div>
           <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
             <a href="{{ route('auth.github.redirect') }}" class="btn btn-light btn-lg"><i class="fa-brands fa-github"></i> Rejoindre maintenant</a>
