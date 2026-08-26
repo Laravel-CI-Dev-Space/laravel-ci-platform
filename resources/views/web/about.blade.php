@@ -118,8 +118,8 @@
             </div>
             <div class="col-6">
               <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:1rem;padding:1.5rem;text-align:center">
-                <div style="font-size:2.8rem;font-weight:800;color:#e8590c;line-height:1">900+</div>
-                <div style="color:rgba(255,255,255,.6);font-size:.82rem;margin-top:.5rem;line-height:1.4">Membres sur LinkedIn aujourd'hui</div>
+                <div style="font-size:2.8rem;font-weight:800;color:#e8590c;line-height:1">1 100+</div>
+                <div style="color:rgba(255,255,255,.6);font-size:.82rem;margin-top:.5rem;line-height:1.4">Membres aujourd'hui</div>
               </div>
             </div>
             <div class="col-12">
@@ -238,6 +238,72 @@
       </div>
     </div>
   </section>
+
+  <!-- PÔLES -->
+  @if($poles->isNotEmpty())
+  <section class="section">
+    <div class="container">
+      <div class="text-center mb-5 reveal">
+        <span class="section-eyebrow">Organisation interne</span>
+        <h2 class="section-heading">Nos pôles</h2>
+        <p class="text-muted-2" style="max-width:38rem;margin-inline:auto;font-size:.95rem">La communauté s'organise en pôles thématiques, chacun piloté par des membres engagés.</p>
+      </div>
+      <div class="row g-4">
+        @foreach($poles as $i => $pole)
+        @php
+          $sorted = $pole->activeMembers->sortBy(fn($m) => match($m->role) { 'responsable' => 0, 'adjoint' => 1, default => 2 });
+        @endphp
+        <div class="col-12 col-md-6 col-lg-4 reveal" @if($i > 0) data-delay="{{ $i * 0.07 }}" @endif>
+          <div class="card-soft h-100" style="padding:1.75rem">
+            <div style="display:flex;align-items:center;gap:.875rem;margin-bottom:1.5rem">
+              <div class="value-icon" style="margin:0;flex-shrink:0;width:2.75rem;height:2.75rem;font-size:1.05rem">
+                <i class="fa-solid fa-layer-group"></i>
+              </div>
+              <h3 style="font-size:1.05rem;margin:0;line-height:1.35">{{ $pole->name }}</h3>
+            </div>
+
+            @if($sorted->isNotEmpty())
+              <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.85rem">
+                @foreach($sorted as $member)
+                @php
+                  $isResponsable = $member->role === 'responsable';
+                  $isAdjoint     = $member->role === 'adjoint';
+                  $avatarBg      = $isResponsable ? 'var(--orange,#e8590c)' : ($isAdjoint ? 'var(--navy)' : '#94A3B8');
+                @endphp
+                <li style="display:flex;align-items:flex-start;gap:.7rem{{ $isResponsable ? ';border-bottom:1px solid var(--light);padding-bottom:.85rem;margin-bottom:.05rem' : '' }}">
+                  <span style="width:32px;height:32px;border-radius:50%;background:{{ $avatarBg }};color:#fff;font-size:.68rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;letter-spacing:.02em;margin-top:.1rem">
+                    {{ strtoupper(substr($member->first_name, 0, 1) . substr($member->last_name, 0, 1)) }}
+                  </span>
+                  <div style="min-width:0;flex:1">
+                    <div style="display:flex;align-items:center;gap:.4rem;flex-wrap:wrap">
+                      <span style="font-size:.875rem;font-weight:700;color:var(--navy)">{{ $member->first_name }} {{ $member->last_name }}</span>
+                      @if($isResponsable)
+                        <span style="font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--orange,#e8590c);color:#fff;padding:.15rem .55rem;border-radius:20px">Responsable</span>
+                      @elseif($isAdjoint)
+                        <span style="font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--navy);color:#fff;padding:.15rem .55rem;border-radius:20px">Adjoint</span>
+                      @endif
+                    </div>
+                    @if($member->poste)
+                      <div style="font-size:.78rem;color:var(--muted);margin-top:.1rem">{{ $member->poste }}</div>
+                    @endif
+                    <div style="font-size:.75rem;color:var(--muted);margin-top:.1rem;display:flex;align-items:center;gap:.3rem">
+                      <i class="fa-solid fa-envelope" style="font-size:.65rem;opacity:.5"></i>
+                      <span>{{ $member->email }}</span>
+                    </div>
+                  </div>
+                </li>
+                @endforeach
+              </ul>
+            @else
+              <p class="text-muted-2 mb-0" style="font-size:.88rem;font-style:italic">Membres à venir</p>
+            @endif
+          </div>
+        </div>
+        @endforeach
+      </div>
+    </div>
+  </section>
+  @endif
 
   <!-- PARTENAIRES -->
   <section style="padding:3.5rem 0">

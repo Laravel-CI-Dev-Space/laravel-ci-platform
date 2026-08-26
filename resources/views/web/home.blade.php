@@ -1,6 +1,6 @@
 @extends('layouts.web')
 
-@section('title', ($settings->firstWhere('key', 'seo_home_title')?->value) ?? "Laravel CI — La communauté Laravel de Côte d'Ivoire")
+@section('title', ($settings->firstWhere('key', 'seo_home_title')?->value) ?? "Laravel CI - La communauté Laravel de Côte d'Ivoire")
 @section('description', ($settings->firstWhere('key', 'seo_home_description')?->value) ?? "Rejoins 900+ développeurs Laravel ivoiriens. Forum, blog, événements, emplois : la communauté tech africaine de référence.")
 
 @section('content')
@@ -33,8 +33,8 @@
             </a>
           </div>
           <div class="trust-badges">
-            <div class="trust-badge"><i class="fa-brands fa-linkedin"></i> <span><strong>900+</strong> sur LinkedIn</span></div>
-            <div class="trust-badge"><i class="fa-brands fa-whatsapp"></i> <span><strong>340+</strong> sur WhatsApp</span></div>
+            <div class="trust-badge"><i class="fa-solid fa-users"></i> <span><strong>1 100+</strong> Membres</span></div>
+            <div class="trust-badge"><i class="fa-brands fa-whatsapp"></i> <span><strong>420+</strong> sur WhatsApp</span></div>
             <div class="trust-badge"><i class="fa-solid fa-location-dot"></i> <span>Abidjan, <strong>Côte d'Ivoire</strong></span></div>
           </div>
         </div>
