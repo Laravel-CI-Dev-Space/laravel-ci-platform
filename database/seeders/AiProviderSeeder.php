@@ -257,7 +257,7 @@ class AiProviderSeeder extends Seeder
         );
 
         // ── Assignment global → OpenRouter DeepSeek V3 (gratuit) ─────────────
-        $adminId = User::role('admin')->value('id') ?? User::first()?->id;
+        $adminId = User::role('super-admin')->value('id') ?? User::first()?->id;
 
         if ($adminId) {
             AiUserAssignment::updateOrCreate(
