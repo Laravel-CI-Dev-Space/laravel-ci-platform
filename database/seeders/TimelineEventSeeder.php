@@ -37,7 +37,7 @@ class TimelineEventSeeder extends Seeder
             [
                 'period'      => 'Août 2026',
                 'title'       => '1 100+ membres et le premier talk en présentiel',
-                'description' => "Deux mois après le lancement, la communauté dépasse les 1 100 membres. Premier talk en présentiel organisé à Abidjan sur le thème de l'IA au service des développeurs Laravel — une étape décisive dans la vie de la communauté.",
+                'description' => "Deux mois après le lancement, la communauté dépasse les 1 100 membres. Premier talk en présentiel organisé à Abidjan sur le thème de l'IA au service des développeurs Laravel : une étape décisive dans la vie de la communauté.",
                 'order'       => 5,
             ],
         ];

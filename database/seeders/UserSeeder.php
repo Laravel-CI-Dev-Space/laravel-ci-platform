@@ -13,13 +13,8 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        // ══════════════════════════════════════════════════════════
-        //  SUPER-ADMIN UNIQUE - yanne.kouassi@epitech.eu
-        //  syncRoles() garantit qu'il est le SEUL super-admin seedé
-        //  et qu'un re-seed ne duplique pas le rôle.
-        // ══════════════════════════════════════════════════════════
-        // Recherche par github_id car le compte existe déjà via OAuth
-        // (email peut être null ou différent dans la colonne selon la config GitHub)
+        // Super-admin : Wilson Kouassi
+        // Retrouvé par github_id : l'email peut varier selon la config OAuth GitHub
         $superAdmin = User::updateOrCreate(
             ['github_id' => '167759591'],
             [
@@ -50,80 +45,6 @@ class UserSeeder extends Seeder
             ]
         );
 
-        // ──────────────────────────────────────────────────────────
-        //  COMPTES DE TEST (développement uniquement)
-        // ──────────────────────────────────────────────────────────
-
-        $admin = User::firstOrCreate(
-            ['email' => 'admin@laravelci.com'],
-            [
-                'name'              => 'Admin Test',
-                'github_id'         => '11111111',
-                'github_username'   => 'admin-laravel-ci',
-                'avatar'            => 'https://ui-avatars.com/api/?name=Admin&color=fff&background=FF6600',
-                'is_active'         => true,
-                'email_verified_at' => now(),
-                'last_login_at'     => now(),
-            ]
-        );
-        $admin->syncRoles([UserRole::Member->value]);
-
-        $moderator = User::firstOrCreate(
-            ['email' => 'moderator@laravelci.com'],
-            [
-                'name'              => 'Moderator Test',
-                'github_id'         => '22222222',
-                'github_username'   => 'mod-laravel-ci',
-                'avatar'            => 'https://ui-avatars.com/api/?name=Mod&color=fff&background=1C1C2E',
-                'is_active'         => true,
-                'email_verified_at' => now(),
-                'last_login_at'     => now(),
-            ]
-        );
-        $moderator->syncRoles([UserRole::Member->value]);
-
-        $member = User::firstOrCreate(
-            ['email' => 'member@laravelci.com'],
-            [
-                'name'              => 'Member Test',
-                'github_id'         => '33333333',
-                'github_username'   => 'member-laravel-ci',
-                'avatar'            => 'https://ui-avatars.com/api/?name=Member&color=fff&background=2ECC71',
-                'is_active'         => true,
-                'email_verified_at' => now(),
-                'last_login_at'     => now(),
-            ]
-        );
-        $member->syncRoles([UserRole::Member->value]);
-
-        $suspended = User::firstOrCreate(
-            ['email' => 'suspended@laravelci.com'],
-            [
-                'name'              => 'Suspended Test',
-                'github_id'         => '44444444',
-                'github_username'   => 'suspended-laravel-ci',
-                'avatar'            => 'https://ui-avatars.com/api/?name=Suspended&color=fff&background=E74C3C',
-                'is_active'         => true,
-                'suspended_until'   => now()->addDays(7),
-                'email_verified_at' => now(),
-            ]
-        );
-        $suspended->syncRoles([UserRole::Member->value]);
-
-        $banned = User::firstOrCreate(
-            ['email' => 'banned@laravelci.com'],
-            [
-                'name'              => 'Banned Test',
-                'github_id'         => '55555555',
-                'github_username'   => 'banned-laravel-ci',
-                'avatar'            => 'https://ui-avatars.com/api/?name=Banned&color=fff&background=7F8C8D',
-                'is_active'         => false,
-                'email_verified_at' => now(),
-            ]
-        );
-        $banned->syncRoles([UserRole::Member->value]);
-
-        $this->command->info('✅ Users seedés (1 super-admin + 5 comptes de test).');
-        $this->command->line('   Super-admin : yanne.kouassi@epitech.eu');
+        $this->command->info('Users seedés : 1 super-admin (Wilson Kouassi).');
     }
 }
