@@ -34,7 +34,6 @@
           </div>
           <div class="trust-badges">
             <div class="trust-badge"><i class="fa-solid fa-users"></i> <span><strong>1 100+</strong> Membres</span></div>
-            <div class="trust-badge"><i class="fa-brands fa-whatsapp"></i> <span><strong>420+</strong> sur WhatsApp</span></div>
             <div class="trust-badge"><i class="fa-solid fa-location-dot"></i> <span>Abidjan, <strong>Côte d'Ivoire</strong></span></div>
           </div>
         </div>
