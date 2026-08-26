@@ -31,8 +31,14 @@ class TimelineEventSeeder extends Seeder
             [
                 'period'      => 'Juin 2026',
                 'title'       => 'Laravel CI en ligne',
-                'description' => "La plateforme est lancée publiquement. 900 membres sur LinkedIn, 340 sur WhatsApp, 5 communautés partenaires. Laravel CI est le point de départ, pas l'arrivée.",
+                'description' => "La plateforme est lancée publiquement avec forum, blog, événements et emplois. 5 communautés partenaires. Laravel CI est le point de départ, pas l'arrivée.",
                 'order'       => 4,
+            ],
+            [
+                'period'      => 'Août 2026',
+                'title'       => '1 100+ membres et le premier talk en présentiel',
+                'description' => "Deux mois après le lancement, la communauté dépasse les 1 100 membres. Premier talk en présentiel organisé à Abidjan sur le thème de l'IA au service des développeurs Laravel — une étape décisive dans la vie de la communauté.",
+                'order'       => 5,
             ],
         ];
 
