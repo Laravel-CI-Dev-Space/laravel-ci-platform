@@ -36,7 +36,9 @@ class PolePanelProvider extends PanelProvider
             ->brandLogoHeight('2rem')
             ->favicon(asset('assets/web/img/logo.png'))
 
-            ->login()
+            // Pas de login Filament - auth via GitHub OAuth (même flow que le panel admin)
+            ->login(false)
+            ->authGuard('web')
 
             ->discoverResources(
                 in: app_path('Filament/Pole/Resources'),
