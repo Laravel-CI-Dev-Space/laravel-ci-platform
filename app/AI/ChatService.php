@@ -30,7 +30,14 @@ class ChatService
     {
         $this->assertBudget($user, $context);
 
-        $model    = $this->router->resolveModelForUser($user);
+        $model = $this->router->resolveModelForUser($user);
+
+        if (! $model) {
+            throw new RuntimeException(
+                "Aucun modèle AI actif configuré. Contactez l'administrateur."
+            );
+        }
+
         $provider = $this->router->makeProvider($model);
         $session  = $this->resolveSession($user, $context, $sessionId, $model);
         $registry = new ChatToolRegistry($user);

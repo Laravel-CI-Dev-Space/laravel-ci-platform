@@ -51,7 +51,7 @@ class SiteSettingSeeder extends Seeder
             ['key' => 'identity_brand_name',    'group' => 'identity', 'type' => 'text',  'label' => 'Nom du brand (header)',        'value' => 'Laravel CI',                          'order' => 1],
             ['key' => 'identity_logo_mark',     'group' => 'identity', 'type' => 'image', 'label' => 'Logo mark (icône)',            'value' => 'web/img/logo-mark.png',               'order' => 2],
             ['key' => 'identity_logo_full',     'group' => 'identity', 'type' => 'image', 'label' => 'Logo complet (optionnel)',     'value' => '',                                    'order' => 3],
-            ['key' => 'identity_favicon',       'group' => 'identity', 'type' => 'image', 'label' => 'Favicon',                     'value' => 'web/img/favicon.png',                 'order' => 4],
+            ['key' => 'identity_favicon',       'group' => 'identity', 'type' => 'image', 'label' => 'Favicon',                     'value' => 'web/img/logo.png',                 'order' => 4],
             ['key' => 'identity_header_cta',    'group' => 'identity', 'type' => 'text',  'label' => 'Bouton header (non connecté)', 'value' => 'Se connecter avec GitHub',            'order' => 5],
 
             // ── FOOTER ───────────────────────────────────────────────

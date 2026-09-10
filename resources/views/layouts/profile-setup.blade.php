@@ -2,11 +2,15 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
   <meta charset="UTF-8" />
-  <title>Complete your profile — Laravel CI</title>
+  <title>Complete your profile - Laravel CI</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="csrf-token" content="{{ csrf_token() }}" />
 
-  <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/dashboard/images/favicon_io/favicon-32x32.png') }}">
+  @php
+    $favicon    = \App\Models\SiteSetting::get('identity_favicon');
+    $faviconUrl = $favicon ? asset('assets/' . $favicon) : asset('assets/web/img/mascot.png');
+  @endphp
+  <link rel="icon" href="{{ $faviconUrl }}" />
 
   <!-- Bootstrap 5.3 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />

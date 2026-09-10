@@ -45,21 +45,26 @@ class CountryService
 
     private function fetchFromApi(): array
     {
-        $response = Http::get('https://restcountries.com/v3.1/all', [
-            'fields' => 'name',
-        ]);
+        try {
+            $response = Http::timeout(5)->get('https://restcountries.com/v3.1/all', [
+                'fields' => 'name',
+            ]);
 
-        if ($response->failed()) {
+            if ($response->failed()) {
+                return $this->fallback();
+            }
+
+            return collect($response->json())
+                ->map(fn ($c) => $c['name']['common'] ?? null)
+                ->filter()
+                ->sort()
+                ->values()
+                ->mapWithKeys(fn ($name) => [$name => $name])
+                ->toArray();
+        } catch (\Throwable) {
+            // Réseau indisponible, timeout, SSL… → fallback
             return $this->fallback();
         }
-
-        return collect($response->json())
-            ->map(fn ($c) => $c['name']['common'] ?? null)
-            ->filter()
-            ->sort()
-            ->values()
-            ->mapWithKeys(fn ($name) => [$name => $name])
-            ->toArray();
     }
 
     /** Fallback list of West/Central African countries used when the API is unavailable. */
