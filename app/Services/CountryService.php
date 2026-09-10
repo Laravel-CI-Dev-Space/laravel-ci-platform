@@ -18,7 +18,17 @@ class CountryService
     public function getCountries(): array
     {
         try {
-            return Cache::remember(self::CACHE_KEY, self::CACHE_TTL, fn () => $this->fetchFromApi());
+            $countries = Cache::remember(self::CACHE_KEY, self::CACHE_TTL, fn () => $this->fetchFromApi());
+
+            // Si le cache contenait un résultat vide (API indispo au moment du cache)
+            // on oublie l'entrée et on retourne le fallback immédiatement
+            if (empty($countries)) {
+                Cache::forget(self::CACHE_KEY);
+
+                return $this->fallback();
+            }
+
+            return $countries;
         } catch (\Throwable) {
             return $this->fallback();
         }
