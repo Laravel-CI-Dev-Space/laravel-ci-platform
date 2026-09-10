@@ -211,6 +211,7 @@ class EditProfile extends Component
         // Invalidate the profile-existence cache used by EnsureProfileComplete middleware
         Cache::forget("user_has_profile_{$user->id}");
 
+        $this->isFirstTime    = false;
         $this->completionRate = $profile->completionRate();
         $this->missingFields  = $profile->missingFields();
         $this->currentAvatar  = $profile->avatarUrl($user->avatar);
