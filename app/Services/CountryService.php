@@ -17,30 +17,11 @@ class CountryService
      */
     public function getCountries(): array
     {
-        if ($cached = Cache::get(self::CACHE_KEY)) {
-            return $cached;
-        }
-
-        $lock = Cache::lock('countries_rebuild', 10);
-
         try {
-            if ($lock->get()) {
-                // Re-check after acquiring the lock - another request may have populated it
-                if ($cached = Cache::get(self::CACHE_KEY)) {
-                    return $cached;
-                }
-
-                $countries = $this->fetchFromApi();
-                Cache::put(self::CACHE_KEY, $countries, self::CACHE_TTL);
-
-                return $countries;
-            }
-        } finally {
-            $lock->release();
+            return Cache::remember(self::CACHE_KEY, self::CACHE_TTL, fn () => $this->fetchFromApi());
+        } catch (\Throwable) {
+            return $this->fallback();
         }
-
-        // Could not acquire lock within timeout - return fallback without blocking
-        return $this->fallback();
     }
 
     private function fetchFromApi(): array
