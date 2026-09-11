@@ -97,6 +97,33 @@ class CompanyRegistrationsTable
                             ->send();
                     }),
 
+                TableAction::make('resend_invitation')
+                    ->label('Renvoyer l\'invitation')
+                    ->icon('heroicon-o-envelope')
+                    ->color('info')
+                    ->visible(fn (CompanyRegistrationRequest $r): bool => $r->status === 'approved')
+                    ->requiresConfirmation()
+                    ->modalHeading('Renvoyer les accès ?')
+                    ->modalDescription('Un nouveau mot de passe temporaire sera généré et envoyé par email à l\'entreprise. L\'ancien mot de passe sera invalidé.')
+                    ->modalSubmitActionLabel('Oui, renvoyer')
+                    ->action(function (CompanyRegistrationRequest $record) {
+                        try {
+                            app(CompanyAccountService::class)->resendInvitation($record);
+
+                            Notification::make()
+                                ->title('Invitation renvoyée')
+                                ->body('Un nouveau mot de passe a été généré et envoyé à ' . $record->email)
+                                ->success()
+                                ->send();
+                        } catch (\RuntimeException $e) {
+                            Notification::make()
+                                ->title('Erreur')
+                                ->body($e->getMessage())
+                                ->danger()
+                                ->send();
+                        }
+                    }),
+
                 TableAction::make('reject')
                     ->label('Refuser')
                     ->icon('heroicon-o-x-circle')

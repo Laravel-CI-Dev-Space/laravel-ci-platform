@@ -82,6 +82,33 @@ class CompanyAccountService
     }
 
     /**
+     * Renvoie l'email d'invitation à une entreprise déjà approuvée.
+     * Génère un nouveau mot de passe temporaire, remet le flag password_changed_at
+     * à null pour forcer le changement au prochain login, et renvoi l'email.
+     *
+     * @throws \RuntimeException Si aucun CompanyAccount n'est trouvé pour cet email.
+     */
+    public function resendInvitation(CompanyRegistrationRequest $request): void
+    {
+        $account = CompanyAccount::where('email', $request->email)->first();
+
+        if (! $account) {
+            throw new \RuntimeException(
+                "Aucun compte entreprise trouvé pour l'email {$request->email}."
+            );
+        }
+
+        $newPassword = $this->generateTemporaryPassword();
+
+        $account->update([
+            'password'            => $newPassword,
+            'password_changed_at' => null, // force changement au prochain login
+        ]);
+
+        $this->notificationService->sendCompanyAccessCredentials($account, $newPassword);
+    }
+
+    /**
      * Suspend un compte entreprise avec une raison.
      */
     public function suspend(CompanyAccount $account, string $reason): void
