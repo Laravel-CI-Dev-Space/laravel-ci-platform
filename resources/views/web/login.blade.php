@@ -59,7 +59,7 @@
       padding-top: 1.25rem; margin-top: 1.75rem;
     }
 
-    /* ── Panneau droit — contenu ── */
+    /* ── Panneau droit - contenu ── */
     .right-inner { max-width: 440px; text-align: center; }
     .mascot-wrap img { width: 150px; height: 150px; border-radius: 50%; border: 4px solid rgba(255,255,255,.3); object-fit: contain; background: rgba(255,255,255,.15); padding: 1rem; margin-bottom: 2rem; }
     .right-inner h2 { color: #fff; font-size: 1.9rem; font-weight: 800; line-height: 1.2; margin-bottom: 1rem; }
@@ -226,11 +226,10 @@
         </div>
 
         <h2>Construis avec la communauté Laravel ivoirienne</h2>
-        <p>900+ développeurs partageant connaissances, opportunités et amitié. À Abidjan et dans la diaspora.</p>
+        <p>1 100+ développeurs partageant connaissances, opportunités et amitié. À Abidjan et dans la diaspora.</p>
 
         <div class="auth-stats">
-          <div><div class="n">900+</div><div class="l">LinkedIn</div></div>
-          <div><div class="n">340+</div><div class="l">WhatsApp</div></div>
+          <div><div class="n">1 100+</div><div class="l">Membres</div></div>
           <div><div class="n">10+</div><div class="l">Événements</div></div>
         </div>
 
