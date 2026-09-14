@@ -5,39 +5,37 @@ declare(strict_types=1);
 namespace App\Filament\Resources\Events\Pages;
 
 use App\Filament\Resources\Events\EventResource;
-use App\Models\Event;
 use App\Models\EventMedia;
 use App\Services\Events\EventMediaService;
 use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
-use Filament\Resources\Pages\Page;
+use Filament\Resources\Pages\ManageRelatedRecords;
+use Filament\Schemas\Schema;
 use Filament\Tables\Actions\Action as TableAction;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Concerns\InteractsWithTable;
-use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Collection;
 
-class ManageEventMedia extends Page implements HasTable
+class ManageEventMedia extends ManageRelatedRecords
 {
-    use InteractsWithTable;
-
     protected static string $resource = EventResource::class;
+
+    protected static string $relationship = 'media';
 
     protected static ?string $title = 'Médias du récapitulatif';
 
     /** Évite l'auto-découverte dans le menu de navigation Filament */
     protected static bool $isDiscovered = false;
 
-    public Event $record;
+    // ── Schéma de formulaire vide (pas de création standard, upload custom) ──
 
-    public function mount(int|string $record): void
+    public function form(Schema $schema): Schema
     {
-        $this->record = Event::where('slug', $record)->firstOrFail();
+        return $schema->components([]);
     }
 
     // ── Table des médias existants ─────────────────────────────────────────
@@ -45,7 +43,6 @@ class ManageEventMedia extends Page implements HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(EventMedia::where('event_id', $this->record->id)->orderBy('order'))
             ->columns([
                 ImageColumn::make('thumbnail_path')
                     ->label('Aperçu')
@@ -85,6 +82,7 @@ class ManageEventMedia extends Page implements HasTable
                     ->sortable(),
             ])
             ->reorderable('order')
+            ->defaultSort('order')
             ->actions([
                 TableAction::make('edit_caption')
                     ->label('Légende')
@@ -132,6 +130,7 @@ class ManageEventMedia extends Page implements HasTable
                             ->success()->send();
                     }),
             ])
+            ->headerActions([])        // pas d'actions "Create" standard — upload custom ci-dessous
             ->emptyStateHeading('Aucun média')
             ->emptyStateDescription('Uploadez des photos ou vidéos MP4 via les boutons ci-dessus.');
     }
@@ -154,9 +153,9 @@ class ManageEventMedia extends Page implements HasTable
                         ->multiple()
                         ->imagePreviewHeight('120')
                         ->panelLayout('grid')
-                        ->disk('local')           // temp local avant envoi vers R2
+                        ->disk('local')
                         ->directory('tmp/uploads')
-                        ->maxSize(10240)           // 10 Mo par photo
+                        ->maxSize(10240)
                         ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'image/gif'])
                         ->required(),
                 ])
@@ -195,14 +194,14 @@ class ManageEventMedia extends Page implements HasTable
                 ->icon('heroicon-o-video-camera')
                 ->color('info')
                 ->modalHeading('Uploader une vidéo')
-                ->modalDescription('Format MP4 uniquement. Taille maximale : 500 Mo. Pour les vidéos lourdes, compressez avec HandBrake avant d\'uploader.')
+                ->modalDescription('Format MP4 uniquement. Taille maximale : 500 Mo.')
                 ->form([
                     FileUpload::make('file')
                         ->label('Vidéo MP4')
                         ->disk('local')
                         ->directory('tmp/uploads')
                         ->acceptedFileTypes(['video/mp4'])
-                        ->maxSize(512_000)        // 500 Mo
+                        ->maxSize(512_000)
                         ->required(),
 
                     TextInput::make('caption')
@@ -242,22 +241,12 @@ class ManageEventMedia extends Page implements HasTable
         ];
     }
 
-    // ── Statistiques en en-tête ────────────────────────────────────────────
+    // ── En-tête avec statistiques ──────────────────────────────────────────
 
     public function getHeading(): string
     {
         $stats = app(EventMediaService::class)->stats($this->record);
 
         return "Médias — {$this->record->title} ({$stats['photos']} photos · {$stats['videos']} vidéos)";
-    }
-
-    protected function getHeaderWidgets(): array
-    {
-        return [];
-    }
-
-    public static function getNavigationLabel(): string
-    {
-        return 'Médias';
     }
 }
