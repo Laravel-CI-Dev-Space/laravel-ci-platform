@@ -87,7 +87,7 @@ class AdminPanelProvider extends PanelProvider
                         'capacity'   => $e->capacity,
                         'registered' => $e->registrations->count(),
                         'edit_url'   => \App\Filament\Resources\Events\EventResource::getUrl('edit', ['record' => $e]),
-                        'view_url'   => route('events.show', $e->slug),
+                        'view_url'   => \App\Filament\Resources\Events\EventResource::getUrl('view', ['record' => $e]),
                     ];
 
                     // Load 3 months: prev, current, next - indexed by 'YYYY-MM-DD'
