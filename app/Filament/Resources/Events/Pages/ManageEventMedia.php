@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Events\Pages;
 
+use App\Enums\UserPermission;
 use App\Filament\Resources\Events\EventResource;
 use App\Models\Event;
 use App\Models\EventMedia;
@@ -13,7 +14,6 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\Page;
-use Filament\Schemas\Schema;
 use Filament\Tables\Actions\Action as TableAction;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\ImageColumn;
@@ -31,7 +31,15 @@ class ManageEventMedia extends Page implements HasTable
 
     protected static ?string $title = 'Médias du récapitulatif';
 
+    /** Évite l'auto-découverte dans le menu de navigation Filament */
+    protected static bool $isDiscovered = false;
+
     public Event $record;
+
+    public static function canAccess(array $parameters = []): bool
+    {
+        return auth()->check() && (bool) auth()->user()?->can(UserPermission::AdminAccess->value);
+    }
 
     public function mount(int|string $record): void
     {
