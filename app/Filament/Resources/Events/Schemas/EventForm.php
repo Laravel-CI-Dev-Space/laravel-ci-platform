@@ -10,10 +10,8 @@ use App\Models\Event;
 use Filament\Actions\Action;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Set;
@@ -249,45 +247,6 @@ class EventForm
                         ]),
                 ]),
 
-            Section::make('Récapitulatif post-événement')
-                ->visible(fn (callable $get): bool => $get('status') === 'completed')
-                ->schema([
-                    Placeholder::make('recap_status')
-                        ->label('Statut du récapitulatif')
-                        ->content(fn (?Event $record): string => $record?->hasRecap()
-                            ? 'Publié le ' . $record->recap_published_at->translatedFormat('d/m/Y à H:i')
-                            : 'Non publié'),
-
-                    Textarea::make('recap_summary')
-                        ->label('Résumé')
-                        ->rows(3)
-                        ->maxLength(1000)
-                        ->columnSpanFull(),
-
-                    RichEditor::make('recap_content')
-                        ->label('Contenu détaillé')
-                        ->toolbarButtons([
-                            'bold', 'italic', 'underline', 'strike',
-                            'h2', 'h3', 'bulletList', 'orderedList',
-                            'link', 'blockquote', 'codeBlock',
-                        ])
-                        ->columnSpanFull(),
-
-                    Placeholder::make('media_info')
-                        ->label('Photos & Vidéos')
-                        ->content(fn (?Event $record): string => $record
-                            ? '📸 Gérez les photos et vidéos depuis la page dédiée — bouton "Médias" dans les actions de cet événement.'
-                            : 'Enregistrez d\'abord l\'événement pour accéder à la gestion des médias.')
-                        ->columnSpanFull(),
-
-                    FileUpload::make('recap_document_path')
-                        ->label('Document de récapitulatif')
-                        ->disk('assets')
-                        ->directory('documents/events')
-                        ->acceptedFileTypes(['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'])
-                        ->maxSize(10240)
-                        ->columnSpanFull(),
-                ]),
         ]);
     }
 }
