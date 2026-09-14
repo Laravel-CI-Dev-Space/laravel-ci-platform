@@ -101,23 +101,26 @@
                         </div>
                     @endif
 
-                    {{-- Organisateur --}}
-                    @if ($event->creator)
-                        <div class="info-card">
-                            <div class="sidebar-title mb-3">Organisé par</div>
-                            <div class="d-flex align-items-center gap-3">
-                                <span class="avatar avatar-md av-1">
-                                    {{ substr($event->creator->name ?? 'LC', 0, 2) }}
-                                </span>
-                                <div>
-                                    <div style="font-weight:600">{{ $event->creator->name }}</div>
-                                    <div class="text-muted-2" style="font-size:.85rem">
-                                        {{ $event->creator->github_username ?? '' }}
-                                    </div>
-                                </div>
+                    {{-- Organisateur — toujours Laravel CI, peu importe l'admin créateur --}}
+                    <div class="info-card">
+                        <div class="sidebar-title mb-3">Organisé par</div>
+                        <div class="d-flex align-items-center gap-3">
+                            <img
+                                src="{{ asset('assets/web/img/logo.png') }}"
+                                alt="Laravel CI"
+                                style="width:40px;height:40px;border-radius:50%;object-fit:cover;border:1px solid #eee;"
+                                onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+                            >
+                            <span
+                                class="avatar avatar-md av-1"
+                                style="display:none;background:#e7222c;color:#fff;font-weight:700"
+                            >LC</span>
+                            <div>
+                                <div style="font-weight:600">Laravel Côte d'Ivoire</div>
+                                <div class="text-muted-2" style="font-size:.85rem">@laravelci</div>
                             </div>
                         </div>
-                    @endif
+                    </div>
                 </div>
 
                 {{-- SIDEBAR --}}
