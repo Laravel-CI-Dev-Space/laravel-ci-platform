@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Events\Pages;
 
-use App\Enums\UserPermission;
 use App\Filament\Resources\Events\EventResource;
 use App\Models\Event;
 use App\Models\EventMedia;
@@ -36,14 +35,9 @@ class ManageEventMedia extends Page implements HasTable
 
     public Event $record;
 
-    public static function canAccess(array $parameters = []): bool
-    {
-        return auth()->check() && (bool) auth()->user()?->can(UserPermission::AdminAccess->value);
-    }
-
     public function mount(int|string $record): void
     {
-        $this->record = Event::findOrFail($record);
+        $this->record = Event::where('slug', $record)->firstOrFail();
     }
 
     // ── Table des médias existants ─────────────────────────────────────────
@@ -244,7 +238,7 @@ class ManageEventMedia extends Page implements HasTable
                 ->label('Retour à l\'événement')
                 ->icon('heroicon-o-arrow-left')
                 ->color('gray')
-                ->url(fn (): string => EventResource::getUrl('edit', ['record' => $this->record])),
+                ->url(fn (): string => EventResource::getUrl('view', ['record' => $this->record])),
         ];
     }
 

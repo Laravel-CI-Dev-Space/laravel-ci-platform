@@ -9,15 +9,14 @@ use App\Models\Event;
 use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\Page;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 
 class WriteEventReport extends Page implements HasForms
 {
@@ -27,13 +26,16 @@ class WriteEventReport extends Page implements HasForms
 
     protected static ?string $title = 'Rapport post-événement';
 
+    /** Évite l'auto-découverte dans le menu de navigation Filament */
+    protected static bool $isDiscovered = false;
+
     public Event $record;
 
     public ?array $data = [];
 
     public function mount(int|string $record): void
     {
-        $this->record = Event::findOrFail($record);
+        $this->record = Event::where('slug', $record)->firstOrFail();
 
         $this->form->fill([
             'recap_summary'        => $this->record->recap_summary,
@@ -45,10 +47,10 @@ class WriteEventReport extends Page implements HasForms
         ]);
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $form): Schema
     {
         return $form
-            ->schema([
+            ->components([
 
                 Section::make('Résumé')
                     ->description('Accroche courte affichée sur la page publique.')

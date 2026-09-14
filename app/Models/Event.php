@@ -44,6 +44,11 @@ class Event extends Model
             ->useLogName('event');
     }
 
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
     protected function casts(): array
     {
         return [
