@@ -26,7 +26,8 @@ class EventService
         string $sort = 'soonest',
         int $perPage = 9,
     ): LengthAwarePaginator {
-        $query = Event::published()
+        // On affiche les événements publiés ET les terminés (completed)
+        $query = Event::whereIn('status', ['published', 'completed'])
             ->with(['creator'])
             ->withCount('registrations');
 
