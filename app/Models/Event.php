@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Enums\EventMediaType;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
@@ -91,6 +92,21 @@ class Event extends Model
     public function photos(): HasMany
     {
         return $this->hasMany(EventPhoto::class)->orderBy('order');
+    }
+
+    public function media(): HasMany
+    {
+        return $this->hasMany(EventMedia::class)->orderBy('order');
+    }
+
+    public function mediaPhotos(): HasMany
+    {
+        return $this->hasMany(EventMedia::class)->where('type', 'photo')->orderBy('order');
+    }
+
+    public function mediaVideos(): HasMany
+    {
+        return $this->hasMany(EventMedia::class)->where('type', 'video')->orderBy('order');
     }
 
     public function recapPublisher(): BelongsTo

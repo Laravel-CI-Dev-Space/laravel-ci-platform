@@ -8,6 +8,7 @@ use App\Filament\Resources\Concerns\AuthorizesViaPermission;
 use App\Filament\Resources\Events\Pages\CreateEvent;
 use App\Filament\Resources\Events\Pages\EditEvent;
 use App\Filament\Resources\Events\Pages\ListEvents;
+use App\Filament\Resources\Events\Pages\ManageEventMedia;
 use App\Filament\Resources\Events\Pages\ViewEvent;
 use App\Filament\Resources\Events\RelationManagers\RegistrationsRelationManager;
 use App\Filament\Resources\Events\Schemas\EventForm;
@@ -80,6 +81,7 @@ class EventResource extends Resource
             'create' => CreateEvent::route('/create'),
             'view'   => ViewEvent::route('/{record}'),
             'edit'   => EditEvent::route('/{record}/edit'),
+            'media'  => ManageEventMedia::route('/{record}/media'),
         ];
     }
 }

@@ -11,7 +11,6 @@ use Filament\Actions\Action;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Placeholder;
-use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -274,41 +273,12 @@ class EventForm
                         ])
                         ->columnSpanFull(),
 
-                    Repeater::make('photos')
-                        ->label('Photos')
-                        ->relationship()
-                        ->schema([
-                            FileUpload::make('path')
-                                ->label('Image')
-                                ->image()
-                                ->disk('assets')
-                                ->directory('events/recap')
-                                ->required(),
-
-                            TextInput::make('caption')
-                                ->label('Légende')
-                                ->maxLength(255),
-                        ])
-                        ->columns(2)
-                        ->maxItems(10)
-                        ->reorderable()
-                        ->orderColumn('order')
+                    Placeholder::make('media_info')
+                        ->label('Photos & Vidéos')
+                        ->content(fn (?Event $record): string => $record
+                            ? '📸 Gérez les photos et vidéos depuis la page dédiée — bouton "Médias" dans les actions de cet événement.'
+                            : 'Enregistrez d\'abord l\'événement pour accéder à la gestion des médias.')
                         ->columnSpanFull(),
-
-                    TextInput::make('recap_video_url_1')
-                        ->label('Vidéo 1 (URL)')
-                        ->url()
-                        ->maxLength(255),
-
-                    TextInput::make('recap_video_url_2')
-                        ->label('Vidéo 2 (URL)')
-                        ->url()
-                        ->maxLength(255),
-
-                    TextInput::make('recap_video_url_3')
-                        ->label('Vidéo 3 (URL)')
-                        ->url()
-                        ->maxLength(255),
 
                     FileUpload::make('recap_document_path')
                         ->label('Document de récapitulatif')
