@@ -7,11 +7,8 @@ namespace App\Console\Commands\Events;
 use App\Models\Event;
 use App\Models\GuestRegistration;
 use App\Models\User;
-use App\Services\Events\EventRegistrationService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class ImportLumaMeet01 extends Command
 {
@@ -83,7 +80,7 @@ HTML;
     {
         $isDryRun = $this->option('dry-run');
         $csvPath  = $this->option('csv')
-            ?? base_path("docs/L'IA AU SERVICE DES DÉVELOPPEURS LARAVEL - Guests - 2026-09-14-08-46-23.csv");
+            ?? base_path('docs/luma-meet01-guests.csv');
 
         $this->info($isDryRun ? '🔍 Mode dry-run — aucune écriture en base' : '🚀 Import réel en base');
         $this->newLine();
