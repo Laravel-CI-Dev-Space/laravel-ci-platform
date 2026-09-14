@@ -31,6 +31,9 @@ class ManageEventMedia extends ManageRelatedRecords
     /** Évite l'auto-découverte dans le menu de navigation Filament */
     protected static bool $isDiscovered = false;
 
+    /** Pas de politique EventMedia — la sécurité est gérée par FilamentAdminAccess */
+    protected static bool $shouldSkipAuthorization = true;
+
     // ── Schéma de formulaire vide (pas de création standard, upload custom) ──
 
     public function form(Schema $schema): Schema
