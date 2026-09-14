@@ -6,6 +6,7 @@ namespace App\Filament\Resources\Events\Tables;
 
 use App\Enums\EventStatus;
 use App\Enums\EventType;
+use App\Filament\Resources\Events\EventResource;
 use App\Jobs\Events\SendEventReminder;
 use App\Mail\NewsletterEventMail;
 use App\Models\Event;
@@ -130,8 +131,11 @@ class EventsTable
                     ->query(fn (Builder $q) => $q->where('waitlist_enabled', true)),
             ])
 
+            ->recordUrl(fn (Event $record): string => EventResource::getUrl('view', ['record' => $record]))
+
             ->recordActions([
-                ViewAction::make(),
+                ViewAction::make()
+                    ->url(fn (Event $record): string => EventResource::getUrl('view', ['record' => $record])),
                 EditAction::make(),
 
                 TableAction::make('publish')

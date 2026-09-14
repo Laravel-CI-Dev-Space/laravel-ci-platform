@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Resources\Events\Pages;
 
 use App\Filament\Resources\Events\EventResource;
+use App\Filament\Resources\Events\Widgets\EventRegistrationStatsWidget;
 use App\Models\Event;
 use App\Models\EventRegistration;
 use App\Models\GuestRegistration;
@@ -57,16 +58,16 @@ class ViewEvent extends ViewRecord
         ];
     }
 
-    // ── Widgets : stats + liste inscriptions ──────────────────────────────
-
-    protected function getFooterWidgets(): array
-    {
-        return [];
-    }
+    // ── Widgets : stats inscriptions ──────────────────────────────────────
 
     protected function getHeaderWidgets(): array
     {
-        return [];
+        return [EventRegistrationStatsWidget::class];
+    }
+
+    public function getWidgetData(): array
+    {
+        return ['record' => $this->record];
     }
 
     // ── Export Excel ──────────────────────────────────────────────────────
