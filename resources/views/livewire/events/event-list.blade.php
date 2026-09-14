@@ -10,7 +10,7 @@
                         <span>Événements</span>
                     </div>
                     <h1 class="mb-2">Événements</h1>
-                    <p class="lead mb-0">Meetups, webinaires et hackathons — à Abidjan et en ligne. Venez apprendre et construire avec la communauté.</p>
+                    <p class="lead mb-0">Meetups, webinaires et hackathons - à Abidjan et en ligne. Venez apprendre et construire avec la communauté.</p>
                 </div>
                 <div class="col-lg-4 d-none d-lg-block">
                     <div class="mascot-art">
@@ -82,7 +82,16 @@
                                         <i class="fa-solid fa-clock-rotate-left"></i> Événement passé
                                     </span>
                                 @endif
-                                <div class="event-banner {{ $event->type->bannerClass() }}"></div>
+                                @if ($event->cover_image)
+                                    <div class="event-banner" style="padding:0;overflow:hidden">
+                                        <img src="{{ \Illuminate\Support\Facades\Storage::disk('assets')->url($event->cover_image) }}"
+                                             alt="{{ $event->title }}"
+                                             onerror="this.parentElement.className='event-banner {{ $event->type->bannerClass() }}';this.remove();"
+                                             style="width:100%;height:100%;object-fit:cover;display:block;" />
+                                    </div>
+                                @else
+                                    <div class="event-banner {{ $event->type->bannerClass() }}"></div>
+                                @endif
                                 <div class="card-pad">
                                     <div class="d-flex gap-3 mb-3">
                                         <div class="event-date-chip">

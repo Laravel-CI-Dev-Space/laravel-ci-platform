@@ -20,7 +20,7 @@ class EventList extends Component
     public string $type = 'all';
 
     #[Url]
-    public string $period = 'upcoming';
+    public string $period = 'all';
 
     #[Url]
     public string $sort = 'soonest';
