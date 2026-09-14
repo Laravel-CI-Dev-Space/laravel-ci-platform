@@ -12,10 +12,8 @@ use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
-use BackedEnum;
 use Filament\Resources\Pages\Page;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Actions\Action as TableAction;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\ImageColumn;
@@ -32,8 +30,6 @@ class ManageEventMedia extends Page implements HasTable
     protected static string $resource = EventResource::class;
 
     protected static ?string $title = 'Médias du récapitulatif';
-
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedPhoto;
 
     public Event $record;
 

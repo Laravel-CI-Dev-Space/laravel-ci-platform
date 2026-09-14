@@ -54,7 +54,7 @@ class ViewEvent extends ViewRecord
                 ->icon('heroicon-o-document-text')
                 ->color('warning')
                 ->visible(fn (): bool => $this->record->status->value === 'completed')
-                ->url(fn (): string => EventResource::getUrl('edit', ['record' => $this->record]) . '#recap'),
+                ->url(fn (): string => EventResource::getUrl('report', ['record' => $this->record])),
         ];
     }
 
