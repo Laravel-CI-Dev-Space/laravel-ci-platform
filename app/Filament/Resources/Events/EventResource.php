@@ -71,6 +71,7 @@ class EventResource extends Resource
     {
         return [
             RegistrationsRelationManager::class,
+            \App\Filament\Resources\Events\RelationManagers\GuestRegistrationsRelationManager::class,
         ];
     }
 

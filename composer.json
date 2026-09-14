@@ -22,6 +22,7 @@
         "meilisearch/meilisearch-php": "^1.16",
         "mews/purifier": "*",
         "openai-php/client": "^0.20.0",
+        "rap2hpoutre/fast-excel": "^5.17",
         "spatie/browsershot": "^5.4",
         "spatie/laravel-activitylog": "^5.0",
         "spatie/laravel-permission": "^6.0",
