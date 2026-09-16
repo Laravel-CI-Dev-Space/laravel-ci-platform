@@ -14,12 +14,13 @@ class LaravelMcpArticleSeeder extends Seeder
 {
     public function run(): void
     {
-        $author = User::where('email', 'hlab.digital.center@gmail.com')
-            ->orWhere('email', 'admin@laravelci.com')
+        $author = User::where('github_username', 'ky-wilson')
+            ->orWhere('github_username', 'Ky-Wilson')
+            ->orWhere('email', 'hlab.digital.center@gmail.com')
             ->first();
 
         if (! $author) {
-            $this->command->error("No author found. Please create a user first.");
+            $this->command->error("No author found (tried github_username=ky-wilson and hlab.digital.center@gmail.com).");
             return;
         }
 
