@@ -230,7 +230,7 @@
                 <div class="col-lg-8 order-lg-1">
 
                     @if ($article->cover_image)
-                        <img src="{{ asset('assets/covers/' . $article->cover_image) }}"
+                        <img src="{{ asset('assets/' . $article->cover_image) }}"
                              alt="{{ $article->title }}"
                              class="img-fluid rounded mb-4"
                              style="width:100%; max-height:420px; object-fit:cover;" />
