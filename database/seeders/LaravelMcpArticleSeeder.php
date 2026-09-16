@@ -117,7 +117,7 @@ class LaravelMcpArticleSeeder extends Seeder
 }
 .mcp-file:hover { color: #c9d1d9; }
 .mcp-file.active { color: #e8590c; border-bottom-color: #e8590c; }
-.mcp-pane { display: none; position: relative; }
+.mcp-pane { display: none; position: relative; overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .mcp-pane.active { display: block; }
 .mcp-copy {
     position: absolute;
@@ -152,6 +152,10 @@ class LaravelMcpArticleSeeder extends Seeder
     font-size: .8rem !important;
     background: transparent !important;
     color: #c9d1d9;
+    white-space: pre;
+    word-wrap: normal;
+    overflow-wrap: normal;
+    min-width: max-content;
 }
 .article-body .pre-wrap { position: relative; }
 .article-body .pre-wrap .std-copy {

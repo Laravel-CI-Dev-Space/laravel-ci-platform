@@ -6,7 +6,7 @@
    Style terminal pour les blocs de code dans les articles
    ══════════════════════════════════════════════════════════ */
 
-/* Wrapper <pre> */
+/* Wrapper <pre> — overflow-x:auto permet le scroll horizontal sur mobile */
 .article-body pre {
     position: relative;
     background: #0d1117;
@@ -14,7 +14,9 @@
     border-radius: 10px;
     margin: 1.75rem 0;
     padding: 0;
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
     box-shadow: 0 4px 20px rgba(0,0,0,.25);
 }
 
@@ -25,6 +27,10 @@
     height: 2.4rem;
     background: #161b22;
     border-bottom: 1px solid #30363d;
+    border-radius: 10px 10px 0 0;
+    position: sticky;
+    left: 0;
+    min-width: 100%;
 }
 
 /* Boutons macOS décoratifs */
@@ -41,16 +47,22 @@
     pointer-events: none;
 }
 
-/* Le bloc de code lui-même */
+/* Le bloc de code — couleur de base visible avant que hljs colorise */
+.article-body pre code {
+    color: #c9d1d9;
+    white-space: pre;
+    word-wrap: normal;
+    overflow-wrap: normal;
+}
 .article-body pre code.hljs {
     display: block;
     padding: 1.25rem 1.4rem;
-    overflow-x: auto;
     background: transparent !important;
     font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
     font-size: .875rem;
     line-height: 1.75;
     tab-size: 4;
+    min-width: max-content;
 }
 
 /* Code inline (dans les paragraphes) */
@@ -179,7 +191,7 @@
                         <div class="sidebar-title mt-3">Partager cet article</div>
                         @php
                             $shareUrl  = urlencode(request()->url());
-                            $shareText = urlencode($article->title . ' — Laravel CI');
+                            $shareText = urlencode($article->title . ' - Laravel CI');
                         @endphp
                         <div class="d-flex gap-2 mt-2 flex-wrap">
                             <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ $shareUrl }}"
