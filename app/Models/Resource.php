@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 #[Fillable(['user_id', 'title', 'description', 'type', 'file_path', 'file_name', 'file_size', 'mime_type', 'downloads_count', 'is_public'])]
 class Resource extends Model
@@ -30,7 +31,7 @@ class Resource extends Model
 
     public function fileUrl(): string
     {
-        return asset('assets/resources/' . $this->file_path);
+        return Storage::disk('assets')->url('resources/' . $this->file_path);
     }
 
     public function fileSizeHuman(): string

@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Enums\EventMediaType;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
 
@@ -261,7 +262,7 @@ class Event extends Model
             return null;
         }
 
-        return asset('assets/documents/events/' . $this->recap_document_path);
+        return Storage::disk('assets')->url('documents/events/' . $this->recap_document_path);
     }
 
     /**

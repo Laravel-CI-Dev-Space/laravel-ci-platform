@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[Fillable([
@@ -44,6 +45,6 @@ class Company extends Model
 
     public function logoUrl(): ?string
     {
-        return $this->logo ? asset('assets/companies/' . $this->logo) : null;
+        return $this->logo ? Storage::disk('assets')->url('companies/' . $this->logo) : null;
     }
 }

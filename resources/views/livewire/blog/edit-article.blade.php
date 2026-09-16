@@ -136,7 +136,7 @@
                             <span class="text-muted-2 fw-normal d-block" style="font-size:.75rem">Optionnel · max. 2 Mo</span>
                         </label>
                         @if ($article->cover_image && !$coverImage)
-                            <img src="{{ asset('assets/'.$article->cover_image) }}"
+                            <img src="{{ $article->coverUrl() }}"
                                  class="img-fluid rounded mb-2 w-100"
                                  style="max-height:110px; object-fit:cover;" />
                         @elseif ($coverImage)

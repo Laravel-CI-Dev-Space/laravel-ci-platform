@@ -48,16 +48,22 @@ return [
         ],
 
         /*
-         * Disk public/assets/ — utilisé par AssetService et Filament FileUpload.
-         * Tous les fichiers uploadés (images, CV, documents) vont dans public/assets/.
-         * Pas de storage:link requis : c'est directement dans public/.
+         * Disk assets — uploads utilisateur (covers, logos, documents…).
+         * En production (R2_ACCESS_KEY_ID défini) : Cloudflare R2, persistant entre déploiements.
+         * En développement local : public/assets/ (pas besoin de storage:link).
          */
         'assets' => [
-            'driver'     => 'local',
-            'root'       => public_path('assets'),
-            'url'        => env('APP_URL', 'http://localhost') . '/assets',
-            'visibility' => 'public',
-            'throw'      => false,
+            'driver'                  => env('R2_ACCESS_KEY_ID') ? 's3' : 'local',
+            'key'                     => env('R2_ACCESS_KEY_ID'),
+            'secret'                  => env('R2_SECRET_ACCESS_KEY'),
+            'region'                  => 'auto',
+            'bucket'                  => env('R2_BUCKET'),
+            'endpoint'                => env('R2_ENDPOINT'),
+            'url'                     => env('R2_PUBLIC_URL', env('APP_URL', 'http://localhost') . '/assets'),
+            'use_path_style_endpoint' => true,
+            'root'                    => public_path('assets'),
+            'visibility'              => 'public',
+            'throw'                   => false,
         ],
 
         's3' => [

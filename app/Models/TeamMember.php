@@ -6,6 +6,7 @@ use App\Models\Concerns\CachesActiveRecords;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 #[Fillable([
     'first_name', 'last_name', 'role', 'avatar', 'avatar_initials',
@@ -41,7 +42,7 @@ class TeamMember extends Model
             return null;
         }
 
-        return asset('assets/' . $this->avatar);
+        return Storage::disk('assets')->url($this->avatar);
     }
 
     /** Retourne les initiales du membre (depuis avatar_initials ou prénom+nom). */

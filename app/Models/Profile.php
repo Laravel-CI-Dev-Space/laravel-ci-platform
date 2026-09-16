@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 
 #[Fillable([
     'user_id',
@@ -131,7 +132,7 @@ class Profile extends Model
     public function avatarUrl(?string $fallback = null): string
     {
         if ($this->avatar) {
-            return asset('assets/avatars/' . $this->avatar);
+            return Storage::disk('assets')->url('avatars/' . $this->avatar);
         }
 
         if ($fallback !== null) {

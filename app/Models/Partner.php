@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Concerns\CachesActiveRecords;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -32,6 +33,6 @@ class Partner extends Model
             return null;
         }
 
-        return asset('assets/' . $this->logo);
+        return Storage::disk('assets')->url($this->logo);
     }
 }

@@ -6,6 +6,7 @@ use App\Enums\MediaType;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 
 #[Fillable([
     'eyebrow', 'title', 'content', 'media_type', 'media_path',
@@ -44,7 +45,7 @@ class AboutOriginSection extends Model
     public function mediaUrl(): ?string
     {
         return match ($this->media_type) {
-            MediaType::Image, MediaType::Video => $this->media_path ? asset('assets/' . $this->media_path) : null,
+            MediaType::Image, MediaType::Video => $this->media_path ? Storage::disk('assets')->url($this->media_path) : null,
             MediaType::Youtube                 => $this->youtube_url ?: null,
             default                            => null,
         };

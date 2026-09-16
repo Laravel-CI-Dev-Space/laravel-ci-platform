@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -160,7 +161,7 @@ class JobOffer extends Model
     public function coverImageUrl(): ?string
     {
         return $this->cover_image
-            ? asset('assets/job-covers/' . $this->cover_image)
+            ? Storage::disk('assets')->url('job-covers/' . $this->cover_image)
             : null;
     }
 
@@ -171,7 +172,7 @@ class JobOffer extends Model
     public function attachmentUrl(): ?string
     {
         return $this->attachment_path
-            ? asset('assets/job-attachments/' . $this->attachment_path)
+            ? Storage::disk('assets')->url('job-attachments/' . $this->attachment_path)
             : null;
     }
 

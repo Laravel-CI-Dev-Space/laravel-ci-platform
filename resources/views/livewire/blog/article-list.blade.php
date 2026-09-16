@@ -154,7 +154,7 @@
                                 {{-- Cover image --}}
                                 @if ($article->cover_image)
                                     <a href="{{ route('blog.show', $article->slug) }}">
-                                        <img src="{{ asset('assets/' . $article->cover_image) }}"
+                                        <img src="{{ $article->coverUrl() }}"
                                              alt="{{ $article->title }}"
                                              style="width:100%; height:150px; object-fit:cover;" />
                                     </a>
