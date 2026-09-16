@@ -27,8 +27,10 @@ class LaravelMcpArticleSeeder extends Seeder
         $title = 'Laravel MCP : le nouveau standard universel pour connecter vos apps aux IA';
         $slug  = 'laravel-mcp-standard-universel-ia';
 
-        if (Article::where('slug', $slug)->exists()) {
-            $this->command->info("Article already exists, skipping.");
+        $existing = Article::where('slug', $slug)->first();
+        if ($existing) {
+            $existing->update(['body' => $this->body(), 'body_html' => $this->body()]);
+            $this->command->info("Article mis à jour.");
             return;
         }
 
@@ -55,8 +57,16 @@ class LaravelMcpArticleSeeder extends Seeder
     private function body(): string
     {
         return <<<'HTML'
+<div style="display:inline-flex;align-items:center;gap:8px;background:#fff7ed;border:1px solid #fdba74;border-radius:6px;padding:6px 14px;margin-bottom:20px;font-size:0.88rem;font-weight:600;color:#c2410c;">
+  <span>🚀</span> Sorti en beta publique — septembre 2025
+</div>
+
 <p class="lead">
-  Trois milliards de messages par jour. C'est le volume que traitent aujourd'hui les principaux assistants IA comme ChatGPT, Claude et Gemini. Pendant ce temps, vos applications Laravel restent des îlots : riches en données, mais inaccessibles depuis ces nouveaux points d'entrée. <strong>Laravel MCP</strong> change cela.
+  Trois milliards de messages par jour. C'est le volume que traitent aujourd'hui les principaux assistants IA comme ChatGPT, Claude et Gemini. Pendant ce temps, vos applications Laravel restent des îlots : riches en données, mais inaccessibles depuis ces nouveaux points d'entrée. <strong>Laravel MCP vient de changer cela.</strong>
+</p>
+
+<p>
+  L'équipe Laravel a lancé la <strong>beta publique de <code>laravel/mcp</code></strong> en septembre 2025, après avoir field-testé le package en production sur <a href="https://blog.laravel.com/announcing-laravel-boost" target="_blank" rel="noopener">Laravel Boost</a>. La documentation officielle est disponible dès maintenant sur <a href="https://laravel.com/framework/docs/mcp" target="_blank" rel="noopener">laravel.com/framework/docs/mcp</a>. C'est le bon moment pour monter dans le train.
 </p>
 
 <h2>Qu'est-ce que le Model Context Protocol ?</h2>
@@ -674,10 +684,18 @@ test('booking tool requires auth', function () {
   Laravel MCP donne aux développeurs du framework les outils pour prendre ce train en marche — avec l'élégance et la productivité auxquelles l'écosystème Laravel nous a habitués. <strong>Tools, Resources, Prompts, OAuth 2.1, streaming, testing</strong> : tout y est, prêt à l'emploi.
 </p>
 
-<pre><code class="language-bash">composer require laravel/mcp</code></pre>
+<pre><code class="language-bash">composer require laravel/mcp
+php artisan vendor:publish --tag=ai-routes</code></pre>
 
 <p>
   C'est tout ce qu'il faut pour commencer. Le reste, c'est votre imagination.
+</p>
+
+<p>
+  <strong>Ressources officielles :</strong><br>
+  📖 <a href="https://laravel.com/framework/docs/mcp" target="_blank" rel="noopener">Documentation Laravel MCP</a><br>
+  🧪 <a href="https://github.com/laravel/locket" target="_blank" rel="noopener">Locket — l'app de démo officielle</a><br>
+  📦 <a href="https://github.com/laravel/mcp" target="_blank" rel="noopener">Package sur GitHub</a>
 </p>
 HTML;
     }
