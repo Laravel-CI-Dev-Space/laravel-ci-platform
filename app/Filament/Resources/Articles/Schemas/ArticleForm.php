@@ -6,6 +6,7 @@ namespace App\Filament\Resources\Articles\Schemas;
 
 use App\Enums\ArticleLevel;
 use App\Enums\ArticleStatus;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -37,6 +38,17 @@ class ArticleForm
                         ->label('Corps (Markdown)')
                         ->required()
                         ->rows(15)
+                        ->columnSpanFull(),
+
+                    FileUpload::make('cover_image')
+                        ->label('Image de couverture')
+                        ->image()
+                        ->disk('assets')
+                        ->directory('covers')
+                        ->imagePreviewHeight('160')
+                        ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                        ->maxSize(5120)
+                        ->helperText('JPEG, PNG ou WebP · max 5 Mo')
                         ->columnSpanFull(),
 
                     Select::make('level')
