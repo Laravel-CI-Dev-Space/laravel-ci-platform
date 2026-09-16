@@ -184,7 +184,7 @@ class LaravelMcpArticleSeeder extends Seeder
 
 <p class="lead">La semaine dernière, l'équipe Laravel a discrètement poussé quelque chose dans l'écosystème qui pourrait bien changer la façon dont vous pensez vos applications. Un package baptisé <code>laravel/mcp</code>. Pas de grand discours. Juste une commande composer et des API propres. Mais derrière cette simplicité se cache quelque chose d'important.</p>
 
-<p>Nous sommes en 2025 et les assistants IA — Claude, ChatGPT, Cursor, GitHub Copilot — traitent plus de trois milliards de messages par jour. Ce sont devenus des points d'entrée à part entière, au même titre que le navigateur ou l'API REST. Vos applications Laravel sont riches en données, en logique métier, en actions — mais inaccessibles depuis ces nouveaux points d'entrée. Laravel MCP change cela.</p>
+<p>Nous sommes en 2025 et les assistants IA comme Claude, ChatGPT, Cursor et GitHub Copilot traitent plus de trois milliards de messages par jour. Ce sont devenus des points d'entrée à part entière, au même titre que le navigateur ou l'API REST. Vos applications Laravel sont riches en données, en logique métier, en actions, mais inaccessibles depuis ces nouveaux points d'entrée. Laravel MCP change cela.</p>
 
 <p>À travers cet article, Laravel CI vous donne les bases pour comprendre le Model Context Protocol, pourquoi ça compte pour la communauté Laravel en Côte d'Ivoire et en Afrique francophone, et comment le mettre en place dans votre application dès aujourd'hui.</p>
 
