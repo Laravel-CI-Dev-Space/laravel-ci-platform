@@ -691,6 +691,36 @@ php artisan vendor:publish --tag=ai-routes</code></pre>
   C'est tout ce qu'il faut pour commencer. Le reste, c'est votre imagination.
 </p>
 
+<h2>Voir MCP en action</h2>
+
+<p>
+  L'équipe Laravel a publié deux vidéos pour accompagner le lancement. La première est une introduction de 3 minutes qui montre concrètement l'impact de MCP sur une app Laravel :
+</p>
+
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:10px;margin-bottom:24px;">
+  <iframe
+    src="https://www.youtube.com/embed/ldqusTDx4K0"
+    title="Laravel MCP — Introduction (3 min)"
+    style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;"
+    allowfullscreen
+    loading="lazy"
+  ></iframe>
+</div>
+
+<p>
+  Et pour aller plus loin, le tutoriel complet de construction d'une vraie app avec Laravel MCP :
+</p>
+
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:10px;margin-bottom:24px;">
+  <iframe
+    src="https://www.youtube.com/embed/QiyKIkCUCcU"
+    title="Building a Real Laravel MCP App — Full Tutorial"
+    style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;"
+    allowfullscreen
+    loading="lazy"
+  ></iframe>
+</div>
+
 <p>
   <strong>Ressources officielles :</strong><br>
   📖 <a href="https://laravel.com/framework/docs/mcp" target="_blank" rel="noopener">Documentation Laravel MCP</a><br>
