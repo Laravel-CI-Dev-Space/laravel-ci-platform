@@ -6,7 +6,7 @@ namespace App\Filament\Resources\Articles\Tables;
 
 use App\Enums\ArticleLevel;
 use App\Enums\ArticleStatus;
-use App\Mail\NewsletterArticleMail;
+use App\Jobs\SendNewsletterBatch;
 use App\Models\Article;
 use App\Models\NewsletterSubscriber;
 use Filament\Actions\Action as TableAction;
@@ -21,7 +21,6 @@ use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Mail;
 
 class ArticlesTable
 {
@@ -184,16 +183,15 @@ class ArticlesTable
                         return "Cet article sera envoyé à {$count} abonné(s) actif(s). Cette action est irréversible.";
                     })
                     ->action(function (Article $record): void {
-                        $subscribers = NewsletterSubscriber::active()->get();
+                        $count = NewsletterSubscriber::active()->count();
 
-                        foreach ($subscribers as $subscriber) {
-                            Mail::to($subscriber->email)->send(new NewsletterArticleMail($record, $subscriber));
-                        }
+                        SendNewsletterBatch::dispatch($record);
 
                         $record->update(['newsletter_sent' => true]);
 
                         Notification::make()
-                            ->title("Newsletter envoyée à {$subscribers->count()} abonné(s)")
+                            ->title("Newsletter en cours d'envoi")
+                            ->body("{$count} abonné(s) vont recevoir l'email en arrière-plan.")
                             ->success()
                             ->send();
                     }),
