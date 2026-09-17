@@ -61,7 +61,7 @@ return [
             'endpoint'                => env('R2_ENDPOINT'),
             'url'                     => env('R2_PUBLIC_URL', env('APP_URL', 'http://localhost') . '/assets'),
             'use_path_style_endpoint' => true,
-            'root'                    => public_path('assets'),
+            'root'                    => env('R2_ACCESS_KEY_ID') ? null : public_path('assets'),
             'visibility'              => 'public',
             'throw'                   => false,
         ],
