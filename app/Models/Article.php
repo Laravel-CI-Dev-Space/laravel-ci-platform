@@ -18,7 +18,7 @@ use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
 
 #[Fillable([
-    'user_id', 'reviewed_by', 'title', 'slug', 'excerpt', 'body', 'body_html',
+    'user_id', 'reviewed_by', 'author_label', 'title', 'slug', 'excerpt', 'body', 'body_html',
     'cover_image', 'level', 'status', 'rejection_reason', 'views_count',
     'comments_count', 'newsletter_sent', 'published_at', 'reviewed_at', 'edited_at',
 ])]
@@ -52,6 +52,11 @@ class Article extends Model
     public function getRouteKeyName(): string
     {
         return 'slug';
+    }
+
+    public function authorName(): string
+    {
+        return $this->author_label ?: ($this->author?->name ?? 'Laravel CI');
     }
 
     public function coverUrl(): ?string

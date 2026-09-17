@@ -23,6 +23,7 @@
 <body>
   <div class="wrapper">
     <div class="header">
+      <img src="https://pub-586b4a4ea2c24ee7bd0b1f5d4ac57045.r2.dev/laravel-logo.png" alt="Laravel CI" style="height:48px;margin-bottom:12px;" />
       <h1>Nouvel article publié</h1>
     </div>
     <div class="body">
@@ -43,7 +44,7 @@
       <a href="{{ route('blog.show', $article->slug) }}" class="btn">Lire l'article →</a>
 
       <div class="meta">
-        Par <strong>{{ $article->author->name ?? 'La communauté' }}</strong>
+        Par <strong>{{ $article->authorName() }}</strong>
         @if($article->published_at)
           · publié le {{ $article->published_at->format('d/m/Y') }}
         @endif

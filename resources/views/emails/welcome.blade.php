@@ -127,7 +127,7 @@
 
     {{-- HEADER --}}
     <div class="header">
-        <img src="{{ $message->embed(public_path('assets/logo.jpeg')) }}" alt="Laravel CI">
+        <img src="https://pub-586b4a4ea2c24ee7bd0b1f5d4ac57045.r2.dev/laravel-logo.png" alt="Laravel CI" style="height:48px;">
         <h1>Laravel Côte d'Ivoire</h1>
         <p>Hub communautaire des développeurs Laravel ivoiriens</p>
     </div>
@@ -140,7 +140,7 @@
         </p>
 
         <p class="text">
-            Nous sommes ravis de vous accueillir dans la communauté <strong>Laravel Côte d'Ivoire</strong> —
+            Nous sommes ravis de vous accueillir dans la communauté <strong>Laravel Côte d'Ivoire</strong> -
             la première communauté structurée dédiée aux développeurs Laravel en Côte d'Ivoire et dans la diaspora ivoirienne.
         </p>
 
@@ -154,19 +154,19 @@
             <h3>Ce qui vous attend</h3>
             <div class="benefit-item">
                 <span class="benefit-dot"></span>
-                <span><strong>Forum technique</strong> — Posez vos questions Laravel, répondez à celles des autres</span>
+                <span><strong>Forum technique</strong> - Posez vos questions Laravel, répondez à celles des autres</span>
             </div>
             <div class="benefit-item">
                 <span class="benefit-dot"></span>
-                <span><strong>Blog &amp; ressources</strong> — Tutoriels, boilerplates et guides PDF</span>
+                <span><strong>Blog &amp; ressources</strong> - Tutoriels, boilerplates et guides PDF</span>
             </div>
             <div class="benefit-item">
                 <span class="benefit-dot"></span>
-                <span><strong>Événements</strong> — Meetups, hackathons et talks en ligne</span>
+                <span><strong>Événements</strong> - Meetups, hackathons et talks en ligne</span>
             </div>
             <div class="benefit-item">
                 <span class="benefit-dot"></span>
-                <span><strong>Job Board</strong> — Offres Laravel en Côte d'Ivoire et en remote</span>
+                <span><strong>Job Board</strong> - Offres Laravel en Côte d'Ivoire et en remote</span>
             </div>
         </div>
 
@@ -186,7 +186,7 @@
                 de postuler aux offres d'emploi et de participer pleinement aux échanges.
             </p>
             <div class="progress-hint">
-                Taux de complétion actuel : <strong>0%</strong> —
+                Taux de complétion actuel : <strong>0%</strong> -
                 Complétez votre profil pour atteindre <strong>100%</strong> et débloquer toutes les fonctionnalités.
             </div>
             <p>
@@ -201,7 +201,7 @@
     {{-- FOOTER --}}
     <div class="footer">
         <p>
-            <strong style="color:#FF6600;">Laravel Côte d'Ivoire</strong> — 2026 — Open Source MIT
+            <strong style="color:#FF6600;">Laravel Côte d'Ivoire</strong> - 2026 - Open Source MIT
         </p>
         <p style="margin-top:0.5rem;">
             Vous recevez cet email car vous venez de vous inscrire sur

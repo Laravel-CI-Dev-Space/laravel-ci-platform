@@ -130,12 +130,12 @@
                     <div class="cover-meta">
                         <div class="author-row">
                             @if ($article->author->avatar)
-                                <img src="{{ $article->author->avatar }}" class="avatar" alt="{{ $article->author->name }}" />
+                                <img src="{{ $article->author->avatar }}" class="avatar" alt="{{ $article->authorName() }}" />
                             @else
-                                <span class="avatar av-1">{{ strtoupper(substr($article->author->name, 0, 2)) }}</span>
+                                <span class="avatar av-1">{{ strtoupper(substr($article->authorName(), 0, 2)) }}</span>
                             @endif
                             <div class="meta">
-                                <div class="name">{{ $article->author->name }}</div>
+                                <div class="name">{{ $article->authorName() }}</div>
                             </div>
                         </div>
                         <span class="text-muted-2">
@@ -244,13 +244,13 @@
                     {{-- Biographie de l'auteur --}}
                     <div class="author-bio mt-5">
                         @if ($article->author->avatar)
-                            <img src="{{ $article->author->avatar }}" class="avatar avatar-lg" alt="{{ $article->author->name }}" />
+                            <img src="{{ $article->author->avatar }}" class="avatar avatar-lg" alt="{{ $article->authorName() }}" />
                         @else
-                            <span class="avatar avatar-lg av-1">{{ strtoupper(substr($article->author->name, 0, 2)) }}</span>
+                            <span class="avatar avatar-lg av-1">{{ strtoupper(substr($article->authorName(), 0, 2)) }}</span>
                         @endif
                         <div>
                             <h3 style="font-size:1.1rem;margin-bottom:.3rem" class="text-navy">
-                                {{ $article->author->name }}
+                                {{ $article->authorName() }}
                             </h3>
                             @if ($article->author->profile?->bio ?? false)
                                 <p class="mb-2" style="font-size:.92rem;color:var(--muted)">
@@ -291,9 +291,9 @@
                                         <div class="art-foot">
                                             <div class="author-row">
                                                 <span class="avatar avatar-sm av-1">
-                                                    {{ strtoupper(substr($related->author->name, 0, 2)) }}
+                                                    {{ strtoupper(substr($related->authorName(), 0, 2)) }}
                                                 </span>
-                                                <div class="meta"><div class="name">{{ $related->author->name }}</div></div>
+                                                <div class="meta"><div class="name">{{ $related->authorName() }}</div></div>
                                             </div>
                                         </div>
                                     </div>

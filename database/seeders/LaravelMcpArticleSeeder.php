@@ -29,7 +29,7 @@ class LaravelMcpArticleSeeder extends Seeder
 
         $existing = Article::where('slug', $slug)->first();
         if ($existing) {
-            $existing->update(['body' => $this->body(), 'body_html' => $this->body()]);
+            $existing->update(['body' => $this->body(), 'body_html' => $this->body(), 'author_label' => 'Laravel CI']);
             $this->command->info("Article mis à jour.");
             return;
         }
@@ -39,6 +39,7 @@ class LaravelMcpArticleSeeder extends Seeder
         Article::create([
             'user_id'      => $author->id,
             'reviewed_by'  => $author->id,
+            'author_label' => 'Laravel CI',
             'title'        => $title,
             'slug'         => $slug,
             'excerpt'      => 'Laravel vient de lancer laravel/mcp en beta publique. À travers cet article, Laravel CI vous donne les bases pour comprendre le Model Context Protocol et l\'intégrer dans vos applications dès aujourd\'hui.',

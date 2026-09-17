@@ -206,7 +206,7 @@
                                                 </span>
                                             @endif
                                             <div class="meta">
-                                                <div class="name" style="font-size:.8rem">{{ $article->author->name }}</div>
+                                                <div class="name" style="font-size:.8rem">{{ $article->authorName() }}</div>
                                             </div>
                                         </div>
                                         <div class="d-flex gap-2 align-items-center" style="font-size:.75rem; color:var(--muted)">

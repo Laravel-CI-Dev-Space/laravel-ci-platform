@@ -25,7 +25,7 @@
 <body>
   <div class="wrapper">
     <div class="header">
-      <img src="{{ asset('assets/web/img/logo-mark.png') }}" alt="Laravel CI" />
+      <img src="https://pub-586b4a4ea2c24ee7bd0b1f5d4ac57045.r2.dev/laravel-logo.png" alt="Laravel CI" style="height:48px;" />
       <h1>Nouvel événement</h1>
     </div>
     <div class="body">

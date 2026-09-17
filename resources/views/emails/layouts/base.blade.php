@@ -150,7 +150,7 @@
 
     {{-- HEADER --}}
     <div class="header">
-        <img src="{{ $message->embed(public_path('assets/logo.jpeg')) }}" alt="Laravel CI">
+        <img src="https://pub-586b4a4ea2c24ee7bd0b1f5d4ac57045.r2.dev/laravel-logo.png" alt="Laravel CI" style="height:48px;">
         <h1>Laravel Côte d'Ivoire</h1>
         <p>Hub communautaire des développeurs Laravel ivoiriens</p>
     </div>

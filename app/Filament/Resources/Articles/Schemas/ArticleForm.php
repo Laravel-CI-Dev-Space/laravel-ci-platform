@@ -21,6 +21,13 @@ class ArticleForm
             Section::make('Article')
                 ->columns(2)
                 ->schema([
+                    TextInput::make('author_label')
+                        ->label('Auteur affiché')
+                        ->placeholder('Laravel CI')
+                        ->helperText('Laissez vide pour afficher le nom réel de l\'auteur')
+                        ->maxLength(100)
+                        ->columnSpanFull(),
+
                     TextInput::make('title')
                         ->label('Titre')
                         ->required()
