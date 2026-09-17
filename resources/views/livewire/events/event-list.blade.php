@@ -83,11 +83,10 @@
                                     </span>
                                 @endif
                                 @if ($event->cover_image)
-                                    <div class="event-banner" style="padding:0;overflow:hidden">
+                                    <div class="event-banner has-cover">
                                         <img src="{{ \Illuminate\Support\Facades\Storage::disk('assets')->url($event->cover_image) }}"
                                              alt="{{ $event->title }}"
-                                             onerror="this.parentElement.className='event-banner {{ $event->type->bannerClass() }}';this.remove();"
-                                             style="width:100%;height:100%;object-fit:cover;display:block;" />
+                                             onerror="this.className='event-banner {{ $event->type->bannerClass() }}';this.innerHTML='';" />
                                     </div>
                                 @else
                                     <div class="event-banner {{ $event->type->bannerClass() }}"></div>

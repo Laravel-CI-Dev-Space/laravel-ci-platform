@@ -1027,6 +1027,17 @@ h1, h2, h3, h4, h5, h6 {
   height: 8px;
   border-radius: var(--radius) var(--radius) 0 0;
 }
+.event-banner.has-cover {
+  height: 180px;
+  overflow: hidden;
+  padding: 0;
+}
+.event-banner.has-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
 .ev-meetup { background: var(--orange); }
 .ev-webinar { background: #4361ee; }
 .ev-hackathon { background: #9b5de5; }
