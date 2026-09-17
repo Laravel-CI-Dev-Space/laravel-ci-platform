@@ -4,9 +4,18 @@ namespace Database\Seeders;
 
 use App\Models\TeamMember;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
 
 class TeamMemberSeeder extends Seeder
 {
+    private function syncToDisk(string $path): void
+    {
+        $local = public_path('assets/' . $path);
+        if (file_exists($local) && ! Storage::disk('assets')->exists($path)) {
+            Storage::disk('assets')->put($path, file_get_contents($local));
+        }
+    }
+
     public function run(): void
     {
         $members = [
@@ -41,6 +50,8 @@ class TeamMemberSeeder extends Seeder
         ];
 
         foreach ($members as $member) {
+            $this->syncToDisk($member['avatar']);
+
             TeamMember::updateOrCreate(
                 ['first_name' => $member['first_name'], 'last_name' => $member['last_name']],
                 $member
