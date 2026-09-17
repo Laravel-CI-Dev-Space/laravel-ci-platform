@@ -23,7 +23,6 @@
 <body>
   <div class="wrapper">
     <div class="header">
-      <img src="{{ asset('assets/web/img/logo-mark.png') }}" alt="Laravel CI" />
       <h1>Nouvel article publié</h1>
     </div>
     <div class="body">
@@ -35,7 +34,11 @@
 
       <span class="label">Article</span>
       <div class="title">{{ $article->title }}</div>
-      <div class="excerpt">{{ Str::limit(strip_tags($article->body ?? ''), 200) }}</div>
+      @php
+        $excerpt = $article->excerpt
+          ?: Str::limit(strip_tags(preg_replace('/<(style|script)[^>]*>.*?<\/(style|script)>/is', '', $article->body ?? '')), 200);
+      @endphp
+      <div class="excerpt">{{ $excerpt }}</div>
 
       <a href="{{ route('blog.show', $article->slug) }}" class="btn">Lire l'article →</a>
 
