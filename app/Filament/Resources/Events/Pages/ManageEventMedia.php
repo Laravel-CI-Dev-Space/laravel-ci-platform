@@ -13,8 +13,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ManageRelatedRecords;
 use Filament\Schemas\Schema;
-use Filament\Tables\Actions\Action as TableAction;
-use Filament\Tables\Actions\BulkAction;
+use Filament\Actions\BulkAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -87,7 +86,7 @@ class ManageEventMedia extends ManageRelatedRecords
             ->reorderable('order')
             ->defaultSort('order')
             ->actions([
-                TableAction::make('edit_caption')
+                Action::make('edit_caption')
                     ->label('Légende')
                     ->icon('heroicon-o-pencil')
                     ->color('gray')
@@ -102,14 +101,14 @@ class ManageEventMedia extends ManageRelatedRecords
                         Notification::make()->title('Légende mise à jour')->success()->send();
                     }),
 
-                TableAction::make('open')
+                Action::make('open')
                     ->label('Ouvrir')
                     ->icon('heroicon-o-arrow-top-right-on-square')
                     ->color('gray')
                     ->url(fn (EventMedia $record): string => $record->url())
                     ->openUrlInNewTab(),
 
-                TableAction::make('delete')
+                Action::make('delete')
                     ->label('Supprimer')
                     ->icon('heroicon-o-trash')
                     ->color('danger')
