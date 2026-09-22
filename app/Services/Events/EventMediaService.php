@@ -11,7 +11,6 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Intervention\Image\Laravel\Facades\Image;
 
 class EventMediaService
 {
@@ -171,25 +170,59 @@ class EventMediaService
     }
 
     /**
-     * Génère un thumbnail redimensionné et l'upload vers R2.
-     * Retourne le chemin dans le bucket.
+     * Génère un thumbnail cover-crop 400×300 en WebP (ou JPEG en fallback) via GD natif.
      */
     private function generateAndUploadThumbnail(
         UploadedFile $file,
         string $thumbDir,
         string $baseName
     ): string {
-        // Nom du thumbnail en .webp pour réduire la taille
-        $thumbName = pathinfo($baseName, PATHINFO_FILENAME) . '_thumb.webp';
+        $srcPath = $file->getRealPath();
 
-        $image = Image::read($file->getRealPath())
-            ->cover(self::THUMB_WIDTH, self::THUMB_HEIGHT);
+        [$origW, $origH] = @getimagesize($srcPath) ?: [0, 0];
 
-        $encoded = $image->toWebp(quality: 80);
+        if ($origW === 0 || $origH === 0) {
+            throw new \InvalidArgumentException('Impossible de lire les dimensions de l\'image.');
+        }
 
+        // Cover crop : découpe le centre pour remplir exactement THUMB_WIDTH × THUMB_HEIGHT
+        $ratio     = self::THUMB_WIDTH / self::THUMB_HEIGHT;
+        $origRatio = $origW / $origH;
+
+        if ($origRatio > $ratio) {
+            $cropH = $origH;
+            $cropW = (int) round($origH * $ratio);
+            $cropX = (int) round(($origW - $cropW) / 2);
+            $cropY = 0;
+        } else {
+            $cropW = $origW;
+            $cropH = (int) round($origW / $ratio);
+            $cropX = 0;
+            $cropY = (int) round(($origH - $cropH) / 2);
+        }
+
+        $src   = imagecreatefromstring(file_get_contents($srcPath));
+        $thumb = imagecreatetruecolor(self::THUMB_WIDTH, self::THUMB_HEIGHT);
+        imagecopyresampled($thumb, $src, 0, 0, $cropX, $cropY,
+            self::THUMB_WIDTH, self::THUMB_HEIGHT, $cropW, $cropH);
+
+        ob_start();
+        if (function_exists('imagewebp')) {
+            imagewebp($thumb, null, 80);
+            $ext = 'webp';
+        } else {
+            imagejpeg($thumb, null, 85);
+            $ext = 'jpg';
+        }
+        $blob = ob_get_clean();
+
+        imagedestroy($src);
+        imagedestroy($thumb);
+
+        $thumbName = pathinfo($baseName, PATHINFO_FILENAME) . "_thumb.{$ext}";
         $thumbPath = $thumbDir . '/' . $thumbName;
 
-        Storage::disk(self::DISK)->put($thumbPath, $encoded->toString(), 'public');
+        Storage::disk(self::DISK)->put($thumbPath, $blob, 'public');
 
         return $thumbPath;
     }
