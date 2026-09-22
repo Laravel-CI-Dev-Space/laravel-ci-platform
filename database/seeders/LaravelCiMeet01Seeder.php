@@ -43,7 +43,7 @@ class LaravelCiMeet01Seeder extends Seeder
         }
 
         // ── 1. Sync cover + document vers le disk assets ───────────────────
-        $coverPath  = $this->syncCoverToAssets();
+        $coverPath  = null;
         $docPath    = $this->syncDocumentToAssets('documents/events/Design-program.pdf');
 
         // ── 2. Créer / mettre à jour l'événement ──────────────────────────
