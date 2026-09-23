@@ -78,26 +78,21 @@ class EventMediaGallery extends Component
         return $query;
     }
 
-    // ── Stats ──────────────────────────────────────────────────────────────
-
-    public function getMediaCountsProperty(): array
-    {
-        return [
-            'all'   => EventMedia::where('event_id', $this->event->id)->count(),
-            'photo' => EventMedia::where('event_id', $this->event->id)->where('type', 'photo')->count(),
-            'video' => EventMedia::where('event_id', $this->event->id)->where('type', 'video')->count(),
-        ];
-    }
-
     // ── Rendu ──────────────────────────────────────────────────────────────
 
     public function render(): View
     {
-        $media = $this->mediaQuery()->paginate(48); // 48 = 4 colonnes × 12 lignes
+        $media = $this->mediaQuery()->paginate(48);
+
+        $mediaCounts = [
+            'all'   => EventMedia::where('event_id', $this->event->id)->count(),
+            'photo' => EventMedia::where('event_id', $this->event->id)->where('type', 'photo')->count(),
+            'video' => EventMedia::where('event_id', $this->event->id)->where('type', 'video')->count(),
+        ];
 
         return view('livewire.events.event-media-gallery', [
             'media'       => $media,
-            'mediaCounts' => $this->mediaCounts,
+            'mediaCounts' => $mediaCounts,
         ]);
     }
 }

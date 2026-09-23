@@ -402,14 +402,17 @@
                     </div>
                 @endif
 
-                {{-- ── Galerie complète avec téléchargement ── --}}
+                {{-- ── Téléchargement ZIP ── --}}
                 @if ($recapPhotos->isNotEmpty() || $event->mediaVideos->isNotEmpty())
-                    <div class="mb-4">
-                        <h3 class="mb-3" style="font-size:1.15rem;font-weight:700">
-                            <i class="fa-solid fa-download me-2 text-orange"></i>Télécharger les médias
-                        </h3>
-                        @livewire('events.event-media-gallery', ['event' => $event], key('gallery-' . $event->id))
-                    </div>
+                    @if (Route::has('events.media.zip.all'))
+                        <div class="mb-4 d-flex gap-2 flex-wrap">
+                            <a href="{{ route('events.media.zip.all', $event) }}"
+                               class="btn-outline-navy d-inline-flex align-items-center gap-2">
+                                <i class="fa-solid fa-file-zipper"></i>
+                                Télécharger toutes les photos (ZIP)
+                            </a>
+                        </div>
+                    @endif
                 @endif
 
                 {{-- ── Document PDF ── --}}
