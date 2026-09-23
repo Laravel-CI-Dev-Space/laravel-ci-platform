@@ -38,4 +38,19 @@ class EventController extends Controller
     {
         return view('web.events.show', compact('slug'));
     }
+
+    /**
+     * Page récapitulative post-événement (style article de blog).
+     */
+    public function recap(string $slug): View
+    {
+        $event = $this->eventService->getBySlug($slug);
+
+        abort_unless($event->hasRecap(), 404);
+
+        $photos = $event->mediaPhotos;
+        $videos = $event->mediaVideos;
+
+        return view('web.events.recap', compact('event', 'photos', 'videos'));
+    }
 }

@@ -213,12 +213,23 @@ Route::middleware(['auth', 'active', 'profile.complete'])->group(function () {
 // ─── EVENTS — Routes publiques ────────────────────────────
 Route::prefix('events')->name('events.')->group(function () {
     Route::get('/', [EventController::class, 'index'])->name('index');
+    Route::get('/{slug}/recap', [EventController::class, 'recap'])->name('recap');
     Route::get('/{slug}', [EventController::class, 'show'])->name('show');
     Route::post('/{event}/guest-register', [GuestRegistrationController::class, 'store'])
         ->middleware('throttle:5,1')
         ->name('guest.register');
     Route::get('/ticket/{token}', fn (string $token) => view('web.events.ticket-verify', compact('token')))
         ->name('ticket.verify');
+});
+
+// ─── EVENTS — Routes publiques médias récap ───────────────
+Route::prefix('events/{event}/media')->name('events.media.')->group(function () {
+    Route::post('/download/zip', [\App\Http\Controllers\Events\EventMediaDownloadController::class, 'zip'])
+        ->name('zip');
+    Route::get('/download/all', [\App\Http\Controllers\Events\EventMediaDownloadController::class, 'zipAll'])
+        ->name('zip.all');
+    Route::get('/{media}/download', [\App\Http\Controllers\Events\EventMediaDownloadController::class, 'single'])
+        ->name('single');
 });
 
 // ─── EVENTS — Routes authentifiées ────────────────────────

@@ -179,12 +179,12 @@
                 <div class="col-lg-4">
                     <div class="apply-card">
 
-                        {{-- Lien vers le récapitulatif si disponible --}}
+                        {{-- Lien vers la page récapitulative dédiée --}}
                         @if ($event->hasRecap())
-                            <a href="#recap"
-                               class="btn-primary d-flex align-items-center justify-content-center gap-2 mb-3"
-                               style="background:var(--orange,#e7222c);border-color:var(--orange,#e7222c);color:#fff;padding:.65rem 1.25rem;border-radius:.5rem;font-weight:600;text-decoration:none;">
-                                <i class="fa-solid fa-circle-play"></i>
+                            <a href="{{ route('events.recap', $event->slug) }}"
+                               class="d-flex align-items-center justify-content-center gap-2 mb-3"
+                               style="background:#e7222c;color:#fff;padding:.65rem 1.25rem;border-radius:.5rem;font-weight:600;text-decoration:none;border:none;">
+                                <i class="fa-solid fa-flag-checkered"></i>
                                 Voir le récapitulatif
                             </a>
                         @endif
@@ -297,132 +297,30 @@
         </div>
     </section>
 
-    {{-- ===== RÉCAPITULATIF ===== --}}
+    {{-- ===== TEASER RÉCAPITULATIF ===== --}}
     @if ($event->hasRecap())
-        @php $recapPhotos = $event->mediaPhotos; @endphp
-
-        <section id="recap" class="section" style="background:var(--surface-2,#f8fafc)">
+        <section class="section" style="background:var(--surface-2,#f8fafc);padding:2.5rem 0;">
             <div class="container">
-                <div class="section-eyebrow">Après l'événement</div>
-                <h2 class="mb-4">Récapitulatif</h2>
-
-                @if ($event->recap_summary)
-                    <p class="lead mb-4">{{ $event->recap_summary }}</p>
-                @endif
-
-                @if ($event->recap_content)
-                    <div class="recap-content mb-5">
-                        {!! clean($event->recap_content) !!}
+                <div class="row align-items-center g-4">
+                    <div class="col-lg-8">
+                        <div class="section-eyebrow mb-2">Après l'événement</div>
+                        <h2 class="mb-2" style="font-size:1.5rem">Le récapitulatif est disponible</h2>
+                        @if ($event->recap_summary)
+                            <p class="mb-0" style="color:var(--muted);line-height:1.7">
+                                {{ Str::limit($event->recap_summary, 180) }}
+                            </p>
+                        @endif
                     </div>
-                @endif
-
-                {{-- ── Carrousel photos ── --}}
-                @if ($recapPhotos->isNotEmpty())
-                    <h3 class="mb-3" style="font-size:1.15rem;font-weight:700">
-                        <i class="fa-solid fa-images me-2 text-orange"></i>Photos de l'événement
-                        <span style="font-size:.85rem;font-weight:400;color:var(--muted)">
-                            ({{ $recapPhotos->count() }})
-                        </span>
-                    </h3>
-
-                    <div id="recapCarousel" class="carousel slide mb-3" data-bs-ride="false">
-
-                        {{-- Indicateurs --}}
-                        <div class="carousel-indicators">
-                            @foreach ($recapPhotos as $i => $photo)
-                                <button type="button"
-                                        data-bs-target="#recapCarousel"
-                                        data-bs-slide-to="{{ $i }}"
-                                        @class(['active' => $i === 0])
-                                        @if ($i === 0) aria-current="true" @endif
-                                        aria-label="Photo {{ $i + 1 }}"></button>
-                            @endforeach
-                        </div>
-
-                        {{-- Slides --}}
-                        <div class="carousel-inner" style="border-radius:.75rem;overflow:hidden;background:#0f172a;">
-                            @foreach ($recapPhotos as $i => $photo)
-                                <div @class(['carousel-item', 'active' => $i === 0])>
-                                    <img src="{{ $photo->url() }}"
-                                         class="d-block w-100"
-                                         alt="{{ $photo->caption ?? ($event->title . ' — photo ' . ($i + 1)) }}"
-                                         loading="lazy"
-                                         style="max-height:520px;object-fit:contain;background:#0f172a;" />
-                                    @if ($photo->caption)
-                                        <div class="carousel-caption d-none d-md-block"
-                                             style="background:rgba(0,0,0,.45);border-radius:.5rem;padding:.4rem .75rem;bottom:1rem;">
-                                            <p class="mb-0" style="font-size:.85rem">{{ $photo->caption }}</p>
-                                        </div>
-                                    @endif
-                                </div>
-                            @endforeach
-                        </div>
-
-                        {{-- Contrôles --}}
-                        <button class="carousel-control-prev" type="button" data-bs-target="#recapCarousel" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Précédent</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#recapCarousel" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Suivant</span>
-                        </button>
+                    <div class="col-lg-4 d-flex justify-content-lg-end">
+                        <a href="{{ route('events.recap', $event->slug) }}"
+                           class="d-inline-flex align-items-center gap-2"
+                           style="background:#e7222c;color:#fff;padding:.75rem 1.5rem;border-radius:.5rem;font-weight:700;text-decoration:none;white-space:nowrap;">
+                            <i class="fa-solid fa-flag-checkered"></i>
+                            Lire le récapitulatif
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
                     </div>
-
-                    {{-- Miniatures cliquables --}}
-                    <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2rem;">
-                        @foreach ($recapPhotos as $i => $photo)
-                            <button type="button"
-                                    data-bs-target="#recapCarousel"
-                                    data-bs-slide-to="{{ $i }}"
-                                    style="padding:0;border:2px solid transparent;border-radius:.375rem;overflow:hidden;cursor:pointer;background:none;transition:border-color .15s;"
-                                    onmouseover="this.style.borderColor='#e7222c'"
-                                    onmouseout="this.style.borderColor='transparent'">
-                                <img src="{{ $photo->thumbnailUrl() }}"
-                                     alt="{{ $photo->caption ?? 'photo ' . ($i + 1) }}"
-                                     loading="lazy"
-                                     style="width:72px;height:54px;object-fit:cover;display:block;" />
-                            </button>
-                        @endforeach
-                    </div>
-                @endif
-
-                {{-- ── Vidéos YouTube/Vimeo ── --}}
-                @if (! empty($event->recapVideoUrls()))
-                    <div class="row g-3 mb-5">
-                        @foreach ($event->recapVideoUrls() as $videoUrl)
-                            <div class="col-md-6">
-                                <div class="ratio ratio-16x9" style="border-radius:.75rem;overflow:hidden;">
-                                    <iframe src="{{ $event->toEmbedUrl($videoUrl) }}"
-                                            title="Vidéo récapitulative"
-                                            allowfullscreen></iframe>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                @endif
-
-                {{-- ── Téléchargement ZIP ── --}}
-                @if ($recapPhotos->isNotEmpty() || $event->mediaVideos->isNotEmpty())
-                    @if (Route::has('events.media.zip.all'))
-                        <div class="mb-4 d-flex gap-2 flex-wrap">
-                            <a href="{{ route('events.media.zip.all', $event) }}"
-                               class="btn-outline-navy d-inline-flex align-items-center gap-2">
-                                <i class="fa-solid fa-file-zipper"></i>
-                                Télécharger toutes les photos (ZIP)
-                            </a>
-                        </div>
-                    @endif
-                @endif
-
-                {{-- ── Document PDF ── --}}
-                @if ($event->recapDocumentUrl())
-                    <a href="{{ $event->recapDocumentUrl() }}" target="_blank" rel="noopener"
-                       class="btn-outline-navy d-inline-flex align-items-center gap-2">
-                        <i class="fa-solid fa-file-arrow-down"></i>
-                        Télécharger {{ $event->recap_document_name ?? 'le document' }}
-                    </a>
-                @endif
+                </div>
             </div>
         </section>
     @endif
