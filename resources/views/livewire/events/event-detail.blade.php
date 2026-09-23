@@ -183,7 +183,7 @@
                         @if ($event->hasRecap())
                             <a href="{{ route('events.recap', $event->slug) }}"
                                class="d-flex align-items-center justify-content-center gap-2 mb-3"
-                               style="background:#e7222c;color:#fff;padding:.65rem 1.25rem;border-radius:.5rem;font-weight:600;text-decoration:none;border:none;">
+                               style="background:#FF6600;color:#fff;padding:.65rem 1.25rem;border-radius:.375rem;font-weight:700;text-decoration:none;border:2px solid #1C1C2E;box-shadow:3px 3px 0 #1C1C2E;">
                                 <i class="fa-solid fa-flag-checkered"></i>
                                 Voir le récapitulatif
                             </a>
@@ -281,7 +281,7 @@
                                 >
                                 <span
                                     class="avatar avatar-md av-1"
-                                    style="display:none;background:#e7222c;color:#fff;font-weight:700"
+                                    style="display:none;background:#FF6600;color:#fff;font-weight:700"
                                 >LC</span>
                                 <div>
                                     <div style="font-weight:600">Laravel Côte d'Ivoire</div>
@@ -314,7 +314,7 @@
                     <div class="col-lg-4 d-flex justify-content-lg-end">
                         <a href="{{ route('events.recap', $event->slug) }}"
                            class="d-inline-flex align-items-center gap-2"
-                           style="background:#e7222c;color:#fff;padding:.75rem 1.5rem;border-radius:.5rem;font-weight:700;text-decoration:none;white-space:nowrap;">
+                           style="background:#FF6600;color:#fff;padding:.75rem 1.5rem;border-radius:.375rem;font-weight:700;text-decoration:none;white-space:nowrap;border:2px solid #1C1C2E;box-shadow:4px 4px 0 #1C1C2E;">
                             <i class="fa-solid fa-flag-checkered"></i>
                             Lire le récapitulatif
                             <i class="fa-solid fa-arrow-right"></i>
