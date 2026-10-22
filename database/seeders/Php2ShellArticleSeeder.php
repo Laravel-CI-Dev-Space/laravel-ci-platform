@@ -27,10 +27,11 @@ class Php2ShellArticleSeeder extends Seeder
 
         $body = $this->articleMarkdown();
         $html = $this->compileHtml($body);
-        $slug = 'php2shell-cve-2026-109618-109619-faille-critique-php';
+        $oldSlug = 'php2shell-cve-2026-109618-109619-faille-critique-php';
+        $slug    = 'tout-savoir-sur-la-faille-php-qui-secoue-plus-de-la-moitie-des-plateformes-web';
 
         $article = Article::updateOrCreate(
-            ['slug' => $slug],
+            ['slug' => Article::where('slug', $slug)->exists() ? $slug : $oldSlug],
             [
                 'user_id'      => $author->id,
                 'reviewed_by'  => $author->id,
