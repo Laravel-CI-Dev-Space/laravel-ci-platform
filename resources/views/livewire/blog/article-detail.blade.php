@@ -309,13 +309,18 @@
 </div>
 
 @push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/highlight.min.js"></script>
 <script>
-    // Coloration initiale
-    document.querySelectorAll('.article-body pre code').forEach(el => hljs.highlightElement(el));
-    // Re-coloration après navigation Livewire SPA
-    document.addEventListener('livewire:navigated', () => {
-        document.querySelectorAll('.article-body pre code').forEach(el => hljs.highlightElement(el));
-    });
+    (function () {
+        function highlight() {
+            document.querySelectorAll('.article-body pre code:not(.hljs)').forEach(el => hljs.highlightElement(el));
+        }
+        var s = document.createElement('script');
+        s.src = 'https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/highlight.min.js';
+        s.onload = highlight;
+        document.head.appendChild(s);
+        document.addEventListener('livewire:navigated', function () {
+            if (window.hljs) highlight();
+        });
+    })();
 </script>
 @endpush
