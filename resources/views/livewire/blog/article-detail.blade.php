@@ -233,7 +233,7 @@
                         <img src="{{ $article->coverUrl() }}"
                              alt="{{ $article->title }}"
                              class="img-fluid rounded mb-4"
-                             style="width:100%; max-height:420px; object-fit:cover;" />
+                             style="width:100%; height:auto; display:block;" />
                     @endif
 
                     {{-- Corps rendu en HTML depuis CommonMark --}}
